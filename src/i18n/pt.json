@@ -333,7 +333,11 @@
       "remove": "Remover",
       "select_agent": "Selecione um agent para **{player}**.",
       "agent_selected": "**{p}** jogará de **{agent}**.",
-      "map": "Mapa Atual: `{map}`"
+      "map": "Mapa Atual: `{map}`",
+      "embed": {
+        "title": "Informações da Arena",
+        "desc": "Mapa Atual: `{map}`\nO mapa mudará {when}"
+      }
     },
     "summary": {
       "match_not_found": "Esta partida não pôde ser encontrada. Verifique a semente e tente novamente.",
