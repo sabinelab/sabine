@@ -90,7 +90,18 @@ const processArenaQueue = async() => {
 }
 
 const updateRedis = async() => {
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany({
+    take: 100,
+    orderBy: {
+      coins: 'desc'
+    },
+    select: {
+      id: true,
+      coins: true,
+      correct_predictions: true,
+      rank_rating: true
+    }
+  })
   const blacklist = await prisma.blacklist.findMany()
 
   await Bun.redis.set('blacklist', JSON.stringify(blacklist))
