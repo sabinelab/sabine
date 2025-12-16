@@ -48,19 +48,19 @@
     "leaderboard": {
       "no_users": "No users to show in this page.",
       "predictions": {
-        "title": "Predictions Leaderboard",
+        "title": "Top 100 - Predictions Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
         "field": "`{t}` correct predictions"
       },
       "coins": {
-        "title": "Coins Leaderboard",
+        "title": "Top 100 - Coins Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
         "field": "`{t}` coins"
       },
       "rating": {
-        "title": "Rating Leaderboard",
+        "title": "Top 100 - Rating Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
         "field": "Rating: `{rr}RR`"

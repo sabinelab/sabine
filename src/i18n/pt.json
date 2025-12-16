@@ -48,19 +48,19 @@
     "leaderboard": {
       "no_users": "Sem usuários para mostrar nesta página.",
       "predictions": {
+        "title": "Top 100 - Tabela de Palpites",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "title": "Tabela de Palpites",
         "field": "`{t}` palpites certos"
       },
       "coins": {
-        "title": "Tabela de Coins",
+        "title": "Top 100 - Tabela de Coins",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
         "field": "`{t}` coins"
       },
       "rating": {
-        "title": "Tabela de Classificação",
+        "title": "Top 100 - Tabela de Classificação",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
         "field": "Classificação: `{rr}RR`"
