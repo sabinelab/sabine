@@ -109,7 +109,7 @@ export default createCommand({
         if(prediction.status === 'correct') {
           status = '<:success:1300882212190945292>'
         }
-        else if(prediction.status === 'wrong') {
+        else if(prediction.status === 'incorrect') {
           status = '<:error:1300882259078938685>'
         }
         else {
@@ -189,7 +189,7 @@ export default createCommand({
         if(prediction.status === 'correct') {
           status = '<:success:1300882212190945292>'
         }
-        else if(prediction.status === 'wrong') {
+        else if(prediction.status === 'incorrect') {
           status = '<:error:1300882259078938685>'
         }
         else {
@@ -278,7 +278,7 @@ export default createCommand({
         if(prediction.status === 'correct') {
           status = '<:success:1300882212190945292>'
         }
-        else if(prediction.status === 'wrong') {
+        else if(prediction.status === 'incorrect') {
           status = '<:error:1300882259078938685>'
         }
         else {
@@ -369,7 +369,7 @@ export default createCommand({
         if(prediction.status === 'correct') {
           status = '<:success:1300882212190945292>'
         }
-        else if(prediction.status === 'wrong') {
+        else if(prediction.status === 'incorrect') {
           status = '<:error:1300882259078938685>'
         }
         else {
