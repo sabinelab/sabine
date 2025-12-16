@@ -1,10 +1,4 @@
-import {
-  $Enums,
-  type Event,
-  type Guild,
-  type LiveMessage,
-  type TBDMatch,
-} from '@generated'
+import { $Enums, type Event, type Guild, type LiveMessage, type TBDMatch } from '@generated'
 import { prisma } from '@db'
 import { updateCache, voidCatch } from '@/database/update-cache'
 import { hydrateData } from '@/database/hydrate-data'
@@ -46,14 +40,7 @@ export class SabineGuild implements Guild {
         ['tbd_matches', 'events', 'live_messages']
           .includes(key)
       ) {
-        (data as any)[key] = {
-          [key]: Array.isArray(this[key]) &&
-            this[key].length ?
-            {
-              create: this[key]
-            } :
-            undefined
-        }
+        continue
       }
 
       else (data as any)[key] = this[key]

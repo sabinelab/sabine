@@ -15,7 +15,7 @@ type PredictionTeam = {
 type Prediction = {
   match: string
   teams: PredictionTeam[]
-  status: 'pending' | 'correct' | 'wrong'
+  status: 'pending' | 'correct' | 'incorrect'
   bet: bigint | null
   odd: number | null
 }
@@ -252,13 +252,14 @@ export class SabineUser implements User {
   }
 
   public async addPrediction(game: 'valorant' | 'lol', prediction: Prediction) {
+    const { teams, ...pred } = prediction
     await prisma.prediction.create({
       data: {
-        ...prediction,
+        ...pred,
         game,
         userId: this.id,
         teams: {
-          create: prediction.teams
+          create: teams
         }
       }
     })
@@ -277,21 +278,29 @@ export class SabineUser implements User {
 
     if(!pred) return this
 
-    this.correct_predictions += 1
-
-    await prisma.prediction.update({
-      where: {
-        match: predictionId,
-        game,
-        userId: this.id,
-        id: pred.id
-      },
-      data: {
-        status: 'correct'
-      }
-    })
-
-    await this.save(false)
+    await prisma.$transaction([
+      prisma.prediction.update({
+        where: {
+          id: pred.id,
+          game,
+          userId: this.id,
+          match: predictionId
+        },
+        data: {
+          status: 'correct'
+        }
+      }),
+      prisma.user.update({
+        where: {
+          id: this.id
+        },
+        data: {
+          correct_predictions: {
+            increment: 1
+          }
+        }
+      })
+    ])
     await Bun.redis.del(`user:${this.id}`)
 
     return this
@@ -317,13 +326,15 @@ export class SabineUser implements User {
           id: pred.id
         },
         data: {
-          status: 'wrong'
+          status: 'incorrect'
         }
       }),
       prisma.user.update({
         where: { id: this.id },
         data: {
-          incorrect_predictions: { increment: 1 }
+          incorrect_predictions: {
+            increment: 1
+          }
         }
       })
     ])
@@ -333,29 +344,39 @@ export class SabineUser implements User {
     return this
   }
 
-  public async addPlayerToRoster(player: string, method: 'CLAIM_PLAYER_BY_CLAIM_COMMAND' | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND', channel?: string) {
+  public async addPlayerToRoster(
+    player: string,
+    method: 'CLAIM_PLAYER_BY_CLAIM_COMMAND' | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND',
+    channel?: string
+  ) {
+    const updates: any = {
+      reserve_players: {
+        push: player
+      }
+    }
+    
     this.reserve_players.push(player)
 
     if(method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
-      if(this.premium) {
-        this.claim_time = new Date(Date.now() + 5 * 60 * 1000)
-      }
-      else this.claim_time = new Date(Date.now() + 10 * 60 * 1000)
 
-      this.claims += 1
-      this.reminded = false
-      this.pity += 1
-      this.claims += 1
+      const claimTime = this.premium
+        ? new Date(Date.now() + 5 * 60 * 1000)
+        : new Date(Date.now() + 10 * 60 * 1000)
+
+      updates.claim_time = claimTime
+      updates.claims = { increment: 1 }
+      updates.reminded = false
+      updates.pity = { increment: 1 }
 
       if(channel) {
-        this.remind_in = channel
+        updates.remind_in = channel
 
         if(this.remind) {
           await app.queue.add('reminder', {
-            channel: this.remind_in,
+            channel,
             user: this.id
           }, {
-            delay: this.claim_time.getTime() - Date.now(),
+            delay: claimTime.getTime() - Date.now(),
             removeOnComplete: true,
             removeOnFail: true
           })
@@ -363,7 +384,7 @@ export class SabineUser implements User {
       }
 
       if(app.players.get(player)!.ovr >= 85) {
-        this.pity = 0
+        updates.pity = 0
       }
     }
 
@@ -375,7 +396,21 @@ export class SabineUser implements User {
       }
     })
 
-    await this.save(false)
+    await prisma.$transaction([
+      prisma.transaction.create({
+        data: {
+          type: method,
+          player: Number(player),
+          userId: this.id
+        }
+      }),
+      prisma.user.update({
+        where: {
+          id: this.id
+        },
+        data: updates
+      })
+    ])
     await Bun.redis.del(`user:${this.id}`)
 
     return this
@@ -408,87 +443,116 @@ export class SabineUser implements User {
   }
 
   public async sellPlayer(id: string, price: bigint, i: number) {
-    this.reserve_players.splice(i, 1)
-    this.coins += price
+    await prisma.$transaction(async(tx) => {
+      const currentData = await tx.user.findUnique({
+        where: {
+          id: this.id
+        },
+        select: {
+          reserve_players: true,
+          arena_metadata: true
+        }
+      })
 
-    await prisma.transaction.create({
-      data: {
-        type: 'SELL_PLAYER',
-        player: Number(id),
-        price,
-        userId: this.id
+      if(!currentData) return
+
+      const currentPlayers = currentData.reserve_players
+
+      if(!currentPlayers[i] || currentPlayers[i] !== id) {
+        const index = currentPlayers.indexOf(id)
+        if(index === -1) return
+
+        i = index
       }
+
+      const newPlayers = [...currentPlayers]
+      newPlayers.splice(i, 1)
+
+      let newArenaMetadata = currentData.arena_metadata
+        ? JSON.parse(JSON.stringify(currentData.arena_metadata))
+        : null
+
+      if(newArenaMetadata && newArenaMetadata.lineup) {
+        const index = newArenaMetadata.lineup.findIndex((line: any) => line.player === id)
+        if(index !== -1) {
+          newArenaMetadata.lineup.splice(index, 1)
+        }
+      }
+
+      await tx.user.update({
+        where: {
+          id: this.id
+        },
+        data: {
+          coins: {
+            increment: price
+          },
+          reserve_players: {
+            set: newPlayers
+          },
+          arena_metadata: newArenaMetadata
+            ? newArenaMetadata
+            : undefined
+        }
+      })
+
+      await tx.transaction.create({
+        data: {
+          type: 'SELL_PLAYER',
+          player: Number(id),
+          price,
+          userId: this.id
+        }
+      })
     })
 
-    if(
-      this.arena_metadata?.lineup
-        .some(line => line.player === id)
-    ) {
-      const index = this.arena_metadata.lineup
-        .findIndex(line => line.player === id)
-
-      this.arena_metadata.lineup.splice(index, 1)
-    }
-
-    await this.save(false)
     await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
 
   public async addPack(pack: Pack, increaseVoteStreak?: boolean) {
-    switch(pack) {
-      case 'IRON': {
-        this.iron_packs += 1
-      }
-        break
-      case 'BRONZE': {
-        this.bronze_packs += 1
-      }
-        break
-      case 'SILVER': {
-        this.silver_packs += 1
-      }
-        break
-      case 'GOLD': {
-        this.gold_packs += 1
-      }
-        break
-      case 'PLATINUM': {
-        this.platinum_packs += 1
-      }
-        break
-      case 'DIAMOND': {
-        this.diamond_packs += 1
-      }
-        break
-      case 'ASCENDANT': {
-        this.ascendant_packs += 1
-      }
-        break
-      case 'IMMORTAL': {
-        this.immortal_packs += 1
-      }
-        break
-      case 'RADIANT': {
-        this.radiant_packs += 1
+    const packField = {
+      'IRON': 'iron_packs',
+      'BRONZE': 'bronze_packs',
+      'SILVER': 'silver_packs',
+      'GOLD': 'gold_packs',
+      'PLATINUM': 'platinum_packs',
+      'DIAMOND': 'diamond_packs',
+      'ASCENDANT': 'ascendant_packs',
+      'IMMORTAL': 'immortal_packs',
+      'RADIANT': 'radiant_packs'
+    } as const
+    const fieldToIncrement = packField[pack]
+
+    const update: any = {
+      [fieldToIncrement]: {
+        increment: 1
       }
     }
 
     if(increaseVoteStreak) {
-      this.vote_streak += 1
-      this.last_vote = new Date()
+      update.vote_streak = {
+        increment: 1
+      }
+      update.last_vote = new Date()
     }
 
-    await prisma.transaction.create({
-      data: {
-        userId: this.id,
-        type: 'CLAIM_PACK_BY_VOTE',
-        pack
-      }
-    })
-
-    await this.save(false)
+    await prisma.$transaction([
+      prisma.user.update({
+        where: {
+          id: this.id
+        },
+        data: update
+      }),
+      prisma.transaction.create({
+        data: {
+          userId: this.id,
+          type: 'CLAIM_PACK_BY_VOTE',
+          pack
+        }
+      })
+    ])
     await Bun.redis.del(`user:${this.id}`)
 
     return this
