@@ -190,7 +190,7 @@ export default createCommand({
         const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
 
         let users = value.data
-          .filter((user: any) => ctx.guild!.members.cache.get(user.id)).sort((a: any, b: any) => b.correct_predictions - a.correct_predictions)
+          .filter((user: any) => ctx.guild!.members.cache.get(user.id))
 
         const array = users
 
@@ -275,7 +275,6 @@ export default createCommand({
 
         let users = value.data
           .filter((user: any) => ctx.guild!.members.cache.get(user.id))
-          .sort((a: any, b: any) => Number(b.coins - a.coins))
 
         const array = users
 
@@ -360,7 +359,6 @@ export default createCommand({
 
         let users = value.data
           .filter((user: any) => ctx.guild!.members.cache.get(user.id))
-          .sort((a: any, b: any) => b.rank_rating - a.rank_rating)
 
         const array = users
 
@@ -445,7 +443,6 @@ export default createCommand({
         const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
 
         let users = value.data
-          .sort((a: any, b: any) => b.correct_predictions - a.correct_predictions)
 
         const array = users
 
@@ -528,7 +525,6 @@ export default createCommand({
         const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
 
         let users = value.data
-          .sort((a: any, b: any) => Number(b.coins - a.coins))
 
         const array = users
 
@@ -611,7 +607,6 @@ export default createCommand({
         const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
 
         let users = value.data
-          .sort((a: any, b: any) => b.rank_rating - a.rank_rating)
 
         const array = users
 
@@ -700,7 +695,6 @@ export default createCommand({
 
         let users = value.data
           .filter((user: any) => ctx.guild!.members.cache.get(user.id))
-          .sort((a: any, b: any) => b.correct_predictions - a.correct_predictions)
 
         const array = users
 
@@ -782,7 +776,6 @@ export default createCommand({
 
         let users = value.data
           .filter((user: any) => ctx.guild!.members.cache.get(user.id))
-          .sort((a: any, b: any) => Number(b.coins - a.coins))
 
         const array = users
 
@@ -864,7 +857,6 @@ export default createCommand({
 
         let users = value.data
           .filter((user: any) => ctx.guild!.members.cache.get(user.id))
-          .sort((a: any, b: any) => b.rank_rating - a.rank_rating)
 
         const array = users
 
@@ -946,7 +938,7 @@ export default createCommand({
       if(ctx.args[5] === 'predictions') {
         const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
 
-        let users = value.data.sort((a: any, b: any) => b.correct_predictions - a.correct_predictions)
+        let users = value.data
 
         const array = users
 
@@ -1026,7 +1018,7 @@ export default createCommand({
       else if(ctx.args[5] === 'coins') {
         const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
 
-        let users = value.data.sort((a: any, b: any) => Number(b.coins - a.coins))
+        let users = value.data
 
         const array = users
 
@@ -1106,7 +1098,7 @@ export default createCommand({
       else if(ctx.args[5] === 'rating') {
         const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
 
-        let users = value.data.sort((a: any, b: any) => b.rank_rating - a.rank_rating)
+        let users = value.data
 
         const array = users
 

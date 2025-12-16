@@ -92,9 +92,6 @@ const processArenaQueue = async() => {
 const updateRedis = async() => {
   const users = await prisma.user.findMany({
     take: 100,
-    orderBy: {
-      coins: 'desc'
-    },
     select: {
       id: true,
       coins: true,
@@ -116,6 +113,7 @@ const updateRedis = async() => {
           coins: user.coins
         }))
           .filter(user => user.coins > 0)
+          .sort((a, b) => Number(b.coins) - Number(a.coins))
       },
       (_, value) => typeof value === 'bigint' ? value.toString() : value
     )
@@ -131,6 +129,7 @@ const updateRedis = async() => {
           correct_predictions: user.correct_predictions
         }))
           .filter(user => user.correct_predictions > 0)
+          .sort((a, b) => b.correct_predictions - a.correct_predictions)
       }
     )
   )
@@ -144,6 +143,8 @@ const updateRedis = async() => {
           id: user.id,
           rank_rating: user.rank_rating
         }))
+          .filter(user => user.rank_rating)
+          .sort((a, b) => b.rank_rating - a.rank_rating)
       }
     )
   )
