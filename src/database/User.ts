@@ -468,7 +468,7 @@ export class SabineUser implements User {
       const newPlayers = [...currentPlayers]
       newPlayers.splice(i, 1)
 
-      let newArenaMetadata = currentData.arena_metadata
+      const newArenaMetadata = currentData.arena_metadata
         ? JSON.parse(JSON.stringify(currentData.arena_metadata))
         : null
 
