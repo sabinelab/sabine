@@ -84,12 +84,7 @@ export default createCommand({
       }) + '\n' + bonus.join('\n')
     }
 
-    ctx.db.user.coins += coins
-    ctx.db.user.fates += fates
-    ctx.db.user.daily_time = new Date(new Date().setHours(24, 0, 0, 0))
-
-    await ctx.db.user.save()
-
+    await ctx.db.user.daily(coins, fates)
     await ctx.reply(content)
   }
 })
