@@ -1,8 +1,4 @@
-import {
-  $Enums,
-  type Premium,
-  type User
-} from '@generated'
+import { $Enums, type Premium, type User } from '@generated'
 import { prisma } from '@db'
 import { app } from '../structures/app/App'
 import type { Pack } from '../server/routes/util/vote'
@@ -87,7 +83,7 @@ export class SabineUser implements User {
     this.id = id
   }
 
-  public async save() {
+  public async save(update = true) {
     const data: Partial<User> = {}
 
     for(const key in this) {
@@ -118,7 +114,9 @@ export class SabineUser implements User {
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    if(update) {
+      updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    }
 
     return user
   }
@@ -293,7 +291,8 @@ export class SabineUser implements User {
       }
     })
 
-    await this.save()
+    await this.save(false)
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
@@ -328,6 +327,8 @@ export class SabineUser implements User {
         }
       })
     ])
+
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
@@ -374,16 +375,24 @@ export class SabineUser implements User {
       }
     })
 
-    await this.save()
+    await this.save(false)
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
 
   public async addPlayersToRoster(players: string[]) {
-    this.reserve_players.push(...players)
-
-    await Promise.all([
-      this.save(),
+    await prisma.$transaction([
+      prisma.user.update({
+        where: {
+          id: this.id
+        },
+        data: {
+          reserve_players: {
+            push: players
+          }
+        }
+      }),
       prisma.transaction.createMany({
         data: players.map(p => ({
           type: 'CLAIM_PLAYER_BY_PACK',
@@ -392,6 +401,8 @@ export class SabineUser implements User {
         }))
       })
     ])
+
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
@@ -419,7 +430,8 @@ export class SabineUser implements User {
       this.arena_metadata.lineup.splice(index, 1)
     }
 
-    await this.save()
+    await this.save(false)
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
@@ -476,7 +488,8 @@ export class SabineUser implements User {
       }
     })
 
-    await this.save()
+    await this.save(false)
+    await Bun.redis.del(`user:${this.id}`)
 
     return this
   }
