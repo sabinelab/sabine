@@ -300,5 +300,5 @@ enum Game {
 enum PredictionStatus {
   correct
   pending
-  wrong
+  incorrect
 }
