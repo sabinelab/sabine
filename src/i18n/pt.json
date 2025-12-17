@@ -363,6 +363,10 @@
         "diamond": "You bought a **Diamond** pack for **{fates} fates** succesfully!",
         "ascendant": "You bought a **Ascendant** pack for **{fates} fates** succesfully!"
       }
+    },
+    "register": {
+      "already_registered": "Você já está registrado.",
+      "success": "Você foi registrado com sucesso!"
     }
   },
   "simulator": {
@@ -441,7 +445,8 @@
     "duelists": "Duelistas",
     "initiators": "Iniciadores",
     "sentinels": "Sentinelas",
-    "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}"
+    "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
+    "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Rode `/register` para iniciar."
   },
   "permissions": {
     "CREATE_INSTANT_INVITE": "Criar convite instantâneo",
