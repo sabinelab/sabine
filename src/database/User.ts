@@ -78,6 +78,7 @@ export class SabineUser implements User {
   public radiant_packs: number = 0
   public last_vote: Date | null = null
   public vote_streak: number = 0
+  public votes: number = 0
 
   public constructor(id: string) {
     this.id = id

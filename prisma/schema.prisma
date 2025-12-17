@@ -55,6 +55,7 @@ model User {
   radiant_packs            Int           @default(0)
   last_vote                DateTime?
   vote_streak              Int           @default(0)
+  votes                    Int           @default(0)
 
   @@index([coins, correct_predictions, rank_rating, arena_wins])
 }
