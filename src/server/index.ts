@@ -14,7 +14,6 @@ import Logger from '../util/Logger'
 import { auth } from './auth'
 
 new Elysia()
-  .use(auth)
   .use(cors({
     origin: true,
     methods: ['POST', 'GET', 'OPTIONS'],
@@ -24,6 +23,7 @@ new Elysia()
       'x-dbl-signature',
     ]
   }))
+  .use(auth)
   .use(lolLive)
   .use(lolResults)
   .use(valorantLive)
