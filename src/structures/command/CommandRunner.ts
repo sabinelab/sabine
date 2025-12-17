@@ -38,7 +38,18 @@ export default class CommandRunner {
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
     const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
 
-    const user = await SabineUser.fetch(interaction.user.id) ?? new SabineUser(interaction.user.id)
+    let user = await SabineUser.fetch(interaction.user.id)
+
+    if(
+      !user &&
+      command.name !== 'register' &&
+      ['economy', 'simulator', 'pvp', 'esports']
+        .includes(command.category)
+    ) {
+      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
+    }
+    
+    if(!user) user = new SabineUser(interaction.user.id)
 
     const ban = blacklist.get(interaction.user.id)
 
