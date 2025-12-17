@@ -503,6 +503,14 @@ export class SabineUser implements User {
   }
 
   public async addPack(pack: Pack, increaseVoteStreak?: boolean) {
+    const checkStreak = (n: number) => {
+      return n > 0 && n % 20 === 0
+    }
+    const checkDate = (date1: Date, date2: Date | null) => {
+      if(!date2) return false
+      return Math.abs(date1.getTime() - date2.getTime()) <= (24 * 60 * 60 * 1000)
+    }
+
     const packField = {
       'IRON': 'iron_packs',
       'BRONZE': 'bronze_packs',
@@ -516,14 +524,30 @@ export class SabineUser implements User {
     } as const
     const fieldToIncrement = packField[pack]
 
-    const update: any = {
-      [fieldToIncrement]: {
+    const update: any = {}
+
+    if(checkStreak(this.vote_streak + 1) && fieldToIncrement !== 'radiant_packs') {
+      update.radiant_packs = {
+        increment: 1
+      }
+    }
+    else {
+      update[fieldToIncrement] = {
         increment: 1
       }
     }
 
     if(increaseVoteStreak) {
-      update.vote_streak = {
+      if(!checkDate(new Date(), this.last_vote) && this.vote_streak) {
+        update.vote_streak = 0
+      }
+      else {
+        update.vote_streak = {
+          increment: 1
+        }
+      }
+
+      update.votes = {
         increment: 1
       }
       update.last_vote = new Date()
