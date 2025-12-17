@@ -75,7 +75,7 @@ model Match {
 
 model CareerTeam {
   id      String @id @default(uuid())
-  match   Match  @relation(fields: [matchId], references: [id])
+  match   Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
   matchId BigInt
   user    String
   score   Int    @db.SmallInt

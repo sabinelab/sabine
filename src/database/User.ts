@@ -354,8 +354,6 @@ export class SabineUser implements User {
         push: player
       }
     }
-    
-    this.reserve_players.push(player)
 
     if(method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
 
@@ -387,14 +385,6 @@ export class SabineUser implements User {
         updates.pity = 0
       }
     }
-
-    await prisma.transaction.create({
-      data: {
-        type: method,
-        player: Number(player),
-        userId: this.id
-      }
-    })
 
     await prisma.$transaction([
       prisma.transaction.create({
