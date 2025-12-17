@@ -258,11 +258,10 @@ export default createCommand({
               id: ctx.db.guild.id
             }
           })
-
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.tournament.tournament_added', {
             t: ctx.args[2].toString()
           })
-
         },
         lol: async() => {
           if(!ctx.db.guild || !ctx.guild) return
@@ -319,7 +318,7 @@ export default createCommand({
               }
             }
           })
-
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.tournament.tournament_added', {
             t: ctx.args[2].toString()
           })

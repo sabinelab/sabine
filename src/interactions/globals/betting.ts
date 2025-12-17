@@ -1,3 +1,4 @@
+import { prisma } from '@db'
 import { app } from '../../structures/app/App'
 import createModalSubmitInteraction from '../../structures/interaction/createModalSubmitInteraction'
 import calcOdd from '../../util/calcOdd'
@@ -52,8 +53,6 @@ export default createModalSubmitInteraction({
           odd = calcOdd(oddB)
         }
 
-        ctx.db.user.coins -= value
-
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
@@ -67,16 +66,28 @@ export default createModalSubmitInteraction({
 
         if(!pred) return await ctx.reply('helper.prediction_needed')
 
-        await app.prisma.prediction.update({
-          where: {
-            id: pred.id
-          },
-          data: {
-            bet: value + (pred.bet ?? 0n)
-          }
-        })
+        await prisma.$transaction(async(tx) => {
+          await tx.prediction.update({
+            where: {
+              id: pred.id
+            },
+            data: {
+              bet: value + (pred.bet ?? 0n)
+            }
+          })
 
-        await ctx.db.user.save()
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              coins: {
+                decrement: value
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 
@@ -148,16 +159,28 @@ export default createModalSubmitInteraction({
 
         if(!pred) return await ctx.reply('helper.prediction_needed')
 
-        await app.prisma.prediction.update({
-          where: {
-            id: pred.id
-          },
-          data: {
-            bet: value + (pred.bet ?? 0n)
-          }
-        })
+        await prisma.$transaction(async(tx) => {
+          await tx.prediction.update({
+            where: {
+              id: pred.id
+            },
+            data: {
+              bet: value + (pred.bet ?? 0n)
+            }
+          })
 
-        await ctx.db.user.save()
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              coins: {
+                decrement: value
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 

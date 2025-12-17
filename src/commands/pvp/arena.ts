@@ -9,6 +9,7 @@ import createCommand from '../../structures/command/createCommand'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import { valorant_agents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import { prisma } from '@db'
 
 export default createCommand({
   name: 'arena',
@@ -391,11 +392,24 @@ export default createCommand({
         return await ctx.reply('commands.sell.player_not_found')
       }
 
-      const index = ctx.db.user.arena_metadata.lineup
-        .findIndex(line => line.player === player.id.toString())
+      await prisma.$transaction(async(tx) => {
+        const index = ctx.db.user.arena_metadata?.lineup
+          .findIndex(line => line.player === player.id.toString())
 
-      ctx.db.user.arena_metadata.lineup.splice(index, 1)
-      await ctx.db.user.save()
+        if(index === undefined) return
+
+        ctx.db.user.arena_metadata?.lineup.splice(index, 1)
+
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            arena_metadata: ctx.db.user.arena_metadata!
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+      })
 
       const page = 1
 
@@ -522,35 +536,45 @@ export default createCommand({
         return await ctx.reply('commands.duel.duplicated_agent')
       }
 
-      if(
-        !ctx.db.user.arena_metadata ||
-        !ctx.db.user.arena_metadata.lineup.length
-      ) {
-        ctx.db.user.arena_metadata = {
-          map: (await ctx.app.redis.get('arena:map'))!,
-          lineup: [
-            {
-              player: ctx.args[3],
-              agent: {
-                name: agent.name,
-                role: agent.role
+      await prisma.$transaction(async(tx) => {
+        if(
+          !ctx.db.user.arena_metadata ||
+          !ctx.db.user.arena_metadata.lineup.length
+        ) {
+          ctx.db.user.arena_metadata = {
+            map: (await ctx.app.redis.get('arena:map'))!,
+            lineup: [
+              {
+                player: ctx.args[3],
+                agent: {
+                  name: agent.name,
+                  role: agent.role
+                }
               }
-            }
-          ]
+            ]
+          }
         }
-      }
-      else {
-        ctx.db.user.arena_metadata.lineup.push({
-          player: ctx.args[3],
-          agent: {
-            name: agent.name,
-            role: agent.role
+        else {
+          ctx.db.user.arena_metadata.lineup.push({
+            player: ctx.args[3],
+            agent: {
+              name: agent.name,
+              role: agent.role
+            }
+          })
+          ctx.db.user.arena_metadata.map = (await ctx.app.redis.get('arena:map'))!
+        }
+
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            arena_metadata: ctx.db.user.arena_metadata
           }
         })
-        ctx.db.user.arena_metadata.map = (await ctx.app.redis.get('arena:map'))!
-      }
-
-      await ctx.db.user.save()
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+      })
 
       const page = 1
 

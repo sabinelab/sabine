@@ -1,7 +1,7 @@
 import type { APISelectMenuOption } from 'discord.js'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 
 export default createCommand({
   name: 'promote',
@@ -42,12 +42,23 @@ export default createCommand({
     const players = ctx.db.user.active_players
 
     if(players.length < 5) {
-      const i = ctx.db.user.reserve_players.findIndex(pl => pl === p.id.toString())
+      await prisma.$transaction(async(tx) => {
+        const i = ctx.db.user.reserve_players.findIndex(pl => pl === p.id.toString())
 
-      ctx.db.user.active_players.push(p.id.toString())
-      ctx.db.user.reserve_players.splice(i, 1)
+        ctx.db.user.active_players.push(p.id.toString())
+        ctx.db.user.reserve_players.splice(i, 1)
 
-      await ctx.db.user.save()
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            active_players: ctx.db.user.active_players,
+            reserve_players: ctx.db.user.reserve_players
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+      })
 
       return await ctx.reply('commands.promote.player_promoted', { p: p.name })
     }
@@ -107,19 +118,31 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx, i, app }) {
     if(!i.isStringSelectMenu()) return
 
-    const id = i.values[0].split('_')[1]
+    await prisma.$transaction(async(tx) => {
+      const id = i.values[0].split('_')[1]
 
-    let index = ctx.db.user.active_players.findIndex(p => p === id)
+      let index = ctx.db.user.active_players.findIndex(p => p === id)
 
-    ctx.db.user.active_players.splice(index, 1)
-    ctx.db.user.reserve_players.push(id)
+      ctx.db.user.active_players.splice(index, 1)
+      ctx.db.user.reserve_players.push(id)
 
-    index = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[2])
+      index = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[2])
 
-    ctx.db.user.reserve_players.splice(index, 1)
-    ctx.db.user.active_players.push(ctx.args[2])
+      ctx.db.user.reserve_players.splice(index, 1)
+      ctx.db.user.active_players.push(ctx.args[2])
 
-    await ctx.db.user.save()
+      await tx.user.update({
+        where: {
+          id: ctx.db.user.id
+        },
+        data: {
+          reserve_players: ctx.db.user.reserve_players,
+          active_players: ctx.db.user.active_players
+        }
+      })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
+    })
+    await Bun.redis.del(`user:${ctx.db.user.id}`)
 
     const p = app.players.get(ctx.args[2])!
 

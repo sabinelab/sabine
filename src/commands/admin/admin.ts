@@ -13,6 +13,7 @@ import {
 } from 'discord.js'
 import type { $Enums } from '@generated'
 import Logger from '../../util/Logger'
+import { prisma } from '@db'
 
 const service = new Service(process.env.AUTH)
 
@@ -162,16 +163,28 @@ export default createCommand({
     else if(ctx.args[0] === 'language') {
       const options = {
         en: async() => {
-          ctx.db.guild!.lang = 'en'
-
-          await ctx.db.guild?.save()
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild?.id
+            },
+            data: {
+              lang: 'en'
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild?.id}`)
 
           await ctx.reply('Now I will interact in English on this server!')
         },
         pt: async() => {
-          ctx.db.guild!.lang = 'pt'
-
-          await ctx.db.guild?.save()
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild?.id
+            },
+            data: {
+              lang: 'pt'
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild?.id}`)
 
           await ctx.reply('Agora eu irei interagir em português neste servidor!')
         }
@@ -561,27 +574,28 @@ export default createCommand({
         }
       }
 
-      // await app.prisma.guild.update({
-      //   where: {
-      //     id: ctx.interaction.guildId!
-      //   },
-      //   data: {
-      //     valorant_matches: guild.valorant_matches,
-      //     tbd_matches: {
-      //       deleteMany: {
-      //         type: 'valorant'
-      //       },
-      //       create: matches.length
-      //         ? matches.map(m => ({
-      //           type: m.type,
-      //           matchId: m.matchId,
-      //           channel: m.channel
-      //         }))
-      //         : undefined
-      //     },
-      //     valorant_resend_time: guild.valorant_resend_time
-      //   }
-      // })
+      await app.prisma.guild.update({
+        where: {
+          id: ctx.interaction.guildId!
+        },
+        data: {
+          valorant_matches: guild.valorant_matches,
+          tbd_matches: {
+            deleteMany: {
+              type: 'valorant'
+            },
+            create: matches.length
+              ? matches.map(m => ({
+                type: m.type,
+                matchId: m.matchId,
+                channel: m.channel
+              }))
+              : undefined
+          },
+          valorant_resend_time: guild.valorant_resend_time
+        }
+      })
+      await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
       await ctx.edit('commands.admin.resent')
     }
@@ -782,6 +796,7 @@ export default createCommand({
           lol_resend_time: guild.lol_resend_time
         }
       })
+      await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
       await ctx.edit('commands.admin.resent')
     }

@@ -91,18 +91,30 @@ export default createCommand({
 
     if(price > ctx.db.user.coins) return ctx.reply('commands.sign.coins_needed')
 
-    ctx.db.user.coins -= BigInt(price)
-    ctx.db.user.reserve_players.push(player.id.toString())
+    await app.prisma.$transaction(async(tx) => {
+      await tx.transaction.create({
+        data: {
+          userId: ctx.db.user.id,
+          player: player.id,
+          type: 'SIGN_PLAYER'
+        }
+      })
 
-    await app.prisma.transaction.create({
-      data: {
-        userId: ctx.db.user.id,
-        player: player.id,
-        type: 'SIGN_PLAYER'
-      }
+      await tx.user.update({
+        where: {
+          id: ctx.db.user.id
+        },
+        data: {
+          reserve_players: {
+            push: player.id.toString()
+          },
+          coins: {
+            decrement: price
+          }
+        }
+      })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
     })
-
-    await ctx.db.user.save()
 
     await ctx.reply('commands.sign.signed', {
       player: `${player.name} (${Math.floor(player.ovr)})`,

@@ -78,7 +78,9 @@ export default class App extends Discord.Client {
         this.interactions.set(interaction.name, interaction)
       }
     }
+  }
 
+  public loadPlayers() {
     for(const player of getPlayers()) {
       this.players.set(player.id.toString(), {
         ...player,
@@ -86,6 +88,10 @@ export default class App extends Discord.Client {
       })
     }
 
+    return this
+  }
+
+  public loadEmojis() {
     for(const emoji of emojis) {
       this.emoji.set(emoji.name, emoji.emoji)
 
@@ -95,6 +101,8 @@ export default class App extends Discord.Client {
         }
       }
     }
+
+    return this
   }
 
   public async connect() {
@@ -157,4 +165,4 @@ export const app = new App({
     repliedUser: true,
     parse: ['users', 'roles']
   }
-})
+}).loadEmojis().loadPlayers()

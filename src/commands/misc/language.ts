@@ -1,3 +1,4 @@
+import { prisma } from '@db'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -43,18 +44,28 @@ export default createCommand({
   async run({ ctx }) {
     switch(ctx.args[0]) {
       case 'pt': {
-        ctx.db.user.lang = 'pt'
-
-        await ctx.db.user.save()
-
+        await prisma.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            lang: 'pt'
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('Agora eu irei interagir em português com você!')
       }
         break
       case 'en': {
-        ctx.db.user.lang = 'en'
-
-        await ctx.db.user.save()
-
+        await prisma.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            lang: 'en'
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('Now I will interact in english with you!')
       }
     }

@@ -1,5 +1,6 @@
 import { ButtonStyle, ContainerBuilder } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
+import { prisma } from '@db'
 
 const price = {
   ascendant: 500,
@@ -91,10 +92,22 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        ctx.db.user.fates -= price.gold
-        ctx.db.user.gold_packs += 1
-
-        await ctx.db.user.save()
+        await prisma.$transaction(async(tx) => {
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              fates: {
+                decrement: price.gold
+              },
+              gold_packs: {
+                increment: 1
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
         await ctx.reply('commands.shop.success.gold', { fates: price.gold })
       },
       platinum: async() => {
@@ -102,10 +115,22 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        ctx.db.user.fates -= price.platinum
-        ctx.db.user.platinum_packs += 1
-
-        await ctx.db.user.save()
+        await prisma.$transaction(async(tx) => {
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              fates: {
+                decrement: price.platinum
+              },
+              platinum_packs: {
+                increment: 1
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
         await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
       },
       diamond: async() => {
@@ -113,10 +138,22 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        ctx.db.user.fates -= price.diamond
-        ctx.db.user.diamond_packs += 1
-
-        await ctx.db.user.save()
+        await prisma.$transaction(async(tx) => {
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              fates: {
+                decrement: price.diamond
+              },
+              diamond_packs: {
+                increment: 1
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
         await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
       },
       ascendant: async() => {
@@ -124,10 +161,22 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        ctx.db.user.fates -= price.ascendant
-        ctx.db.user.ascendant_packs += 1
-
-        await ctx.db.user.save()
+        await prisma.$transaction(async(tx) => {
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              fates: {
+                decrement: price.ascendant
+              },
+              ascendant_packs: {
+                increment: 1
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
         await ctx.reply('commands.shop.success.gold', { fates: price.ascendant })
       }
     }
@@ -135,7 +184,6 @@ export default createCommand({
     if(!args[ctx.args[2]]) return
 
     ctx.setFlags(64)
-
     await args[ctx.args[2]]()
   }
 })

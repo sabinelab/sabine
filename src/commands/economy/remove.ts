@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -34,17 +34,29 @@ export default createCommand({
       return await ctx.reply('commands.remove.player_not_found')
     }
 
-    const i = ctx.db.user.active_players.findIndex(pl => pl === p.id.toString())
+    await prisma.$transaction(async(tx) => {
+      const i = ctx.db.user.active_players.findIndex(pl => pl === p.id.toString())
+      ctx.db.user.active_players.splice(i, 1)
 
-    ctx.db.user.reserve_players.push(p.id.toString())
-    ctx.db.user.active_players.splice(i, 1)
-
-    await ctx.db.user.save()
+      await tx.user.update({
+        where: {
+          id: ctx.db.user.id
+        },
+        data: {
+          reserve_players: {
+            push: p.id.toString()
+          },
+          active_players: ctx.db.user.active_players
+        }
+      })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
+    })
 
     return await ctx.reply('commands.remove.player_removed', { p: p.name })
   },
   async createAutocompleteInteraction({ i, app }) {
-    const user = (await SabineUser.fetch(i.user.id))!
+    const user = await SabineUser.fetch(i.user.id)
+    if(!user) return
 
     const value = i.options.getString('player', true)
 

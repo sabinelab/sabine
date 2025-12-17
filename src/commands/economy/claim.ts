@@ -3,6 +3,7 @@ import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 import { app } from '../../structures/app/App'
+import { prisma } from '@db'
 
 const tier = (() => {
   const tier: { [key: string]: Player[] } = {
@@ -68,7 +69,6 @@ export default createCommand({
     if(ctx.db.user.pity >= 49) {
       player = getRandomPlayerByTier('s')
     }
-
     else player = getRandomPlayer()
 
     let channel: string | undefined = undefined
@@ -120,15 +120,26 @@ export default createCommand({
     const i = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[3])
 
     if(ctx.args[2] === 'promote') {
-      if(ctx.db.user.active_players.length >= 5) {
-        ctx.db.user.reserve_players.push(ctx.db.user.active_players.at(-1)!)
-        ctx.db.user.active_players.splice(-1, 1)
-      }
+      await prisma.$transaction(async(tx) => {
+        if(ctx.db.user.active_players.length >= 5) {
+          ctx.db.user.reserve_players.push(ctx.db.user.active_players.at(-1)!)
+          ctx.db.user.active_players.splice(-1, 1)
+        }
 
-      ctx.db.user.active_players.push(ctx.args[3])
-      ctx.db.user.reserve_players.splice(i, 1)
+        ctx.db.user.active_players.push(ctx.args[3])
+        ctx.db.user.reserve_players.splice(i, 1)
 
-      await ctx.db.user.save()
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            active_players: ctx.db.user.active_players,
+            reserve_players: ctx.db.user.reserve_players
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+      })
 
       await ctx.reply('commands.promote.player_promoted', { p: app.players.get(ctx.args[3])?.name })
     }

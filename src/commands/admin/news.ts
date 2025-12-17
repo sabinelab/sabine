@@ -1,3 +1,4 @@
+import { prisma } from '@db'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -109,10 +110,15 @@ export default createCommand({
 
           if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
-          ctx.db.guild.valorant_news_channel = channel.id
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.guild.id
+            },
+            data: {
+              valorant_news_channel: channel.id
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         },
         lol: async() => {
@@ -122,10 +128,15 @@ export default createCommand({
 
           if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
-          ctx.db.guild.lol_news_channel = channel.id
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.guild.id
+            },
+            data: {
+              lol_news_channel: channel.id
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         }
       }
@@ -137,19 +148,29 @@ export default createCommand({
         valorant: async() => {
           if(!ctx.db.guild) return
 
-          ctx.db.guild.valorant_news_channel = null
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              valorant_news_channel: null
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_disabled')
         },
         lol: async() => {
           if(!ctx.db.guild) return
 
-          ctx.db.guild.lol_news_channel = null
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              valorant_news_channel: null
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_disabled')
         }
       }

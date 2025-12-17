@@ -15,7 +15,7 @@ import type { MatchesData } from '@/types'
 import createListener from '@/structures/app/createListener'
 import Logger from '@/util/Logger'
 import App from '@/structures/app/App'
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 import type { $Enums } from '@generated'
 import Bull from 'bull'
 import Match from '@/simulator/arena/Match'
@@ -748,22 +748,60 @@ export default createListener({
           player2.arena_metadata.lineup.length === 5
         ) {
           player1.rank_rating -= 15
-          player2.rank_rating += 10
-
           if(player1.rank_rating < 0) player1.rank_rating = 0
 
-          await Promise.allSettled([player1.save(), player2.save()])
+          await prisma.$transaction([
+            prisma.user.update({
+              where: {
+                id: player1.id
+              },
+              data: {
+                rank_rating: player1.rank_rating
+              }
+            }),
+            prisma.user.update({
+              where: {
+                id: player2.id
+              },
+              data: {
+                rank_rating: {
+                  increment: 10
+                }
+              }
+            })
+          ])
+          await Bun.redis.del(`user:${player1.id}`)
+          await Bun.redis.del(`user:${player2.id}`)
         }
         else if(
           player1.arena_metadata.lineup.length === 5 &&
           player2.arena_metadata.lineup.length < 5
         ) {
-          player1.rank_rating += 15
           player2.rank_rating -= 10
-
           if(player2.rank_rating < 0) player2.rank_rating = 0
 
-          await Promise.allSettled([player1.save(), player2.save()])
+          await prisma.$transaction([
+            prisma.user.update({
+              where: {
+                id: player1.id
+              },
+              data: {
+                rank_rating: {
+                  increment: 10
+                }
+              }
+            }),
+            prisma.user.update({
+              where: {
+                id: player2.id
+              },
+              data: {
+                rank_rating: player2.rank_rating
+              }
+            })
+          ])
+          await Bun.redis.del(`user:${player1.id}`)
+          await Bun.redis.del(`user:${player2.id}`)
         }
         else if(
           player1.arena_metadata.lineup.length < 5 &&
@@ -775,7 +813,26 @@ export default createListener({
           if(player1.rank_rating < 0) player1.rank_rating = 0
           if(player2.rank_rating < 0) player2.rank_rating = 0
 
-          await Promise.allSettled([player1.save(), player2.save()])
+          await prisma.$transaction([
+            prisma.user.update({
+              where: {
+                id: player1.id
+              },
+              data: {
+                rank_rating: player1.rank_rating
+              }
+            }),
+            prisma.user.update({
+              where: {
+                id: player2.id
+              },
+              data: {
+                rank_rating: player2.rank_rating
+              }
+            })
+          ])
+          await Bun.redis.del(`user:${player1.id}`)
+          await Bun.redis.del(`user:${player2.id}`)
         }
 
         const map = await app.redis.get('arena:map')
@@ -865,7 +922,11 @@ export default createListener({
       })
 
       app.queue.process('reminder', async job => {
-        const user = await SabineUser.fetch(job.data.user)
+        const user = await prisma.user.findUnique({
+          where: {
+            id: job.data.user
+          }
+        })
 
         if(!user) return
 
@@ -881,9 +942,15 @@ export default createListener({
           }
         })
 
-        user.reminded = true
-
-        await user.save()
+        await prisma.user.update({
+          where: {
+            id: user.id
+          },
+          data: {
+            reminded: true
+          }
+        })
+        await Bun.redis.del(`user:${user.id}`)
       })
         .catch(e => new Logger(app).error(e))
 

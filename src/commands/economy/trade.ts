@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import { calcPlayerPrice } from '@sabinelab/players'
 
@@ -156,26 +156,47 @@ export default createCommand({
         })
       }
 
-      user.reserve_players.splice(i, 1)
-      user.coins += BigInt(ctx.args[5])
+      await prisma.$transaction(async(tx) => {
+        if(
+          user.arena_metadata?.lineup
+            .some(line => line.player === player.id.toString())
+        ) {
+          const index = user.arena_metadata.lineup
+            .findIndex(line => line.player === player.id.toString())
 
-      ctx.db.user.reserve_players.push(ctx.args[4])
-      ctx.db.user.coins -= BigInt(ctx.args[5])
+          user.arena_metadata.lineup.splice(index, 1)
+        }
 
-      if(
-        user.arena_metadata?.lineup
-          .some(line => line.player === player.id.toString())
-      ) {
-        const index = user.arena_metadata.lineup
-          .findIndex(line => line.player === player.id.toString())
+        await tx.user.update({
+          where: {
+            id: user.id
+          },
+          data: {
+            reserve_players: user.reserve_players,
+            arena_metadata: user.arena_metadata
+              ? user.arena_metadata
+              : undefined,
+            coins: {
+              increment: BigInt(ctx.args[5])
+            }
+          }
+        })
 
-        user.arena_metadata.lineup.splice(index, 1)
-      }
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            coins: {
+              decrement: BigInt(ctx.args[5])
+            },
+            reserve_players: {
+              push: ctx.args[4]
+            }
+          }
+        })
 
-      await Promise.allSettled([
-        user.save(),
-        ctx.db.user.save(),
-        app.prisma.transaction.createMany({
+        await tx.transaction.createMany({
           data: [
             {
               type: 'TRADE_PLAYER',
@@ -193,7 +214,9 @@ export default createCommand({
             }
           ]
         })
-      ])
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+        await Bun.redis.del(`user:${user.id}`)
+      })
 
       await ctx.edit('commands.trade.res', {
         player: `${player.name} (${player.ovr})`,

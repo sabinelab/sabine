@@ -1,5 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
+import { prisma } from '@db'
 
 export default createCommand({
   name: 'live',
@@ -116,11 +117,16 @@ export default createCommand({
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
           if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
-
-          ctx.db.guild.valorant_live_feed_channel = channel.id
-
-          await ctx.db.guild.save()
-
+          
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              valorant_live_feed_channel: channel.id
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
         },
         lol: async() => {
@@ -130,10 +136,15 @@ export default createCommand({
 
           if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
 
-          ctx.db.guild.lol_live_feed_channel = channel.id
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              lol_live_feed_channel: channel.id
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
         }
       }
@@ -145,19 +156,29 @@ export default createCommand({
         valorant: async() => {
           if(!ctx.db.guild) return
 
-          ctx.db.guild.valorant_live_feed_channel = null
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              valorant_live_feed_channel: null
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.live.live_disabled')
         },
         lol: async() => {
           if(!ctx.db.guild) return
 
-          ctx.db.guild.lol_live_feed_channel = null
-
-          await ctx.db.guild.save()
-
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild.id
+            },
+            data: {
+              lol_live_feed_channel: null
+            }
+          })
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.live.live_disabled')
         }
       }

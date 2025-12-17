@@ -8,6 +8,7 @@ import {
 } from 'discord.js'
 import createCommand from '@/structures/command/createCommand'
 import SelectMenuBuilder from '@/structures/builders/SelectMenuBuilder'
+import { prisma } from '@db'
 
 export default createCommand({
   name: 'roster',
@@ -227,12 +228,24 @@ export default createCommand({
       }
 
       if(ctx.db.user.active_players.length < 5) {
-        const i = ctx.db.user.reserve_players.findIndex(p => p === player.id.toString())
+        await prisma.$transaction(async(tx) => {
+          const i = ctx.db.user.reserve_players.findIndex(p => p === player.id.toString())
 
-        ctx.db.user.reserve_players.splice(i, 1)
-        ctx.db.user.active_players.push(player.id.toString())
-
-        await ctx.db.user.save()
+          ctx.db.user.reserve_players.splice(i, 1)
+          
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              reserve_players: ctx.db.user.reserve_players,
+              active_players: {
+                push: player.id.toString()
+              }
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
 
         return await ctx.reply('commands.promote.player_promoted', { p: player.name })
       }
@@ -280,10 +293,21 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      ctx.db.user.reserve_players.splice(i, 1)
-      ctx.db.user.active_players.push(ctx.args[3])
+      await prisma.$transaction(async(tx) => {
+        ctx.db.user.reserve_players.splice(i, 1)
+        ctx.db.user.active_players.push(ctx.args[3])
 
-      await ctx.db.user.save()
+        await tx.user.update({
+          where: {
+            id: ctx.db.user.id
+          },
+          data: {
+            active_players: ctx.db.user.active_players,
+            reserve_players: ctx.db.user.reserve_players
+          }
+        })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
+      })
 
       const p = ctx.app.players.get(ctx.args[3])
 
@@ -379,12 +403,23 @@ export default createCommand({
           return await ctx.reply('commands.remove.player_not_found')
         }
 
-        const i = ctx.db.user.active_players.findIndex(p => p === player.id.toString())
+        await prisma.$transaction(async(tx) => {
+          const i = ctx.db.user.active_players.findIndex(p => p === player.id.toString())
+          ctx.db.user.active_players.splice(i, 1)
 
-        ctx.db.user.reserve_players.push(player.id.toString())
-        ctx.db.user.active_players.splice(i, 1)
-
-        await ctx.db.user.save()
+          await tx.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              reserve_players: {
+                push: player.id.toString()
+              },
+              active_players: ctx.db.user.active_players
+            }
+          })
+          await Bun.redis.del(`user:${ctx.db.user.id}`)
+        })
 
         await ctx.reply('commands.remove.player_removed', { p: player.name })
       }
@@ -458,11 +493,16 @@ export default createCommand({
     const name = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-1`)
     const tag = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-2`)
 
-    ctx.db.user.team_name = name
-    ctx.db.user.team_tag = tag
-
-    await ctx.db.user.save()
-
+    await prisma.user.update({
+      where: {
+        id: ctx.db.user.id
+      },
+      data: {
+        team_name: name,
+        team_tag: tag
+      }
+    })
+    await Bun.redis.del(`user:${ctx.db.user.id}`)
     await ctx.reply('commands.roster.team_info_changed', { name, tag })
   }
 })
