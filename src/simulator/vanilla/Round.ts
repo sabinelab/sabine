@@ -149,7 +149,11 @@ export default class Round extends Match {
         user2.ranked_defeats += 1
         user2.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user2.rank_rating < 0) {
+          user2.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED',
@@ -189,9 +193,37 @@ export default class Round extends Match {
                 ]
               }
             }
-          })])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_defeats: {
+                increment: 1
+              },
+              rank_rating: user2.rank_rating
+            }
+          })
+        ])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -244,7 +276,11 @@ export default class Round extends Match {
         user1.ranked_defeats += 1
         user1.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user1.rank_rating < 0) {
+          user1.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED',
@@ -284,10 +320,37 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_defeats: {
+                increment: 1
+              },
+              rank_rating: user1.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -342,7 +405,11 @@ export default class Round extends Match {
         user2.ranked_defeats += 1
         user2.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user2.rank_rating < 0) {
+          user2.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED',
@@ -382,10 +449,37 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_defeats: {
+                increment: 1
+              },
+              rank_rating: user2.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -439,7 +533,11 @@ export default class Round extends Match {
         user1.ranked_defeats += 1
         user1.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user1.rank_rating < 0) {
+          user1.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED',
@@ -464,25 +562,52 @@ export default class Round extends Match {
             data: {
               mode: 'RANKED',
               points: -(pts - 5),
-              userId: this.teams[1].user,
+              userId: this.teams[0].user,
               winner: false,
               teams: {
                 create: [
                   {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
                     user: this.teams[0].user,
                     score: score1,
+                  },
+                  {
+                    user: this.teams[1].user,
+                    score: score2,
                   }
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_defeats: {
+                increment: 1
+              },
+              rank_rating: user1.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -540,7 +665,11 @@ export default class Round extends Match {
         user2.ranked_swiftplay_defeats += 1
         user2.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user2.rank_rating < 0) {
+          user2.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED_SWIFTPLAY',
@@ -580,10 +709,37 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_swiftplay_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_swiftplay_defeats: {
+                increment: 1
+              },
+              rank_rating: user2.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -637,7 +793,11 @@ export default class Round extends Match {
         user1.ranked_swiftplay_defeats += 1
         user1.rank_rating -= pts - 5
 
-        await Promise.allSettled([
+        if(user1.rank_rating < 0) {
+          user1.rank_rating = 0
+        }
+
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'RANKED_SWIFTPLAY',
@@ -677,10 +837,37 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              ranked_swiftplay_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              ranked_swiftplay_defeats: {
+                increment: 1
+              },
+              rank_rating: user1.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -729,7 +916,7 @@ export default class Round extends Match {
         user1.swiftplay_wins += 1
         user2.swiftplay_defeats += 1
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'SWIFTPLAY',
@@ -767,10 +954,30 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              swiftplay_wins: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              swiftplay_defeats: {
+                increment: 1
+              }
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -815,7 +1022,7 @@ export default class Round extends Match {
         user2.swiftplay_wins += 1
         user1.swiftplay_defeats += 1
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'SWIFTPLAY',
@@ -853,10 +1060,30 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              swiftplay_wins: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              swiftplay_defeats: {
+                increment: 1
+              }
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -905,7 +1132,7 @@ export default class Round extends Match {
         user1.unranked_wins += 1
         user2.unranked_defeats += 1
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'UNRANKED',
@@ -943,10 +1170,30 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              unranked_wins: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              unranked_defeats: {
+                increment: 1
+              }
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -991,7 +1238,7 @@ export default class Round extends Match {
         user2.unranked_wins += 1
         user1.unranked_defeats += 1
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'UNRANKED',
@@ -1029,10 +1276,30 @@ export default class Round extends Match {
                 ]
               }
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              unranked_wins: {
+                increment: 1
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              unranked_defeats: {
+                increment: 1
+              }
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1078,7 +1345,7 @@ export default class Round extends Match {
       const max = Math.max(score1, score2)
 
       if(max === 13 && score1 === max) {
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'TOURNAMENT',
@@ -1118,8 +1385,8 @@ export default class Round extends Match {
             }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1161,21 +1428,21 @@ export default class Round extends Match {
         )
       }
       else if(max === 13 && score2 === max) {
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'TOURNAMENT',
-              userId: this.teams[0].user,
+              userId: this.teams[1].user,
               winner: true,
               teams: {
                 create: [
                   {
-                    user: this.teams[0].user,
-                    score: score1,
-                  },
-                  {
                     user: this.teams[1].user,
                     score: score2,
+                  },
+                  {
+                    user: this.teams[0].user,
+                    score: score1,
                   }
                 ]
               }
@@ -1184,25 +1451,25 @@ export default class Round extends Match {
           prisma.match.create({
             data: {
               mode: 'TOURNAMENT',
-              userId: this.teams[1].user,
+              userId: this.teams[0].user,
               winner: false,
               teams: {
                 create: [
                   {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
                     user: this.teams[0].user,
                     score: score1,
+                  },
+                  {
+                    user: this.teams[1].user,
+                    score: score2,
                   }
                 ]
               }
             }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1248,7 +1515,7 @@ export default class Round extends Match {
       const max = Math.max(score1, score2)
 
       if(max === 13 && score1 === max) {
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'TOURNAMENT',
@@ -1276,8 +1543,8 @@ export default class Round extends Match {
             }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1319,7 +1586,7 @@ export default class Round extends Match {
         )
       }
       else if(max === 13 && score2 === max) {
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'TOURNAMENT',
@@ -1359,175 +1626,8 @@ export default class Round extends Match {
             }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-            this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(player => `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${parseInt(player.ovr.toString())}) — \`${player.kills}/${player.deaths}\``)
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(player => `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${parseInt(player.ovr.toString())}) — \`${player.kills}/${player.deaths}\``)
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send(
-          {
-            content: this.t('simulator.winner',
-              {
-                t: this.teams[1].name,
-                users: this.mentions
-              }),
-            reply: {
-              messageReference: this.ctx.id
-            }
-          }
-        )
-      }
-      else if(max > 13 && score1 === max) {
-        await Promise.allSettled([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              userId: this.teams[0].user,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1,
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2,
-                  }
-                ]
-              }
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              userId: this.teams[1].user,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1,
-                  }
-                ]
-              }
-            }
-          })
-        ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-            this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(player => `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${parseInt(player.ovr.toString())}) — \`${player.kills}/${player.deaths}\``)
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(player => `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${parseInt(player.ovr.toString())}) — \`${player.kills}/${player.deaths}\``)
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send(
-          {
-            content: this.t('simulator.winner',
-              {
-                t: this.teams[0].name,
-                users: this.mentions
-              }),
-            reply: {
-              messageReference: this.ctx.id
-            }
-          }
-        )
-      }
-
-      else if(max > 13 && score2 === max) {
-        await Promise.allSettled([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              userId: this.teams[1].user,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1,
-                  }
-                ]
-              }
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              userId: this.teams[1].user,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1,
-                  }
-                ]
-              }
-            }
-          })
-        ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1763,6 +1863,7 @@ export default class Round extends Match {
       }
     }
   }
+
   private async secondStep(bombPlanted?: boolean) {
     const kills: KillEvent[] = []
 

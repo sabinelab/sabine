@@ -127,7 +127,7 @@ export default class Round extends Match {
           ]
         }
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'ARENA',
@@ -169,9 +169,37 @@ export default class Round extends Match {
               },
               metadata: stats
             }
-          })])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              arena_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              arena_defeats: {
+                increment: 1
+              },
+              rank_rating: user2.rank_rating
+            }
+          })
+        ])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
       }
       else if(max === 13 && score2 === max) {
         const diff = score2 - score1
@@ -212,7 +240,7 @@ export default class Round extends Match {
           ]
         }
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'ARENA',
@@ -254,10 +282,37 @@ export default class Round extends Match {
               },
               metadata: stats
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              arena_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              arena_defeats: {
+                increment: 1
+              },
+              rank_rating: user1.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
       }
 
       else if(max > 13 && score1 === max) {
@@ -299,7 +354,7 @@ export default class Round extends Match {
           ]
         }
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'ARENA',
@@ -341,10 +396,37 @@ export default class Round extends Match {
               },
               metadata: stats
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              arena_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              arena_defeats: {
+                increment: 1
+              },
+              rank_rating: user2.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
       }
       else if(max > 13 && score2 === max) {
         const diff = score2 - score1
@@ -385,7 +467,7 @@ export default class Round extends Match {
           ]
         }
 
-        await Promise.allSettled([
+        await prisma.$transaction([
           prisma.match.create({
             data: {
               mode: 'ARENA',
@@ -411,26 +493,53 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: -(pts - 5),
-              userId: this.teams[1].user,
+              userId: this.teams[0].user,
               winner: false,
               teams: {
                 create: [
                   {
-                    user: this.teams[1].user,
-                    score: score2,
-                  },
-                  {
                     user: this.teams[0].user,
                     score: score1,
+                  },
+                  {
+                    user: this.teams[1].user,
+                    score: score2,
                   }
                 ]
               },
               metadata: stats
             }
+          }),
+          prisma.user.update({
+            where: {
+              id: user2.id
+            },
+            data: {
+              arena_wins: {
+                increment: 1
+              },
+              rank_rating: {
+                increment: pts
+              },
+              fates: {
+                increment: 5
+              }
+            }
+          }),
+          prisma.user.update({
+            where: {
+              id: user1.id
+            },
+            data: {
+              arena_defeats: {
+                increment: 1
+              },
+              rank_rating: user1.rank_rating
+            }
           })
         ])
-
-        await Promise.allSettled([user1.save(), user2.save()])
+        await Bun.redis.del(`user:${user1.id}`)
+        await Bun.redis.del(`user:${user2.id}`)
       }
     }
 
