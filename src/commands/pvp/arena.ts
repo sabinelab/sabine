@@ -419,6 +419,8 @@ export default createCommand({
             arena_metadata: metadata
           }
         })
+
+        ctx.db.user.arena_metadata = metadata
       })
 
       const page = 1
