@@ -198,8 +198,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
       }
       else if(max === 13 && score2 === max) {
         const diff = score2 - score1
@@ -311,8 +309,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
       }
 
       else if(max > 13 && score1 === max) {
@@ -425,8 +421,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
       }
       else if(max > 13 && score2 === max) {
         const diff = score2 - score1
@@ -538,8 +532,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
       }
     }
 

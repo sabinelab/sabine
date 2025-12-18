@@ -223,8 +223,6 @@ export default createCommand({
           ]
         })
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
-      await Bun.redis.del(`user:${user.id}`)
 
       await ctx.edit('commands.trade.res', {
         player: `${player.name} (${player.ovr})`,

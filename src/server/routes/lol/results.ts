@@ -186,7 +186,6 @@ export const lolResults = new Elysia()
                   }
                 })
               ])
-              await Bun.redis.del(`user:${user.id}`)
             }
             else {
               await user.addIncorrectPrediction('lol', data.id)

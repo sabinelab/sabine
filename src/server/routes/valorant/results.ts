@@ -219,7 +219,6 @@ export const valorantResults = new Elysia()
                   }
                 })
               ])
-              await Bun.redis.del(`user:${user.id}`)
             }
             else {
               await user.addIncorrectPrediction('valorant', data.id)

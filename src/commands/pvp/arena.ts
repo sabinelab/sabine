@@ -418,7 +418,6 @@ export default createCommand({
           }
         })
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       const page = 1
 
@@ -577,7 +576,6 @@ export default createCommand({
           }
         })
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       const page = 1
 

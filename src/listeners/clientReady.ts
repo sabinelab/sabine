@@ -770,8 +770,6 @@ export default createListener({
               }
             })
           ])
-          await Bun.redis.del(`user:${player1.id}`)
-          await Bun.redis.del(`user:${player2.id}`)
         }
         else if(
           player1.arena_metadata.lineup.length === 5 &&
@@ -800,8 +798,6 @@ export default createListener({
               }
             })
           ])
-          await Bun.redis.del(`user:${player1.id}`)
-          await Bun.redis.del(`user:${player2.id}`)
         }
         else if(
           player1.arena_metadata.lineup.length < 5 &&
@@ -831,8 +827,6 @@ export default createListener({
               }
             })
           ])
-          await Bun.redis.del(`user:${player1.id}`)
-          await Bun.redis.del(`user:${player2.id}`)
         }
 
         const map = await app.redis.get('arena:map')
@@ -950,7 +944,6 @@ export default createListener({
             reminded: true
           }
         })
-        await Bun.redis.del(`user:${user.id}`)
       })
         .catch(e => new Logger(app).error(e))
 

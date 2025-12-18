@@ -118,7 +118,6 @@ export default createCommand({
               valorant_news_channel: channel.id
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         },
         lol: async() => {
@@ -136,7 +135,6 @@ export default createCommand({
               lol_news_channel: channel.id
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         }
       }
@@ -156,7 +154,6 @@ export default createCommand({
               valorant_news_channel: null
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_disabled')
         },
         lol: async() => {
@@ -170,7 +167,6 @@ export default createCommand({
               valorant_news_channel: null
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
           await ctx.reply('commands.news.news_disabled')
         }
       }

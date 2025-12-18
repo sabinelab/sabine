@@ -86,7 +86,6 @@ export default createModalSubmitInteraction({
             }
           })
         ])
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 
@@ -176,7 +175,6 @@ export default createModalSubmitInteraction({
             }
           })
         ])
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 

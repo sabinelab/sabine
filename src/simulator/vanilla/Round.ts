@@ -222,8 +222,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -349,8 +347,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -478,8 +474,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -606,8 +600,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -738,8 +730,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -866,8 +856,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -976,8 +964,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1082,8 +1068,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1192,8 +1176,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1298,8 +1280,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1385,8 +1365,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1468,8 +1446,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1543,8 +1519,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1626,8 +1600,6 @@ export default class Round extends Match {
             }
           })
         ])
-        await Bun.redis.del(`user:${user1.id}`)
-        await Bun.redis.del(`user:${user2.id}`)
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))

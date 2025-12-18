@@ -21,7 +21,6 @@ export default createCommand({
           remind: true
         }
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       return await ctx.reply('commands.remind.enabled')
     }
@@ -34,7 +33,6 @@ export default createCommand({
         remind: false
       }
     })
-    await Bun.redis.del(`user:${ctx.db.user.id}`)
     
     return await ctx.reply('commands.remind.disabled')
   }

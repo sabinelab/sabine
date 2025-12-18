@@ -157,7 +157,6 @@ export default createCommand({
           }
         })
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       await ctx.reply('commands.promote.player_promoted', { p: app.players.get(ctx.args[3])?.name })
     }

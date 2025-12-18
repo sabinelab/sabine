@@ -52,7 +52,6 @@ export default createCommand({
             lang: 'pt'
           }
         })
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('Agora eu irei interagir em português com você!')
       }
         break
@@ -65,7 +64,6 @@ export default createCommand({
             lang: 'en'
           }
         })
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('Now I will interact in english with you!')
       }
     }

@@ -171,7 +171,6 @@ export default createCommand({
               lang: 'en'
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild?.id}`)
 
           await ctx.reply('Now I will interact in English on this server!')
         },
@@ -184,7 +183,6 @@ export default createCommand({
               lang: 'pt'
             }
           })
-          await Bun.redis.del(`guild:${ctx.db.guild?.id}`)
 
           await ctx.reply('Agora eu irei interagir em português neste servidor!')
         }
@@ -595,7 +593,6 @@ export default createCommand({
           valorant_resend_time: guild.valorant_resend_time
         }
       })
-      await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
       await ctx.edit('commands.admin.resent')
     }
@@ -796,7 +793,6 @@ export default createCommand({
           lol_resend_time: guild.lol_resend_time
         }
       })
-      await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
       await ctx.edit('commands.admin.resent')
     }
