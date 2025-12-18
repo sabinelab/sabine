@@ -12,6 +12,7 @@ export default createCommand({
   },
   category: 'economy',
   cooldown: true,
+  userInstall: true,
   async run({ ctx }) {
     const user = await SabineUser.fetch(ctx.interaction.user.id)
 
