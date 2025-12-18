@@ -25,6 +25,12 @@ export const prisma = new PrismaClient({ adapter })
           Bun.redis.del(`user:${user.id}`).catch(voidCatch)
 
           return user
+        },
+        async delete({ args, query }) {
+          const user = await query(args)
+          Bun.redis.del(`user:${user.id}`).catch(voidCatch)
+
+          return user
         }
       },
       guild: {
@@ -41,6 +47,12 @@ export const prisma = new PrismaClient({ adapter })
           return guild
         },
         async create({ args, query }) {
+          const guild = await query(args)
+          Bun.redis.del(`guild:${guild.id}`).catch(voidCatch)
+
+          return guild
+        },
+        async delete({ args, query }) {
           const guild = await query(args)
           Bun.redis.del(`guild:${guild.id}`).catch(voidCatch)
 
