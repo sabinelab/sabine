@@ -113,8 +113,8 @@ export default createCommand({
           }
         }
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
     })
+    await Bun.redis.del(`user:${ctx.db.user.id}`)
 
     await ctx.reply('commands.sign.signed', {
       player: `${player.name} (${Math.floor(player.ovr)})`,

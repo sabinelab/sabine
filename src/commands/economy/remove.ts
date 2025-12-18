@@ -67,8 +67,8 @@ export default createCommand({
           active_players: user.active_players
         }
       })
-      await Bun.redis.del(`user:${ctx.db.user.id}`)
     })
+    await Bun.redis.del(`user:${ctx.db.user.id}`)
 
     return await ctx.reply('commands.remove.player_removed', { p: p.name })
   },

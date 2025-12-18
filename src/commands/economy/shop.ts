@@ -106,8 +106,8 @@ export default createCommand({
               }
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('commands.shop.success.gold', { fates: price.gold })
       },
       platinum: async() => {
@@ -129,8 +129,8 @@ export default createCommand({
               }
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
       },
       diamond: async() => {
@@ -152,8 +152,8 @@ export default createCommand({
               }
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
       },
       ascendant: async() => {
@@ -175,8 +175,8 @@ export default createCommand({
               }
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
         await ctx.reply('commands.shop.success.gold', { fates: price.ascendant })
       }
     }

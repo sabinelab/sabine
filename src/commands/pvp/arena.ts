@@ -417,10 +417,8 @@ export default createCommand({
             arena_metadata: metadata
           }
         })
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
-
-        ctx.db.user.arena_metadata = metadata as any
       })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       const page = 1
 
@@ -578,10 +576,8 @@ export default createCommand({
             arena_metadata: metadata as any
           }
         })
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
-
-        ctx.db.user.arena_metadata = metadata as any
       })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       const page = 1
 

@@ -353,6 +353,7 @@ export default createCommand({
                 }
               })
             }
+            await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
             return await ctx.reply('commands.tournament.tournament_removed')
           }
@@ -378,6 +379,7 @@ export default createCommand({
               }
             })
           }
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
           await ctx.reply('commands.tournament.tournament_removed', {
             t: ctx.args[2].toString()
@@ -406,6 +408,7 @@ export default createCommand({
                 }
               })
             }
+            await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
             return await ctx.reply('commands.tournament.tournament_removed')
           }
@@ -431,6 +434,7 @@ export default createCommand({
               }
             })
           }
+          await Bun.redis.del(`guild:${ctx.db.guild.id}`)
 
           await ctx.reply('commands.tournament.tournament_removed', {
             t: ctx.args[2].toString()

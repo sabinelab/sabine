@@ -256,8 +256,8 @@ export default createCommand({
               }
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         return await ctx.reply('commands.promote.player_promoted', { p: player.name })
       }
@@ -320,8 +320,8 @@ export default createCommand({
             reserve_players: user.reserve_players
           }
         })
-        await Bun.redis.del(`user:${ctx.db.user.id}`)
       })
+      await Bun.redis.del(`user:${ctx.db.user.id}`)
 
       const p = ctx.app.players.get(ctx.args[3])
 
@@ -441,8 +441,8 @@ export default createCommand({
               active_players: user.active_players
             }
           })
-          await Bun.redis.del(`user:${ctx.db.user.id}`)
         })
+        await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         await ctx.reply('commands.remove.player_removed', { p: player.name })
       }

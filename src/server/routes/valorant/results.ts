@@ -4,7 +4,7 @@ import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import locales from '@i18n'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import { app } from '@/structures/app/App'
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 import * as Discord from 'discord.js'
 
 const tournaments: { [key: string]: RegExp[] } = {
@@ -198,7 +198,7 @@ export const valorantResults = new Elysia()
               const coins = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
               const fates = 5
 
-              await Promise.allSettled([
+              await prisma.$transaction([
                 app.prisma.prediction.update({
                   where: {
                     id: pred.id
@@ -219,6 +219,7 @@ export const valorantResults = new Elysia()
                   }
                 })
               ])
+              await Bun.redis.del(`user:${user.id}`)
             }
             else {
               await user.addIncorrectPrediction('valorant', data.id)

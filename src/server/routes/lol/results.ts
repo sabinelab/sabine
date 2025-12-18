@@ -4,7 +4,7 @@ import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import locales from '@i18n'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import calcOdd from '@/util/calcOdd'
-import { SabineUser } from '@db'
+import { prisma, SabineUser } from '@db'
 import { REST, Routes } from 'discord.js'
 
 const rest = new REST().setToken(process.env.BOT_TOKEN)
@@ -129,7 +129,6 @@ export const lolResults = new Elysia()
 
           const transaction = async() => {
             if(pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
-
               let odd: number | null = null
               let bonus = 0
 
@@ -153,7 +152,6 @@ export const lolResults = new Elysia()
                   if(pred.teams[0].winner) {
                     odd = calcOdd(oddA)
                   }
-
                   else {
                     odd = calcOdd(oddB)
                   }
@@ -167,7 +165,7 @@ export const lolResults = new Elysia()
               const coins = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
               const fates = 5
 
-              await Promise.allSettled([
+              await prisma.$transaction([
                 app.prisma.prediction.update({
                   where: {
                     id: pred.id
@@ -188,6 +186,7 @@ export const lolResults = new Elysia()
                   }
                 })
               ])
+              await Bun.redis.del(`user:${user.id}`)
             }
             else {
               await user.addIncorrectPrediction('lol', data.id)
