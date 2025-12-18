@@ -42,7 +42,7 @@ export default createCommand({
     const players = ctx.db.user.active_players
 
     if(players.length < 5) {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async(tx) => {
         const user = await tx.user.findUnique({
           where: {
             id: ctx.db.user.id
