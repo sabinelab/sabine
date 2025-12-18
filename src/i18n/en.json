@@ -367,6 +367,13 @@
     "register": {
       "already_registered": "You are already registered.",
       "success": "You have been registered succcessfully!"
+    },
+    "vote": {
+      "title": "Vote for the bot and earn rewards",
+      "description": "Vote for the bot now and stand a chance to win amazing rewards!\n\nLast vote: {last_vote}\nCurrent streak: `{current_streak}`\nTotal votes: `{total}`",
+      "field": "Rewards",
+      "value": "Radiant Pack (`95+`): `0.5%`\nImmortal Pack (`91-94`): `1.5%`\nAscendant Pack (`87-90`): `3%`\nDiamond Pack (`83-86`): `15%`\nPlatinum Pack (`78-82`): `30%`\nGold Pack (`73-77`): `20%`\nSilver Pack (`67-72`): `15%`\nBronze Pack (`60-66`): `10%`\nIron Pack (`59-`): `5%`\n\nFor every 20 votes without breaking the streak, a Radiant Pack is guaranteed.",
+      "vote": "Vote now!"
     }
   },
   "simulator": {

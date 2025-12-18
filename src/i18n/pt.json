@@ -367,6 +367,13 @@
     "register": {
       "already_registered": "Você já está registrado.",
       "success": "Você foi registrado com sucesso!"
+    },
+    "vote": {
+      "title": "Vote no bot e ganhe recompensas",
+      "description": "Vote no bot agora e ganhe recompensas incríveis!\n\nÚltimo voto: {last_vote}\nSequência atual: `{current_streak}`\nVotos totais: `{total}`",
+      "field": "Recompensas",
+      "value": "Pacote Radiante (`95+`): `0.5%`\nPacote Imortal (`91-94`): `1.5%`\nPacote Ascendente (`87-90`): `3%`\nPacote Diamante (`83-86`): `15%`\nPacote Platina (`78-82`): `30%`\nPacote Ouro (`73-77`): `20%`\nPacote Prata (`67-72`): `15%`\nPacote Bronze (`60-66`): `10%`\nPacote Ferro (`59-`): `5%`\n\nA cada 20 votos sem quebrar a sequência, um Pacote Radiante é garantido.",
+      "vote": "Vote agora!"
     }
   },
   "simulator": {
