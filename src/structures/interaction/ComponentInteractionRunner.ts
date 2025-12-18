@@ -72,7 +72,11 @@ export default class ComponentInteractionRunner {
         guild = await SabineGuild.fetch(interaction.guildId) ?? new SabineGuild(interaction.guildId)
       }
 
-      const user = await SabineUser.fetch(interaction.user.id) ?? new SabineUser(interaction.user.id)
+      const user = await SabineUser.fetch(interaction.user.id)
+
+      if(!user) {
+        return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
+      }
 
       const ctx = new ComponentInteractionContext({
         args,
@@ -115,12 +119,16 @@ export default class ComponentInteractionRunner {
 
     if(!i) return
 
-    const user = await SabineUser.fetch(interaction.user.id) ?? new SabineUser(interaction.user.id)
+    const user = await SabineUser.fetch(interaction.user.id)
 
     let guild: SabineGuild | undefined
 
     if(interaction.guildId) {
       guild = await SabineGuild.fetch(interaction.guildId) ?? new SabineGuild(interaction.guildId)
+    }
+
+    if(!user) {
+      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
     }
 
     const ctx = new ComponentInteractionContext({
