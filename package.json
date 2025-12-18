@@ -8,11 +8,11 @@
     "test": "bun test.ts",
     "start": "bun src/shard.ts",
     "dev": "bun --watch .",
-    "build": "eslint && tsgo",
+    "build": "eslint && tsc",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate",
     "lint": "eslint",
-    "type-check": "tsgo"
+    "type-check": "tsc"
   },
   "keywords": [],
   "author": "levisantosp",
@@ -36,7 +36,6 @@
     "@eslint/js": "9.39.2",
     "@types/bun": "1.3.4",
     "@types/humanize-duration": "3.27.4",
-    "@typescript/native-preview": "7.0.0-dev.20251218.1",
     "eslint": "9.39.2",
     "globals": "16.5.0",
     "prisma": "7.2.0",
