@@ -9,7 +9,7 @@ import createCommand from '../../structures/command/createCommand'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import { valorant_agents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
-import { prisma } from '@db'
+import { prisma, type ArenaMetadata } from '@db'
 
 export default createCommand({
   name: 'arena',
@@ -393,22 +393,33 @@ export default createCommand({
       }
 
       await prisma.$transaction(async(tx) => {
-        const index = ctx.db.user.arena_metadata?.lineup
+        const user = await tx.user.findUnique({
+          where: { id: ctx.db.user.id },
+          select: { arena_metadata: true }
+        })
+
+        if(!user || !user.arena_metadata) return
+
+        const metadata = user.arena_metadata as ArenaMetadata
+
+        const index = metadata.lineup
           .findIndex(line => line.player === player.id.toString())
 
-        if(index === undefined) return
+        if(index === -1) return
 
-        ctx.db.user.arena_metadata?.lineup.splice(index, 1)
+        metadata.lineup.splice(index, 1)
 
         await tx.user.update({
           where: {
             id: ctx.db.user.id
           },
           data: {
-            arena_metadata: ctx.db.user.arena_metadata!
+            arena_metadata: metadata
           }
         })
         await Bun.redis.del(`user:${ctx.db.user.id}`)
+
+        ctx.db.user.arena_metadata = metadata as any
       })
 
       const page = 1
@@ -537,43 +548,39 @@ export default createCommand({
       }
 
       await prisma.$transaction(async(tx) => {
-        if(
-          !ctx.db.user.arena_metadata ||
-          !ctx.db.user.arena_metadata.lineup.length
-        ) {
-          ctx.db.user.arena_metadata = {
-            map: (await ctx.app.redis.get('arena:map'))!,
-            lineup: [
-              {
-                player: ctx.args[3],
-                agent: {
-                  name: agent.name,
-                  role: agent.role
-                }
-              }
-            ]
+        const user = await tx.user.findUnique({
+          where: { id: ctx.db.user.id },
+          select: { arena_metadata: true }
+        })
+
+        let metadata = (user?.arena_metadata as unknown as ArenaMetadata) || {
+          map: (await ctx.app.redis.get('arena:map'))!,
+          lineup: []
+        }
+
+        if(metadata.lineup && metadata.lineup.length) {
+          metadata.map = (await ctx.app.redis.get('arena:map'))!
+        }
+
+        metadata.lineup.push({
+          player: ctx.args[3],
+          agent: {
+            name: agent.name,
+            role: agent.role
           }
-        }
-        else {
-          ctx.db.user.arena_metadata.lineup.push({
-            player: ctx.args[3],
-            agent: {
-              name: agent.name,
-              role: agent.role
-            }
-          })
-          ctx.db.user.arena_metadata.map = (await ctx.app.redis.get('arena:map'))!
-        }
+        })
 
         await tx.user.update({
           where: {
             id: ctx.db.user.id
           },
           data: {
-            arena_metadata: ctx.db.user.arena_metadata
+            arena_metadata: metadata as any
           }
         })
         await Bun.redis.del(`user:${ctx.db.user.id}`)
+
+        ctx.db.user.arena_metadata = metadata as any
       })
 
       const page = 1

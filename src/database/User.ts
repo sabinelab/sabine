@@ -28,7 +28,7 @@ type ArenaLineup = {
   }
 }
 
-type ArenaMetadata = {
+export type ArenaMetadata = {
   map: string
   lineup: ArenaLineup[]
 }
@@ -82,44 +82,6 @@ export class SabineUser implements User {
 
   public constructor(id: string) {
     this.id = id
-  }
-
-  public async save(update = true) {
-    const data: Partial<User> = {}
-
-    for(const key in this) {
-      if(
-        typeof this[key] === 'function' ||
-        key === 'id' ||
-        this[key] === null ||
-        this[key] === 'premium'
-      ) continue
-
-      (data as any)[key] = this[key]
-    }
-    
-    // eslint-disable-next-line
-    const { premium, ...cleanData } = data as any
-
-    const user = await prisma.user.upsert({
-      where: {
-        id: this.id
-      },
-      update: cleanData,
-      create: {
-        id: this.id,
-        ...cleanData
-      },
-      include: {
-        premium: true
-      }
-    })
-
-    if(update) {
-      updateCache(`user:${this.id}`, user, true).catch(voidCatch)
-    }
-
-    return user
   }
 
   public static async fetch(id: string) {

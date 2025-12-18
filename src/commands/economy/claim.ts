@@ -117,25 +117,43 @@ export default createCommand({
       return await ctx.reply('commands.sell.player_not_found')
     }
 
-    const i = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[3])
-
     if(ctx.args[2] === 'promote') {
       await prisma.$transaction(async(tx) => {
-        if(ctx.db.user.active_players.length >= 5) {
-          ctx.db.user.reserve_players.push(ctx.db.user.active_players.at(-1)!)
-          ctx.db.user.active_players.splice(-1, 1)
+        const user = await tx.user.findUnique({
+          where: {
+            id: ctx.db.user.id
+          },
+          select: {
+            active_players: true,
+            reserve_players: true
+          }
+        })
+
+        if(!user) {
+          throw new Error('Not found')
         }
 
-        ctx.db.user.active_players.push(ctx.args[3])
-        ctx.db.user.reserve_players.splice(i, 1)
+        if(user.active_players.length >= 5) {
+          user.reserve_players.push(user.active_players.at(-1)!)
+          user.active_players.splice(-1, 1)
+        }
+
+        const i = user.reserve_players.findIndex(p => p === ctx.args[3])
+
+        if(i === -1) {
+          throw new Error('Not found')
+        }
+
+        user.active_players.push(ctx.args[3])
+        user.reserve_players.splice(i, 1)
 
         await tx.user.update({
           where: {
             id: ctx.db.user.id
           },
           data: {
-            active_players: ctx.db.user.active_players,
-            reserve_players: ctx.db.user.reserve_players
+            active_players: user.active_players,
+            reserve_players: user.reserve_players
           }
         })
         await Bun.redis.del(`user:${ctx.db.user.id}`)
@@ -152,6 +170,7 @@ export default createCommand({
 
       const price = BigInt(calcPlayerPrice(player, true))
 
+      const i = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[3])
       await ctx.db.user.sellPlayer(player.id.toString(), price, i)
 
       await ctx.reply('commands.sell.sold', { p: player.name, price: price.toLocaleString() })

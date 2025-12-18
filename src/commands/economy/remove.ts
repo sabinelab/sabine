@@ -35,8 +35,26 @@ export default createCommand({
     }
 
     await prisma.$transaction(async(tx) => {
-      const i = ctx.db.user.active_players.findIndex(pl => pl === p.id.toString())
-      ctx.db.user.active_players.splice(i, 1)
+      const user = await tx.user.findUnique({
+        where: {
+          id: ctx.db.user.id
+        },
+        select: {
+          active_players: true,
+          reserve_players: true
+        }
+      })
+
+      if(!user) {
+        throw new Error('Not found')
+      }
+
+      const i = user.active_players.findIndex(pl => pl === p.id.toString())
+      if(i === -1) {
+        throw new Error('Not found')
+      }
+
+      user.active_players.splice(i, 1)
 
       await tx.user.update({
         where: {
@@ -46,7 +64,7 @@ export default createCommand({
           reserve_players: {
             push: p.id.toString()
           },
-          active_players: ctx.db.user.active_players
+          active_players: user.active_players
         }
       })
       await Bun.redis.del(`user:${ctx.db.user.id}`)

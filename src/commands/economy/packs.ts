@@ -3,6 +3,7 @@ import createCommand from '../../structures/command/createCommand'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import type { Player } from '@sabinelab/players'
 import { app } from '../../structures/app/App'
+import { prisma } from '@db'
 
 const tier = (() => {
   const tier = {
@@ -373,8 +374,19 @@ export default createCommand({
 
           const players = getRandomPlayers('iron')
 
-          ctx.db.user.iron_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                iron_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -402,8 +414,19 @@ export default createCommand({
 
           const players = getRandomPlayers('bronze')
 
-          ctx.db.user.bronze_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                bronze_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -431,8 +454,19 @@ export default createCommand({
 
           const players = getRandomPlayers('silver')
 
-          ctx.db.user.silver_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                silver_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -460,8 +494,19 @@ export default createCommand({
 
           const players = getRandomPlayers('gold')
 
-          ctx.db.user.gold_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                gold_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -489,8 +534,19 @@ export default createCommand({
 
           const players = getRandomPlayers('platinum')
 
-          ctx.db.user.platinum_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                platinum_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -518,8 +574,19 @@ export default createCommand({
 
           const players = getRandomPlayers('diamond')
 
-          ctx.db.user.diamond_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                diamond_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -547,8 +614,19 @@ export default createCommand({
 
           const players = getRandomPlayers('ascendant')
 
-          ctx.db.user.ascendant_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                ascendant_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -576,8 +654,19 @@ export default createCommand({
 
           const players = getRandomPlayers('immortal')
 
-          ctx.db.user.immortal_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                immortal_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -605,8 +694,19 @@ export default createCommand({
 
           const players = getRandomPlayers('radiant')
 
-          ctx.db.user.radiant_packs -= 1
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await prisma.$transaction(async(tx) => {
+            await tx.user.update({
+              where: {
+                id: ctx.db.user.id
+              },
+              data: {
+                radiant_packs: {
+                  decrement: 1
+                }
+              }
+            })
+            await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          })
 
           const button = new ButtonBuilder()
             .defineStyle('blue')

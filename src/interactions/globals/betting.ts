@@ -144,8 +144,6 @@ export default createModalSubmitInteraction({
           odd = calcOdd(oddB)
         }
 
-        ctx.db.user.coins -= value
-
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],

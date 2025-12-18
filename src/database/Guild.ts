@@ -26,37 +26,6 @@ export class SabineGuild implements Guild {
     this.id = id
   }
 
-  public async save() {
-    const data: Partial<Guild> = {}
-
-    for(const key in this) {
-      if(
-        typeof this[key] === 'function' ||
-        key === 'id' ||
-        this[key] === null
-      ) continue
-
-      if(
-        ['tbd_matches', 'events', 'live_messages']
-          .includes(key)
-      ) {
-        continue
-      }
-
-      else (data as any)[key] = this[key]
-    }
-
-    const guild = await prisma.guild.upsert({
-      where: { id: this.id },
-      update: data,
-      create: { id: this.id, ...data }
-    })
-
-    updateCache(`guild:${this.id}`, guild, true).catch(voidCatch)
-
-    return guild
-  }
-
   public static async fetch(id: string) {
     const cachedData = await Bun.redis.get(`guild:${id}`)
 

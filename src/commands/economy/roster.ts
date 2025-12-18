@@ -223,22 +223,34 @@ export default createCommand({
     else if(ctx.args[2] === 'promote') {
       const player = ctx.app.players.get(ctx.args[3])
 
-      if(!player || !ctx.db.user.reserve_players.includes(player.id.toString())) {
+      if(!player) {
         return await ctx.reply('commands.promote.player_not_found')
       }
 
       if(ctx.db.user.active_players.length < 5) {
         await prisma.$transaction(async(tx) => {
-          const i = ctx.db.user.reserve_players.findIndex(p => p === player.id.toString())
+          const user = await tx.user.findUnique({
+            where: { id: ctx.db.user.id },
+            select: { active_players: true, reserve_players: true }
+          })
+          if(!user) throw new Error('Not found')
 
-          ctx.db.user.reserve_players.splice(i, 1)
+          if(user.active_players.length >= 5) {
+            throw new Error('Roster full')
+          }
+
+          const i = user.reserve_players.findIndex(p => p === player.id.toString())
+
+          if(i === -1) throw new Error('Not found')
+
+          user.reserve_players.splice(i, 1)
           
           await tx.user.update({
             where: {
               id: ctx.db.user.id
             },
             data: {
-              reserve_players: ctx.db.user.reserve_players,
+              reserve_players: user.reserve_players,
               active_players: {
                 push: player.id.toString()
               }
@@ -276,34 +288,36 @@ export default createCommand({
     else if(ctx.args[2] === 'promote2') {
       if(!ctx.interaction.isStringSelectMenu()) return
 
-      const id = ctx.interaction.values[0].split(';')[1]
-
-      let i = ctx.db.user.active_players.findIndex(p => p === id)
-
-      if(i < 0) {
-        return await ctx.reply('commands.promote.player_not_found')
-      }
-
-      ctx.db.user.active_players.splice(i, 1)
-      ctx.db.user.reserve_players.push(id)
-
-      i = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[3])
-
-      if(i < 0) {
-        return await ctx.reply('commands.promote.player_not_found')
-      }
+      const idActive = ctx.interaction.values[0].split(';')[1]
+      const idReserve = ctx.args[3]
 
       await prisma.$transaction(async(tx) => {
-        ctx.db.user.reserve_players.splice(i, 1)
-        ctx.db.user.active_players.push(ctx.args[3])
+        const user = await tx.user.findUnique({
+          where: { id: ctx.db.user.id },
+          select: { active_players: true, reserve_players: true }
+        })
+        if(!user) throw new Error('Not found')
+
+        const iActive = user.active_players.findIndex(p => p === idActive)
+        const iReserve = user.reserve_players.findIndex(p => p === idReserve)
+
+        if(iActive === -1 || iReserve === -1) {
+          throw new Error('Player not found')
+        }
+
+        user.active_players.splice(iActive, 1)
+        user.active_players.push(idReserve)
+
+        user.reserve_players.splice(iReserve, 1)
+        user.reserve_players.push(idActive)
 
         await tx.user.update({
           where: {
             id: ctx.db.user.id
           },
           data: {
-            active_players: ctx.db.user.active_players,
-            reserve_players: ctx.db.user.reserve_players
+            active_players: user.active_players,
+            reserve_players: user.reserve_players
           }
         })
         await Bun.redis.del(`user:${ctx.db.user.id}`)
@@ -399,13 +413,22 @@ export default createCommand({
       else if(ctx.args[2] === 'remove') {
         const player = ctx.app.players.get(ctx.args[3])
 
-        if(!player || !ctx.db.user.active_players.includes(player.id.toString())) {
+        if(!player) {
           return await ctx.reply('commands.remove.player_not_found')
         }
 
         await prisma.$transaction(async(tx) => {
-          const i = ctx.db.user.active_players.findIndex(p => p === player.id.toString())
-          ctx.db.user.active_players.splice(i, 1)
+          const user = await tx.user.findUnique({
+            where: { id: ctx.db.user.id },
+            select: { active_players: true }
+          })
+          if(!user) throw new Error('Not found')
+
+          const i = user.active_players.findIndex(p => p === player.id.toString())
+
+          if(i === -1) throw new Error('Player not found')
+
+          user.active_players.splice(i, 1)
 
           await tx.user.update({
             where: {
@@ -415,7 +438,7 @@ export default createCommand({
               reserve_players: {
                 push: player.id.toString()
               },
-              active_players: ctx.db.user.active_players
+              active_players: user.active_players
             }
           })
           await Bun.redis.del(`user:${ctx.db.user.id}`)

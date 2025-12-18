@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
-import { prisma, SabineUser } from '@db'
+import { prisma, SabineUser, type ArenaMetadata } from '@db'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import { calcPlayerPrice } from '@sabinelab/players'
 
@@ -157,14 +157,22 @@ export default createCommand({
       }
 
       await prisma.$transaction(async(tx) => {
+        const user = await tx.user.findUnique({
+          where: {
+            id: ctx.db.user.id
+          }
+        })
+
+        if(!user) return
+
         if(
-          user.arena_metadata?.lineup
+          (user.arena_metadata as ArenaMetadata).lineup
             .some(line => line.player === player.id.toString())
         ) {
-          const index = user.arena_metadata.lineup
+          const index = (user.arena_metadata as ArenaMetadata).lineup
             .findIndex(line => line.player === player.id.toString())
 
-          user.arena_metadata.lineup.splice(index, 1)
+          ;(user.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
         }
 
         await tx.user.update({
