@@ -19,5 +19,5 @@ const schema = z.object({
 
 export const env = schema.parse({
   ...Bun.env,
-  INTERVAL: Number(Bun.env.INTERVAL)
+  INTERVAL: Number(Bun.env.INTERVAL) || undefined
 })
