@@ -1,8 +1,9 @@
 import Service from '../../api'
 import { app } from '../../structures/app/App'
 import createModalSubmitInteraction from '../../structures/interaction/createModalSubmitInteraction'
+import { env } from '@/env'
 
-const service = new Service(process.env.AUTH)
+const service = new Service(env.AUTH)
 
 export default createModalSubmitInteraction({
   name: 'prediction',
@@ -77,7 +78,7 @@ export default createModalSubmitInteraction({
           Number(ctx.args[3]),
           Number(ctx.args[4])
         )
-        
+
         await ctx.db.user.addPrediction('lol', {
           match: data.id!,
           teams: [

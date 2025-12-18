@@ -5,6 +5,7 @@ import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import locales from '@i18n'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
+import { env } from '@/env'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [
@@ -20,7 +21,7 @@ const tournaments: { [key: string]: RegExp[] } = {
   ]
 }
 
-const rest = new REST().setToken(process.env.BOT_TOKEN)
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 export const valorantLive = new Elysia()
   .post(

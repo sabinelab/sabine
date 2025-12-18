@@ -5,8 +5,9 @@ import { app } from '../../../structures/app/App'
 import EmbedBuilder from '../../../structures/builders/EmbedBuilder'
 import locales from '@i18n'
 import ButtonBuilder from '../../../structures/builders/ButtonBuilder'
+import { env } from '@/env'
 
-const rest = new REST().setToken(process.env.BOT_TOKEN)
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 export const news = new Elysia()
   .post(

@@ -4,6 +4,7 @@ import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 import { app } from '../../structures/app/App'
 import { prisma } from '@db'
+import { env } from '@/env'
 
 const tier = (() => {
   const tier: { [key: string]: Player[] } = {
@@ -90,7 +91,7 @@ export default createCommand({
           }
         )
       )
-      .setImage(`${process.env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
+      .setImage(`${env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
 
     await ctx.reply(embed.build({
       components: [

@@ -1,6 +1,7 @@
 import { ChannelType } from 'discord.js'
 import createListener from '../structures/app/createListener'
 import EmbedBuilder from '../structures/builders/EmbedBuilder'
+import { env } from '@/env'
 
 export default createListener({
   name: 'guildDelete',
@@ -14,7 +15,7 @@ export default createListener({
       .addField('Member count', guild.memberCount.toString(), true)
       .setThumb(guild.iconURL()!)
 
-    const channel = await client.channels.fetch(process.env.GUILDS_LOG!)
+    const channel = await client.channels.fetch(env.GUILDS_LOG!)
 
     if(!channel || channel.type !== ChannelType.GuildText) return
 

@@ -1,8 +1,9 @@
 import createCommand from '../../structures/command/createCommand'
 import Service from '../../api'
 import { SabineGuild } from '@db'
+import { env } from '@/env'
 
-const service = new Service(process.env.AUTH)
+const service = new Service(env.AUTH)
 
 export default createCommand({
   name: 'tournament',

@@ -2,6 +2,7 @@ import { ChannelType } from 'discord.js'
 import pino from 'pino'
 import App from '../structures/app/App'
 import EmbedBuilder from '../structures/builders/EmbedBuilder'
+import { env } from '@/env'
 
 const logger = pino({
   transport: {
@@ -46,7 +47,7 @@ export default class Logger {
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``)
 
-      const channel = await this.client.channels.fetch(process.env.GUILDS_LOG!)
+      const channel = await this.client.channels.fetch(env.GUILDS_LOG!)
 
       if(!channel || channel.type !== ChannelType.GuildText) return
 
@@ -68,7 +69,7 @@ export default class Logger {
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack}\`\`\``)
 
-      const channel = await this.client.channels.fetch(process.env.ERROR_LOG!)
+      const channel = await this.client.channels.fetch(env.ERROR_LOG!)
 
       if(!channel || channel.type !== ChannelType.GuildText) return
 

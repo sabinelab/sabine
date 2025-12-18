@@ -7,8 +7,9 @@ import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import calcOdd from '@/util/calcOdd'
 import { prisma, SabineUser } from '@db'
 import { REST, Routes } from 'discord.js'
+import { env } from '@/env'
 
-const rest = new REST().setToken(process.env.BOT_TOKEN)
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 export const lolResults = new Elysia()
   .post(

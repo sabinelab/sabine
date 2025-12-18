@@ -9,6 +9,7 @@ import path from 'node:path'
 import { readFileSync } from 'node:fs'
 import Logger from '../../util/Logger'
 import type { Blacklist } from '@generated'
+import { env } from '@/env'
 
 const raw: {
   [key: string]: any
@@ -48,7 +49,7 @@ export default class CommandRunner {
     ) {
       return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
     }
-    
+
     if(!user) user = new SabineUser(interaction.user.id)
 
     const ban = blacklist.get(interaction.user.id)
@@ -179,7 +180,7 @@ export default class CommandRunner {
 
     command.run({ ctx, app, t, id: interaction.commandId })
       .then(async() => {
-        if(process.env.DEVS.includes(interaction.user.id)) return
+        if(env.DEVS.includes(interaction.user.id)) return
 
         const cmd: string[] = [command.name]
 
@@ -218,7 +219,7 @@ export default class CommandRunner {
           embed.setThumb(ctx.guild.iconURL()!)
         }
 
-        const channel = await app.channels.fetch(process.env.COMMAND_LOG!)
+        const channel = await app.channels.fetch(env.COMMAND_LOG!)
 
         if(!channel || channel.type !== ChannelType.GuildText) return
 

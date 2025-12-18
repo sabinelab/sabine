@@ -2,8 +2,10 @@ import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import { calcPlayerPrice } from '@sabinelab/players'
+import { env } from '@/env'
 
 const date = Date.now()
+
 export default createCommand({
   name: 'card',
   category: 'economy',
@@ -63,7 +65,7 @@ export default createCommand({
           inline: true
         }
       )
-      .setImage(`${process.env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
+      .setImage(`${env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
 
     await ctx.reply(embed.build())
   },

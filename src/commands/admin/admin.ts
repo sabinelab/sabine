@@ -14,8 +14,9 @@ import {
 import type { $Enums } from '@generated'
 import Logger from '../../util/Logger'
 import { prisma } from '@db'
+import { env } from '@/env'
 
-const service = new Service(process.env.AUTH)
+const service = new Service(env.AUTH)
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [

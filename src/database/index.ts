@@ -1,8 +1,9 @@
 import { voidCatch } from '@/database/update-cache'
 import { PrismaClient } from '@generated'
 import { PrismaPg } from '@prisma/adapter-pg'
+import { env } from '@/env'
 
-const adapter = new PrismaPg({ connectionString: process.env.POSTGRES_URI })
+const adapter = new PrismaPg({ connectionString: env.DATABASE_URL })
 
 export const prisma = new PrismaClient({ adapter })
   .$extends({

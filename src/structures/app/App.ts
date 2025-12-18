@@ -15,6 +15,7 @@ import {
 import type { Listener } from './createListener'
 import { prisma } from '@db'
 import { emojis } from '@/util/emojis'
+import { env } from '@/env'
 
 type Reminder = {
   user: string
@@ -25,10 +26,10 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const queue = new Queue<Reminder>('reminder', {
-  redis: process.env.REDIS_URL
+  redis: env.REDIS_URL
 })
 
-const rest = new Discord.REST().setToken(process.env.BOT_TOKEN)
+const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
 export default class App extends Discord.Client {
   public commands: Map<string, Command> = new Map()
@@ -109,7 +110,7 @@ export default class App extends Discord.Client {
     this.prisma = prisma
 
     await this.load()
-    await super.login(process.env.BOT_TOKEN)
+    await super.login(env.BOT_TOKEN)
   }
   public async postCommands() {
     const commands: Discord.ApplicationCommandData[] = []

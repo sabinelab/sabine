@@ -7,6 +7,7 @@ import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import { app } from '@/structures/app/App'
 import { prisma, SabineUser } from '@db'
 import * as Discord from 'discord.js'
+import { env } from '@/env'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [
@@ -22,7 +23,7 @@ const tournaments: { [key: string]: RegExp[] } = {
   ]
 }
 
-const rest = new Discord.REST().setToken(process.env.BOT_TOKEN)
+const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
 export const valorantResults = new Elysia()
   .post(

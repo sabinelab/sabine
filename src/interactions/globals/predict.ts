@@ -1,7 +1,8 @@
 import Service from '../../api'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
+import { env } from '@/env'
 
-const service = new Service(process.env.AUTH)
+const service = new Service(env.AUTH)
 
 export default createComponentInteraction({
   name: 'predict',

@@ -5,6 +5,7 @@ import Bull from 'bull'
 import type { ArenaQueue } from './listeners/clientReady'
 import { valorant_maps } from './config'
 import { prisma } from '@db'
+import { env } from '@/env'
 import './server'
 
 const currentMap = await Bun.redis.get('arena:map')
@@ -19,8 +20,8 @@ const map = maps[Math.floor(Math.random() * maps.length)]
 
 if(!currentMap) await Bun.redis.set('arena:map', map)
 
-const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: process.env.REDIS_URL })
-const changeMapQueue = new Bull('arena:map', { redis: process.env.REDIS_URL })
+const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
+const changeMapQueue = new Bull('arena:map', { redis: env.REDIS_URL })
 
 changeMapQueue.process('arena:map', async() => {
   const currentMap = await Bun.redis.get('arena:map')
@@ -180,14 +181,14 @@ if(keys.length) {
 await updateRedis()
 
 const manager = new ShardingManager('src/index.ts', {
-  token: process.env.BOT_TOKEN,
+  token: env.BOT_TOKEN,
   mode: 'process',
   totalShards: 2
 })
 
-const rest = new REST().setToken(process.env.BOT_TOKEN)
+const rest = new REST().setToken(env.BOT_TOKEN)
 
-const res = await rest.get(Routes.channelWebhooks(process.env.SHARD_LOG)) as any[]
+const res = await rest.get(Routes.channelWebhooks(env.SHARD_LOG)) as any[]
 const webhook = res.filter(w => w.token)[0]
 
 if(!webhook) {

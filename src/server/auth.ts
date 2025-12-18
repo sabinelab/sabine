@@ -1,8 +1,9 @@
 import { Elysia } from 'elysia'
+import { env } from '@/env'
 
 export const auth = new Elysia()
   .onBeforeHandle({ as: 'scoped' }, ({ headers, set }) => {
-    if(headers.authorization !== process.env.AUTH) {
+    if(headers.authorization !== env.AUTH) {
       set.status = 'Unauthorized'
 
       return { message: 'Unauthorized' }

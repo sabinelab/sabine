@@ -19,9 +19,10 @@ import { prisma, SabineUser } from '@db'
 import type { $Enums } from '@generated'
 import Bull from 'bull'
 import Match from '@/simulator/arena/Match'
+import { env } from '@/env'
 
-const rest = new REST().setToken(process.env.BOT_TOKEN)
-const service = new Service(process.env.AUTH)
+const rest = new REST().setToken(env.BOT_TOKEN)
+const service = new Service(env.AUTH)
 
 export type ArenaQueue = {
   parsedData1: {
@@ -33,7 +34,7 @@ export type ArenaQueue = {
     channelId?: string
   }
 }
-const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: process.env.REDIS_URL })
+const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [
@@ -714,7 +715,7 @@ const runTasks = async(app: App) => {
     tasks.map(task => task(app).catch(e => Logger.error(e)))
   )
 
-  setTimeout(async() => await runTasks(app), process.env.INTERVAL ?? 5 * 60 * 1000)
+  setTimeout(async() => await runTasks(app), env.INTERVAL ?? 5 * 60 * 1000)
 }
 
 export default createListener({

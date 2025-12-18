@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import { env } from '@/env'
 
 export default createCommand({
   name: 'sign',
@@ -45,7 +46,7 @@ export default createCommand({
           price: price.toLocaleString()
         }
       ))
-      .setImage(`${process.env.CDN_URL}/cards/${player.id}.png`)
+      .setImage(`${env.CDN_URL}/cards/${player.id}.png`)
 
     const button = new ButtonBuilder()
       .defineStyle('green')
