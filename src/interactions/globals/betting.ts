@@ -66,17 +66,16 @@ export default createModalSubmitInteraction({
 
         if(!pred) return await ctx.reply('helper.prediction_needed')
 
-        await prisma.$transaction(async(tx) => {
-          await tx.prediction.update({
+        await prisma.$transaction([
+          prisma.prediction.update({
             where: {
               id: pred.id
             },
             data: {
               bet: value + (pred.bet ?? 0n)
             }
-          })
-
-          await tx.user.update({
+          }),
+          prisma.user.update({
             where: {
               id: ctx.db.user.id
             },
@@ -86,7 +85,7 @@ export default createModalSubmitInteraction({
               }
             }
           })
-        })
+        ])
         await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
@@ -157,17 +156,16 @@ export default createModalSubmitInteraction({
 
         if(!pred) return await ctx.reply('helper.prediction_needed')
 
-        await prisma.$transaction(async(tx) => {
-          await tx.prediction.update({
+        await prisma.$transaction([
+          prisma.prediction.update({
             where: {
               id: pred.id
             },
             data: {
               bet: value + (pred.bet ?? 0n)
             }
-          })
-
-          await tx.user.update({
+          }),
+          prisma.user.update({
             where: {
               id: ctx.db.user.id
             },
@@ -177,7 +175,7 @@ export default createModalSubmitInteraction({
               }
             }
           })
-        })
+        ])
         await Bun.redis.del(`user:${ctx.db.user.id}`)
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)

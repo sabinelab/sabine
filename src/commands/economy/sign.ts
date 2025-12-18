@@ -91,16 +91,15 @@ export default createCommand({
 
     if(price > ctx.db.user.coins) return ctx.reply('commands.sign.coins_needed')
 
-    await app.prisma.$transaction(async(tx) => {
-      await tx.transaction.create({
+    await app.prisma.$transaction([
+      app.prisma.transaction.create({
         data: {
           userId: ctx.db.user.id,
           player: player.id,
           type: 'SIGN_PLAYER'
         }
-      })
-
-      await tx.user.update({
+      }),
+      app.prisma.user.update({
         where: {
           id: ctx.db.user.id
         },
@@ -113,7 +112,7 @@ export default createCommand({
           }
         }
       })
-    })
+    ])
     await Bun.redis.del(`user:${ctx.db.user.id}`)
 
     await ctx.reply('commands.sign.signed', {
