@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import calcOdd from '@/util/calcOdd'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import locales from '@i18n'
@@ -236,21 +237,21 @@ export const valorantResults = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Array(t.Object({
-        id: t.String(),
-        status: t.String(),
-        stage: t.String(),
-        when: t.String(),
-        url: t.String(),
-        teams: t.Array(t.Object({
-          name: t.String(),
-          score: t.String(),
-          country: t.String(),
-          winner: t.String()
+      body: z.array(z.object({
+        id: z.string(),
+        status: z.string(),
+        stage: z.string(),
+        when: z.string(),
+        url: z.string(),
+        teams: z.array(z.object({
+          name: z.string(),
+          score: z.string(),
+          country: z.string(),
+          winner: z.string()
         })),
-        tournament: t.Object({
-          name: t.String(),
-          image: t.String()
+        tournament: z.object({
+          name: z.string(),
+          image: z.string()
         })
       }))
     }

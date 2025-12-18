@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import { REST, Routes } from 'discord.js'
 import { app } from '../../../structures/app/App'
 import EmbedBuilder from '../../../structures/builders/EmbedBuilder'
@@ -60,11 +61,11 @@ export const news = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Array(t.Object({
-        title: t.String(),
-        description: t.String(),
-        url: t.String(),
-        id: t.String()
+      body: z.array(z.object({
+        title: z.string(),
+        description: z.string(),
+        url: z.string(),
+        id: z.string()
       }))
     }
   )

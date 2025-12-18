@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import { REST, Routes, TextChannel } from 'discord.js'
 import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
@@ -87,27 +88,27 @@ export const lolLive = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Array(t.Object({
-        id: t.String(),
-        tournament: t.Object({
-          name: t.String(),
-          full_name: t.String(),
-          image: t.String()
+      body: z.array(z.object({
+        id: z.string(),
+        tournament: z.object({
+          name: z.string(),
+          full_name: z.string(),
+          image: z.string()
         }),
-        teams: t.Union([
-          t.Array(t.Never()),
-          t.Array(t.Object({
-            name: t.String(),
-            score: t.String()
+        teams: z.union([
+          z.array(z.never()),
+          z.array(z.object({
+            name: z.string(),
+            score: z.string()
           }))
         ]),
-        stage: t.Optional(t.String()),
-        streams: t.Array(t.Object({
-          mani: t.Boolean(),
-          language: t.String(),
-          embed_url: t.String(),
-          official: t.Boolean(),
-          raw_url: t.String()
+        stage: z.optional(z.string()),
+        streams: z.array(z.object({
+          mani: z.boolean(),
+          language: z.string(),
+          embed_url: z.string(),
+          official: z.boolean(),
+          raw_url: z.string()
         }))
       }))
     }

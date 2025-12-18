@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import { SabineUser } from '@db'
 
 export type Pack =
@@ -37,20 +38,20 @@ export const vote = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Object({
-        admin: t.Boolean(),
-        avatar: t.String(),
-        username: t.String(),
-        id: t.String(),
-        discriminator: t.Optional(t.String()),
-        promotable_bot: t.Optional(t.String()),
-        promotable_server: t.Optional(t.Object({
-          icon: t.String(),
-          id: t.String(),
-          name: t.String()
+      body: z.object({
+        admin: z.boolean(),
+        avatar: z.string(),
+        username: z.string(),
+        id: z.string(),
+        discriminator: z.optional(z.string()),
+        promotable_bot: z.optional(z.string()),
+        promotable_server: z.optional(z.object({
+          icon: z.string(),
+          id: z.string(),
+          name: z.string()
         })),
-        roblox: t.Optional(t.Boolean()),
-        stripe: t.Optional(t.Boolean())
+        roblox: z.optional(z.boolean()),
+        stripe: z.optional(z.boolean())
       })
     }
   )

@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import { REST, Routes } from 'discord.js'
 import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
@@ -106,20 +107,20 @@ export const valorantLive = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Array(t.Object({
-        teams: t.Array(t.Object({
-          name: t.String(),
-          score: t.String()
+      body: z.array(z.object({
+        teams: z.array(z.object({
+          name: z.string(),
+          score: z.string()
         })),
-        currentMap: t.String(),
-        score1: t.String(),
-        score2: t.String(),
-        id: t.String(),
-        url: t.String(),
-        stage: t.String(),
-        tournament: t.Object({
-          name: t.String(),
-          image: t.String()
+        currentMap: z.string(),
+        score1: z.string(),
+        score2: z.string(),
+        id: z.string(),
+        url: z.string(),
+        stage: z.string(),
+        tournament: z.object({
+          name: z.string(),
+          image: z.string()
         })
       }))
     }

@@ -1,4 +1,5 @@
-import { Elysia, t } from 'elysia'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import locales from '@i18n'
@@ -203,20 +204,20 @@ export const lolResults = new Elysia()
       return { ok: true }
     },
     {
-      body: t.Array(t.Object({
-        id: t.String(),
-        teams: t.Array(t.Object({
-          name: t.String(),
-          score: t.String(),
-          winner: t.Boolean()
+      body: z.array(z.object({
+        id: z.string(),
+        teams: z.array(z.object({
+          name: z.string(),
+          score: z.string(),
+          winner: z.boolean()
         })),
-        tournament: t.Object({
-          name: t.String(),
-          full_name: t.String(),
-          image: t.String()
+        tournament: z.object({
+          name: z.string(),
+          full_name: z.string(),
+          image: z.string()
         }),
-        stage: t.String(),
-        when: t.String()
+        stage: z.string(),
+        when: z.string()
       }))
     }
   )
