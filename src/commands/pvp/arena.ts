@@ -553,7 +553,7 @@ export default createCommand({
           select: { arena_metadata: true }
         })
 
-        let metadata = (user?.arena_metadata as unknown as ArenaMetadata) || {
+        const metadata = (user?.arena_metadata as ArenaMetadata) || {
           map: (await ctx.app.redis.get('arena:map'))!,
           lineup: []
         }
