@@ -276,6 +276,8 @@ export default createCommand({
   },
   async createMessageComponentInteraction({ ctx, t }) {
     if(ctx.args[2] === 'promote') {
+      if(ctx.db.user.arena_metadata && ctx.db.user.arena_metadata.lineup.length >= 5) return
+
       const player = ctx.app.players.get(ctx.args[3])
 
       ctx.setFlags(64)
@@ -575,6 +577,8 @@ export default createCommand({
             arena_metadata: metadata as any
           }
         })
+
+        ctx.db.user.arena_metadata = metadata
       })
 
       const page = 1
