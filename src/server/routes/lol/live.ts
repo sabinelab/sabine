@@ -6,6 +6,7 @@ import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import locales from '@i18n'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import { env } from '@/env'
+import { prisma } from '@db'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
@@ -13,7 +14,7 @@ export const lolLive = new Elysia()
   .post(
     '/webhooks/live/lol',
     async(req) => {
-      const guilds = await app.prisma.guild.findMany({
+      const guilds = await prisma.guild.findMany({
         where: {
           lol_live_feed_channel: {
             not: null
