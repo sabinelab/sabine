@@ -6,6 +6,7 @@ import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import locales from '@i18n'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import { env } from '@/env'
+import { prisma } from '@db'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [
@@ -27,7 +28,7 @@ export const valorantLive = new Elysia()
   .post(
     '/webhooks/live/valorant',
     async(req) => {
-      const guilds = await app.prisma.guild.findMany({
+      const guilds = await prisma.guild.findMany({
         where: {
           valorant_live_feed_channel: {
             not: null

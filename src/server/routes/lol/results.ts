@@ -15,7 +15,7 @@ export const lolResults = new Elysia()
   .post(
     '/webhooks/results/lol',
     async(req) => {
-      const guilds = await app.prisma.guild.findMany({
+      const guilds = await prisma.guild.findMany({
         where: {
           events: {
             some: {
@@ -33,7 +33,7 @@ export const lolResults = new Elysia()
         }
       })
 
-      const preds = await app.prisma.prediction.findMany({
+      const preds = await prisma.prediction.findMany({
         where: {
           game: 'lol'
         },
@@ -104,7 +104,7 @@ export const lolResults = new Elysia()
 
       const usersIds = [...new Set(preds.map(pred => pred.userId))]
 
-      const usersData = await app.prisma.user.findMany({
+      const usersData = await prisma.user.findMany({
         where: {
           id: { in: usersIds }
         }
@@ -168,7 +168,7 @@ export const lolResults = new Elysia()
               const fates = 5
 
               await prisma.$transaction([
-                app.prisma.prediction.update({
+                prisma.prediction.update({
                   where: {
                     id: pred.id
                   },
@@ -177,7 +177,7 @@ export const lolResults = new Elysia()
                     status: 'correct'
                   }
                 }),
-                app.prisma.user.update({
+                prisma.user.update({
                   where: { id: user.id },
                   data: {
                     correct_predictions: {

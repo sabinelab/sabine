@@ -29,7 +29,7 @@ export const valorantResults = new Elysia()
   .post(
     '/webhooks/results/valorant',
     async(req) => {
-      const guilds = await app.prisma.guild.findMany({
+      const guilds = await prisma.guild.findMany({
         where: {
           events: {
             some: {
@@ -47,7 +47,7 @@ export const valorantResults = new Elysia()
         }
       })
 
-      const preds = await app.prisma.prediction.findMany({
+      const preds = await prisma.prediction.findMany({
         where: {
           game: 'valorant'
         },
@@ -134,7 +134,7 @@ export const valorantResults = new Elysia()
 
       const usersIds = [...new Set(preds.map(pred => pred.userId))]
 
-      const usersData = await app.prisma.user.findMany({
+      const usersData = await prisma.user.findMany({
         where: {
           id: { in: usersIds }
         }
@@ -192,25 +192,27 @@ export const valorantResults = new Elysia()
                   }
 
                   if(user.premium) {
-                    bonus = Number(pred.bet) / 2
+                    bonus = Math.floor(Number(pred.bet) / 2)
                   }
                 }
               }
 
-              const coins = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
+              const coins = BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
               const fates = 5
 
               await prisma.$transaction([
-                app.prisma.prediction.update({
+                prisma.prediction.update({
                   where: {
                     id: pred.id
                   },
                   data: {
-                    odd: odd,
+                    odd: odd
+                      ? Math.floor(odd)
+                      : undefined,
                     status: 'correct'
                   }
                 }),
-                app.prisma.user.update({
+                prisma.user.update({
                   where: { id: user.id },
                   data: {
                     correct_predictions: {
@@ -248,7 +250,7 @@ export const valorantResults = new Elysia()
           name: z.string(),
           score: z.string(),
           country: z.string(),
-          winner: z.string()
+          winner: z.boolean()
         })),
         tournament: z.object({
           name: z.string(),
