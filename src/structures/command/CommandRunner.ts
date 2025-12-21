@@ -1,4 +1,8 @@
-import { ChannelType, type ChatInputCommandInteraction, type Guild, type PermissionResolvable } from 'discord.js'
+import {
+  ChannelType,
+  REST, Routes, type ChatInputCommandInteraction,
+  type Guild, type PermissionResolvable
+} from 'discord.js'
 import App from '../app/App'
 import CommandContext from './CommandContext'
 import locales from '@i18n'
@@ -10,6 +14,8 @@ import { readFileSync } from 'node:fs'
 import Logger from '../../util/Logger'
 import type { Blacklist } from '@generated'
 import { env } from '@/env'
+
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 const raw: {
   [key: string]: any
@@ -219,19 +225,18 @@ export default class CommandRunner {
           embed.setThumb(ctx.guild.iconURL()!)
         }
 
-        const channel = await app.channels.fetch(env.COMMAND_LOG!)
+        const webhooks = await rest.get(Routes.channelWebhooks(env.COMMAND_LOG)) as any[]
+        const webhook = webhooks.find(w => w.token)
 
-        if(!channel || channel.type !== ChannelType.GuildText) return
+        if(!webhook) {
+          return Logger.warn('[COMMAND_LOG] - There is no webhook')
+        }
 
-        const webhooks = await channel.fetchWebhooks()
-
-        let webhook = webhooks.find(w => w.name === `${app.user?.username} Logger`)
-
-        if(!webhook) webhook = await channel.createWebhook({ name: `${app.user?.username} Logger` })
-
-        await webhook.send({
-          embeds: [embed],
-          avatarURL: app.user?.displayAvatarURL({ size: 2048 })
+        await rest.post(Routes.webhook(webhook.id, webhook.token), {
+          body: {
+            embeds: [embed.toJSON()],
+            avatar_url: app.user?.displayAvatarURL()
+          }
         })
       })
       .catch(async e => {
