@@ -91,16 +91,39 @@ const processArenaQueue = async() => {
 }
 
 const updateRedis = async() => {
-  const users = await prisma.user.findMany({
-    take: 100,
-    select: {
-      id: true,
-      coins: true,
-      correct_predictions: true,
-      rank_rating: true
-    }
-  })
-  const blacklist = await prisma.blacklist.findMany()
+  const [lbcoins, lbpreds, lbrating, blacklist] = await Promise.all([
+    prisma.user.findMany({
+      take: 100,
+      select: {
+        id: true,
+        coins: true
+      },
+      orderBy: {
+        coins: 'desc'
+      }
+    }),
+    prisma.user.findMany({
+      take: 100,
+      select: {
+        id: true,
+        correct_predictions: true
+      },
+      orderBy: {
+        correct_predictions: 'desc'
+      }
+    }),
+    prisma.user.findMany({
+      take: 100,
+      select: {
+        id: true,
+        rank_rating: true
+      },
+      orderBy: {
+        rank_rating: 'desc'
+      }
+    }),
+    prisma.blacklist.findMany()
+  ])
 
   await Bun.redis.set('blacklist', JSON.stringify(blacklist))
 
@@ -109,12 +132,11 @@ const updateRedis = async() => {
     JSON.stringify(
       {
         updated_at: Date.now(),
-        data: users.map(user => ({
+        data: lbcoins.map(user => ({
           id: user.id,
           coins: user.coins
         }))
           .filter(user => user.coins > 0)
-          .sort((a, b) => Number(b.coins) - Number(a.coins))
       },
       (_, value) => typeof value === 'bigint' ? value.toString() : value
     )
@@ -125,12 +147,11 @@ const updateRedis = async() => {
     JSON.stringify(
       {
         updated_at: Date.now(),
-        data: users.map(user => ({
+        data: lbpreds.map(user => ({
           id: user.id,
           correct_predictions: user.correct_predictions
         }))
           .filter(user => user.correct_predictions > 0)
-          .sort((a, b) => b.correct_predictions - a.correct_predictions)
       }
     )
   )
@@ -140,12 +161,11 @@ const updateRedis = async() => {
     JSON.stringify(
       {
         updated_at: Date.now(),
-        data: users.map(user => ({
+        data: lbrating.map(user => ({
           id: user.id,
           rank_rating: user.rank_rating
         }))
           .filter(user => user.rank_rating)
-          .sort((a, b) => b.rank_rating - a.rank_rating)
       }
     )
   )
