@@ -57,7 +57,10 @@ model User {
   vote_streak              Int           @default(0)
   votes                    Int           @default(0)
 
-  @@index([coins, correct_predictions, rank_rating, arena_wins])
+  @@index([coins])
+  @@index([correct_predictions])
+  @@index([rank_rating])
+  @@index([arena_wins])
 }
 
 model Match {
