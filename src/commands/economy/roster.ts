@@ -383,6 +383,7 @@ export default createCommand({
             text => text.setContent(t('commands.roster.container.active_players', { total: active_players.length }))
           )
 
+          let i = 0
           for(const p of active_players) {
             container.addSectionComponents(
               section => section
@@ -402,9 +403,11 @@ export default createCommand({
                   button => button
                     .setStyle(ButtonStyle.Danger)
                     .setLabel(t('commands.roster.container.button.remove'))
-                    .setCustomId(`roster;${ctx.db.user.id};remove;${p}`)
+                    .setCustomId(`roster;${ctx.db.user.id};remove;${p};${i}`)
                 )
             )
+
+            i++
           }
         }
       }
