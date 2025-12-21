@@ -1,5 +1,4 @@
 import {
-  ChannelType,
   REST, Routes, type ChatInputCommandInteraction,
   type Guild, type PermissionResolvable
 } from 'discord.js'
