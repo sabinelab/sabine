@@ -119,7 +119,7 @@ export default createCommand({
         }
 
         await Promise.all([
-          ctx.app.redis.set(`arena:in_queue:${ctx.db.user.id}`, JSON.stringify(payload), 'EX', 1800),
+          ctx.app.redis.set(`arena:in_queue:${ctx.db.user.id}`, JSON.stringify(payload)),
           ctx.app.redis.lpush('arena:queue', JSON.stringify(payload))
         ])
 
