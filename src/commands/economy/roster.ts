@@ -179,7 +179,7 @@ export default createCommand({
 
     await ctx.reply({
       flags: 'IsComponentsV2',
-      components: [container, row]
+      components: [container, row.toJSON()]
     })
   },
   async createMessageComponentInteraction({ ctx, i, t }) {
@@ -505,7 +505,7 @@ export default createCommand({
 
       await ctx.edit({
         flags: 'IsComponentsV2',
-        components: [container, row]
+        components: [container, row.toJSON()]
       })
     }
   },
