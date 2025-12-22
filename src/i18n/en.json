@@ -326,7 +326,7 @@
       "joined": "You joined the queue successfully!",
       "left": "You left the queue succesfully!",
       "is_not_in_queue": "You are not in the Arena queue.",
-      "invalid_lineup": "You need to set the **{map}** map lineup.",
+      "invalid_lineup": "You need to set the **{map}** map lineup. Use `/arena lineup` to get started!",
       "no_players": "You do not have any players. Use `/claim` to get started!",
       "your_players": "### Your Players",
       "promote": "Promote",
@@ -453,7 +453,8 @@
     "initiators": "Initiators",
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run `/register` to start."
+    "you_need_to_register": "You need to register to use this feature. Run `/register` to start.",
+    "new_game_mode": "Um novo modo de jogo está disponível. Experimente o modo arena usando `/arena join`."
   },
   "permissions": {
     "CREATE_INSTANT_INVITE": "Create Instant Invite",

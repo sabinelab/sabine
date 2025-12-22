@@ -13,6 +13,7 @@ import { readFileSync } from 'node:fs'
 import Logger from '../../util/Logger'
 import type { Blacklist } from '@generated'
 import { env } from '@/env'
+import { voidCatch } from '@/database/update-cache'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
@@ -185,6 +186,14 @@ export default class CommandRunner {
 
     command.run({ ctx, app, t, id: interaction.commandId })
       .then(async() => {
+        console.log(command.name)
+        if(command.name === 'duel') {
+          interaction.followUp({
+            content: t('helper.new_game_mode'),
+            flags: 'Ephemeral'
+          })
+          .catch(voidCatch)
+        }
         if(env.DEVS.includes(interaction.user.id)) return
 
         const cmd: string[] = [command.name]
