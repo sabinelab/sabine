@@ -454,7 +454,7 @@
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
     "you_need_to_register": "You need to register to use this feature. Run `/register` to start.",
-    "new_game_mode": "Um novo modo de jogo está disponível. Experimente o modo arena usando `/arena join`."
+    "new_game_mode": "A new game mode is available. Try the Arena game mode using `/arena join`."
   },
   "permissions": {
     "CREATE_INSTANT_INVITE": "Create Instant Invite",

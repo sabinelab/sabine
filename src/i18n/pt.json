@@ -454,7 +454,7 @@
     "sentinels": "Sentinelas",
     "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
     "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Rode `/register` para iniciar.",
-    "new_game_mode": "A new game mode is available. Try the Arena game mode using `/arena join`."
+    "new_game_mode": "Um novo modo de jogo está disponível. Experimente o modo arena usando `/arena join`."
   },
   "permissions": {
     "CREATE_INSTANT_INVITE": "Criar convite instantâneo",
