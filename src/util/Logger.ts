@@ -1,4 +1,4 @@
-import { ChannelType } from 'discord.js'
+import { REST, Routes, type APIUser, type APIWebhook } from 'discord.js'
 import pino from 'pino'
 import App from '../structures/app/App'
 import EmbedBuilder from '../structures/builders/EmbedBuilder'
@@ -12,6 +12,8 @@ const logger = pino({
     }
   }
 })
+
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 export default class Logger {
   private client: App
@@ -47,19 +49,23 @@ export default class Logger {
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``)
 
-      const channel = await this.client.channels.fetch(env.GUILDS_LOG!)
-
-      if(!channel || channel.type !== ChannelType.GuildText) return
-
-      const webhooks = await channel.fetchWebhooks()
-
-      let webhook = webhooks.find(w => w.name === `${this.client.user?.username} Logger`)
-
-      if(!webhook) webhook = await channel.createWebhook({ name: `${this.client.user?.username} Logger` })
-
-      await webhook.send({
-        embeds: [embed],
-        avatarURL: this.client.user?.displayAvatarURL({ size: 2048 })
+      const client = await rest.get(Routes.user('@me')) as APIUser
+      const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
+      let webhook = webhooks.find(w => w.name === `${client.username} Logger`)
+      
+      if(!webhook) {
+        webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+          body: {
+            name: `${client.username} Logger`
+          }
+        }) as APIWebhook
+      }
+      
+      await rest.post(Routes.webhook(webhook.id, webhook.token), {
+        body: {
+          embeds: [embed],
+          avatar_url: `https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png`
+        }
       })
     }
     else {
@@ -69,19 +75,23 @@ export default class Logger {
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack}\`\`\``)
 
-      const channel = await this.client.channels.fetch(env.ERROR_LOG!)
-
-      if(!channel || channel.type !== ChannelType.GuildText) return
-
-      const webhooks = await channel.fetchWebhooks()
-
-      let webhook = webhooks.find(w => w.name === `${this.client.user?.username} Logger`)
-
-      if(!webhook) webhook = await channel.createWebhook({ name: `${this.client.user?.username} Logger` })
-
-      await webhook.send({
-        embeds: [embed],
-        avatarURL: this.client.user?.displayAvatarURL({ size: 2048 })
+      const client = await rest.get(Routes.user('@me')) as APIUser
+      const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
+      let webhook = webhooks.find(w => w.name === `${client.username} Logger`)
+      
+      if(!webhook) {
+        webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+          body: {
+            name: `${client.username} Logger`
+          }
+        }) as APIWebhook
+      }
+      
+      await rest.post(Routes.webhook(webhook.id, webhook.token), {
+        body: {
+          embeds: [embed],
+          avatar_url: `https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png`
+        }
       })
     }
   }

@@ -1,8 +1,10 @@
-import { ChannelType } from 'discord.js'
+import { REST, Routes, type APIWebhook } from 'discord.js'
 import createListener from '../structures/app/createListener'
 import EmbedBuilder from '../structures/builders/EmbedBuilder'
 import { prisma } from '@db'
 import { env } from '@/env'
+
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 export default createListener({
   name: 'guildCreate',
@@ -21,19 +23,22 @@ export default createListener({
       .addField('Member count', guild.memberCount.toString(), true)
       .setThumb(guild.iconURL()!)
 
-    const channel = await client.channels.fetch(env.GUILDS_LOG!)
-
-    if(!channel || channel.type !== ChannelType.GuildText) return
-
-    const webhooks = await channel.fetchWebhooks()
-
+    const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
     let webhook = webhooks.find(w => w.name === `${client.user?.username} Logger`)
-
-    if(!webhook) webhook = await channel.createWebhook({ name: `${client.user?.username} Logger` })
-
-    await webhook.send({
-      embeds: [embed],
-      avatarURL: client.user?.displayAvatarURL({ size: 2048 })
+    
+    if(!webhook) {
+      webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+        body: {
+          name: `${client.user?.username} Logger`
+        }
+      }) as APIWebhook
+    }
+    
+    await rest.post(Routes.webhook(webhook.id, webhook.token), {
+      body: {
+        embeds: [embed],
+        avatar_url: client.user?.displayAvatarURL({ size: 2048 })
+      }
     })
   }
 })
