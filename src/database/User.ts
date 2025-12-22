@@ -493,7 +493,7 @@ export class SabineUser implements User {
 
     if(increaseVoteStreak) {
       if(!checkDate(new Date(), this.last_vote) && this.vote_streak) {
-        update.vote_streak = 0
+        update.vote_streak = 1
       }
       else {
         update.vote_streak = {
