@@ -186,7 +186,6 @@ export default class CommandRunner {
 
     command.run({ ctx, app, t, id: interaction.commandId })
       .then(async() => {
-        console.log(command.name)
         if(command.name === 'duel') {
           interaction.followUp({
             content: t('helper.new_game_mode'),
