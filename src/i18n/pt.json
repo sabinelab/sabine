@@ -336,7 +336,7 @@
       "map": "Mapa Atual: `{map}`",
       "embed": {
         "title": "Informações da Arena",
-        "desc": "Mapa Atual: `{map}`\nO mapa mudará {when}"
+        "desc": "Pessoas na fila agora: `{queueLength}`\nMapa Atual: `{map}`\nO mapa mudará {when}"
       }
     },
     "summary": {

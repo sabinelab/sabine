@@ -263,7 +263,8 @@ export default createCommand({
           .setTitle(ctx.t('commands.arena.embed.title'))
           .setDesc(ctx.t('commands.arena.embed.desc', {
             when: `<t:${Math.floor(when.getTime() / 1000)}:R>`,
-            map: await ctx.app.redis.get('arena:map')
+            map: await ctx.app.redis.get('arena:map'),
+            queueLength: await Bun.redis.llen('arena:queue')
           }))
 
         await ctx.reply(embed.build())
