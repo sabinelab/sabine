@@ -166,10 +166,10 @@ export default createCommand({
         if(!user) return
 
         if(
-          (user.arena_metadata as ArenaMetadata).lineup
+          (user.arena_metadata as ArenaMetadata | null)?.lineup
             .some(line => line.player === player.id.toString())
         ) {
-          const index = (user.arena_metadata as ArenaMetadata).lineup
+          const index = (user.arena_metadata as ArenaMetadata)?.lineup
             .findIndex(line => line.player === player.id.toString())
 
           ;(user.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
