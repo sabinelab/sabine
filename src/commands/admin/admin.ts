@@ -1,36 +1,27 @@
-import type { MatchesData } from '../../types'
-import Service from '../../api'
-import createCommand from '../../structures/command/createCommand'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
-import {
-  ChannelType,
-  TextChannel,
-  ContainerBuilder,
-  ActionRowBuilder,
-  ButtonStyle,
-  MessageFlags,
-  ButtonBuilder
-} from 'discord.js'
-import type { $Enums } from '@generated'
-import Logger from '../../util/Logger'
 import { prisma } from '@db'
+import type { $Enums } from '@generated'
+import {
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle,
+  ChannelType,
+  ContainerBuilder,
+  MessageFlags,
+  type TextChannel
+} from 'discord.js'
 import { env } from '@/env'
+import Service from '../../api'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
+import type { MatchesData } from '../../types'
+import Logger from '../../util/Logger'
 
 const service = new Service(env.AUTH)
 
 const tournaments: { [key: string]: RegExp[] } = {
-  'Valorant Champions Tour': [
-    /valorant champions/,
-    /valorant masters/,
-    /vct \d{4}/
-  ],
-  'Valorant Challengers League': [
-    /challengers \d{4}/,
-    /vct \d{4}: ascension/
-  ],
-  'Valorant Game Changers': [
-    /game changers \d{4}/
-  ]
+  'Valorant Champions Tour': [/valorant champions/, /valorant masters/, /vct \d{4}/],
+  'Valorant Challengers League': [/challengers \d{4}/, /vct \d{4}: ascension/],
+  'Valorant Game Changers': [/game changers \d{4}/]
 }
 
 export default createCommand({
@@ -95,20 +86,13 @@ export default createCommand({
   ],
   permissions: ['ManageGuild', 'ManageChannels'],
   botPermissions: ['ManageMessages', 'SendMessages'],
-  syntaxes: [
-    'admin dashboard',
-    'adming language [lang]',
-  ],
-  examples: [
-    'admin dashboard',
-    'admin language pt-BR',
-    'admin language en-US'
-  ],
+  syntaxes: ['admin dashboard', 'adming language [lang]'],
+  examples: ['admin dashboard', 'admin language pt-BR', 'admin language en-US'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, id, app }) {
-    if(!ctx.db.guild) return
+    if (!ctx.db.guild) return
 
-    if(ctx.args[0] === 'dashboard') {
+    if (ctx.args[0] === 'dashboard') {
       const guild = (await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
@@ -118,52 +102,58 @@ export default createCommand({
         }
       }))!
 
-      const embed = new EmbedBuilder()
-        .setTitle(t('commands.admin.dashboard'))
-        .setDesc(t('commands.admin.desc', {
+      const embed = new EmbedBuilder().setTitle(t('commands.admin.dashboard')).setDesc(
+        t('commands.admin.desc', {
           lang: ctx.db.guild!.lang.replace('en', 'English').replace('pt', 'Português'),
-          limit: ctx.db.guild!.tournaments_length === Infinity ? '`Infinity`' : `${guild.events.length}/${ctx.db.guild!.tournaments_length}`,
+          limit:
+            ctx.db.guild!.tournaments_length === Infinity
+              ? '`Infinity`'
+              : `${guild.events.length}/${ctx.db.guild!.tournaments_length}`,
           id,
           vlr_news: !ctx.db.guild!.valorant_news_channel ? '`undefined`' : `<#${ctx.db.guild!.valorant_news_channel}>`,
-          vlr_live: !ctx.db.guild!.valorant_live_feed_channel ? '`undefined`' : `<#${ctx.db.guild!.valorant_live_feed_channel}>`,
+          vlr_live: !ctx.db.guild!.valorant_live_feed_channel
+            ? '`undefined`'
+            : `<#${ctx.db.guild!.valorant_live_feed_channel}>`,
           lol_news: !ctx.db.guild!.lol_news_channel ? '`undefined`' : `<#${ctx.db.guild!.lol_news_channel}>`,
-          lol_live: !ctx.db.guild!.lol_live_feed_channel ? '`undefined`' : `<#${ctx.db.guild!.lol_live_feed_channel}>`,
-        }))
+          lol_live: !ctx.db.guild!.lol_live_feed_channel ? '`undefined`' : `<#${ctx.db.guild!.lol_live_feed_channel}>`
+        })
+      )
 
-      await ctx.reply(embed.build({
-        components: [
-          {
-            type: 1,
-            components: [
-              new ButtonBuilder()
-                .setStyle(ButtonStyle.Primary)
-                .setLabel(t('commands.admin.vlr_esports_coverage'))
-                .setCustomId(`admin;${ctx.interaction.user.id};vlr`),
-              new ButtonBuilder()
-                .setStyle(ButtonStyle.Primary)
-                .setLabel(t('commands.admin.lol_esports_coverage'))
-                .setCustomId(`admin;${ctx.interaction.user.id};lol`)
-            ]
-          },
-          {
-            type: 1,
-            components: [
-              new ButtonBuilder()
-                .setLabel(t('commands.admin.resend', { game: 'VALORANT' }))
-                .setStyle(ButtonStyle.Danger)
-                .setCustomId(`admin;${ctx.interaction.user.id};resend;vlr`),
-              new ButtonBuilder()
-                .setLabel(t('commands.admin.resend', { game: 'League of Legends' }))
-                .setStyle(ButtonStyle.Danger)
-                .setCustomId(`admin;${ctx.interaction.user.id};resend;lol`)
-            ]
-          }
-        ]
-      }))
-    }
-    else if(ctx.args[0] === 'language') {
+      await ctx.reply(
+        embed.build({
+          components: [
+            {
+              type: 1,
+              components: [
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Primary)
+                  .setLabel(t('commands.admin.vlr_esports_coverage'))
+                  .setCustomId(`admin;${ctx.interaction.user.id};vlr`),
+                new ButtonBuilder()
+                  .setStyle(ButtonStyle.Primary)
+                  .setLabel(t('commands.admin.lol_esports_coverage'))
+                  .setCustomId(`admin;${ctx.interaction.user.id};lol`)
+              ]
+            },
+            {
+              type: 1,
+              components: [
+                new ButtonBuilder()
+                  .setLabel(t('commands.admin.resend', { game: 'VALORANT' }))
+                  .setStyle(ButtonStyle.Danger)
+                  .setCustomId(`admin;${ctx.interaction.user.id};resend;vlr`),
+                new ButtonBuilder()
+                  .setLabel(t('commands.admin.resend', { game: 'League of Legends' }))
+                  .setStyle(ButtonStyle.Danger)
+                  .setCustomId(`admin;${ctx.interaction.user.id};resend;lol`)
+              ]
+            }
+          ]
+        })
+      )
+    } else if (ctx.args[0] === 'language') {
       const options = {
-        en: async() => {
+        en: async () => {
           await prisma.guild.update({
             where: {
               id: ctx.db.guild?.id
@@ -175,7 +165,7 @@ export default createCommand({
 
           await ctx.reply('Now I will interact in English on this server!')
         },
-        pt: async() => {
+        pt: async () => {
           await prisma.guild.update({
             where: {
               id: ctx.db.guild?.id
@@ -190,9 +180,8 @@ export default createCommand({
       }
 
       await options[ctx.args[1] as 'pt' | 'en']()
-    }
-    else if(ctx.args[0] === 'premium') {
-      if(!ctx.db.guild) {
+    } else if (ctx.args[0] === 'premium') {
+      if (!ctx.db.guild) {
         return await ctx.reply('commands.admin.no_premium')
       }
 
@@ -205,24 +194,24 @@ export default createCommand({
         }
       })
 
-      if(!key || !key.key.expires_at) {
+      if (!key || !key.key.expires_at) {
         return await ctx.reply('commands.admin.no_premium')
       }
 
-      const embed = new EmbedBuilder()
-        .setTitle('Premium')
-        .setDesc(t('commands.admin.premium', {
+      const embed = new EmbedBuilder().setTitle('Premium').setDesc(
+        t('commands.admin.premium', {
           key: key.key.type,
           expiresAt: `<t:${(key.key.expires_at.getTime() / 1000).toFixed(0)}:R>`
-        }))
+        })
+      )
 
       await ctx.reply(embed.build())
     }
   },
   async createMessageComponentInteraction({ ctx, t, app }) {
-    if(!ctx.db.guild) return
+    if (!ctx.db.guild) return
 
-    if(ctx.args[2] === 'vlr') {
+    if (ctx.args[2] === 'vlr') {
       ctx.setFlags(64)
 
       const guild = (await app.prisma.guild.findUnique({
@@ -238,19 +227,21 @@ export default createCommand({
         }
       }))!
 
-      const embed = new EmbedBuilder()
-        .setDesc(t('commands.admin.tournaments', { game: 'VALORANT' }))
+      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'VALORANT' }))
 
-      for(const event of guild.events) {
-        embed.addField(event.name, t('commands.admin.event_channels', {
-          ch1: `<#${event.channel1}>`,
-          ch2: `<#${event.channel2}>`
-        }), true)
+      for (const event of guild.events) {
+        embed.addField(
+          event.name,
+          t('commands.admin.event_channels', {
+            ch1: `<#${event.channel1}>`,
+            ch2: `<#${event.channel2}>`
+          }),
+          true
+        )
       }
 
       await ctx.reply(embed.build())
-    }
-    else if(ctx.args[2] === 'lol') {
+    } else if (ctx.args[2] === 'lol') {
       ctx.setFlags(64)
 
       const guild = (await app.prisma.guild.findUnique({
@@ -266,26 +257,27 @@ export default createCommand({
         }
       }))!
 
-      const embed = new EmbedBuilder()
-        .setDesc(t('commands.admin.tournaments', { game: 'League of Legends' }))
+      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'League of Legends' }))
 
-      for(const event of guild.events) {
-        embed.addField(event.name, t('commands.admin.event_channels', {
-          ch1: `<#${event.channel1}>`,
-          ch2: `<#${event.channel2}>`
-        }), true)
+      for (const event of guild.events) {
+        embed.addField(
+          event.name,
+          t('commands.admin.event_channels', {
+            ch1: `<#${event.channel1}>`,
+            ch2: `<#${event.channel2}>`
+          }),
+          true
+        )
       }
 
       await ctx.reply(embed.build())
-    }
-    else if(ctx.args[2] === 'resend' && ctx.args[3] === 'vlr') {
+    } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'vlr') {
       ctx.setFlags(64)
 
-      if(
-        ctx.db.guild.valorant_resend_time &&
-        ctx.db.guild.valorant_resend_time > new Date()
-      ) {
-        return await ctx.reply('commands.admin.resend_time', { t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>` })
+      if (ctx.db.guild.valorant_resend_time && ctx.db.guild.valorant_resend_time > new Date()) {
+        return await ctx.reply('commands.admin.resend_time', {
+          t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>`
+        })
       }
 
       const button = new ButtonBuilder()
@@ -302,16 +294,13 @@ export default createCommand({
           }
         ]
       })
-    }
-
-    else if(ctx.args[2] === 'resend' && ctx.args[3] === 'lol') {
+    } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'lol') {
       ctx.setFlags(64)
 
-      if(
-        ctx.db.guild.lol_resend_time &&
-        ctx.db.guild.lol_resend_time > new Date()
-      ) {
-        return await ctx.reply('commands.admin.resend_time', { t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>` })
+      if (ctx.db.guild.lol_resend_time && ctx.db.guild.lol_resend_time > new Date()) {
+        return await ctx.reply('commands.admin.resend_time', {
+          t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>`
+        })
       }
 
       const button = new ButtonBuilder()
@@ -328,13 +317,11 @@ export default createCommand({
           }
         ]
       })
-    }
-    else if(ctx.args[2] === 'continue' && ctx.args[3] === 'vlr') {
-      if(
-        ctx.db.guild.valorant_resend_time &&
-        ctx.db.guild.valorant_resend_time > new Date()
-      ) {
-        return await ctx.edit('commands.admin.resend_time', { t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>` })
+    } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'vlr') {
+      if (ctx.db.guild.valorant_resend_time && ctx.db.guild.valorant_resend_time > new Date()) {
+        return await ctx.edit('commands.admin.resend_time', {
+          t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>`
+        })
       }
 
       const guild = (await app.prisma.guild.findUnique({
@@ -363,10 +350,14 @@ export default createCommand({
 
       const res = await service.getMatches('valorant')
 
-      if(!res || !res.length) return
+      if (!res || !res.length) return
 
       const res2 = await service.getResults('valorant')
-      if(guild.valorant_matches.length && !res2.some(d => d.id === guild.valorant_matches[guild.valorant_matches.length - 1])) return
+      if (
+        guild.valorant_matches.length &&
+        !res2.some(d => d.id === guild.valorant_matches[guild.valorant_matches.length - 1])
+      )
+        return
 
       const matches: {
         matchId: string
@@ -377,74 +368,84 @@ export default createCommand({
 
       let data: MatchesData[]
 
-      if(guild.events.length > 5 && !guild.key) {
-        if(guild.events.slice().reverse().slice(0, 5).some(e => Object.keys(tournaments).includes(e.name))) {
+      if (guild.events.length > 5 && !guild.key) {
+        if (
+          guild.events
+            .slice()
+            .reverse()
+            .slice(0, 5)
+            .some(e => Object.keys(tournaments).includes(e.name))
+        ) {
           data = res.filter(d => {
-            const events1 = guild.events.slice()
+            const events1 = guild.events
+              .slice()
               .reverse()
               .slice(0, 5)
               .some(e => e.name === d.tournament.name)
 
-            if(events1) return true
+            if (events1) return true
 
-            const events2 = guild.events.slice()
+            const events2 = guild.events
+              .slice()
               .reverse()
               .slice(0, 5)
               .some(e => {
                 const tour = tournaments[e.name]
-                if(!tour) return false
-                return tour.some(regex =>
-                  regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
-                )
+                if (!tour) return false
+                return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
               })
 
-            if(events2) return true
+            if (events2) return true
 
             return false
           })
-        }
-        else data = res.filter(d => guild.events.reverse().slice(0, 5).some(e => e.name === d.tournament.name))
-      }
-
-      else {
-        if(guild.events.slice().reverse().slice(0, 5).some(e => Object.keys(tournaments).includes(e.name))) {
+        } else
+          data = res.filter(d =>
+            guild.events
+              .reverse()
+              .slice(0, 5)
+              .some(e => e.name === d.tournament.name)
+          )
+      } else {
+        if (
+          guild.events
+            .slice()
+            .reverse()
+            .slice(0, 5)
+            .some(e => Object.keys(tournaments).includes(e.name))
+        ) {
           data = res.filter(d => {
             const events1 = guild.events.some(e => e.name === d.tournament.name)
 
-            if(events1) return true
+            if (events1) return true
 
             const events2 = guild.events.some(e => {
               const tour = tournaments[e.name]
-              if(!tour) return false
-              return tour.some(regex =>
-                regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
-              )
+              if (!tour) return false
+              return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
             })
 
-            if(events2) return true
+            if (events2) return true
 
             return false
           })
-        }
-        else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
+        } else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
       }
 
-      for(const e of guild.events) {
+      for (const e of guild.events) {
         const channel = await app.channels.fetch(e.channel1)
-        if(!channel || channel.type !== ChannelType.GuildText) continue
+        if (!channel || channel.type !== ChannelType.GuildText) continue
 
         try {
           const messages = await channel.messages.fetch({ limit: 100 })
           const messagesIds = messages.filter(m => m.author.id === app.user?.id).map(m => m.id)
 
-          if(messagesIds.length === 1) {
+          if (messagesIds.length === 1) {
             await channel.messages.delete(messagesIds[0])
-          }
-          else if(messagesIds.length) {
+          } else if (messagesIds.length) {
             await channel.bulkDelete(messagesIds)
           }
-        }
-        catch(e) {
+        } catch (e) {
           new Logger(app).error(e as Error)
         }
       }
@@ -452,45 +453,44 @@ export default createCommand({
       const channelBatches = new Map<string, any[]>()
 
       try {
-        for(
-          const d of data.map(body => ({
-            ...body,
-            when: new Date(body.when)
-          }))
-        ) {
-          if(new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
+        for (const d of data.map(body => ({
+          ...body,
+          when: new Date(body.when)
+        }))) {
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
-          for(const e of guild.events) {
-            if(
-              e.name === d.tournament.name
-              || tournaments[e.name]?.some(regex =>
+          for (const e of guild.events) {
+            if (
+              e.name === d.tournament.name ||
+              tournaments[e.name]?.some(regex =>
                 regex.test(d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase())
               )
             ) {
-              if(d.stage.toLowerCase().includes('showmatch')) continue
+              if (d.stage.toLowerCase().includes('showmatch')) continue
 
-              const emoji1 = app.emoji.get(d.teams[0].name.toLowerCase())
-                ?? app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '')
-                ?? app.emoji.get('default')
-              const emoji2 = app.emoji.get(d.teams[1].name.toLowerCase())
-                ?? app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '')
-                ?? app.emoji.get('default')
+              const emoji1 =
+                app.emoji.get(d.teams[0].name.toLowerCase()) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
+                app.emoji.get('default')
+              const emoji2 =
+                app.emoji.get(d.teams[1].name.toLowerCase()) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
+                app.emoji.get('default')
 
-              const index = guild.valorant_matches.findIndex((m) => m === d.id)
+              const index = guild.valorant_matches.findIndex(m => m === d.id)
 
-              if(index > -1) guild.valorant_matches.splice(index, 1)
+              if (index > -1) guild.valorant_matches.splice(index, 1)
 
               guild.valorant_matches.push(d.id!)
 
-              if(d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
-                if(!channelBatches.has(e.channel1)) {
+              if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
+                if (!channelBatches.has(e.channel1)) {
                   channelBatches.set(e.channel1, [])
                 }
 
                 channelBatches.get(e.channel1)?.push({ d, e, emoji1, emoji2 })
-              }
-              else {
-                if(!matches.some(m => m.matchId === d.id)) {
+              } else {
+                if (!matches.some(m => m.matchId === d.id)) {
                   matches.push({
                     matchId: d.id!,
                     channel: e.channel1,
@@ -504,37 +504,33 @@ export default createCommand({
             }
           }
         }
-      }
-      catch(e) {
+      } catch (e) {
         new Logger(app).error(e as Error)
       }
 
-      for(const [channelId, matchesChunk] of channelBatches.entries()) {
+      for (const [channelId, matchesChunk] of channelBatches.entries()) {
         const chunkSize = 10
 
-        for(let i = 0;i < matchesChunk.length;i += chunkSize) {
+        for (let i = 0; i < matchesChunk.length; i += chunkSize) {
           const chunk = matchesChunk.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder()
-            .setAccentColor(6719296)
+          const container = new ContainerBuilder().setAccentColor(6719296)
 
-          for(const data of chunk) {
+          for (const data of chunk) {
             const { d, emoji1, emoji2 } = data
 
             container
-              .addTextDisplayComponents(
-                text => {
-                  let content = `### ${d.tournament.name}\n`
+              .addTextDisplayComponents(text => {
+                let content = `### ${d.tournament.name}\n`
 
-                  content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
-                  content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
-                  content += `-# ${d.stage}`
+                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
+                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
+                content += `-# ${d.stage}`
 
-                  return text.setContent(content)
-                }
-              )
-              .addActionRowComponents(
-                row => row.setComponents(
+                return text.setContent(content)
+              })
+              .addActionRowComponents(row =>
+                row.setComponents(
                   new ButtonBuilder()
                     .setLabel(t('helper.predict'))
                     .setCustomId(`predict;valorant;${d.id}`)
@@ -554,21 +550,19 @@ export default createCommand({
 
           const channel = ctx.app.channels.cache.get(channelId) as TextChannel
 
-          if(!channel) continue
+          if (!channel) continue
 
-          if(container.components.length) {
-            const row = new ActionRowBuilder<ButtonBuilder>()
-              .setComponents(
-                new ButtonBuilder()
-                  .setLabel(t('helper.pickem.label'))
-                  .setStyle(ButtonStyle.Primary)
-                  .setCustomId('pickem')
-              )
+          if (container.components.length) {
+            const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
+              new ButtonBuilder().setLabel(t('helper.pickem.label')).setStyle(ButtonStyle.Primary).setCustomId('pickem')
+            )
 
-            await channel.send({
-              components: [container.toJSON(), row.toJSON()],
-              flags: MessageFlags.IsComponentsV2
-            }).catch(() => { })
+            await channel
+              .send({
+                components: [container.toJSON(), row.toJSON()],
+                flags: MessageFlags.IsComponentsV2
+              })
+              .catch(() => {})
           }
         }
       }
@@ -585,10 +579,10 @@ export default createCommand({
             },
             create: matches.length
               ? matches.map(m => ({
-                type: m.type,
-                matchId: m.matchId,
-                channel: m.channel
-              }))
+                  type: m.type,
+                  matchId: m.matchId,
+                  channel: m.channel
+                }))
               : undefined
           },
           valorant_resend_time: guild.valorant_resend_time
@@ -596,13 +590,11 @@ export default createCommand({
       })
 
       await ctx.edit('commands.admin.resent')
-    }
-    else if(ctx.args[2] === 'continue' && ctx.args[3] === 'lol') {
-      if(
-        ctx.db.guild.lol_resend_time &&
-        ctx.db.guild.lol_resend_time > new Date()
-      ) {
-        return await ctx.edit('commands.admin.resend_time', { t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>` })
+    } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'lol') {
+      if (ctx.db.guild.lol_resend_time && ctx.db.guild.lol_resend_time > new Date()) {
+        return await ctx.edit('commands.admin.resend_time', {
+          t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>`
+        })
       }
 
       const guild = (await app.prisma.guild.findUnique({
@@ -632,11 +624,11 @@ export default createCommand({
 
       const res = await service.getMatches('lol')
 
-      if(!res || !res.length) return
+      if (!res || !res.length) return
 
       const res2 = await service.getResults('lol')
 
-      if(guild.lol_matches.length && !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])) return
+      if (guild.lol_matches.length && !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])) return
 
       const matches: {
         matchId: string
@@ -647,29 +639,29 @@ export default createCommand({
 
       let data: MatchesData[]
 
-      if(guild.events.length > 5 && !guild.key) {
-        data = res.filter(d => guild.events.reverse().slice(0, 5).some(e => e.name === d.tournament.name))
-      }
+      if (guild.events.length > 5 && !guild.key) {
+        data = res.filter(d =>
+          guild.events
+            .reverse()
+            .slice(0, 5)
+            .some(e => e.name === d.tournament.name)
+        )
+      } else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
 
-      else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
-
-      for(const e of guild.events) {
+      for (const e of guild.events) {
         const channel = await app.channels.fetch(e.channel1)
-        if(!channel || channel.type !== ChannelType.GuildText) continue
+        if (!channel || channel.type !== ChannelType.GuildText) continue
 
         try {
           const messages = await channel.messages.fetch({ limit: 100 })
           const messagesIds = messages.filter(m => m.author.id === app.user?.id).map(m => m.id)
 
-          if(messagesIds.length === 1) {
+          if (messagesIds.length === 1) {
             await channel.messages.delete(messagesIds[0])
-          }
-          else if(messagesIds.length) {
+          } else if (messagesIds.length) {
             await channel.bulkDelete(messagesIds)
           }
-        }
-
-        catch(e) {
+        } catch (e) {
           new Logger(app).error(e as Error)
         }
       }
@@ -677,39 +669,38 @@ export default createCommand({
       const channelBatches = new Map<string, any[]>()
 
       try {
-        for(
-          const d of data.map(body => ({
-            ...body,
-            when: new Date(body.when)
-          }))
-        ) {
-          if(new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
+        for (const d of data.map(body => ({
+          ...body,
+          when: new Date(body.when)
+        }))) {
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
-          for(const e of guild.events) {
-            if(e.name === d.tournament.name) {
-              if(d.stage.toLowerCase().includes('showmatch')) continue
+          for (const e of guild.events) {
+            if (e.name === d.tournament.name) {
+              if (d.stage.toLowerCase().includes('showmatch')) continue
 
-              const emoji1 = app.emoji.get(d.teams[0].name.toLowerCase())
-                ?? app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '')
-                ?? app.emoji.get('default')
-              const emoji2 = app.emoji.get(d.teams[1].name.toLowerCase())
-                ?? app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '')
-                ?? app.emoji.get('default')
+              const emoji1 =
+                app.emoji.get(d.teams[0].name.toLowerCase()) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
+                app.emoji.get('default')
+              const emoji2 =
+                app.emoji.get(d.teams[1].name.toLowerCase()) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
+                app.emoji.get('default')
 
-              const index = guild.lol_matches.findIndex((m) => m === d.id)
+              const index = guild.lol_matches.findIndex(m => m === d.id)
 
-              if(index > -1) guild.lol_matches.splice(index, 1)
+              if (index > -1) guild.lol_matches.splice(index, 1)
 
               guild.lol_matches.push(d.id!)
 
-              if(d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
-                if(!channelBatches.has(e.channel1)) {
+              if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
+                if (!channelBatches.has(e.channel1)) {
                   channelBatches.set(e.channel1, [])
                 }
 
                 channelBatches.get(e.channel1)?.push({ d, emoji1, emoji2 })
-              }
-              else {
+              } else {
                 matches.push({
                   matchId: d.id!,
                   channel: e.channel1,
@@ -722,37 +713,33 @@ export default createCommand({
             }
           }
         }
-      }
-      catch(e) {
+      } catch (e) {
         new Logger(app).error(e as Error)
       }
 
-      for(const [channelId, matchesChunk] of channelBatches.entries()) {
+      for (const [channelId, matchesChunk] of channelBatches.entries()) {
         const chunkSize = 10
 
-        for(let i = 0;i < matchesChunk.length;i += chunkSize) {
+        for (let i = 0; i < matchesChunk.length; i += chunkSize) {
           const chunk = matchesChunk.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder()
-            .setAccentColor(6719296)
+          const container = new ContainerBuilder().setAccentColor(6719296)
 
-          for(const data of chunk) {
+          for (const data of chunk) {
             const { d, emoji1, emoji2 } = data
 
             container
-              .addTextDisplayComponents(
-                text => {
-                  let content = `### ${d.tournament.full_name}\n`
+              .addTextDisplayComponents(text => {
+                let content = `### ${d.tournament.full_name}\n`
 
-                  content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
-                  content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
-                  content += `-# ${d.stage}`
+                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
+                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
+                content += `-# ${d.stage}`
 
-                  return text.setContent(content)
-                }
-              )
-              .addActionRowComponents(
-                row => row.setComponents(
+                return text.setContent(content)
+              })
+              .addActionRowComponents(row =>
+                row.setComponents(
                   new ButtonBuilder()
                     .setLabel(t('helper.predict'))
                     .setCustomId(`predict;lol;${d.id}`)
@@ -771,13 +758,15 @@ export default createCommand({
           }
 
           const channel = ctx.app.channels.cache.get(channelId) as TextChannel
-          if(!channel) continue
+          if (!channel) continue
 
-          if(container.components.length) {
-            await channel.send({
-              components: [container.toJSON()],
-              flags: MessageFlags.IsComponentsV2
-            }).catch(() => { })
+          if (container.components.length) {
+            await channel
+              .send({
+                components: [container.toJSON()],
+                flags: MessageFlags.IsComponentsV2
+              })
+              .catch(() => {})
           }
         }
       }

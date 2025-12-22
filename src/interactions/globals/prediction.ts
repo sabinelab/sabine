@@ -1,7 +1,7 @@
+import { env } from '@/env'
 import Service from '../../api'
 import { app } from '../../structures/app/App'
 import createModalSubmitInteraction from '../../structures/interaction/createModalSubmitInteraction'
-import { env } from '@/env'
 
 const service = new Service(env.AUTH)
 
@@ -11,7 +11,7 @@ export default createModalSubmitInteraction({
   global: true,
   async run({ ctx }) {
     const games = {
-      valorant: async() => {
+      valorant: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
@@ -20,17 +20,14 @@ export default createModalSubmitInteraction({
           }
         })
 
-        if(pred) {
+        if (pred) {
           return await ctx.reply('helper.replied')
         }
 
         const res = await service.getMatches('valorant')
         const data = res.find(d => d.id === ctx.args[2])!
 
-        const winnerScore = Math.max(
-          Number(ctx.args[3]),
-          Number(ctx.args[4])
-        )
+        const winnerScore = Math.max(Number(ctx.args[3]), Number(ctx.args[4]))
 
         await ctx.db.user.addPrediction('valorant', {
           match: data.id!,
@@ -38,12 +35,12 @@ export default createModalSubmitInteraction({
             {
               name: data.teams[0].name,
               score: ctx.args[3],
-              winner: Number(ctx.args[3]) !== winnerScore ? false : true
+              winner: Number(ctx.args[3]) === winnerScore
             },
             {
               name: data.teams[1].name,
               score: ctx.args[4],
-              winner: Number(ctx.args[4]) !== winnerScore ? false : true
+              winner: Number(ctx.args[4]) === winnerScore
             }
           ],
           status: 'pending',
@@ -58,7 +55,7 @@ export default createModalSubmitInteraction({
           s2: ctx.args[4]
         })
       },
-      lol: async() => {
+      lol: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
@@ -67,17 +64,14 @@ export default createModalSubmitInteraction({
           }
         })
 
-        if(pred) {
+        if (pred) {
           return await ctx.reply('helper.replied')
         }
 
         const res = await service.getMatches('lol')
         const data = res.find(d => d.id?.toString() === ctx.args[2])!
 
-        const winnerScore = Math.max(
-          Number(ctx.args[3]),
-          Number(ctx.args[4])
-        )
+        const winnerScore = Math.max(Number(ctx.args[3]), Number(ctx.args[4]))
 
         await ctx.db.user.addPrediction('lol', {
           match: data.id!,
@@ -85,12 +79,12 @@ export default createModalSubmitInteraction({
             {
               name: data.teams[0].name,
               score: ctx.args[3],
-              winner: Number(ctx.args[3]) !== winnerScore ? false : true
+              winner: Number(ctx.args[3]) === winnerScore
             },
             {
               name: data.teams[1].name,
               score: ctx.args[4],
-              winner: Number(ctx.args[4]) !== winnerScore ? false : true
+              winner: Number(ctx.args[4]) === winnerScore
             }
           ],
           status: 'pending',

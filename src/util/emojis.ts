@@ -308,6 +308,7 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'flex',
-    emoji: '<:controller:1404609821818228817> <:duelist:1404610039335092225> <:initiator:1404610214400884866> <:sentinel:1404610314091364394>'
+    emoji:
+      '<:controller:1404609821818228817> <:duelist:1404610039335092225> <:initiator:1404610214400884866> <:sentinel:1404610314091364394>'
   }
 ]

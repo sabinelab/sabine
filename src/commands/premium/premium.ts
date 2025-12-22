@@ -1,18 +1,18 @@
-import createCommand from '../../structures/command/createCommand'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'premium',
   category: 'premium',
-  description: 'Shows your premium\'s informations',
+  description: "Shows your premium's informations",
   descriptionLocalizations: {
     'pt-BR': 'Mostra as informações do seu premium'
   },
   userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t }) {
-    if(!ctx.db.user.premium || ctx.db.user.premium.type !== 'PREMIUM') {
+    if (!ctx.db.user.premium || ctx.db.user.premium.type !== 'PREMIUM') {
       return await ctx.reply('commands.premium.you_dont_have_premium')
     }
 
@@ -21,14 +21,11 @@ export default createCommand({
       .defineStyle('blue')
       .setCustomId(`premium;${ctx.interaction.user.id}`)
 
-    const embed = new EmbedBuilder()
-      .setTitle('Premium')
-      .setDesc(t(
-        'commands.premium.embed.description',
-        {
-          expiresAt: `<t:${(ctx.db.user.premium.expires_at.getTime() / 1000).toFixed(0)}:R>`
-        }
-      ))
+    const embed = new EmbedBuilder().setTitle('Premium').setDesc(
+      t('commands.premium.embed.description', {
+        expiresAt: `<t:${(ctx.db.user.premium.expires_at.getTime() / 1000).toFixed(0)}:R>`
+      })
+    )
 
     await ctx.reply(button.build({ embeds: [embed] }))
   },
@@ -41,35 +38,27 @@ export default createCommand({
       }
     })
 
-    if(!keys.length) {
+    if (!keys.length) {
       return await ctx.reply('commands.premium.you_dont_have_keys')
     }
 
     const embed = new EmbedBuilder()
 
-    for(const key of keys) {
-      if(key.expires_at) {
+    for (const key of keys) {
+      if (key.expires_at) {
         embed.addField(
           key.type,
-          t(
-            'commands.premium.embed.field.value',
-            {
-              expiresAt: `<t:${(key.expires_at.getTime() / 1000).toFixed(0)}:R>`,
-              key: key.id
-            }
-          )
+          t('commands.premium.embed.field.value', {
+            expiresAt: `<t:${(key.expires_at.getTime() / 1000).toFixed(0)}:R>`,
+            key: key.id
+          })
         )
-      }
-
-      else {
+      } else {
         embed.addField(
           key.type,
-          t(
-            'commands.premium.embed.field.value2',
-            {
-              key: key.id
-            }
-          )
+          t('commands.premium.embed.field.value2', {
+            key: key.id
+          })
         )
       }
     }

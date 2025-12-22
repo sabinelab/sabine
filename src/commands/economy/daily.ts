@@ -9,11 +9,10 @@ export default createCommand({
   category: 'economy',
   userInstall: true,
   async run({ ctx, app, t }) {
-    if(
-      ctx.db.user.daily_time &&
-      ctx.db.user.daily_time.getTime() > Date.now()
-    ) {
-      return await ctx.reply('commands.daily.has_been_claimed', { t: `<t:${((ctx.db.user.daily_time.getTime()) / 1000).toFixed(0)}:R>` })
+    if (ctx.db.user.daily_time && ctx.db.user.daily_time.getTime() > Date.now()) {
+      return await ctx.reply('commands.daily.has_been_claimed', {
+        t: `<t:${(ctx.db.user.daily_time.getTime() / 1000).toFixed(0)}:R>`
+      })
     }
 
     let coins = BigInt(Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000)
@@ -22,30 +21,35 @@ export default createCommand({
 
     const member = app.guilds.cache.get('1233965003850125433')?.members.cache.get(ctx.interaction.user.id)
 
-    let content = t('commands.daily.res', {
-      coins: coins.toLocaleString(),
-      fates
-    }) + '\n'
+    let content =
+      t('commands.daily.res', {
+        coins: coins.toLocaleString(),
+        fates
+      }) + '\n'
 
     const bonus: string[] = []
 
-    if(ctx.db.user.premium) {
+    if (ctx.db.user.premium) {
       coins *= 5n
       fates = Math.round(fates * 1.5)
 
-      bonus.push(t('commands.daily.bonus', {
-        coins: '5x',
-        fates: '1.5x'
-      }))
+      bonus.push(
+        t('commands.daily.bonus', {
+          coins: '5x',
+          fates: '1.5x'
+        })
+      )
     }
-    if(member?.premiumSince) {
+    if (member?.premiumSince) {
       coins *= 2n
       fates = Math.round(fates * 1.25)
 
-      bonus.push(t('commands.daily.bonus2', {
-        coins: '2x',
-        fates: '1.25x'
-      }))
+      bonus.push(
+        t('commands.daily.bonus2', {
+          coins: '2x',
+          fates: '1.25x'
+        })
+      )
     }
     const key = await app.prisma.guildKey.findUnique({
       where: {
@@ -56,32 +60,33 @@ export default createCommand({
       }
     })
 
-    if(
-      key &&
-      key.key.type === 'PREMIUM'
-    ) {
+    if (key && key.key.type === 'PREMIUM') {
       coins = BigInt(Math.round(Number(coins) * 1.5))
 
-      bonus.push(t('commands.daily.bonus3', {
-        coins: '1.5x'
-      }))
+      bonus.push(
+        t('commands.daily.bonus3', {
+          coins: '1.5x'
+        })
+      )
     }
 
-    if(
-      key &&
-      key.key.type === 'BOOSTER'
-    ) {
+    if (key && key.key.type === 'BOOSTER') {
       coins = BigInt(Math.round(Number(coins) * 1.25))
 
-      bonus.push(t('commands.daily.bonus4', {
-        coins: '1.25x'
-      }))
+      bonus.push(
+        t('commands.daily.bonus4', {
+          coins: '1.25x'
+        })
+      )
     }
-    if(bonus.length) {
-      content = t('commands.daily.res', {
-        coins: coins.toLocaleString(),
-        fates
-      }) + '\n' + bonus.join('\n')
+    if (bonus.length) {
+      content =
+        t('commands.daily.res', {
+          coins: coins.toLocaleString(),
+          fates
+        }) +
+        '\n' +
+        bonus.join('\n')
     }
 
     await ctx.db.user.daily(coins, fates)

@@ -101,14 +101,14 @@ export default createCommand({
   ],
   permissions: ['ManageChannels'],
   async run({ ctx }) {
-    if(ctx.args[0] === 'enable') {
+    if (ctx.args[0] === 'enable') {
       const games = {
-        valorant: async() => {
-          if(!ctx.guild || !ctx.db.guild) return
+        valorant: async () => {
+          if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.update({
             where: {
@@ -120,12 +120,12 @@ export default createCommand({
           })
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         },
-        lol: async() => {
-          if(!ctx.guild || !ctx.db.guild) return
+        lol: async () => {
+          if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.update({
             where: {
@@ -140,11 +140,10 @@ export default createCommand({
       }
 
       await games[ctx.args[1] as 'valorant' | 'lol']()
-    }
-    else {
+    } else {
       const games = {
-        valorant: async() => {
-          if(!ctx.db.guild) return
+        valorant: async () => {
+          if (!ctx.db.guild) return
 
           await prisma.guild.update({
             where: {
@@ -156,8 +155,8 @@ export default createCommand({
           })
           await ctx.reply('commands.news.news_disabled')
         },
-        lol: async() => {
-          if(!ctx.db.guild) return
+        lol: async () => {
+          if (!ctx.db.guild) return
 
           await prisma.guild.update({
             where: {

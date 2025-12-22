@@ -1,9 +1,9 @@
-import * as Discord from 'discord.js'
-import App from '../app/App'
-import CommandContext from './CommandContext'
 import type { Args } from '@i18n'
-import ComponentInteractionContext from '../interaction/ComponentInteractionContext'
-import ModalSubmitInteractionContext from '../interaction/ModalSubmitInteractionContext'
+import type * as Discord from 'discord.js'
+import type App from '../app/App'
+import type ComponentInteractionContext from '../interaction/ComponentInteractionContext'
+import type ModalSubmitInteractionContext from '../interaction/ModalSubmitInteractionContext'
+import type CommandContext from './CommandContext'
 
 type CommandOptions = {
   ctx: CommandContext
@@ -59,6 +59,6 @@ export type Command = {
   createModalSubmitInteraction?: (options: CreateModalSubmitInteractionOptions) => Promise<unknown>
 }
 
-export default function(command: Command) {
+export default function (command: Command) {
   return command
 }

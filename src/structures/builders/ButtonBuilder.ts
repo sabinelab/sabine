@@ -1,23 +1,25 @@
-import {
-  ButtonBuilder as DJSButtonBuilder,
-  ButtonStyle,
-  type InteractionReplyOptions,
-} from 'discord.js'
+import { ButtonStyle, ButtonBuilder as DJSButtonBuilder, type InteractionReplyOptions } from 'discord.js'
 
 export default class ButtonBuilder extends DJSButtonBuilder {
   public defineStyle(style: 'blue' | 'gray' | 'green' | 'red' | 'link') {
-    switch(style.toLowerCase()) {
-      case 'blue': super.setStyle(ButtonStyle.Primary)
+    switch (style.toLowerCase()) {
+      case 'blue':
+        super.setStyle(ButtonStyle.Primary)
         break
-      case 'gray': super.setStyle(ButtonStyle.Secondary)
+      case 'gray':
+        super.setStyle(ButtonStyle.Secondary)
         break
-      case 'green': super.setStyle(ButtonStyle.Success)
+      case 'green':
+        super.setStyle(ButtonStyle.Success)
         break
-      case 'red': super.setStyle(ButtonStyle.Danger)
+      case 'red':
+        super.setStyle(ButtonStyle.Danger)
         break
-      case 'link': super.setStyle(ButtonStyle.Link)
+      case 'link':
+        super.setStyle(ButtonStyle.Link)
         break
-      default: throw new Error('Invalid style! Please, choose: "BLUE", "GRAY", "GREEN", "RED", "LINK"')
+      default:
+        throw new Error('Invalid style! Please, choose: "BLUE", "GRAY", "GREEN", "RED", "LINK"')
     }
 
     return this
@@ -36,8 +38,7 @@ export default class ButtonBuilder extends DJSButtonBuilder {
   }
 
   public setEmoji(emoji: string, animated?: boolean) {
-    if(isNaN(Number(emoji))) super.setEmoji({ name: emoji })
-
+    if (Number.isNaN(Number(emoji))) super.setEmoji({ name: emoji })
     else super.setEmoji({ id: emoji, animated })
 
     return this
@@ -62,7 +63,7 @@ export default class ButtonBuilder extends DJSButtonBuilder {
   }
 
   public build(content?: string | InteractionReplyOptions) {
-    if(typeof content === 'string') {
+    if (typeof content === 'string') {
       return {
         content: content ?? '',
         components: [
@@ -72,9 +73,7 @@ export default class ButtonBuilder extends DJSButtonBuilder {
           }
         ]
       }
-    }
-
-    else {
+    } else {
       return {
         components: [
           {

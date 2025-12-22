@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
-import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import { env } from '@/env'
+import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'sign',
@@ -34,18 +34,17 @@ export default createCommand({
   async run({ ctx, t, app }) {
     const player = app.players.get(ctx.args[0].toString())
 
-    if(!player || !player.purchasable) return await ctx.reply('commands.sign.player_not_found')
+    if (!player || !player.purchasable) return await ctx.reply('commands.sign.player_not_found')
 
     const price = player.price
 
     const embed = new EmbedBuilder()
       .setTitle(player.name)
-      .setDesc(t(
-        'commands.sign.embed.desc',
-        {
+      .setDesc(
+        t('commands.sign.embed.desc', {
           price: price.toLocaleString()
-        }
-      ))
+        })
+      )
       .setImage(`${env.CDN_URL}/cards/${player.id}.png`)
 
     const button = new ButtonBuilder()
@@ -56,12 +55,12 @@ export default createCommand({
     await ctx.reply(embed.build(button.build()))
   },
   async createAutocompleteInteraction({ i, app }) {
-    const players: Array<{ name: string, ovr: number, id: number }> = []
+    const players: Array<{ name: string; ovr: number; id: number }> = []
 
     const value = i.options.getString('player', true)
 
-    for(const p of app.players.values()) {
-      if(!p.purchasable) continue
+    for (const p of app.players.values()) {
+      if (!p.purchasable) continue
 
       const ovr = Math.floor(p.ovr)
 
@@ -73,10 +72,9 @@ export default createCommand({
     }
 
     await i.respond(
-      players.sort((a, b) => b.ovr - a.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => b.ovr - a.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 25)
         .map(p => ({ name: p.name, value: p.id.toString() }))
     )
@@ -86,11 +84,11 @@ export default createCommand({
 
     const player = app.players.get(ctx.args[2])
 
-    if(!player) return
+    if (!player) return
 
     const price = player.price
 
-    if(price > ctx.db.user.coins) return ctx.reply('commands.sign.coins_needed')
+    if (price > ctx.db.user.coins) return ctx.reply('commands.sign.coins_needed')
 
     await app.prisma.$transaction([
       app.prisma.transaction.create({

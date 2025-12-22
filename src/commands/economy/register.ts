@@ -1,5 +1,5 @@
-import createCommand from '@/structures/command/createCommand'
 import { prisma, SabineUser } from '@db'
+import createCommand from '@/structures/command/createCommand'
 
 export default createCommand({
   name: 'register',
@@ -16,7 +16,7 @@ export default createCommand({
   async run({ ctx }) {
     const user = await SabineUser.fetch(ctx.interaction.user.id)
 
-    if(user) {
+    if (user) {
       return await ctx.reply('commands.register.already_registered')
     }
 

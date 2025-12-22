@@ -1,9 +1,9 @@
 import { SabineUser } from '@db'
+import { ComponentType, type InteractionCallbackResponse } from 'discord.js'
+import { type valorant_agents, valorant_maps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
-import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
-import { ComponentType, InteractionCallbackResponse } from 'discord.js'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
-import { valorant_agents, valorant_maps } from '../../config'
+import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 
 export default createComponentInteraction({
   name: 'accept',
@@ -13,39 +13,42 @@ export default createComponentInteraction({
 
     const keys = await app.redis.keys('agent_selection*')
 
-    if(!ctx.db.user.team_name || !ctx.db.user.team_tag) {
+    if (!ctx.db.user.team_name || !ctx.db.user.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if(ctx.db.user.active_players.length < 5) {
+    if (ctx.db.user.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
-    if(!user || user.active_players.length < 5) {
+    if (!user || user.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if(!user.team_name || !user.team_tag) {
+    if (!user.team_name || !user.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 
-    if(await app.redis.get(`match:${ctx.interaction.user.id}`) || keys.some(key => key.includes(ctx.interaction.user.id))) {
+    if (
+      (await app.redis.get(`match:${ctx.interaction.user.id}`)) ||
+      keys.some(key => key.includes(ctx.interaction.user.id))
+    ) {
       return await ctx.reply('commands.duel.already_in_match')
     }
 
-    if(await app.redis.get(`match:${user.id}`) || keys.some(key => key.includes(user.id))) {
+    if ((await app.redis.get(`match:${user.id}`)) || keys.some(key => key.includes(user.id))) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
     let maps = valorant_maps
 
-    if(ctx.args.includes('ranked')) {
+    if (ctx.args.includes('ranked')) {
       maps = maps.filter(map => map.current_map_pool)
     }
 
     let map = maps[Math.floor(Math.random() * maps.length)]
 
-    if(ctx.args.includes('tournament')) {
+    if (ctx.args.includes('tournament')) {
       map = valorant_maps.filter(m => m.name === ctx.args[4])[0]
     }
 
@@ -55,20 +58,24 @@ export default createComponentInteraction({
       .setFields(
         {
           name: user.team_name,
-          value: user.active_players.map(id => {
-            const player = app.players.get(id)!
-            const ovr = parseInt(player.ovr.toString())
-            return `<a:loading:809221866434199634> ${player.name} (${ovr})`
-          }).join('\n'),
+          value: user.active_players
+            .map(id => {
+              const player = app.players.get(id)!
+              const ovr = Math.floor(player.ovr)
+              return `<a:loading:809221866434199634> ${player.name} (${ovr})`
+            })
+            .join('\n'),
           inline: true
         },
         {
           name: ctx.db.user.team_name,
-          value: ctx.db.user.active_players.map(id => {
-            const player = app.players.get(id)!
-            const ovr = parseInt(player.ovr.toString())
-            return `<a:loading:809221866434199634> ${player.name} (${ovr})`
-          }).join('\n'),
+          value: ctx.db.user.active_players
+            .map(id => {
+              const player = app.players.get(id)!
+              const ovr = Math.floor(player.ovr)
+              return `<a:loading:809221866434199634> ${player.name} (${ovr})`
+            })
+            .join('\n'),
           inline: true
         }
       )
@@ -101,7 +108,7 @@ export default createComponentInteraction({
       )
       .setCustomId(`select;${ctx.interaction.user.id};${user.id}`)
 
-    const interaction = await ctx.edit({
+    const interaction = (await ctx.edit({
       embeds: [embed],
       content: `${ctx.interaction.user} <@${user.id}>`,
       components: [
@@ -114,7 +121,7 @@ export default createComponentInteraction({
           components: [menu2]
         }
       ]
-    }) as InteractionCallbackResponse
+    })) as InteractionCallbackResponse
 
     const data: {
       [key: string]: {
@@ -130,7 +137,7 @@ export default createComponentInteraction({
         ovr: number
         agent: {
           name: string
-          role: typeof valorant_agents[number]['role']
+          role: (typeof valorant_agents)[number]['role']
         } | null
       }[]
     } = {}
@@ -155,15 +162,18 @@ export default createComponentInteraction({
       }
     })
 
-    await app.redis.set(`agent_selection:${user.id}:${ctx.interaction.user.id}`, JSON.stringify(
-      {
+    await app.redis.set(
+      `agent_selection:${user.id}:${ctx.interaction.user.id}`,
+      JSON.stringify({
         ...data,
         messageId: interaction.resource?.message?.id,
         channelId: interaction.resource?.message?.channelId,
         map: map.name,
         image: map.image,
         mode: ctx.args[3] === 'tournament' ? 'tournament' : ctx.args.slice(3).join(':')
-      }
-    ), 'EX', 300)
+      }),
+      'EX',
+      300
+    )
   }
 })

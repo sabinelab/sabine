@@ -1,7 +1,7 @@
 import {
+  type APIEmbedField,
   EmbedBuilder as DJSEmbedBuilder,
   type EmbedAuthorOptions,
-  type APIEmbedField,
   type EmbedFooterOptions,
   type InteractionReplyOptions
 } from 'discord.js'
@@ -43,11 +43,11 @@ export default class EmbedBuilder extends DJSEmbedBuilder {
   }
 
   public setField(name: string, value: string, inline = false) {
-    super.setFields(
-      {
-        name, value, inline
-      }
-    )
+    super.setFields({
+      name,
+      value,
+      inline
+    })
 
     return this
   }
@@ -83,15 +83,13 @@ export default class EmbedBuilder extends DJSEmbedBuilder {
   }
 
   public build(content?: string | InteractionReplyOptions) {
-    if(typeof content === 'string' || !content) {
+    if (typeof content === 'string' || !content) {
       return {
         content: content ?? '',
         embeds: [this.toJSON()],
         components: []
       }
-    }
-
-    else {
+    } else {
       return {
         embeds: [this.toJSON()],
         ...content

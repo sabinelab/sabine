@@ -61,33 +61,28 @@ export default class Player {
   }
 
   public buy() {
-    if(this.teamCredits >= 2500 && !this.weapon.primary) {
+    if (this.teamCredits >= 2500 && !this.weapon.primary) {
       let primary = valorant_weapons.filter(w => w.price > 800 && w.price + 1000 <= this.credits)
 
       let secondary = valorant_weapons.filter(w => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits)
 
-      if(!primary.length) {
+      if (!primary.length) {
         primary = valorant_weapons.filter(w => w.price > 800 && w.price + 400 <= this.credits)
       }
 
-      if(!secondary.length) {
+      if (!secondary.length) {
         secondary = valorant_weapons.filter(w => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits)
       }
 
-      let weapon: typeof valorant_weapons[number]
+      let weapon: (typeof valorant_weapons)[number]
 
-      if(this.rounds >= 24) {
+      if (this.rounds >= 24) {
         weapon = this.chooseWeapon(
           primary.filter(w => w.price >= 2900),
-          w => Math.pow(w.damage.head, 3)
+          w => w.damage.head ** 3
         )
-      }
-
-      else {
-        weapon = this.chooseWeapon(
-          primary,
-          w => Math.pow(w.damage.head, 3)
-        )
+      } else {
+        weapon = this.chooseWeapon(primary, w => w.damage.head ** 3)
       }
 
       const secondaryWeapon = this.chooseWeapon(secondary, w => w.price)
@@ -98,7 +93,7 @@ export default class Player {
         ...weapon
       }
 
-      if(this.credits >= secondaryWeapon.price) {
+      if (this.credits >= secondaryWeapon.price) {
         this.credits -= secondaryWeapon.price
 
         this.weapon.secondary = {
@@ -106,18 +101,14 @@ export default class Player {
         }
       }
 
-      if(this.credits >= 1000) {
+      if (this.credits >= 1000) {
         this.credits -= 1000
         this.life = 150
-      }
-
-      else if(this.credits >= 400) {
+      } else if (this.credits >= 400) {
         this.credits -= 400
         this.life = 125
       }
-    }
-
-    else if(this.teamCredits === 800) {
+    } else if (this.teamCredits === 800) {
       const secondary = valorant_weapons.filter(w => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, w => w.price * 5)
@@ -128,17 +119,16 @@ export default class Player {
         ...weapon
       }
 
-      if(this.credits >= 400) {
+      if (this.credits >= 400) {
         this.life = 125
         this.credits -= 400
       }
-    }
-    else {
+    } else {
       const secondary = valorant_weapons.filter(w => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, w => w.price * 5)
 
-      if(this.credits - weapon.price + 1900 < 2650) {
+      if (this.credits - weapon.price + 1900 < 2650) {
         return this
       }
 
@@ -148,10 +138,7 @@ export default class Player {
         ...weapon
       }
 
-      if(
-        this.credits >= 400 &&
-        this.credits - 400 >= 2650
-      ) {
+      if (this.credits >= 400 && this.credits - 400 >= 2650) {
         this.life = 125
         this.credits -= 400
       }
@@ -164,10 +151,10 @@ export default class Player {
 
     let random = Math.random() * weight
 
-    for(const item of items) {
+    for (const item of items) {
       random -= weightFun(item)
 
-      if(random <= 0) {
+      if (random <= 0) {
         return item
       }
     }
@@ -180,69 +167,52 @@ export default class Player {
     let prob = (1 / (1 + Math.exp(-steepness * (this.stats.aim - midpoint)))) * (1 - (mov / 100) * 0.2)
     let random = Math.random()
 
-    if(random <= prob) {
+    if (random <= prob) {
       steepness = 0.02
       midpoint = 75
       prob = 1 / (1 + Math.exp(-steepness * (this.stats.HS - midpoint)))
       random = Math.random()
 
-      if(random <= prob) {
+      if (random <= prob) {
         return 'head'
-      }
-
-      else return 'chest'
+      } else return 'chest'
     }
 
     return 'none'
   }
   public shoot(mov: number) {
-    if(this.weapon.primary && this.weapon.primary.magazine && this.weapon.primary.magazine > 0) {
+    if (this.weapon.primary?.magazine && this.weapon.primary.magazine > 0) {
       this.weapon.primary.magazine -= 1
 
       const choice = this.chooseShoot(mov)
 
-      if(choice === 'head') {
+      if (choice === 'head') {
         return [this.weapon.primary.damage.head, this.weapon.primary.rate_fire]
-      }
-
-      else if(choice === 'chest') {
+      } else if (choice === 'chest') {
         return [this.weapon.primary.damage.chest, this.weapon.primary.rate_fire]
-      }
-
-      else {
+      } else {
         return [0, this.weapon.primary.rate_fire]
       }
-    }
-
-    else if(this.weapon.secondary!.magazine && this.weapon.secondary!.magazine > 0) {
+    } else if (this.weapon.secondary!.magazine && this.weapon.secondary!.magazine > 0) {
       this.weapon.secondary!.magazine -= 1
 
       const choice = this.chooseShoot(mov)
 
-      if(choice === 'head') {
+      if (choice === 'head') {
         return [this.weapon.secondary!.damage.head, this.weapon.secondary!.rate_fire]
-      }
-
-      else if(choice === 'chest') {
+      } else if (choice === 'chest') {
         return [this.weapon.secondary!.damage.chest, this.weapon.secondary!.rate_fire]
-      }
-
-      else {
+      } else {
         return [0, this.weapon.secondary!.rate_fire]
       }
-    }
-    else {
+    } else {
       const choice = this.chooseShoot(mov)
 
-      if(choice === 'head') {
+      if (choice === 'head') {
         return [this.weapon.melee.damage.head, this.weapon.melee.rate_fire]
-      }
-
-      else if(choice === 'chest') {
+      } else if (choice === 'chest') {
         return [this.weapon.melee.damage.chest, this.weapon.melee.rate_fire]
-      }
-
-      else {
+      } else {
         return [0, this.weapon.melee.rate_fire]
       }
     }

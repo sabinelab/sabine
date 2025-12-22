@@ -1,5 +1,5 @@
 import { calcPlayerOvr, type Player } from '@sabinelab/players'
-import { valorant_agents, valorant_maps, valorant_weapons } from '../../config'
+import { type valorant_agents, valorant_maps, valorant_weapons } from '../../config'
 import type { PlayerWeapon } from './Player'
 
 export type PlayerStats = {
@@ -21,12 +21,12 @@ export type TeamPlayer = {
   name: string
   stats: PlayerStats
   role: 'initiator' | 'controller' | 'duelist' | 'sentinel' | 'flex'
-  agent?: typeof valorant_agents[number]
+  agent?: (typeof valorant_agents)[number]
   shield_type?: number
   alive: boolean
   match_stats?: PlayerMatchStats
   credits: number
-  weapon?: typeof valorant_weapons[number]['name']
+  weapon?: (typeof valorant_weapons)[number]['name']
 }
 
 export type TeamRoster = {
@@ -42,7 +42,7 @@ export type TeamRoster = {
   ovr: number
   agent: {
     name: string
-    role: typeof valorant_agents[number]['role']
+    role: (typeof valorant_agents)[number]['role']
   }
   credits: number
   collection: string
@@ -68,7 +68,7 @@ export type KillEvent = {
   killerIndex: number
   victim: Pick<TeamPlayer, 'id' | 'name'>
   victimIndex: number
-  weapon: typeof valorant_weapons[number]['name']
+  weapon: (typeof valorant_weapons)[number]['name']
 }
 
 type RoundResult = {
@@ -105,22 +105,25 @@ export default class Match {
     this.map = options.map
     this.mapImage = valorant_maps.filter(m => m.name === this.map)[0].image
 
-    for(const t of this.teams) {
+    for (const t of this.teams) {
       const roles: Record<string, number> = {}
 
-      for(const p of t.roster) {
+      for (const p of t.roster) {
         roles[p.agent.role] = (roles[p.role] || 0) + 1
       }
 
-      for(const p of t.roster) {
+      for (const p of t.roster) {
         const min = 0.07
 
         const increment = 0.015
 
-        if(
-          (p.role !== 'flex' && p.agent.role !== p.role) &&
-          (p.role !== 'sentinel' && p.agent.name !== 'Viper') &&
-          (p.role !== 'duelist') && p.agent.name === 'Chamber'
+        if (
+          p.role !== 'flex' &&
+          p.agent.role !== p.role &&
+          p.role !== 'sentinel' &&
+          p.agent.name !== 'Viper' &&
+          p.role !== 'duelist' &&
+          p.agent.name === 'Chamber'
         ) {
           p.aim *= 0.85
           p.HS *= 0.85
@@ -130,23 +133,10 @@ export default class Match {
           p.gamesense *= 0.85
         }
 
-        if(roles['initiator'] >= 3) {
-          const count = roles['initiator']
+        if (roles.initiator >= 3) {
+          const count = roles.initiator
 
-          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.10)
-
-          p.aim *= debuff
-          p.HS *= debuff
-          p.movement *= debuff
-          p.aggression *= debuff
-          p.ACS *= debuff
-          p.gamesense *= debuff
-        }
-
-        if(roles['sentinel'] >= 3) {
-          const count = roles['sentinel']
-
-          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.10)
+          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
           p.HS *= debuff
@@ -156,22 +146,10 @@ export default class Match {
           p.gamesense *= debuff
         }
 
-        if(roles['duelist'] >= 3) {
-          const count = roles['duelist']
+        if (roles.sentinel >= 3) {
+          const count = roles.sentinel
 
-          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.10)
-
-          p.aim *= debuff
-          p.HS *= debuff
-          p.movement *= debuff
-          p.aggression *= debuff
-          p.ACS *= debuff
-          p.gamesense *= debuff
-        }
-        if(roles['controller'] >= 3) {
-          const count = roles['controller']
-
-          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.10)
+          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
           p.HS *= debuff
@@ -180,7 +158,32 @@ export default class Match {
           p.ACS *= debuff
           p.gamesense *= debuff
         }
-        if(!roles['controller']) {
+
+        if (roles.duelist >= 3) {
+          const count = roles.duelist
+
+          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
+
+          p.aim *= debuff
+          p.HS *= debuff
+          p.movement *= debuff
+          p.aggression *= debuff
+          p.ACS *= debuff
+          p.gamesense *= debuff
+        }
+        if (roles.controller >= 3) {
+          const count = roles.controller
+
+          const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
+
+          p.aim *= debuff
+          p.HS *= debuff
+          p.movement *= debuff
+          p.aggression *= debuff
+          p.ACS *= debuff
+          p.gamesense *= debuff
+        }
+        if (!roles.controller) {
           p.aim *= 0.95
           p.HS *= 0.95
           p.movement *= 0.95
@@ -189,9 +192,10 @@ export default class Match {
           p.gamesense *= 0.95
         }
 
-        if(
-          !valorant_maps.filter(m => m.name === this.map)[0].meta_agents
-            .includes(p.agent.name as typeof valorant_maps[number]['meta_agents'][number])
+        if (
+          !valorant_maps
+            .filter(m => m.name === this.map)[0]
+            .meta_agents.includes(p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number])
         ) {
           p.aim *= 0.95
           p.HS *= 0.95
@@ -236,10 +240,10 @@ export default class Match {
   }
 
   public async switchSides() {
-    for(const t of this.teams) {
+    for (const t of this.teams) {
       t.side = t.side === 'ATTACK' ? 'DEFENSE' : 'ATTACK'
 
-      for(const p of t.roster) {
+      for (const p of t.roster) {
         p.credits = this.rounds.length >= 24 ? 4700 : 800
         p.weapon = {
           melee: {

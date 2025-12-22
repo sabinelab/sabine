@@ -1,14 +1,14 @@
-import { $Enums, type Premium, type User } from '@generated'
 import { prisma } from '@db'
-import { app } from '../structures/app/App'
-import type { Pack } from '../server/routes/util/vote'
-import { valorant_agents } from '../config'
-import { updateCache, voidCatch } from '@/database/update-cache'
+import type { $Enums, Premium, User } from '@generated'
 import { hydrateData } from '@/database/hydrate-data'
+import { updateCache, voidCatch } from '@/database/update-cache'
+import type { valorant_agents } from '../config'
+import type { Pack } from '../server/routes/util/vote'
+import { app } from '../structures/app/App'
 
 type PredictionTeam = {
   name: string
-  score: string,
+  score: string
   winner: boolean
 }
 
@@ -24,7 +24,7 @@ type ArenaLineup = {
   player: string
   agent: {
     name: string
-    role: typeof valorant_agents[number]['role']
+    role: (typeof valorant_agents)[number]['role']
   }
 }
 
@@ -87,7 +87,7 @@ export class SabineUser implements User {
   public static async fetch(id: string) {
     const cachedData = await Bun.redis.get(`user:${id}`)
 
-    if(cachedData) {
+    if (cachedData) {
       const hydrated = hydrateData<typeof this>(JSON.parse(cachedData))
       const user = new SabineUser(id)
 
@@ -101,7 +101,7 @@ export class SabineUser implements User {
       }
     })
 
-    if(!data) return data
+    if (!data) return data
 
     updateCache(`user:${id}`, data).catch(voidCatch)
 
@@ -239,7 +239,7 @@ export class SabineUser implements User {
       }
     })
 
-    if(!pred) return this
+    if (!pred) return this
 
     await prisma.$transaction([
       prisma.prediction.update({
@@ -277,7 +277,7 @@ export class SabineUser implements User {
       }
     })
 
-    if(!pred) return this
+    if (!pred) return this
 
     await prisma.$transaction([
       prisma.prediction.update({
@@ -315,33 +315,34 @@ export class SabineUser implements User {
       }
     }
 
-    if(method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
-
-      const claimTime = this.premium
-        ? new Date(Date.now() + 5 * 60 * 1000)
-        : new Date(Date.now() + 10 * 60 * 1000)
+    if (method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
+      const claimTime = this.premium ? new Date(Date.now() + 5 * 60 * 1000) : new Date(Date.now() + 10 * 60 * 1000)
 
       updates.claim_time = claimTime
       updates.claims = { increment: 1 }
       updates.reminded = false
       updates.pity = { increment: 1 }
 
-      if(channel) {
+      if (channel) {
         updates.remind_in = channel
 
-        if(this.remind) {
-          await app.queue.add('reminder', {
-            channel,
-            user: this.id
-          }, {
-            delay: claimTime.getTime() - Date.now(),
-            removeOnComplete: true,
-            removeOnFail: true
-          })
+        if (this.remind) {
+          await app.queue.add(
+            'reminder',
+            {
+              channel,
+              user: this.id
+            },
+            {
+              delay: claimTime.getTime() - Date.now(),
+              removeOnComplete: true,
+              removeOnFail: true
+            }
+          )
         }
       }
 
-      if(app.players.get(player)!.ovr >= 85) {
+      if (app.players.get(player)!.ovr >= 85) {
         updates.pity = 0
       }
     }
@@ -390,7 +391,7 @@ export class SabineUser implements User {
   }
 
   public async sellPlayer(id: string, price: bigint, i: number) {
-    await prisma.$transaction(async(tx) => {
+    await prisma.$transaction(async tx => {
       const currentData = await tx.user.findUnique({
         where: {
           id: this.id
@@ -401,13 +402,13 @@ export class SabineUser implements User {
         }
       })
 
-      if(!currentData) return
+      if (!currentData) return
 
       const currentPlayers = currentData.reserve_players
 
-      if(!currentPlayers[i] || currentPlayers[i] !== id) {
+      if (!currentPlayers[i] || currentPlayers[i] !== id) {
         const index = currentPlayers.indexOf(id)
-        if(index === -1) return
+        if (index === -1) return
 
         i = index
       }
@@ -419,9 +420,9 @@ export class SabineUser implements User {
         ? JSON.parse(JSON.stringify(currentData.arena_metadata))
         : null
 
-      if(newArenaMetadata && newArenaMetadata.lineup) {
+      if (newArenaMetadata?.lineup) {
         const index = newArenaMetadata.lineup.findIndex((line: any) => line.player === id)
-        if(index !== -1) {
+        if (index !== -1) {
           newArenaMetadata.lineup.splice(index, 1)
         }
       }
@@ -437,9 +438,7 @@ export class SabineUser implements User {
           reserve_players: {
             set: newPlayers
           },
-          arena_metadata: newArenaMetadata
-            ? newArenaMetadata
-            : undefined
+          arena_metadata: newArenaMetadata ? newArenaMetadata : undefined
         }
       })
 
@@ -461,41 +460,39 @@ export class SabineUser implements User {
       return n > 0 && n % 20 === 0
     }
     const checkDate = (date1: Date, date2: Date | null) => {
-      if(!date2) return false
-      return Math.abs(date1.getTime() - date2.getTime()) <= (24 * 60 * 60 * 1000)
+      if (!date2) return false
+      return Math.abs(date1.getTime() - date2.getTime()) <= 24 * 60 * 60 * 1000
     }
 
     const packField = {
-      'IRON': 'iron_packs',
-      'BRONZE': 'bronze_packs',
-      'SILVER': 'silver_packs',
-      'GOLD': 'gold_packs',
-      'PLATINUM': 'platinum_packs',
-      'DIAMOND': 'diamond_packs',
-      'ASCENDANT': 'ascendant_packs',
-      'IMMORTAL': 'immortal_packs',
-      'RADIANT': 'radiant_packs'
+      IRON: 'iron_packs',
+      BRONZE: 'bronze_packs',
+      SILVER: 'silver_packs',
+      GOLD: 'gold_packs',
+      PLATINUM: 'platinum_packs',
+      DIAMOND: 'diamond_packs',
+      ASCENDANT: 'ascendant_packs',
+      IMMORTAL: 'immortal_packs',
+      RADIANT: 'radiant_packs'
     } as const
     const fieldToIncrement = packField[pack]
 
     const update: any = {}
 
-    if(checkStreak(this.vote_streak + 1) && fieldToIncrement !== 'radiant_packs') {
+    if (checkStreak(this.vote_streak + 1) && fieldToIncrement !== 'radiant_packs') {
       update.radiant_packs = {
         increment: 1
       }
-    }
-    else {
+    } else {
       update[fieldToIncrement] = {
         increment: 1
       }
     }
 
-    if(increaseVoteStreak) {
-      if(!checkDate(new Date(), this.last_vote) && this.vote_streak) {
+    if (increaseVoteStreak) {
+      if (!checkDate(new Date(), this.last_vote) && this.vote_streak) {
         update.vote_streak = 1
-      }
-      else {
+      } else {
         update.vote_streak = {
           increment: 1
         }

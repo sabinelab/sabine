@@ -1,6 +1,6 @@
+import { prisma } from '@db'
 import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
-import { prisma } from '@db'
 
 export default createCommand({
   name: 'live',
@@ -103,21 +103,21 @@ export default createCommand({
           }
         }
       ]
-    },
+    }
   ],
   permissions: ['ManageChannels'],
   async run({ ctx }) {
-    if(!ctx.db.guild) return
+    if (!ctx.db.guild) return
 
-    if(ctx.args[0] === 'enable') {
+    if (ctx.args[0] === 'enable') {
       const games = {
-        valorant: async() => {
-          if(!ctx.guild || !ctx.db.guild) return
+        valorant: async () => {
+          if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
-          
+          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
+
           await prisma.guild.update({
             where: {
               id: ctx.db.guild.id
@@ -128,12 +128,12 @@ export default createCommand({
           })
           await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
         },
-        lol: async() => {
-          if(!ctx.guild || !ctx.db.guild) return
+        lol: async () => {
+          if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if(![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
+          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
 
           await prisma.guild.update({
             where: {
@@ -148,11 +148,10 @@ export default createCommand({
       }
 
       await games[ctx.args[1] as 'valorant' | 'lol']()
-    }
-    else {
+    } else {
       const games = {
-        valorant: async() => {
-          if(!ctx.db.guild) return
+        valorant: async () => {
+          if (!ctx.db.guild) return
 
           await prisma.guild.update({
             where: {
@@ -164,8 +163,8 @@ export default createCommand({
           })
           await ctx.reply('commands.live.live_disabled')
         },
-        lol: async() => {
-          if(!ctx.db.guild) return
+        lol: async () => {
+          if (!ctx.db.guild) return
 
           await prisma.guild.update({
             where: {

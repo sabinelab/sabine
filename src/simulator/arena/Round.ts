@@ -1,36 +1,34 @@
-import { valorant_maps, valorant_weapons } from '../../config'
 import { prisma, SabineUser } from '@db'
-import Match, { type TeamRoster, type KillEvent } from './Match'
+import { valorant_maps, valorant_weapons } from '../../config'
+import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'
 
 export default class Round extends Match {
   public override async start() {
-    if(this.rounds.length === this.switchSidesAt) {
+    if (this.rounds.length === this.switchSidesAt) {
       await this.switchSides()
     }
 
     const score1 = this.rounds.filter(r => r.winning_team === 0).length
     const score2 = this.rounds.filter(r => r.winning_team === 1).length
 
-    if(this.mode === 'arena') {
-      if((score1 === 13 || score2 === 13) && this.rounds.length <= 24) {
+    if (this.mode === 'arena') {
+      if ((score1 === 13 || score2 === 13) && this.rounds.length <= 24) {
         return await this.finish(score1, score2)
-      }
-
-      else if((score1 > 13 || score2 > 13) && Math.abs(score1 - score2) === 2) {
+      } else if ((score1 > 13 || score2 > 13) && Math.abs(score1 - score2) === 2) {
         return await this.finish(score1, score2)
       }
     }
 
-    if(this.rounds.length >= 24) {
+    if (this.rounds.length >= 24) {
       await this.switchSides()
     }
 
-    for(const t of this.teams) {
+    for (const t of this.teams) {
       const teamCredits = t.roster.reduce((sum, p) => sum + p.credits, 0) / 5
 
-      for(const p of t.roster) {
-        if(p.life <= 0) {
+      for (const p of t.roster) {
+        if (p.life <= 0) {
           p.weapon = {
             melee: {
               damage: {
@@ -60,13 +58,13 @@ export default class Round extends Match {
         p.credits = player.credits
         p.weapon = player.weapon
 
-        if(p.weapon.primary) {
+        if (p.weapon.primary) {
           const weapon = valorant_weapons.filter(w => w.name === p.weapon?.primary?.name)[0]
 
           p.weapon.primary.magazine = weapon.magazine
         }
 
-        if(p.weapon.secondary) {
+        if (p.weapon.secondary) {
           const weapon = valorant_weapons.filter(w => w.name === p.weapon?.secondary?.name)[0]
 
           p.weapon.secondary.magazine = weapon.magazine
@@ -82,13 +80,13 @@ export default class Round extends Match {
   private async finish(score1: number, score2: number) {
     this.finished = true
 
-    const user1 = await SabineUser.fetch(this.teams[0].user) || new SabineUser(this.teams[0].user)
-    const user2 = await SabineUser.fetch(this.teams[1].user) || new SabineUser(this.teams[1].user)
+    const user1 = (await SabineUser.fetch(this.teams[0].user)) || new SabineUser(this.teams[0].user)
+    const user2 = (await SabineUser.fetch(this.teams[1].user)) || new SabineUser(this.teams[1].user)
 
-    if(this.mode === 'arena') {
+    if (this.mode === 'arena') {
       const max = Math.max(score1, score2)
 
-      if(max === 13 && score1 === max) {
+      if (max === 13 && score1 === max) {
         const diff = score1 - score2
         const maxDiff = 13
         const minPts = 20
@@ -101,7 +99,7 @@ export default class Round extends Match {
         user2.arena_defeats += 1
         user2.rank_rating -= pts - 5
 
-        if(user2.rank_rating < 0) {
+        if (user2.rank_rating < 0) {
           user2.rank_rating = 0
         }
 
@@ -121,10 +119,7 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [
-            this.teams[0].name,
-            this.teams[1].name
-          ]
+          teams: [this.teams[0].name, this.teams[1].name]
         }
 
         await prisma.$transaction([
@@ -198,8 +193,7 @@ export default class Round extends Match {
             }
           })
         ])
-      }
-      else if(max === 13 && score2 === max) {
+      } else if (max === 13 && score2 === max) {
         const diff = score2 - score1
         const maxDiff = 13
         const minPts = 20
@@ -212,7 +206,7 @@ export default class Round extends Match {
         user1.arena_defeats += 1
         user1.rank_rating -= pts - 5
 
-        if(user1.rank_rating < 0) {
+        if (user1.rank_rating < 0) {
           user1.rank_rating = 0
         }
 
@@ -232,10 +226,7 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [
-            this.teams[0].name,
-            this.teams[1].name
-          ]
+          teams: [this.teams[0].name, this.teams[1].name]
         }
 
         await prisma.$transaction([
@@ -249,11 +240,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   },
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   }
                 ]
               },
@@ -270,11 +261,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   },
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   }
                 ]
               },
@@ -309,9 +300,7 @@ export default class Round extends Match {
             }
           })
         ])
-      }
-
-      else if(max > 13 && score1 === max) {
+      } else if (max > 13 && score1 === max) {
         const diff = score1 - score2
         const maxDiff = 13
         const minPts = 20
@@ -324,7 +313,7 @@ export default class Round extends Match {
         user2.arena_defeats += 1
         user2.rank_rating -= pts - 5
 
-        if(user2.rank_rating < 0) {
+        if (user2.rank_rating < 0) {
           user2.rank_rating = 0
         }
 
@@ -344,10 +333,7 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [
-            this.teams[0].name,
-            this.teams[1].name
-          ]
+          teams: [this.teams[0].name, this.teams[1].name]
         }
 
         await prisma.$transaction([
@@ -361,11 +347,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   },
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   }
                 ]
               },
@@ -382,11 +368,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   },
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   }
                 ]
               },
@@ -421,8 +407,7 @@ export default class Round extends Match {
             }
           })
         ])
-      }
-      else if(max > 13 && score2 === max) {
+      } else if (max > 13 && score2 === max) {
         const diff = score2 - score1
         const maxDiff = 13
         const minPts = 20
@@ -435,7 +420,7 @@ export default class Round extends Match {
         user1.arena_defeats += 1
         user1.rank_rating -= pts - 5
 
-        if(user1.rank_rating < 0) {
+        if (user1.rank_rating < 0) {
           user1.rank_rating = 0
         }
 
@@ -455,10 +440,7 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [
-            this.teams[0].name,
-            this.teams[1].name
-          ]
+          teams: [this.teams[0].name, this.teams[1].name]
         }
 
         await prisma.$transaction([
@@ -472,11 +454,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   },
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   }
                 ]
               },
@@ -493,11 +475,11 @@ export default class Round extends Match {
                 create: [
                   {
                     user: this.teams[0].user,
-                    score: score1,
+                    score: score1
                   },
                   {
                     user: this.teams[1].user,
-                    score: score2,
+                    score: score2
                   }
                 ]
               },
@@ -542,16 +524,10 @@ export default class Round extends Match {
     const kills: KillEvent[] = []
     const summary: string[] = []
 
-    for(let i = 0;i < duels;i++) {
-      const {
-        winnerIndex,
-        winnerTeamIndex,
-        loserIndex,
-        loserTeamIndex,
-        weapon
-      } = await this.startPlayerDuel()
+    for (let i = 0; i < duels; i++) {
+      const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
-      if(winnerIndex === undefined) continue
+      if (winnerIndex === undefined) continue
 
       const killer = this.teams[winnerTeamIndex].roster[winnerIndex]
       const victim = this.teams[loserTeamIndex].roster[loserIndex]
@@ -567,14 +543,14 @@ export default class Round extends Match {
           id: victim.id.toString()
         },
         victimIndex: loserTeamIndex,
-        weapon: weapon as typeof valorant_weapons[number]['name']
+        weapon: weapon as (typeof valorant_weapons)[number]['name']
       })
     }
 
     const playersAlive1 = this.teams[0].roster.filter(p => p.life > 0).length > 0
     const playersAlive2 = this.teams[1].roster.filter(p => p.life > 0).length > 0
 
-    if(!playersAlive1 || !playersAlive2) {
+    if (!playersAlive1 || !playersAlive2) {
       const winningTeam = playersAlive1 ? 0 : 1
 
       this.rounds.push({
@@ -584,33 +560,30 @@ export default class Round extends Match {
         summary
       })
 
-      for(let i = 0;i < this.teams.length;i++) {
-        if(i === winningTeam) {
-          for(const p of this.teams[i].roster) {
+      for (let i = 0; i < this.teams.length; i++) {
+        if (i === winningTeam) {
+          for (const p of this.teams[i].roster) {
             p.credits += 2900
           }
-        }
-        else {
-          for(const p of this.teams[i].roster) {
+        } else {
+          for (const p of this.teams[i].roster) {
             p.credits += 1900
           }
         }
       }
-    }
-    else {
+    } else {
       const playersAlive = this.teams.find(t => t.side === 'ATTACK')!.roster.filter(p => p.life > 0).length
       const minChance = 0.2
       const maxChance = 0.8
       const chance = minChance + ((playersAlive - 1) / (5 - 1)) * (maxChance - minChance)
       const bombPlanted = Math.random() < chance
 
-      if(bombPlanted) {
+      if (bombPlanted) {
         const bombSites = valorant_maps.find(m => m.name === this.map)!.sides
         const bombSite = bombSites[Math.floor(Math.random() * bombSites.length)]
 
         return await this.secondStep(true, bombSite)
-      }
-      else {
+      } else {
         return await this.secondStep()
       }
     }
@@ -632,44 +605,34 @@ export default class Round extends Match {
 
     let win_type: 'ELIMINATION' | 'BOMB' | 'DEFUSE' | 'TIME'
 
-    if(bombPlanted) {
+    if (bombPlanted) {
       const random = Math.random()
 
-      if(random < defenderChance * 0.5) {
+      if (random < defenderChance * 0.5) {
         win_type = 'DEFUSE'
-      }
-      else if(random < attackerChance * 0.7) {
+      } else if (random < attackerChance * 0.7) {
         win_type = 'BOMB'
-      }
-      else {
+      } else {
         win_type = 'ELIMINATION'
       }
-    }
-    else {
-      if(Math.random() < defenderChance * 0.05) {
+    } else {
+      if (Math.random() < defenderChance * 0.05) {
         win_type = 'TIME'
-      }
-      else {
+      } else {
         win_type = 'ELIMINATION'
       }
     }
 
-    if(win_type === 'ELIMINATION') {
+    if (win_type === 'ELIMINATION') {
       let alivePlayers = [
         ...this.teams[0].roster.filter(p => p.life > 0),
         ...this.teams[1].roster.filter(p => p.life > 0)
       ].length
 
-      while(alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+      while (alivePlayers > 0) {
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
-        if(winnerIndex === undefined) {
+        if (winnerIndex === undefined) {
           alivePlayers--
           continue
         }
@@ -688,7 +651,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as typeof valorant_weapons[number]['name']
+          weapon: weapon as (typeof valorant_weapons)[number]['name']
         })
 
         alivePlayers--
@@ -705,41 +668,33 @@ export default class Round extends Match {
         summary
       })
 
-      for(let i = 0;i < this.teams.length;i++) {
-        if(i === winning_team) {
-          for(const p of this.teams[i].roster) {
+      for (let i = 0; i < this.teams.length; i++) {
+        if (i === winning_team) {
+          for (const p of this.teams[i].roster) {
             let bonus = 0
 
-            if(bombPlanted) {
+            if (bombPlanted) {
               bonus += 300
             }
 
             p.credits += 2900 + bonus
           }
-        }
-        else {
-          for(const p of this.teams[i].roster) {
+        } else {
+          for (const p of this.teams[i].roster) {
             p.credits += 1900
           }
         }
       }
-    }
-    else if(win_type === 'BOMB') {
+    } else if (win_type === 'BOMB') {
       let alivePlayers = [
         ...this.teams[0].roster.filter(p => p.life > 0),
         ...this.teams[1].roster.filter(p => p.life > 0)
       ].length
 
-      while(alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+      while (alivePlayers > 0) {
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
-        if(winnerIndex === undefined) {
+        if (winnerIndex === undefined) {
           alivePlayers--
           continue
         }
@@ -758,7 +713,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as typeof valorant_weapons[number]['name']
+          weapon: weapon as (typeof valorant_weapons)[number]['name']
         })
 
         alivePlayers--
@@ -775,41 +730,33 @@ export default class Round extends Match {
         summary
       })
 
-      for(let i = 0;i < this.teams.length;i++) {
-        if(i === winning_team) {
-          for(const p of this.teams[i].roster) {
+      for (let i = 0; i < this.teams.length; i++) {
+        if (i === winning_team) {
+          for (const p of this.teams[i].roster) {
             let bonus = 0
 
-            if(bombPlanted) {
+            if (bombPlanted) {
               bonus += 300
             }
 
             p.credits += 2900 + bonus
           }
-        }
-        else {
-          for(const p of this.teams[i].roster) {
+        } else {
+          for (const p of this.teams[i].roster) {
             p.credits += 1900
           }
         }
       }
-    }
-    else if(win_type === 'DEFUSE') {
+    } else if (win_type === 'DEFUSE') {
       let alivePlayers = [
         ...this.teams[0].roster.filter(p => p.life > 0),
         ...this.teams[1].roster.filter(p => p.life > 0)
       ].length
 
-      while(alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+      while (alivePlayers > 0) {
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
-        if(winnerIndex === undefined) {
+        if (winnerIndex === undefined) {
           alivePlayers--
 
           continue
@@ -829,7 +776,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as typeof valorant_weapons[number]['name']
+          weapon: weapon as (typeof valorant_weapons)[number]['name']
         })
 
         alivePlayers--
@@ -847,41 +794,33 @@ export default class Round extends Match {
         summary
       })
 
-      for(let i = 0;i < this.teams.length;i++) {
-        if(i === winning_team) {
-          for(const p of this.teams[i].roster) {
+      for (let i = 0; i < this.teams.length; i++) {
+        if (i === winning_team) {
+          for (const p of this.teams[i].roster) {
             let bonus = 0
 
-            if(bombPlanted) {
+            if (bombPlanted) {
               bonus += 300
             }
 
             p.credits += 2900 + bonus
           }
-        }
-        else {
-          for(const p of this.teams[i].roster) {
+        } else {
+          for (const p of this.teams[i].roster) {
             p.credits += 1900
           }
         }
       }
-    }
-    else if(win_type === 'TIME') {
+    } else if (win_type === 'TIME') {
       let alivePlayers = [
         ...this.teams[0].roster.filter(p => p.life > 0),
         ...this.teams[1].roster.filter(p => p.life > 0)
       ].length
 
-      while(alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+      while (alivePlayers > 0) {
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
-        if(winnerIndex === undefined) {
+        if (winnerIndex === undefined) {
           alivePlayers--
 
           continue
@@ -901,7 +840,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as typeof valorant_weapons[number]['name']
+          weapon: weapon as (typeof valorant_weapons)[number]['name']
         })
 
         alivePlayers--
@@ -918,20 +857,19 @@ export default class Round extends Match {
         summary
       })
 
-      for(let i = 0;i < this.teams.length;i++) {
-        if(i === winning_team) {
-          for(const p of this.teams[i].roster) {
+      for (let i = 0; i < this.teams.length; i++) {
+        if (i === winning_team) {
+          for (const p of this.teams[i].roster) {
             let bonus = 0
 
-            if(bombPlanted) {
+            if (bombPlanted) {
               bonus += 300
             }
 
             p.credits += 2900 + bonus
           }
-        }
-        else {
-          for(const p of this.teams[i].roster) {
+        } else {
+          for (const p of this.teams[i].roster) {
             p.credits += 1900
           }
         }
@@ -940,7 +878,7 @@ export default class Round extends Match {
   }
 
   private calcTeamOvr(i: number, alivePlayers?: boolean) {
-    if(alivePlayers) {
+    if (alivePlayers) {
       return this.teams[i].roster.filter(p => p.life > 0).reduce((sum, p) => sum + p.ovr, 0)
     }
 
@@ -948,15 +886,23 @@ export default class Round extends Match {
   }
 
   private async startPlayerDuel() {
-    const player1 = this.choosePlayer(this.teams[0].roster.filter(p => p.life > 0), 0, p => p.aggression * 5)
-    const player2 = this.choosePlayer(this.teams[1].roster.filter(p => p.life > 0), 1, p => p.aggression * 5)
+    const player1 = this.choosePlayer(
+      this.teams[0].roster.filter(p => p.life > 0),
+      0,
+      p => p.aggression * 5
+    )
+    const player2 = this.choosePlayer(
+      this.teams[1].roster.filter(p => p.life > 0),
+      1,
+      p => p.aggression * 5
+    )
 
     const [winner1, winner2, weapon1, weapon2] = await this.chooseWinner(player1, player2)
 
     const i1 = this.teams[0].roster.findIndex(p => p.id === player1?.id)
     const i2 = this.teams[1].roster.findIndex(p => p.id === player2?.id)
 
-    if(winner1 && i1 >= 0 && i2 >= 0) {
+    if (winner1 && i1 >= 0 && i2 >= 0) {
       this.teams[0].roster[i1].kills! += 1
       this.teams[0].roster[i1].life = player1?.life ?? 0
       this.teams[1].roster[i2].deaths! += 1
@@ -969,8 +915,7 @@ export default class Round extends Match {
         loserTeamIndex: 1,
         weapon: weapon1
       }
-    }
-    else if(winner2 && i1 >= 0 && i2 >= 0) {
+    } else if (winner2 && i1 >= 0 && i2 >= 0) {
       this.teams[1].roster[i2].kills! += 1
       this.teams[1].roster[i2].life = player2?.life ?? 0
       this.teams[0].roster[i1].deaths! += 1
@@ -983,8 +928,7 @@ export default class Round extends Match {
         loserTeamIndex: 0,
         weapon: weapon2
       }
-    }
-    else {
+    } else {
       return {
         winnerIndex: undefined,
         loserIndex: undefined,
@@ -1002,84 +946,76 @@ export default class Round extends Match {
     let weapon1 = ''
     let weapon2 = ''
 
-    if(!player1) {
-      if(player2!.weapon.primary && player2!.weapon.primary.magazine && player2!.weapon.primary.magazine > 0) {
+    if (!player1) {
+      if (player2?.weapon.primary?.magazine && player2!.weapon.primary.magazine > 0) {
         nextShot2 = player2!.weapon.primary.rate_fire
         weapon2 = player2!.weapon.primary.name!
-      }
-      else if(player2!.weapon.secondary?.magazine && player2!.weapon.secondary.magazine > 0) {
+      } else if (player2!.weapon.secondary?.magazine && player2!.weapon.secondary.magazine > 0) {
         nextShot2 = player2!.weapon.secondary.rate_fire
         weapon2 = player2!.weapon.secondary.name!
-      }
-      else {
+      } else {
         nextShot2 = player2!.weapon.melee.rate_fire
         weapon2 = 'Melee'
       }
       return [false, true, weapon1, weapon2]
     }
-    if(!player2) {
-      if(player1.weapon.primary && player1.weapon.primary.magazine && player1.weapon.primary.magazine > 0) {
+    if (!player2) {
+      if (player1?.weapon.primary?.magazine && player1.weapon.primary.magazine > 0) {
         nextShot1 = player1.weapon.primary.rate_fire
         weapon1 = player1.weapon.primary.name!
-      }
-      else if(player1!.weapon.secondary?.magazine && player1.weapon.secondary.magazine > 0) {
+      } else if (player1!.weapon.secondary?.magazine && player1.weapon.secondary.magazine > 0) {
         nextShot1 = player1.weapon.secondary.rate_fire
         weapon1 = player1.weapon.secondary.name!
-      }
-      else {
+      } else {
         nextShot1 = player1.weapon.melee.rate_fire
         weapon1 = 'Melee'
       }
       return [true, false, weapon1, weapon2]
     }
 
-    if(!player1.weapon.secondary) {
+    if (!player1.weapon.secondary) {
       player1.weapon.secondary = valorant_weapons.find(w => w.name === 'Classic')!
     }
 
-    if(!player2.weapon.secondary) {
+    if (!player2.weapon.secondary) {
       player2.weapon.secondary = valorant_weapons.find(w => w.name === 'Classic')!
     }
 
-    if(player1.weapon.primary && player1.weapon.primary.magazine && player1.weapon.primary.magazine > 0) {
+    if (player1?.weapon.primary?.magazine && player1.weapon.primary.magazine > 0) {
       nextShot1 = player1.weapon.primary.rate_fire
       weapon1 = player1.weapon.primary.name!
-    }
-    else if(player1.weapon.secondary.magazine && player1.weapon.secondary.magazine > 0) {
+    } else if (player1.weapon.secondary.magazine && player1.weapon.secondary.magazine > 0) {
       nextShot1 = player1.weapon.secondary.rate_fire
       weapon1 = player1.weapon.secondary.name!
-    }
-    else {
+    } else {
       nextShot1 = player1.weapon.melee.rate_fire
       weapon1 = 'Melee'
     }
 
-    if(player2.weapon.primary && player2.weapon.primary.magazine && player2.weapon.primary.magazine > 0) {
+    if (player2?.weapon.primary?.magazine && player2.weapon.primary.magazine > 0) {
       nextShot2 = player2.weapon.primary.rate_fire
       weapon2 = player2.weapon.primary.name!
-    }
-    else if(player2.weapon.secondary.magazine && player2.weapon.secondary.magazine > 0) {
+    } else if (player2.weapon.secondary.magazine && player2.weapon.secondary.magazine > 0) {
       nextShot2 = player2.weapon.secondary.rate_fire
       weapon2 = player2.weapon.secondary.name!
-    }
-    else {
+    } else {
       nextShot2 = player2.weapon.melee.rate_fire
       weapon2 = 'Melee'
     }
 
-    while(player1.life > 0 && player2.life > 0) {
+    while (player1.life > 0 && player2.life > 0) {
       const wait = Math.min(nextShot1, nextShot2)
 
       nextShot1 -= wait
       nextShot2 -= wait
 
-      if(nextShot1 <= 0 && player1.life > 0) {
+      if (nextShot1 <= 0 && player1.life > 0) {
         const shoot = player1.shoot(player2.stats.movement)
 
         player2.life -= shoot[0]
         nextShot1 = shoot[1]
       }
-      if(nextShot2 <= 0 && player2.life > 0) {
+      if (nextShot2 <= 0 && player2.life > 0) {
         const shoot = player2.shoot(player2.stats.movement)
 
         player1.life -= shoot[0]
@@ -1096,10 +1032,10 @@ export default class Round extends Match {
     const weight = items.reduce((sum, i) => sum + weightFun(i), 0)
     let random = Math.random() * weight
 
-    for(const item of items) {
+    for (const item of items) {
       random -= weightFun(item)
 
-      if(random <= 0) {
+      if (random <= 0) {
         const player = new Player({
           name: item.name,
           life: item.life,

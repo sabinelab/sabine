@@ -1,6 +1,6 @@
 import type { Args } from '@i18n'
-import App from '../app/App'
-import ComponentInteractionContext from './ComponentInteractionContext'
+import type App from '../app/App'
+import type ComponentInteractionContext from './ComponentInteractionContext'
 
 type CreateInteractionProps = {
   ctx: ComponentInteractionContext
@@ -18,6 +18,6 @@ export type CreateInteractionOptions = {
   global?: boolean
 }
 
-export default function(component: CreateInteractionOptions) {
+export default function (component: CreateInteractionOptions) {
   return component
 }

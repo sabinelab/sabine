@@ -7,7 +7,7 @@ const schema = z.object({
   COMMAND_LOG: z.string(),
   GUILDS_LOG: z.string(),
   SHARD_LOG: z.string(),
-  INTERVAL: z.optional( z.number()),
+  INTERVAL: z.optional(z.number()),
   USERS_LOG: z.string(),
   AUTH: z.string(),
   API_URL: z.string(),

@@ -1,34 +1,34 @@
-import { REST, Routes, ShardingManager } from 'discord.js'
-import Logger from './util/Logger'
-import EmbedBuilder from './structures/builders/EmbedBuilder'
-import Bull from 'bull'
-import type { ArenaQueue } from './listeners/clientReady'
-import { valorant_maps } from './config'
 import { prisma } from '@db'
+import Bull from 'bull'
+import { REST, Routes, ShardingManager } from 'discord.js'
 import { env } from '@/env'
+import { valorant_maps } from './config'
+import type { ArenaQueue } from './listeners/clientReady'
+import EmbedBuilder from './structures/builders/EmbedBuilder'
+import Logger from './util/Logger'
 import './server'
 
 const currentMap = await Bun.redis.get('arena:map')
 const mapIndex = valorant_maps.findIndex(m => m.name === currentMap)
 const maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
 
-if(mapIndex >= 0) {
+if (mapIndex >= 0) {
   maps.splice(mapIndex, 1)
 }
 
 const map = maps[Math.floor(Math.random() * maps.length)]
 
-if(!currentMap) await Bun.redis.set('arena:map', map)
+if (!currentMap) await Bun.redis.set('arena:map', map)
 
 const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
 const changeMapQueue = new Bull('arena:map', { redis: env.REDIS_URL })
 
-changeMapQueue.process('arena:map', async() => {
+changeMapQueue.process('arena:map', async () => {
   const currentMap = await Bun.redis.get('arena:map')
   const mapIndex = valorant_maps.findIndex(m => m.name === currentMap)
   const maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
 
-  if(mapIndex >= 0) {
+  if (mapIndex >= 0) {
     maps.splice(mapIndex, 1)
   }
 
@@ -37,17 +37,17 @@ changeMapQueue.process('arena:map', async() => {
   await Bun.redis.set('arena:map', map)
 })
 
-const processArenaQueue = async() => {
+const processArenaQueue = async () => {
   try {
     const queueLength = await Bun.redis.llen('arena:queue')
 
-    if(queueLength < 2) return
+    if (queueLength < 2) return
 
     const payload1 = await Bun.redis.rpop('arena:queue')
     const payload2 = await Bun.redis.rpop('arena:queue')
 
-    if(!payload1 || !payload2) {
-      if(payload1) await Bun.redis.lpush('arena:queue', payload1)
+    if (!payload1 || !payload2) {
+      if (payload1) await Bun.redis.lpush('arena:queue', payload1)
 
       return
     }
@@ -58,39 +58,35 @@ const processArenaQueue = async() => {
     const p1InQueue = await Bun.redis.get(`arena:in_queue:${parsedData1.userId}`)
     const p2InQueue = await Bun.redis.get(`arena:in_queue:${parsedData2.userId}`)
 
-    if(!p1InQueue) {
-      if(p2InQueue) {
+    if (!p1InQueue) {
+      if (p2InQueue) {
         await Bun.redis.lpush('arena:queue', payload2)
       }
 
       return await Bun.redis.del(`arena:in_queue:${parsedData1.userId}`)
     }
 
-    if(!p2InQueue) {
-      if(p1InQueue) {
+    if (!p2InQueue) {
+      if (p1InQueue) {
         await Bun.redis.lpush('arena:queue', payload1)
       }
 
       return await Bun.redis.del(`arena:in_queue:${parsedData2.userId}`)
     }
 
-    await Bun.redis.del(
-      `arena:in_queue:${parsedData1.userId}`,
-      `arena:in_queue:${parsedData2.userId}`
-    )
+    await Bun.redis.del(`arena:in_queue:${parsedData1.userId}`, `arena:in_queue:${parsedData2.userId}`)
 
     await arenaMatchQueue.add('arena', { parsedData1, parsedData2 })
 
-    if(queueLength - 2 >= 2) {
+    if (queueLength - 2 >= 2) {
       await processArenaQueue()
     }
-  }
-  catch(e) {
+  } catch (e) {
     Logger.error(e as Error)
   }
 }
 
-const updateRedis = async() => {
+const updateRedis = async () => {
   const [lbcoins, lbpreds, lbrating, blacklist] = await Promise.all([
     prisma.user.findMany({
       take: 100,
@@ -132,42 +128,41 @@ const updateRedis = async() => {
     JSON.stringify(
       {
         updated_at: Date.now(),
-        data: lbcoins.map(user => ({
-          id: user.id,
-          coins: user.coins
-        }))
+        data: lbcoins
+          .map(user => ({
+            id: user.id,
+            coins: user.coins
+          }))
           .filter(user => user.coins > 0)
       },
-      (_, value) => typeof value === 'bigint' ? value.toString() : value
+      (_, value) => (typeof value === 'bigint' ? value.toString() : value)
     )
   )
 
   await Bun.redis.set(
     'leaderboard:predictions',
-    JSON.stringify(
-      {
-        updated_at: Date.now(),
-        data: lbpreds.map(user => ({
+    JSON.stringify({
+      updated_at: Date.now(),
+      data: lbpreds
+        .map(user => ({
           id: user.id,
           correct_predictions: user.correct_predictions
         }))
-          .filter(user => user.correct_predictions > 0)
-      }
-    )
+        .filter(user => user.correct_predictions > 0)
+    })
   )
 
   await Bun.redis.set(
     'leaderboard:rating',
-    JSON.stringify(
-      {
-        updated_at: Date.now(),
-        data: lbrating.map(user => ({
+    JSON.stringify({
+      updated_at: Date.now(),
+      data: lbrating
+        .map(user => ({
           id: user.id,
           rank_rating: user.rank_rating
         }))
-          .filter(user => user.rank_rating)
-      }
-    )
+        .filter(user => user.rank_rating)
+    })
   )
 
   setTimeout(updateRedis, 10 * 60 * 1000)
@@ -177,24 +172,23 @@ const patterns = ['*leaderboard:*', '*agent_selection:*', '*match:*']
 
 const keysToDelete = new Set<string>()
 
-for(const pattern of patterns) {
+for (const pattern of patterns) {
   let cursor = '0'
 
   do {
     const [next, keys] = await Bun.redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100)
 
-    for(const key of keys) {
+    for (const key of keys) {
       keysToDelete.add(key)
     }
 
     cursor = next
-  }
-  while(cursor !== '0')
+  } while (cursor !== '0')
 }
 
 const keys = [...keysToDelete]
 
-if(keys.length) {
+if (keys.length) {
   await Bun.redis.del(...keys)
 }
 
@@ -208,36 +202,40 @@ const manager = new ShardingManager('src/index.ts', {
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
-const res = await rest.get(Routes.channelWebhooks(env.SHARD_LOG)) as any[]
+const res = (await rest.get(Routes.channelWebhooks(env.SHARD_LOG))) as any[]
 const webhook = res.filter(w => w.token)[0]
 
-if(!webhook) {
+if (!webhook) {
   Logger.warn('There is no webhook')
 }
 
 manager.on('shardCreate', async shard => {
-  if(shard.id === 0) {
+  if (shard.id === 0) {
     setInterval(processArenaQueue, 5000)
 
     const oldJobs = await changeMapQueue.getRepeatableJobs()
 
-    for(const job of oldJobs) {
-      if(job.id === 'change:map') {
+    for (const job of oldJobs) {
+      if (job.id === 'change:map') {
         await changeMapQueue.removeRepeatableByKey(job.key)
       }
     }
 
-    await changeMapQueue.add('arena:map', {}, {
-      jobId: 'change:map',
-      repeat: {
-        cron: '0 0 * * 0' // midnight every sunday
-      },
-      removeOnComplete: true,
-      removeOnFail: true
-    })
+    await changeMapQueue.add(
+      'arena:map',
+      {},
+      {
+        jobId: 'change:map',
+        repeat: {
+          cron: '0 0 * * 0' // midnight every sunday
+        },
+        removeOnComplete: true,
+        removeOnFail: true
+      }
+    )
   }
 
-  shard.on('disconnect', async() => {
+  shard.on('disconnect', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Disconnected')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Disconnected\``)
@@ -252,7 +250,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('ready', async() => {
+  shard.on('ready', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Ready')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Ready\``)
@@ -267,7 +265,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('resume', async() => {
+  shard.on('resume', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Resumed')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Resumed\``)
@@ -282,7 +280,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('reconnecting', async() => {
+  shard.on('reconnecting', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Reconnecting')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Reconnecting\``)
@@ -297,7 +295,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('death', async() => {
+  shard.on('death', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Dead')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Dead\``)
@@ -312,7 +310,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('spawn', async() => {
+  shard.on('spawn', async () => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Spawned')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Spawned\``)
@@ -327,7 +325,7 @@ manager.on('shardCreate', async shard => {
     })
   })
 
-  shard.on('error', async(error) => {
+  shard.on('error', async error => {
     const embed = new EmbedBuilder()
       .setTitle('Shard Error')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Error\`\n\`\`\`fix\n${error.stack}\`\`\``)

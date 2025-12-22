@@ -30,11 +30,11 @@ export default createCommand({
   async run({ ctx, app }) {
     const p = app.players.get(ctx.args[0].toString())
 
-    if(!ctx.db.user.active_players.includes(ctx.args[0].toString()) || !p) {
+    if (!ctx.db.user.active_players.includes(ctx.args[0].toString()) || !p) {
       return await ctx.reply('commands.remove.player_not_found')
     }
 
-    await prisma.$transaction(async(tx) => {
+    await prisma.$transaction(async tx => {
       const user = await tx.user.findUnique({
         where: {
           id: ctx.db.user.id
@@ -45,12 +45,12 @@ export default createCommand({
         }
       })
 
-      if(!user) {
+      if (!user) {
         throw new Error('Not found')
       }
 
-      const i = user.active_players.findIndex(pl => pl === p.id.toString())
-      if(i === -1) {
+      const i = user.active_players.indexOf(p.id.toString())
+      if (i === -1) {
         throw new Error('Not found')
       }
 
@@ -73,16 +73,16 @@ export default createCommand({
   },
   async createAutocompleteInteraction({ i, app }) {
     const user = await SabineUser.fetch(i.user.id)
-    if(!user) return
+    if (!user) return
 
     const value = i.options.getString('player', true)
 
-    const players: Array<{ name: string, ovr: number, id: string }> = []
+    const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for(const p_id of user.active_players) {
+    for (const p_id of user.active_players) {
       const p = app.players.get(p_id)
 
-      if(!p) break
+      if (!p) break
 
       const ovr = Math.floor(p.ovr)
 
@@ -94,10 +94,9 @@ export default createCommand({
     }
 
     await i.respond(
-      players.sort((a, b) => a.ovr - b.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => a.ovr - b.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .map(p => ({ name: p.name, value: p.id }))
     )
   }

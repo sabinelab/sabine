@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
 import { Prisma } from '@generated'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import { ApplicationCommandOptionType } from 'discord.js'
 import { valorant_agents } from '../../config'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 type Stats = {
   id: string
@@ -58,7 +58,7 @@ export default createCommand({
       }
     })
 
-    if(!match) {
+    if (!match) {
       return await ctx.reply('commands.summary.match_not_found')
     }
 
@@ -66,15 +66,18 @@ export default createCommand({
 
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.summary.embed.title'))
-      .setDesc(`### <@${match.teams[0].user}> ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} <@${match.teams[1].user}>\n`)
+      .setDesc(
+        `### <@${match.teams[0].user}> ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} <@${match.teams[1].user}>\n`
+      )
       .setFields(
         {
           name: summary.teams[0],
-          value: summary.stats.slice(0, 5)
+          value: summary.stats
+            .slice(0, 5)
             .map(p => {
               const player = ctx.app.players.get(p.id)
 
-              if(!player) return
+              if (!player) return false
 
               return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
@@ -83,11 +86,12 @@ export default createCommand({
         },
         {
           name: summary.teams[1],
-          value: summary.stats.slice(-5)
+          value: summary.stats
+            .slice(-5)
             .map(p => {
               const player = ctx.app.players.get(p.id)
 
-              if(!player) return
+              if (!player) return false
 
               return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${p.kills}/${p.deaths}\``
             })

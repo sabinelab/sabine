@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import { calcPlayerPrice } from '@sabinelab/players'
+import { ApplicationCommandOptionType } from 'discord.js'
 import { env } from '@/env'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 const date = Date.now()
 
@@ -35,7 +35,7 @@ export default createCommand({
   async run({ ctx, t, app }) {
     const player = app.players.get(ctx.args[0].toString())
 
-    if(!player) return await ctx.reply('commands.card.player_not_found')
+    if (!player) return await ctx.reply('commands.card.player_not_found')
 
     const embed = new EmbedBuilder()
       .setFields(
@@ -72,9 +72,9 @@ export default createCommand({
   async createAutocompleteInteraction({ i, app }) {
     const value = i.options.getString('card', true)
 
-    const players: Array<{ name: string, ovr: number, id: number }> = []
+    const players: Array<{ name: string; ovr: number; id: number }> = []
 
-    for(const p of app.players.values()) {
+    for (const p of app.players.values()) {
       const ovr = Math.floor(p.ovr)
 
       players.push({
@@ -85,10 +85,9 @@ export default createCommand({
     }
 
     await i.respond(
-      players.sort((a, b) => b.ovr - a.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => b.ovr - a.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 25)
         .map(p => ({ name: p.name, value: p.id.toString() }))
     )

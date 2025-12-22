@@ -1,7 +1,7 @@
 import ms from 'humanize-duration'
-import createCommand from '@/structures/command/createCommand'
-import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
+import createCommand from '@/structures/command/createCommand'
 import pkg from '../../../package.json'
 
 export default createCommand({
@@ -50,16 +50,19 @@ export default createCommand({
         },
         {
           name: 'App',
-          value: `Shards: \`${app.shard?.count}\`\nShard ID: \`${ctx.guild?.shard.id}\`\nUptime: \`${ms(app.uptime ?? 0, {
-            language: ctx.db.user.lang ?? ctx.db.guild!.lang,
-            round: true
-          })}\``,
+          value: `Shards: \`${app.shard?.count}\`\nShard ID: \`${ctx.guild?.shard.id}\`\nUptime: \`${ms(
+            app.uptime ?? 0,
+            {
+              language: ctx.db.user.lang ?? ctx.db.guild!.lang,
+              round: true
+            }
+          )}\``,
           inline: true
         }
       )
 
-    await ctx.reply(embed.build(
-      {
+    await ctx.reply(
+      embed.build({
         components: [
           {
             type: 1,
@@ -75,7 +78,7 @@ export default createCommand({
             ]
           }
         ]
-      }
-    ))
+      })
+    )
   }
 })

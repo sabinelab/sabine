@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import { SabineUser } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
 import { valorant_maps } from '../../config'
+import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'duel',
@@ -149,10 +149,12 @@ export default createCommand({
           descriptionLocalizations: {
             'pt-BR': 'Selecione o mapa'
           },
-          choices: valorant_maps.filter(m => m.current_map_pool).map(m => ({
-            name: m.name,
-            value: m.name
-          })),
+          choices: valorant_maps
+            .filter(m => m.current_map_pool)
+            .map(m => ({
+              name: m.name,
+              value: m.name
+            })),
           required: true
         }
       ]
@@ -161,22 +163,18 @@ export default createCommand({
   async run({ ctx, t, app }) {
     let id: string
 
-    if(ctx.args.length === 2) {
+    if (ctx.args.length === 2) {
       id = ctx.args[1].toString()
-    }
-
-    else if(ctx.args.length === 3 && ctx.args[0] === 'tournament') {
+    } else if (ctx.args.length === 3 && ctx.args[0] === 'tournament') {
       id = ctx.args[1].toString()
-    }
-
-    else id = ctx.args[2].toString()
+    } else id = ctx.args[2].toString()
 
     const user = await SabineUser.fetch(id)
 
     const authorCounts: { [key: string]: number } = {}
     const userCounts: { [key: string]: number } = {}
 
-    for(const p of ctx.db.user.active_players) {
+    for (const p of ctx.db.user.active_players) {
       authorCounts[p] = (authorCounts[p] || 0) + 1
     }
 
@@ -184,63 +182,62 @@ export default createCommand({
 
     const keys = await app.redis.keys('agent_selection*')
 
-    if(!ctx.db.user.team_name || !ctx.db.user.team_tag) {
+    if (!ctx.db.user.team_name || !ctx.db.user.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if(ctx.db.user.active_players.length < 5) {
+    if (ctx.db.user.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
-    if(authorDuplicates) {
+    if (authorDuplicates) {
       return await ctx.reply('commands.duel.duplicated_cards')
     }
 
-    if(!user || user.active_players.length < 5) {
+    if (!user || user.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if(!user.team_name || !user.team_tag) {
+    if (!user.team_name || !user.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 
-    if(await app.redis.get(`match:${ctx.interaction.user.id}`) || keys.some(key => key.includes(ctx.interaction.user.id))) {
+    if (
+      (await app.redis.get(`match:${ctx.interaction.user.id}`)) ||
+      keys.some(key => key.includes(ctx.interaction.user.id))
+    ) {
       return await ctx.reply('commands.duel.already_in_match')
     }
 
-    if(await app.redis.get(`match:${user.id}`) || keys.some(key => key.includes(user.id))) {
+    if ((await app.redis.get(`match:${user.id}`)) || keys.some(key => key.includes(user.id))) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
-    if(ctx.args.at(-1) === ctx.interaction.user.id) {
+    if (ctx.args.at(-1) === ctx.interaction.user.id) {
       return await ctx.reply('commands.duel.cannot_duel')
     }
 
-    for(const p of user.active_players) {
+    for (const p of user.active_players) {
       userCounts[p] = (userCounts[p] || 0) + 1
     }
 
     const userDuplicates = Object.values(userCounts).filter(count => count > 1).length
 
-    if(userDuplicates) {
+    if (userDuplicates) {
       return await ctx.reply('commands.duel.duplicated_cards2')
     }
 
     let mode: string
     let map = ''
 
-    if(ctx.args.length === 2) {
+    if (ctx.args.length === 2) {
       mode = ctx.args.slice(0, 1).join(';')
       id = ctx.args[1].toString()
-    }
-
-    else if(ctx.args.length === 3 && ctx.args[0] === 'tournament') {
+    } else if (ctx.args.length === 3 && ctx.args[0] === 'tournament') {
       mode = ctx.args.slice(0, 1).join(';')
       id = ctx.args[1].toString()
       map = `;${ctx.args[2].toString()}`
-    }
-
-    else {
+    } else {
       mode = ctx.args.slice(0, 2).join(';')
       id = ctx.args[2].toString()
     }
@@ -250,10 +247,14 @@ export default createCommand({
       .setLabel(t('commands.duel.button'))
       .setCustomId(`accept;${id};${ctx.interaction.user.id};${mode}${map}`)
 
-    await ctx.reply(button.build(t('commands.duel.request', {
-      author: ctx.interaction.user.toString(),
-      opponent: `<@${id}>`,
-      mode: t(`commands.duel.mode.${mode}`)
-    })))
+    await ctx.reply(
+      button.build(
+        t('commands.duel.request', {
+          author: ctx.interaction.user.toString(),
+          opponent: `<@${id}>`,
+          mode: t(`commands.duel.mode.${mode}`)
+        })
+      )
+    )
   }
 })

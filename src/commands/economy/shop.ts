@@ -1,6 +1,6 @@
+import { prisma } from '@db'
 import { ButtonStyle, ContainerBuilder } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
-import { prisma } from '@db'
 
 const price = {
   ascendant: 500,
@@ -24,55 +24,53 @@ export default createCommand({
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)
-      .addTextDisplayComponents(
-        text => text.setContent(ctx.t('commands.shop.container.title'))
-      )
-      .addSectionComponents(
-        section => section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.shop.container.text.gold', { price: price.gold }))
+      .addTextDisplayComponents(text => text.setContent(ctx.t('commands.shop.container.title')))
+      .addSectionComponents(section =>
+        section
+          .addTextDisplayComponents(text =>
+            text.setContent(ctx.t('commands.shop.container.text.gold', { price: price.gold }))
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
               .setCustomId(`shop;${ctx.db.user.id};gold`)
               .setDisabled(ctx.db.user.fates < price.gold)
           )
       )
-      .addSectionComponents(
-        section => section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.shop.container.text.platinum', { price: price.platinum }))
+      .addSectionComponents(section =>
+        section
+          .addTextDisplayComponents(text =>
+            text.setContent(ctx.t('commands.shop.container.text.platinum', { price: price.platinum }))
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
               .setCustomId(`shop;${ctx.db.user.id};platinum`)
               .setDisabled(ctx.db.user.fates < price.platinum)
           )
       )
-      .addSectionComponents(
-        section => section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.shop.container.text.diamond', { price: price.diamond }))
+      .addSectionComponents(section =>
+        section
+          .addTextDisplayComponents(text =>
+            text.setContent(ctx.t('commands.shop.container.text.diamond', { price: price.diamond }))
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
               .setCustomId(`shop;${ctx.db.user.id};diamond`)
               .setDisabled(ctx.db.user.fates < price.diamond)
           )
       )
-      .addSectionComponents(
-        section => section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.shop.container.text.ascendant', { price: price.ascendant }))
+      .addSectionComponents(section =>
+        section
+          .addTextDisplayComponents(text =>
+            text.setContent(ctx.t('commands.shop.container.text.ascendant', { price: price.ascendant }))
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
               .setCustomId(`shop;${ctx.db.user.id};ascendant`)
@@ -87,12 +85,12 @@ export default createCommand({
   },
   async createMessageComponentInteraction({ ctx }) {
     const args: { [key: string]: () => Promise<unknown> } = {
-      gold: async() => {
-        if(ctx.db.user.fates < price.gold) {
+      gold: async () => {
+        if (ctx.db.user.fates < price.gold) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async(tx) => {
+        await prisma.$transaction(async tx => {
           await tx.user.update({
             where: {
               id: ctx.db.user.id
@@ -109,12 +107,12 @@ export default createCommand({
         })
         await ctx.reply('commands.shop.success.gold', { fates: price.gold })
       },
-      platinum: async() => {
-        if(ctx.db.user.fates < price.platinum) {
+      platinum: async () => {
+        if (ctx.db.user.fates < price.platinum) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async(tx) => {
+        await prisma.$transaction(async tx => {
           await tx.user.update({
             where: {
               id: ctx.db.user.id
@@ -131,12 +129,12 @@ export default createCommand({
         })
         await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
       },
-      diamond: async() => {
-        if(ctx.db.user.fates < price.diamond) {
+      diamond: async () => {
+        if (ctx.db.user.fates < price.diamond) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async(tx) => {
+        await prisma.$transaction(async tx => {
           await tx.user.update({
             where: {
               id: ctx.db.user.id
@@ -153,12 +151,12 @@ export default createCommand({
         })
         await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
       },
-      ascendant: async() => {
-        if(ctx.db.user.fates < price.ascendant) {
+      ascendant: async () => {
+        if (ctx.db.user.fates < price.ascendant) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async(tx) => {
+        await prisma.$transaction(async tx => {
           await tx.user.update({
             where: {
               id: ctx.db.user.id
@@ -177,7 +175,7 @@ export default createCommand({
       }
     }
 
-    if(!args[ctx.args[2]]) return
+    if (!args[ctx.args[2]]) return
 
     ctx.setFlags(64)
     await args[ctx.args[2]]()

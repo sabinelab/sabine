@@ -1,7 +1,7 @@
-import * as Discord from 'discord.js'
-import App from '../app/App'
+import type { SabineGuild, SabineUser } from '@db'
 import locales, { type Args, type Content } from '@i18n'
-import { SabineGuild, SabineUser } from '@db'
+import type * as Discord from 'discord.js'
+import type App from '../app/App'
 
 type Database = {
   guild?: SabineGuild
@@ -38,61 +38,61 @@ export default class CommandContext {
     return locales(this.locale, content, args)
   }
 
-  public async reply(content: Content | Discord.InteractionReplyOptions, options?: Args): Promise<Discord.Message | null | undefined> {
-    if(typeof content === 'string') {
+  public async reply(
+    content: Content | Discord.InteractionReplyOptions,
+    options?: Args
+  ): Promise<Discord.Message | null | undefined> {
+    if (typeof content === 'string') {
       content = {
         content: locales(this.locale, content, options)
       }
     }
 
-    if(options && options.files) {
+    if (options?.files) {
       content = {
         ...content,
         files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
       }
     }
 
-    if(this.interaction.replied || this.interaction.deferred) {
+    if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.followUp(content)
-    }
-
-    else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
+    } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
   public async edit(
-    content:
-      | Content
-      | Discord.InteractionEditReplyOptions,
+    content: Content | Discord.InteractionEditReplyOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
-    if(typeof content === 'string') {
+    if (typeof content === 'string') {
       content = {
         content: locales(this.locale, content, options)
       }
     }
 
-    if(options && options.files) {
+    if (options?.files) {
       content = {
         ...content,
         files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
       }
     }
 
-    if(!content.components) {
+    if (!content.components) {
       content = {
         ...content,
         components: []
       }
     }
 
-    if(this.interaction.replied || this.interaction.deferred) {
+    if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.editReply(content)
-    }
-
-    else return (await this.interaction.reply({
-      content: locales(this.locale, 'helper.interaction_failed'),
-      flags: 64,
-      withResponse: true
-    })).resource?.message
+    } else
+      return (
+        await this.interaction.reply({
+          content: locales(this.locale, 'helper.interaction_failed'),
+          flags: 64,
+          withResponse: true
+        })
+      ).resource?.message
   }
 }

@@ -1,9 +1,9 @@
-import { ButtonStyle, ContainerBuilder, TextDisplayBuilder } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import ButtonBuilder from '../../structures/builders/ButtonBuilder'
-import type { Player } from '@sabinelab/players'
-import { app } from '../../structures/app/App'
 import { prisma } from '@db'
+import type { Player } from '@sabinelab/players'
+import { ButtonStyle, ContainerBuilder, TextDisplayBuilder } from 'discord.js'
+import { app } from '../../structures/app/App'
+import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 const tier = (() => {
   const tier = {
@@ -18,15 +18,15 @@ const tier = (() => {
     radiant: [] as Player[]
   } as const
 
-  for(const p of app.players.values()) {
-    if(p.ovr >= 95) tier.radiant.push(p)
-    else if(p.ovr >= 91) tier.immortal.push(p)
-    else if(p.ovr >= 87) tier.ascendant.push(p)
-    else if(p.ovr >= 83) tier.diamond.push(p)
-    else if(p.ovr >= 78) tier.platinum.push(p)
-    else if(p.ovr >= 73) tier.gold.push(p)
-    else if(p.ovr >= 67) tier.silver.push(p)
-    else if(p.ovr >= 60) tier.bronze.push(p)
+  for (const p of app.players.values()) {
+    if (p.ovr >= 95) tier.radiant.push(p)
+    else if (p.ovr >= 91) tier.immortal.push(p)
+    else if (p.ovr >= 87) tier.ascendant.push(p)
+    else if (p.ovr >= 83) tier.diamond.push(p)
+    else if (p.ovr >= 78) tier.platinum.push(p)
+    else if (p.ovr >= 73) tier.gold.push(p)
+    else if (p.ovr >= 67) tier.silver.push(p)
+    else if (p.ovr >= 60) tier.bronze.push(p)
     else tier.iron.push(p)
   }
 
@@ -40,7 +40,7 @@ const getRandomPlayers = (key: Tier) => {
 
   const count = 3
 
-  if(players.length <= count) {
+  if (players.length <= count) {
     return [...players]
   }
 
@@ -49,13 +49,11 @@ const getRandomPlayers = (key: Tier) => {
   let currentLength = shuffled.length
   let i: number
 
-  while(currentLength > 0) {
+  while (currentLength > 0) {
     i = Math.floor(Math.random() * currentLength)
     currentLength--
 
-    ;[shuffled[currentLength], shuffled[i]] = [
-      shuffled[i], shuffled[currentLength]
-    ]
+    ;[shuffled[currentLength], shuffled[i]] = [shuffled[i], shuffled[currentLength]]
   }
 
   return shuffled.slice(0, count)
@@ -75,18 +73,18 @@ export default createCommand({
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)
-      .addTextDisplayComponents(
-        text => text.setContent(ctx.t('commands.packs.container.title'))
-      )
+      .addTextDisplayComponents(text => text.setContent(ctx.t('commands.packs.container.title')))
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.iron', {
-              count: ctx.db.user.iron_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.iron', {
+                count: ctx.db.user.iron_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};iron`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -95,13 +93,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.bronze', {
-              count: ctx.db.user.bronze_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.bronze', {
+                count: ctx.db.user.bronze_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -110,13 +110,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.silver', {
-              count: ctx.db.user.silver_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.silver', {
+                count: ctx.db.user.silver_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};silver`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -125,13 +127,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.gold', {
-              count: ctx.db.user.gold_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.gold', {
+                count: ctx.db.user.gold_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};gold`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -140,13 +144,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.platinum', {
-              count: ctx.db.user.platinum_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.platinum', {
+                count: ctx.db.user.platinum_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -155,13 +161,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.diamond', {
-              count: ctx.db.user.diamond_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.diamond', {
+                count: ctx.db.user.diamond_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -170,13 +178,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.ascendant', {
-              count: ctx.db.user.ascendant_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.ascendant', {
+                count: ctx.db.user.ascendant_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -185,13 +195,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.immortal', {
-              count: ctx.db.user.immortal_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.immortal', {
+                count: ctx.db.user.immortal_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -200,13 +212,15 @@ export default createCommand({
       )
       .addSectionComponents(section =>
         section
-          .addTextDisplayComponents(
-            text => text.setContent(ctx.t('commands.packs.type.radiant', {
-              count: ctx.db.user.radiant_packs
-            }))
+          .addTextDisplayComponents(text =>
+            text.setContent(
+              ctx.t('commands.packs.type.radiant', {
+                count: ctx.db.user.radiant_packs
+              })
+            )
           )
-          .setButtonAccessory(
-            button => button
+          .setButtonAccessory(button =>
+            button
               .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
@@ -220,21 +234,21 @@ export default createCommand({
     })
   },
   async createMessageComponentInteraction({ ctx, t }) {
-    if(ctx.args[2] === 'back') {
+    if (ctx.args[2] === 'back') {
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
-        .addTextDisplayComponents(
-          text => text.setContent(t('commands.packs.container.title'))
-        )
+        .addTextDisplayComponents(text => text.setContent(t('commands.packs.container.title')))
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.iron', {
-                count: ctx.db.user.iron_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.iron', {
+                  count: ctx.db.user.iron_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};iron`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -243,13 +257,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.bronze', {
-                count: ctx.db.user.bronze_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.bronze', {
+                  count: ctx.db.user.bronze_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -258,13 +274,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.silver', {
-                count: ctx.db.user.silver_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.silver', {
+                  count: ctx.db.user.silver_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};silver`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -273,13 +291,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.gold', {
-                count: ctx.db.user.gold_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.gold', {
+                  count: ctx.db.user.gold_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};gold`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -288,13 +308,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.platinum', {
-                count: ctx.db.user.platinum_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.platinum', {
+                  count: ctx.db.user.platinum_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -303,13 +325,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.diamond', {
-                count: ctx.db.user.diamond_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.diamond', {
+                  count: ctx.db.user.diamond_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -318,13 +342,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.ascendant', {
-                count: ctx.db.user.ascendant_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.ascendant', {
+                  count: ctx.db.user.ascendant_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -333,13 +359,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.immortal', {
-                count: ctx.db.user.immortal_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.immortal', {
+                  count: ctx.db.user.immortal_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -348,13 +376,15 @@ export default createCommand({
         )
         .addSectionComponents(section =>
           section
-            .addTextDisplayComponents(
-              text => text.setContent(t('commands.packs.type.radiant', {
-                count: ctx.db.user.radiant_packs
-              }))
+            .addTextDisplayComponents(text =>
+              text.setContent(
+                t('commands.packs.type.radiant', {
+                  count: ctx.db.user.radiant_packs
+                })
+              )
             )
-            .setButtonAccessory(
-              button => button
+            .setButtonAccessory(button =>
+              button
                 .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
@@ -366,11 +396,10 @@ export default createCommand({
         flags: 'IsComponentsV2',
         components: [container]
       })
-    }
-    else {
+    } else {
       const packs: { [key: string]: () => Promise<unknown> } = {
-        iron: async() => {
-          if(ctx.db.user.iron_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        iron: async () => {
+          if (ctx.db.user.iron_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('iron')
 
@@ -391,11 +420,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -407,8 +437,8 @@ export default createCommand({
             ]
           })
         },
-        bronze: async() => {
-          if(ctx.db.user.bronze_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        bronze: async () => {
+          if (ctx.db.user.bronze_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('bronze')
 
@@ -429,11 +459,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -445,8 +476,8 @@ export default createCommand({
             ]
           })
         },
-        silver: async() => {
-          if(ctx.db.user.silver_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        silver: async () => {
+          if (ctx.db.user.silver_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('silver')
 
@@ -467,11 +498,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -483,8 +515,8 @@ export default createCommand({
             ]
           })
         },
-        gold: async() => {
-          if(ctx.db.user.gold_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        gold: async () => {
+          if (ctx.db.user.gold_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('gold')
 
@@ -505,11 +537,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -521,8 +554,8 @@ export default createCommand({
             ]
           })
         },
-        platinum: async() => {
-          if(ctx.db.user.platinum_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        platinum: async () => {
+          if (ctx.db.user.platinum_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('platinum')
 
@@ -543,11 +576,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -559,8 +593,8 @@ export default createCommand({
             ]
           })
         },
-        diamond: async() => {
-          if(ctx.db.user.diamond_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        diamond: async () => {
+          if (ctx.db.user.diamond_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('diamond')
 
@@ -581,11 +615,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -597,8 +632,8 @@ export default createCommand({
             ]
           })
         },
-        ascendant: async() => {
-          if(ctx.db.user.ascendant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        ascendant: async () => {
+          if (ctx.db.user.ascendant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('ascendant')
 
@@ -619,11 +654,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -635,8 +671,8 @@ export default createCommand({
             ]
           })
         },
-        immortal: async() => {
-          if(ctx.db.user.immortal_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        immortal: async () => {
+          if (ctx.db.user.immortal_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('immortal')
 
@@ -657,11 +693,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [
@@ -673,8 +710,8 @@ export default createCommand({
             ]
           })
         },
-        radiant: async() => {
-          if(ctx.db.user.radiant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+        radiant: async () => {
+          if (ctx.db.user.radiant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('radiant')
 
@@ -695,11 +732,12 @@ export default createCommand({
             .setLabel(t('commands.packs.back'))
             .setCustomId(`packs;${ctx.interaction.user.id};back`)
 
-          const textDisplay = new TextDisplayBuilder()
-            .setContent(t('commands.packs.pack_opened', {
+          const textDisplay = new TextDisplayBuilder().setContent(
+            t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
               players: players.map(p => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
-            }))
+            })
+          )
 
           await ctx.edit({
             components: [

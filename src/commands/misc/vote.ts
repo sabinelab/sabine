@@ -16,19 +16,17 @@ export default createCommand({
   async run({ ctx }) {
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.vote.title'))
-      .setDesc(ctx.t('commands.vote.description', {
-        last_vote: ctx.db.user.last_vote
-          ? `<t:${(ctx.db.user.last_vote?.getTime() / 1000).toFixed(0)}:R>`
-          : '`null`',
-        current_streak: ctx.db.user.vote_streak,
-        total: ctx.db.user.votes
-      }))
-      .setFields(
-        {
-          name: ctx.t('commands.vote.field'),
-          value: ctx.t('commands.vote.value')
-        }
+      .setDesc(
+        ctx.t('commands.vote.description', {
+          last_vote: ctx.db.user.last_vote ? `<t:${(ctx.db.user.last_vote?.getTime() / 1000).toFixed(0)}:R>` : '`null`',
+          current_streak: ctx.db.user.vote_streak,
+          total: ctx.db.user.votes
+        })
       )
+      .setFields({
+        name: ctx.t('commands.vote.field'),
+        value: ctx.t('commands.vote.value')
+      })
 
     const button = new ButtonBuilder()
       .defineStyle('link')

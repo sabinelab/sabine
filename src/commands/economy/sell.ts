@@ -1,5 +1,5 @@
-import { calcPlayerPrice } from '@sabinelab/players'
 import { SabineUser } from '@db'
+import { calcPlayerPrice } from '@sabinelab/players'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -32,9 +32,10 @@ export default createCommand({
   async run({ ctx, app }) {
     const player = app.players.get(ctx.args[0].toString())
 
-    const i = ctx.db.user.reserve_players.findIndex(p => p === ctx.args[0])
+    // const i = ctx.db.user.reserve_players.findIndex((p) => p === ctx.args[0])
+    const i = ctx.db.user.reserve_players.indexOf(ctx.args[0].toString())
 
-    if(!player || i === -1) {
+    if (!player || i === -1) {
       return await ctx.reply('commands.sell.player_not_found')
     }
 
@@ -45,16 +46,16 @@ export default createCommand({
   async createAutocompleteInteraction({ i, app }) {
     const user = await SabineUser.fetch(i.user.id)
 
-    if(!user) return
+    if (!user) return
 
     const value = i.options.getString('player', true)
 
-    const players: Array<{ name: string, ovr: number, id: string }> = []
+    const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for(const p_id of user.reserve_players) {
+    for (const p_id of user.reserve_players) {
       const p = app.players.get(p_id)
 
-      if(!p) break
+      if (!p) break
 
       const ovr = Math.floor(p.ovr)
 
@@ -66,10 +67,9 @@ export default createCommand({
     }
 
     await i.respond(
-      players.sort((a, b) => a.ovr - b.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => a.ovr - b.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 25)
         .map(p => ({ name: p.name, value: p.id }))
     )

@@ -1,7 +1,7 @@
+import { prisma, SabineUser } from '@db'
 import type { APISelectMenuOption } from 'discord.js'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
-import { prisma, SabineUser } from '@db'
 
 export default createCommand({
   name: 'promote',
@@ -33,7 +33,7 @@ export default createCommand({
   async run({ ctx, t, app }) {
     const p = app.players.get(ctx.args[0].toString())
 
-    if(!p) {
+    if (!p) {
       return await ctx.reply('commands.promote.player_not_found')
     }
 
@@ -41,8 +41,8 @@ export default createCommand({
 
     const players = ctx.db.user.active_players
 
-    if(players.length < 5) {
-      await prisma.$transaction(async(tx) => {
+    if (players.length < 5) {
+      await prisma.$transaction(async tx => {
         const user = await tx.user.findUnique({
           where: {
             id: ctx.db.user.id
@@ -53,9 +53,9 @@ export default createCommand({
           }
         })
 
-        if(!user) throw new Error('Not found')
+        if (!user) throw new Error('Not found')
 
-        const i = user.reserve_players.findIndex(pl => pl === p.id.toString())
+        const i = user.reserve_players.indexOf(p.id.toString())
 
         user.active_players.push(p.id.toString())
         user.reserve_players.splice(i, 1)
@@ -75,14 +75,14 @@ export default createCommand({
     }
     let i = 0
 
-    for(const p_id of players) {
+    for (const p_id of players) {
       i++
 
       const p = app.players.get(p_id)
 
-      if(!p) break
+      if (!p) break
 
-      const ovr = parseInt(p.ovr.toString())
+      const ovr = Math.floor(p.ovr)
 
       options.push({
         label: `${p.name} (${ovr})`,
@@ -102,14 +102,14 @@ export default createCommand({
 
     const value = i.options.getString('player', true)
 
-    const players: Array<{ name: string, ovr: number, id: string }> = []
+    const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for(const p_id of user.reserve_players) {
+    for (const p_id of user.reserve_players) {
       const p = app.players.get(p_id)
 
-      if(!p) break
+      if (!p) break
 
-      const ovr = parseInt(p.ovr.toString())
+      const ovr = Math.floor(p.ovr)
 
       players.push({
         name: `${p.name} (${ovr}) — ${p.collection}`,
@@ -118,18 +118,17 @@ export default createCommand({
       })
     }
     await i.respond(
-      players.sort((a, b) => a.ovr - b.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => a.ovr - b.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 25)
         .map(p => ({ name: p.name, value: p.id }))
     )
   },
   async createMessageComponentInteraction({ ctx, i, app }) {
-    if(!i.isStringSelectMenu()) return
+    if (!i.isStringSelectMenu()) return
 
-    await prisma.$transaction(async(tx) => {
+    await prisma.$transaction(async tx => {
       const user = await tx.user.findUnique({
         where: {
           id: ctx.db.user.id
@@ -140,16 +139,16 @@ export default createCommand({
         }
       })
 
-      if(!user) throw new Error('Not found')
-      
+      if (!user) throw new Error('Not found')
+
       const id = i.values[0].split('_')[1]
 
-      let index = user.active_players.findIndex(p => p === id)
+      let index = user.active_players.indexOf(id)
 
       user.active_players.splice(index, 1)
       user.reserve_players.push(id)
 
-      index = user.reserve_players.findIndex(p => p === ctx.args[2])
+      index = user.reserve_players.indexOf(ctx.args[2])
 
       user.reserve_players.splice(index, 1)
       user.active_players.push(ctx.args[2])

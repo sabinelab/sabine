@@ -36,24 +36,22 @@ export default createCommand({
     }
   ],
   syntax: 'language [lang]',
-  examples: [
-    'language en-US',
-    'language pt-BR'
-  ],
+  examples: ['language en-US', 'language pt-BR'],
   userInstall: true,
   async run({ ctx }) {
-    switch(ctx.args[0]) {
-      case 'pt': {
-        await prisma.user.update({
-          where: {
-            id: ctx.db.user.id
-          },
-          data: {
-            lang: 'pt'
-          }
-        })
-        await ctx.reply('Agora eu irei interagir em português com você!')
-      }
+    switch (ctx.args[0]) {
+      case 'pt':
+        {
+          await prisma.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              lang: 'pt'
+            }
+          })
+          await ctx.reply('Agora eu irei interagir em português com você!')
+        }
         break
       case 'en': {
         await prisma.user.update({

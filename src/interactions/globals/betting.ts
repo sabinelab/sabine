@@ -9,7 +9,7 @@ export default createModalSubmitInteraction({
   global: true,
   async run({ ctx }) {
     const games = {
-      valorant: async() => {
+      valorant: async () => {
         const preds = await ctx.app.prisma.prediction.findMany({
           where: {
             game: 'valorant',
@@ -22,21 +22,19 @@ export default createModalSubmitInteraction({
 
         const value = BigInt(ctx.args[3])
 
-        if(isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
 
-        if(value < 500) return await ctx.reply('helper.min_value')
+        if (value < 500) return await ctx.reply('helper.min_value')
 
-        if(value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
 
-        for(const pred of preds) {
-          if(pred.teams[0].winner && pred.bet) {
+        for (const pred of preds) {
+          if (pred.teams[0].winner && pred.bet) {
             oddA += 1
-          }
-
-          else if(pred.teams[1].winner && pred.bet) {
+          } else if (pred.teams[1].winner && pred.bet) {
             oddB += 1
           }
         }
@@ -45,11 +43,9 @@ export default createModalSubmitInteraction({
 
         let odd: number
 
-        if(preds[index].teams[0].winner) {
+        if (preds[index].teams[0].winner) {
           odd = calcOdd(oddA)
-        }
-
-        else {
+        } else {
           odd = calcOdd(oddB)
         }
 
@@ -64,7 +60,7 @@ export default createModalSubmitInteraction({
           }
         })
 
-        if(!pred) return await ctx.reply('helper.prediction_needed')
+        if (!pred) return await ctx.reply('helper.prediction_needed')
 
         await prisma.$transaction([
           prisma.prediction.update({
@@ -89,16 +85,13 @@ export default createModalSubmitInteraction({
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 
-        await ctx.reply(
-          'helper.bet_res',
-          {
-            team: pred.teams[winnerIndex].name,
-            coins: value.toLocaleString(),
-            odd
-          }
-        )
+        await ctx.reply('helper.bet_res', {
+          team: pred.teams[winnerIndex].name,
+          coins: value.toLocaleString(),
+          odd
+        })
       },
-      lol: async() => {
+      lol: async () => {
         const preds = await ctx.app.prisma.prediction.findMany({
           where: {
             game: 'lol',
@@ -111,21 +104,19 @@ export default createModalSubmitInteraction({
 
         const value = BigInt(ctx.args[3])
 
-        if(isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
 
-        if(value < 500) return await ctx.reply('helper.min_value')
+        if (value < 500) return await ctx.reply('helper.min_value')
 
-        if(value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
 
-        for(const pred of preds) {
-          if(pred.teams[0].winner && pred.bet) {
+        for (const pred of preds) {
+          if (pred.teams[0].winner && pred.bet) {
             oddA += 1
-          }
-
-          else if(pred.teams[1].winner && pred.bet) {
+          } else if (pred.teams[1].winner && pred.bet) {
             oddB += 1
           }
         }
@@ -134,11 +125,9 @@ export default createModalSubmitInteraction({
 
         let odd: number
 
-        if(preds[index].teams[0].winner) {
+        if (preds[index].teams[0].winner) {
           odd = calcOdd(oddA)
-        }
-
-        else {
+        } else {
           odd = calcOdd(oddB)
         }
 
@@ -153,7 +142,7 @@ export default createModalSubmitInteraction({
           }
         })
 
-        if(!pred) return await ctx.reply('helper.prediction_needed')
+        if (!pred) return await ctx.reply('helper.prediction_needed')
 
         await prisma.$transaction([
           prisma.prediction.update({
@@ -178,14 +167,11 @@ export default createModalSubmitInteraction({
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
 
-        await ctx.reply(
-          'helper.bet_res',
-          {
-            team: pred.teams[winnerIndex].name,
-            coins: value.toLocaleString(),
-            odd
-          }
-        )
+        await ctx.reply('helper.bet_res', {
+          team: pred.teams[winnerIndex].name,
+          coins: value.toLocaleString(),
+          odd
+        })
       }
     }
 

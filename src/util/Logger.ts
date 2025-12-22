@@ -1,8 +1,8 @@
-import { REST, Routes, type APIUser, type APIWebhook } from 'discord.js'
+import { type APIUser, type APIWebhook, REST, Routes } from 'discord.js'
 import pino from 'pino'
-import App from '../structures/app/App'
-import EmbedBuilder from '../structures/builders/EmbedBuilder'
 import { env } from '@/env'
+import type App from '../structures/app/App'
+import EmbedBuilder from '../structures/builders/EmbedBuilder'
 
 const logger = pino({
   transport: {
@@ -35,58 +35,54 @@ export default class Logger {
   }
 
   public async error(error: Error | string, shardId?: number) {
-    const ignoredErrors = [
-      'Missing Permissions',
-      'AbortError: This operation was aborted'
-    ]
+    const ignoredErrors = ['Missing Permissions', 'AbortError: This operation was aborted']
 
-    if(ignoredErrors.some(e => error.toString().includes(e))) return
+    if (ignoredErrors.some(e => error.toString().includes(e))) return
 
-    if(typeof error === 'string') {
+    if (typeof error === 'string') {
       logger.error(error)
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``)
 
-      const client = await rest.get(Routes.user('@me')) as APIUser
-      const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
+      const client = (await rest.get(Routes.user('@me'))) as APIUser
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find(w => w.name === `${client.username} Logger`)
-      
-      if(!webhook) {
-        webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+
+      if (!webhook) {
+        webhook = (await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
           body: {
             name: `${client.username} Logger`
           }
-        }) as APIWebhook
+        })) as APIWebhook
       }
-      
+
       await rest.post(Routes.webhook(webhook.id, webhook.token), {
         body: {
           embeds: [embed],
           avatar_url: `https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png`
         }
       })
-    }
-    else {
+    } else {
       logger.error(error.stack ?? error)
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack}\`\`\``)
 
-      const client = await rest.get(Routes.user('@me')) as APIUser
-      const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
+      const client = (await rest.get(Routes.user('@me'))) as APIUser
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find(w => w.name === `${client.username} Logger`)
-      
-      if(!webhook) {
-        webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+
+      if (!webhook) {
+        webhook = (await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
           body: {
             name: `${client.username} Logger`
           }
-        }) as APIWebhook
+        })) as APIWebhook
       }
-      
+
       await rest.post(Routes.webhook(webhook.id, webhook.token), {
         body: {
           embeds: [embed],

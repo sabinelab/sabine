@@ -1,5 +1,5 @@
 import type { Args } from '@i18n'
-import ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
+import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 type CreateModalSubmitInteractionProps = {
   ctx: ModalSubmitInteractionContext
@@ -15,6 +15,6 @@ export type CreateModalSubmitInteractionOptions = {
   run: (props: CreateModalSubmitInteractionProps) => Promise<any>
 }
 
-export default function(options: CreateModalSubmitInteractionOptions) {
+export default function (options: CreateModalSubmitInteractionOptions) {
   return options
 }

@@ -1,6 +1,6 @@
+import { env } from '@/env'
 import Service from '../../api'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
-import { env } from '@/env'
 
 const service = new Service(env.AUTH)
 
@@ -10,7 +10,7 @@ export default createComponentInteraction({
   global: true,
   async run({ ctx, t, app }) {
     const games = {
-      valorant: async() => {
+      valorant: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
@@ -19,14 +19,14 @@ export default createComponentInteraction({
           }
         })
 
-        if(pred) {
+        if (pred) {
           return await ctx.reply('helper.replied')
         }
 
         const res = await service.getMatches('valorant')
         const data = res.find(d => d.id === ctx.args[2])
 
-        if(!data || data.status === 'LIVE') {
+        if (!data || data.status === 'LIVE') {
           return await ctx.reply('helper.started')
         }
 
@@ -46,7 +46,7 @@ export default createComponentInteraction({
                   maxLength: 2,
                   required: true,
                   placeholder: '0'
-                },
+                }
               ]
             },
             {
@@ -67,7 +67,7 @@ export default createComponentInteraction({
           ]
         })
       },
-      lol: async() => {
+      lol: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
@@ -76,14 +76,14 @@ export default createComponentInteraction({
           }
         })
 
-        if(pred) {
+        if (pred) {
           return await ctx.reply('helper.replied')
         }
 
         const res = await service.getMatches('lol')
         const data = res.find(d => d.id === ctx.args[2])
 
-        if(!data || data.status === 'LIVE') {
+        if (!data || data.status === 'LIVE') {
           return await ctx.reply('helper.started')
         }
 
@@ -103,7 +103,7 @@ export default createComponentInteraction({
                   maxLength: 2,
                   required: true,
                   placeholder: '0'
-                },
+                }
               ]
             },
             {

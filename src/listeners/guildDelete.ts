@@ -1,7 +1,7 @@
-import { REST, Routes, type APIWebhook } from 'discord.js'
+import { type APIWebhook, REST, Routes } from 'discord.js'
+import { env } from '@/env'
 import createListener from '../structures/app/createListener'
 import EmbedBuilder from '../structures/builders/EmbedBuilder'
-import { env } from '@/env'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
@@ -15,19 +15,19 @@ export default createListener({
       .setDesc(`Now I'm on ${client.guilds.cache.size} guilds`)
       .addField('Owner', `\`${owner?.username} (${owner?.id})`, true)
       .addField('Member count', guild.memberCount.toString(), true)
-      .setThumb(guild.iconURL()!)
+      .setThumb(guild.iconURL() ?? '')
 
-    const webhooks = await rest.get(Routes.channelWebhooks(env.ERROR_LOG)) as APIWebhook[]
+    const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
     let webhook = webhooks.find(w => w.name === `${client.user?.username} Logger`)
-    
-    if(!webhook) {
-      webhook = await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
+
+    if (!webhook) {
+      webhook = (await rest.post(Routes.channelWebhooks(env.ERROR_LOG), {
         body: {
           name: `${client.user?.username} Logger`
         }
-      }) as APIWebhook
+      })) as APIWebhook
     }
-    
+
     await rest.post(Routes.webhook(webhook.id, webhook.token), {
       body: {
         embeds: [embed],

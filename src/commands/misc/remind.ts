@@ -12,7 +12,7 @@ export default createCommand({
   },
   category: 'misc',
   async run({ ctx }) {
-    if(!ctx.db.user.remind) {
+    if (!ctx.db.user.remind) {
       await prisma.user.update({
         where: {
           id: ctx.db.user.id
@@ -33,7 +33,7 @@ export default createCommand({
         remind: false
       }
     })
-    
+
     return await ctx.reply('commands.remind.disabled')
   }
 })

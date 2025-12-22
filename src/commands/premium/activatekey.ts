@@ -26,13 +26,11 @@ export default createCommand({
     }
   ],
   syntax: 'activatekey [key]',
-  examples: [
-    'activatekey ABCD-1234-AB12-abcdf'
-  ],
+  examples: ['activatekey ABCD-1234-AB12-abcdf'],
   permissions: ['Administrator'],
   ephemeral: true,
   async run({ ctx, t, app }) {
-    if(!ctx.guild) return
+    if (!ctx.guild) return
 
     const key = await app.prisma.key.findFirst({
       where: {
@@ -43,19 +41,19 @@ export default createCommand({
       }
     })
 
-    if(!key) {
+    if (!key) {
       return await ctx.reply('commands.activatekey.invalid_key')
     }
 
-    if(key.guildKeys.some(gk => gk.guildId === ctx.guild!.id)) {
+    if (key.guildKeys.some(gk => gk.guildId === ctx.guild!.id)) {
       return await ctx.reply('commands.activatekey.key_already_activated')
     }
 
-    if(key.type === 'PREMIUM' && key.guildKeys.length >= 2) {
+    if (key.type === 'PREMIUM' && key.guildKeys.length >= 2) {
       return await ctx.reply('commands.activatekey.limit_reached')
     }
 
-    if(key.type === 'BOOSTER' && key.guildKeys.length > 0) {
+    if (key.type === 'BOOSTER' && key.guildKeys.length > 0) {
       return await ctx.reply('commands.activatekey.limit_reached')
     }
 
@@ -66,15 +64,14 @@ export default createCommand({
       }
     })
 
-    if(guildKey) {
+    if (guildKey) {
       const button = new ButtonBuilder()
         .defineStyle('red')
         .setLabel(t('commands.activatekey.button'))
         .setCustomId(`activatekey;${ctx.interaction.user.id};${key.type};${ctx.args[0]}`)
 
       await ctx.reply(button.build(t('commands.activatekey.would_like_to_continue', { key: key.type })))
-    }
-    else {
+    } else {
       await app.prisma.guildKey.create({
         data: {
           guildId: ctx.guild.id,
@@ -87,7 +84,7 @@ export default createCommand({
   },
   messageComponentInteractionTime: 60 * 1000,
   async createMessageComponentInteraction({ ctx, app }) {
-    if(!ctx.guild) return
+    if (!ctx.guild) return
 
     await ctx.interaction.deferReply({ flags: 64 })
 
@@ -100,19 +97,19 @@ export default createCommand({
       }
     })
 
-    if(!key) {
+    if (!key) {
       return await ctx.reply('commands.activatekey.invalid_key')
     }
 
-    if(key.guildKeys.some(gk => gk.guildId === ctx.guild!.id)) {
+    if (key.guildKeys.some(gk => gk.guildId === ctx.guild!.id)) {
       return await ctx.reply('commands.activatekey.key_already_activated')
     }
 
-    if(key.type === 'PREMIUM' && key.guildKeys.length >= 2) {
+    if (key.type === 'PREMIUM' && key.guildKeys.length >= 2) {
       return await ctx.reply('commands.activatekey.limit_reached')
     }
 
-    if(key.type === 'BOOSTER' && key.guildKeys.length > 0) {
+    if (key.type === 'BOOSTER' && key.guildKeys.length > 0) {
       return await ctx.reply('commands.activatekey.limit_reached')
     }
 

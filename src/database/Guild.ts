@@ -1,7 +1,7 @@
-import { $Enums, type Event, type Guild, type LiveMessage, type TBDMatch } from '@generated'
 import { prisma } from '@db'
-import { updateCache, voidCatch } from '@/database/update-cache'
+import type { $Enums, Event, Guild, LiveMessage, TBDMatch } from '@generated'
 import { hydrateData } from '@/database/hydrate-data'
+import { updateCache, voidCatch } from '@/database/update-cache'
 
 export class SabineGuild implements Guild {
   public id: string
@@ -29,7 +29,7 @@ export class SabineGuild implements Guild {
   public static async fetch(id: string) {
     const cachedData = await Bun.redis.get(`guild:${id}`)
 
-    if(cachedData) {
+    if (cachedData) {
       const hydrated = hydrateData<typeof this>(JSON.parse(cachedData))
       const guild = new SabineGuild(id)
 
@@ -40,7 +40,7 @@ export class SabineGuild implements Guild {
 
     const data = await prisma.guild.findUnique({ where: { id } })
 
-    if(!data) return data
+    if (!data) return data
 
     updateCache(`guild:${id}`, data).catch(voidCatch)
 

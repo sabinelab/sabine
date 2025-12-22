@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'career',
@@ -44,15 +44,13 @@ export default createCommand({
 
     const pages = Math.ceil(career.length / 10)
 
-    if(page === 1 || page < 1) {
+    if (page === 1 || page < 1) {
       career = career.slice(0, 10)
-    }
-
-    else {
+    } else {
       career = career.slice(page * 10 - 10, page * 10)
     }
 
-    if(!career.length) {
+    if (!career.length) {
       return await ctx.reply('commands.career.no_pages')
     }
 
@@ -67,11 +65,11 @@ export default createCommand({
     const arena_wins = ctx.db.user.arena_wins
     const arena_defeats = ctx.db.user.arena_defeats
     const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
-    const total_defeats = ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
+    const total_defeats =
+      ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
 
-    let content = t(
-      'commands.career.embed.desc',
-      {
+    let content =
+      t('commands.career.embed.desc', {
         ranked_wins,
         unranked_wins,
         ranked_swiftplay_wins,
@@ -86,8 +84,7 @@ export default createCommand({
         rr: ctx.db.user.rank_rating,
         arena_defeats,
         arena_wins
-      }
-    ) + '\n\n'
+      }) + '\n\n'
 
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -101,38 +98,45 @@ export default createCommand({
         })
       })
 
-    for(const match of career) {
-      if(match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
+    for (const match of career) {
+      if (match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.ranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`,
-          points: match.points! > 0 ? `+${match.points}` : match.points
-        })}\n`
-      }
-      else if(match.mode === 'ARENA') {
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.ranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`,
+            points: match.points! > 0 ? `+${match.points}` : match.points
+          }
+        )}\n`
+      } else if (match.mode === 'ARENA') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.ranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`,
-          points: match.points! > 0 ? `+${match.points}` : match.points
-        })}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
-      }
-      else {
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.ranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`,
+            points: match.points! > 0 ? `+${match.points}` : match.points
+          }
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
+      } else {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.unranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`
-        })}\n`
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.unranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`
+          }
+        )}\n`
       }
     }
 
@@ -148,22 +152,24 @@ export default createCommand({
       .setEmoji('1404176291829121028')
       .setCustomId(`career;${ctx.interaction.user.id};${page + 1 > pages ? pages : page + 1};next`)
 
-    if(page <= 1) {
+    if (page <= 1) {
       previous.setDisabled()
     }
 
-    if(page >= pages) {
+    if (page >= pages) {
       next.setDisabled()
     }
 
-    await ctx.reply(embed.build({
-      components: [
-        {
-          type: 1,
-          components: [previous, next]
-        }
-      ]
-    }))
+    await ctx.reply(
+      embed.build({
+        components: [
+          {
+            type: 1,
+            components: [previous, next]
+          }
+        ]
+      })
+    )
   },
   async createMessageComponentInteraction({ ctx, t, app }) {
     const matches = await app.prisma.match.findMany({
@@ -181,15 +187,13 @@ export default createCommand({
 
     const pages = Math.ceil(career.length / 10)
 
-    if(page === 1 || page < 1) {
+    if (page === 1 || page < 1) {
       career = career.slice(0, 10)
-    }
-
-    else {
+    } else {
       career = career.slice(page * 10 - 10, page * 10)
     }
 
-    if(!career.length) {
+    if (!career.length) {
       return await ctx.reply('commands.career.no_pages')
     }
 
@@ -204,11 +208,11 @@ export default createCommand({
     const arena_wins = ctx.db.user.arena_wins
     const arena_defeats = ctx.db.user.arena_defeats
     const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
-    const total_defeats = ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
+    const total_defeats =
+      ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
 
-    let content = t(
-      'commands.career.embed.desc',
-      {
+    let content =
+      t('commands.career.embed.desc', {
         ranked_wins,
         unranked_wins,
         ranked_swiftplay_wins,
@@ -223,8 +227,7 @@ export default createCommand({
         rr: ctx.db.user.rank_rating,
         arena_defeats,
         arena_wins
-      }
-    ) + '\n\n'
+      }) + '\n\n'
 
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -238,38 +241,45 @@ export default createCommand({
         })
       })
 
-    for(const match of career) {
-      if(match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
+    for (const match of career) {
+      if (match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.ranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`,
-          points: match.points! > 0 ? `+${match.points}` : match.points
-        })}\n`
-      }
-      else if(match.mode === 'ARENA') {
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.ranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`,
+            points: match.points! > 0 ? `+${match.points}` : match.points
+          }
+        )}\n`
+      } else if (match.mode === 'ARENA') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.ranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`,
-          points: match.points! > 0 ? `+${match.points}` : match.points
-        })}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
-      }
-      else {
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.ranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`,
+            points: match.points! > 0 ? `+${match.points}` : match.points
+          }
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
+      } else {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
 
-        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(`commands.career.type.unranked_${type}`, {
-          score: `${match.teams[0].score}-${match.teams[1].score}`,
-          user: `<@${match.teams[1].user}>`
-        })}\n`
+        content += `- [<t:${timestamp}:d> <t:${timestamp}:t> | <t:${timestamp}:R>] **[${t(`commands.career.mode.${match.mode}`)}]** ${t(
+          `commands.career.type.unranked_${type}`,
+          {
+            score: `${match.teams[0].score}-${match.teams[1].score}`,
+            user: `<@${match.teams[1].user}>`
+          }
+        )}\n`
       }
     }
 
@@ -285,11 +295,11 @@ export default createCommand({
       .setEmoji('1404176291829121028')
       .setCustomId(`career;${ctx.interaction.user.id};${page + 1};next`)
 
-    if(page <= 1) {
+    if (page <= 1) {
       previous.setDisabled()
     }
 
-    if(page >= pages) {
+    if (page >= pages) {
       next.setDisabled()
     }
 

@@ -1,18 +1,18 @@
 import { ComponentType } from 'discord.js'
 import { valorant_agents } from '../../config'
-import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
+import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 
 export default createComponentInteraction({
   name: 'select',
   time: 6 * 60 * 1000,
   flags: 64,
   async run({ ctx, t, app }) {
-    if(!ctx.interaction.isStringSelectMenu()) return
+    if (!ctx.interaction.isStringSelectMenu()) return
 
     const player = app.players.get(ctx.interaction.values[0])
 
-    if(!player) return
+    if (!player) return
 
     const controllers = new SelectMenuBuilder()
       .setCustomId(`selected;${ctx.interaction.user.id};${player.id};controller;${ctx.args[2]}`)

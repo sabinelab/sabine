@@ -1,21 +1,17 @@
-import * as Discord from 'discord.js'
 import { readdirSync } from 'node:fs'
 import path from 'node:path'
-import type { Command } from '../command/createCommand'
 import { fileURLToPath } from 'node:url'
+import { prisma } from '@db'
+import { calcPlayerPrice, getPlayers, type Player } from '@sabinelab/players'
+import Queue from 'bull'
+import * as Discord from 'discord.js'
+import { env } from '@/env'
+import { emojis } from '@/util/emojis'
 import Logger from '../../util/Logger'
+import type { Command } from '../command/createCommand'
 import type { CreateInteractionOptions } from '../interaction/createComponentInteraction'
 import type { CreateModalSubmitInteractionOptions } from '../interaction/createModalSubmitInteraction'
-import Queue from 'bull'
-import {
-  calcPlayerPrice,
-  getPlayers,
-  type Player
-} from '@sabinelab/players'
 import type { Listener } from './createListener'
-import { prisma } from '@db'
-import { emojis } from '@/util/emojis'
-import { env } from '@/env'
 
 type Reminder = {
   user: string
@@ -48,19 +44,20 @@ export default class App extends Discord.Client {
   }
 
   public async load() {
-    for(const file of readdirSync(path.resolve(__dirname, '../../listeners'))) {
+    for (const file of readdirSync(path.resolve(__dirname, '../../listeners'))) {
       const listener: Listener = (await import(`../../listeners/${file}`)).default
 
-      if(listener.name === 'ready') this.once('ready', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
-
-      else this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
+      if (listener.name === 'ready')
+        this.once('ready', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
+      else
+        this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
     }
 
-    for(const folder of readdirSync(path.resolve(__dirname, '../../commands'))) {
-      for(const file of readdirSync(path.resolve(__dirname, `../../commands/${folder}`))) {
+    for (const folder of readdirSync(path.resolve(__dirname, '../../commands'))) {
+      for (const file of readdirSync(path.resolve(__dirname, `../../commands/${folder}`))) {
         const command: Command = (await import(`../../commands/${folder}/${file}`)).default
 
-        if(this.commands.get(command.name)) {
+        if (this.commands.get(command.name)) {
           Logger.warn(`There is already a command named '${command.name}'`)
         }
 
@@ -68,11 +65,11 @@ export default class App extends Discord.Client {
       }
     }
 
-    for(const folder of readdirSync(path.resolve(__dirname, '../../interactions'))) {
-      for(const file of readdirSync(path.resolve(__dirname, `../../interactions/${folder}`))) {
+    for (const folder of readdirSync(path.resolve(__dirname, '../../interactions'))) {
+      for (const file of readdirSync(path.resolve(__dirname, `../../interactions/${folder}`))) {
         const interaction = (await import(`../../interactions/${folder}/${file}`)).default
 
-        if(this.interactions.get(interaction.name)) {
+        if (this.interactions.get(interaction.name)) {
           Logger.warn(`There is already an interaction named '${interaction.name}'`)
         }
 
@@ -82,7 +79,7 @@ export default class App extends Discord.Client {
   }
 
   public loadPlayers() {
-    for(const player of getPlayers()) {
+    for (const player of getPlayers()) {
       this.players.set(player.id.toString(), {
         ...player,
         price: calcPlayerPrice(player)
@@ -93,11 +90,11 @@ export default class App extends Discord.Client {
   }
 
   public loadEmojis() {
-    for(const emoji of emojis) {
+    for (const emoji of emojis) {
       this.emoji.set(emoji.name, emoji.emoji)
 
-      if(emoji.aliases) {
-        for(const alias of emoji.aliases) {
+      if (emoji.aliases) {
+        for (const alias of emoji.aliases) {
           this.emojiAliases.set(alias, emoji.name)
         }
       }
@@ -116,20 +113,13 @@ export default class App extends Discord.Client {
     const commands: Discord.ApplicationCommandData[] = []
 
     this.commands.forEach(cmd => {
-      const integrationTypes = [
-        Discord.ApplicationIntegrationType.GuildInstall
-      ]
+      const integrationTypes = [Discord.ApplicationIntegrationType.GuildInstall]
 
-      const contexts = [
-        Discord.InteractionContextType.Guild
-      ]
+      const contexts = [Discord.InteractionContextType.Guild]
 
-      if(cmd.userInstall) {
+      if (cmd.userInstall) {
         integrationTypes.push(Discord.ApplicationIntegrationType.UserInstall)
-        contexts.push(
-          Discord.InteractionContextType.BotDM,
-          Discord.InteractionContextType.PrivateChannel
-        )
+        contexts.push(Discord.InteractionContextType.BotDM, Discord.InteractionContextType.PrivateChannel)
       }
 
       commands.push({
@@ -152,7 +142,7 @@ export default class App extends Discord.Client {
   public async getUser(id: string) {
     let user = this.users.cache.get(id)
 
-    if(!user) {
+    if (!user) {
       user = await this.users.fetch(id, { cache: true })
     }
 
@@ -166,4 +156,6 @@ export const app = new App({
     repliedUser: true,
     parse: ['users', 'roles']
   }
-}).loadEmojis().loadPlayers()
+})
+  .loadEmojis()
+  .loadPlayers()

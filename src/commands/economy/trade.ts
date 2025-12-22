@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType } from 'discord.js'
-import createCommand from '../../structures/command/createCommand'
-import { prisma, SabineUser, type ArenaMetadata } from '@db'
-import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import { type ArenaMetadata, prisma, SabineUser } from '@db'
 import { calcPlayerPrice } from '@sabinelab/players'
+import { ApplicationCommandOptionType } from 'discord.js'
+import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'trade',
@@ -61,21 +61,21 @@ export default createCommand({
 
     const player = app.players.get(ctx.args[1].toString())
 
-    if(!player) {
+    if (!player) {
       return await ctx.reply('commands.trade.player_not_found')
     }
 
     const price = calcPlayerPrice(player, true)
 
-    if(BigInt(ctx.args[2]) < price) {
+    if (BigInt(ctx.args[2]) < price) {
       return await ctx.reply('commands.trade.invalid_value', { value: price.toLocaleString() })
     }
 
-    if(ctx.args[0] === ctx.interaction.user.id) {
+    if (ctx.args[0] === ctx.interaction.user.id) {
       return await ctx.reply('commands.trade.cannot_trade')
     }
 
-    if(!user || user.coins < BigInt(ctx.args[2])) {
+    if (!user || user.coins < BigInt(ctx.args[2])) {
       return await ctx.reply('commands.trade.missing_coins', {
         coins: (BigInt(ctx.args[2]) - (!user ? 0n : user.coins)).toLocaleString(),
         user: `<@${ctx.args[0]}>`
@@ -110,14 +110,14 @@ export default createCommand({
   async createAutocompleteInteraction({ i, app }) {
     const user = (await SabineUser.fetch(i.user.id)) ?? new SabineUser(i.user.id)
 
-    const players: Array<{ name: string, ovr: number, id: string }> = []
+    const players: Array<{ name: string; ovr: number; id: string }> = []
 
     const value = i.options.getString('player', true)
 
-    for(const p_id of user.reserve_players) {
+    for (const p_id of user.reserve_players) {
       const p = app.players.get(p_id)
 
-      if(!p) continue
+      if (!p) continue
 
       const ovr = Math.floor(p.ovr)
 
@@ -129,48 +129,45 @@ export default createCommand({
     }
 
     await i.respond(
-      players.sort((a, b) => a.ovr - b.ovr)
-        .filter(p => {
-          if(p.name.toLowerCase().includes(value.toLowerCase())) return p
-        })
+      players
+        .sort((a, b) => a.ovr - b.ovr)
+        .filter(p => p.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 25)
         .map(p => ({ name: p.name, value: p.id }))
     )
   },
   async createMessageComponentInteraction({ ctx, app }) {
-    if(ctx.args[2] === 'buy') {
+    if (ctx.args[2] === 'buy') {
       const user = await SabineUser.fetch(ctx.args[3])
 
       const player = app.players.get(ctx.args[4])
 
-      if(!user || !player) return
+      if (!user || !player) return
 
-      const i = user.reserve_players.findIndex(p => p === ctx.args[4])
+      const i = user.reserve_players.indexOf(ctx.args[4])
 
-      if(i === -1 || i === undefined) return
+      if (i === -1 || i === undefined) return
 
-      if(ctx.db.user.coins < BigInt(ctx.args[5])) {
+      if (ctx.db.user.coins < BigInt(ctx.args[5])) {
         return await ctx.edit('commands.trade.missing_coins', {
           coins: (BigInt(ctx.args[5]) - ctx.db.user.coins).toLocaleString(),
           user: `<@${ctx.interaction.user}>`
         })
       }
 
-      await prisma.$transaction(async(tx) => {
+      await prisma.$transaction(async tx => {
         const user = await tx.user.findUnique({
           where: {
             id: ctx.db.user.id
           }
         })
 
-        if(!user) return
+        if (!user) return
 
-        if(
-          (user.arena_metadata as ArenaMetadata | null)?.lineup
-            .some(line => line.player === player.id.toString())
-        ) {
-          const index = (user.arena_metadata as ArenaMetadata)?.lineup
-            .findIndex(line => line.player === player.id.toString())
+        if ((user.arena_metadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())) {
+          const index = (user.arena_metadata as ArenaMetadata)?.lineup.findIndex(
+            line => line.player === player.id.toString()
+          )
 
           ;(user.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
         }
@@ -181,9 +178,7 @@ export default createCommand({
           },
           data: {
             reserve_players: user.reserve_players,
-            arena_metadata: user.arena_metadata
-              ? user.arena_metadata
-              : undefined,
+            arena_metadata: user.arena_metadata ? user.arena_metadata : undefined,
             coins: {
               increment: BigInt(ctx.args[5])
             }
@@ -230,8 +225,7 @@ export default createCommand({
         user: ctx.interaction.user.toString(),
         coins: BigInt(ctx.args[5]).toLocaleString()
       })
-    }
-    else {
+    } else {
       await ctx.edit('commands.trade.cancelled')
     }
   }
