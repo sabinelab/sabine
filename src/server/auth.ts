@@ -1,7 +1,7 @@
 import { Elysia } from 'elysia'
 import { env } from '@/env'
 
-export const auth = new Elysia().onBeforeHandle({ as: 'scoped' }, ({ headers, set, request }) => {
+export const auth = new Elysia().onBeforeHandle({ as: 'global' }, ({ headers, set, request }) => {
   const url = new URL(request.url)
   if (url.pathname.includes('/vote')) {
     console.log('\n🔍 --- NEW VOTE REQUEST ---')
