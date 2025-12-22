@@ -20,7 +20,7 @@ export default createCommand({
 
     let fates = Math.floor(Math.random() * (30 - 20 + 1)) + 20
 
-    const member = app.guilds.cache.get('1233965003850125433')!.members.cache.get(ctx.interaction.user.id)
+    const member = app.guilds.cache.get('1233965003850125433')?.members.cache.get(ctx.interaction.user.id)
 
     let content = t('commands.daily.res', {
       coins: coins.toLocaleString(),
