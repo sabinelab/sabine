@@ -14,6 +14,12 @@ import Logger from '../util/Logger'
 import { auth } from './auth'
 
 new Elysia()
+  .onRequest(({ request }) => {
+    const url = new URL(request.url)
+    if(url.pathname.includes('/vote')) {
+      Logger.info(`🔌 CONNECTION RECEIVED: ${request.method} ${request.url}`)
+    }
+  })
   .use(cors({
     origin: true,
     methods: ['POST', 'GET', 'OPTIONS'],
