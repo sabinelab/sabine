@@ -19,12 +19,14 @@ new Elysia()
       Logger.info(`🔌 [1] CONNECTION RECEIVED: ${request.method} ${request.url}`)
     }
   })
-  .onParse(({ request, headers }, contentType) => {
+  .onParse(({ request, headers, body }, contentType) => {
     const url = new URL(request.url)
     if (url.pathname.includes('/vote')) {
       console.info(`📦 [2] TRYING TO READ BODY... Type: ${contentType}`)
       console.info(`📨 [3] HEADERS:`)
       console.log(headers)
+      console.log(`📨 [4] BODY:`)
+      console.log(body)
     }
   })
   .use(
