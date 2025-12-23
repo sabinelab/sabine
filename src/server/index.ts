@@ -19,10 +19,6 @@ new Elysia()
       Logger.info(`🔌 [1] CONNECTION RECEIVED: ${request.method} ${request.url}`)
     }
   })
-  .onError(({ code, error, set }) => {
-    console.error(`❌ [ERROR ${code}]:`, error)
-    return { status: set.status, error: error }
-  })
   .use(
     cors({
       origin: true,
