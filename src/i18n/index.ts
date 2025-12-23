@@ -1,6 +1,7 @@
 import type * as Discord from 'discord.js'
 import en from './en.json'
 import pt from './pt.json'
+import es from './es.json'
 
 export type Args = {
   [key: string]:
@@ -25,7 +26,8 @@ const locale: {
   [key: string]: any
 } = {
   en,
-  pt
+  pt,
+  es
 }
 
 export default function t<T extends Content>(lang: string, content: T, args?: Args): string {
