@@ -13,12 +13,6 @@ import { news } from './routes/valorant/news'
 import { valorantResults } from './routes/valorant/results'
 
 new Elysia()
-  .onRequest(({ request }) => {
-    const url = new URL(request.url)
-    if (url.pathname.includes('/vote')) {
-      Logger.info(`🔌 [1] CONNECTION RECEIVED: ${request.method} ${request.url}`)
-    }
-  })
   .use(
     cors({
       origin: true,
