@@ -21,7 +21,7 @@ Sabine is an open-source project dedicated to providing a top-tier esports cover
 2.  **Clone** your fork: `git clone https://github.com/YOUR_USERNAME/sabine.git`
 3.  Create a new **branch** for your changes: `git checkout -b my-feature-branch`
 4.  Make your changes.
-5.  **Lint** your code: `bun lint`. Please ensure your code adheres to the project's ESLint rules.
+5.  **Lint** your code: `bun lint`. Please ensure your code adheres to the project's Biome rules.
 6.  **Commit** your changes with a descriptive message.
 7.  **Push** your branch to your fork: `git push origin my-feature-branch`
 8.  Open a **Pull Request** to the `main` branch of the main repository.
@@ -38,16 +38,16 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
 
 2.  **Install dependencies:**
     ```bash
-    bun i
+    bun i --frozen-lockfile
     ```
 
 3.  **Set up environment variables:**
-    Create a `.env` file in the root directory. You can use `env.d.ts` as a template for the required variables. You must provide values for:
+    Create a `.env` file in the root directory. You can use `src/env.ts` as a template for the required variables. You must provide values for:
     * `BOT_TOKEN`: Your Discord bot token.
     * `POSTGRES_URI`: The connection string for your PostgreSQL database.
     * `REDIS_URL`: The URL for your Redis instance.
     * `AUTH`: Auth key for the internal API.
-    * ...and other variables defined in `env.d.ts`.
+    * ...and other variables defined in `src/env.ts`.
 
     *Note: The `docker-compose.yml` file is configured to start the **Redis** service via `docker compose up -d redis`. You must provide your own PostgreSQL database container. You can use [this repository as an example](https://github.com/levisantosp/postgres) for a quick setup.*
 
@@ -65,7 +65,7 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
 
 ## Code Style
 
-This project uses ESLint and TypeScript. Before committing, please run `bun lint` to check for any style issues and fix them.
+This project uses Biome and TypeScript. Before committing, please run `bun lint` to check for any style issues and fix them.
 
 ## License
 
