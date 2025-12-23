@@ -44,7 +44,7 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
 3.  **Set up environment variables:**
     Create a `.env` file in the root directory. You can use `src/env.ts` as a template for the required variables. You must provide values for:
     * `BOT_TOKEN`: Your Discord bot token.
-    * `POSTGRES_URI`: The connection string for your PostgreSQL database.
+    * `DATABASE_URL`: The connection string for your PostgreSQL database.
     * `REDIS_URL`: The URL for your Redis instance.
     * `AUTH`: Auth key for the internal API.
     * ...and other variables defined in `src/env.ts`.
