@@ -19,15 +19,9 @@ new Elysia()
       Logger.info(`🔌 [1] CONNECTION RECEIVED: ${request.method} ${request.url}`)
     }
   })
-  .onParse(({ request, headers, body }, contentType) => {
-    const url = new URL(request.url)
-    if (url.pathname.includes('/vote')) {
-      console.info(`📦 [2] TRYING TO READ BODY... Type: ${contentType}`)
-      console.info(`📨 [3] HEADERS:`)
-      console.log(headers)
-      console.log(`📨 [4] BODY:`)
-      console.log(body)
-    }
+  .onError(({ code, error, set }) => {
+    console.error(`❌ [ERROR ${code}]:`, error)
+    return { status: set.status, error: error }
   })
   .use(
     cors({
