@@ -39,7 +39,8 @@ export default createCommand({
           description: 'Notify when finished',
           descriptionLocalizations: {
             'pt-BR': 'Notificar quando acabar'
-          }
+          },
+          required: true
         }
       ]
     },
