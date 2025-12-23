@@ -1,0 +1,40 @@
+name: Biome Format and Check
+
+on:
+  pull_request:
+
+jobs:
+  format-and-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+        with:
+          version: latest
+
+      - name: Attempt to apply Biome fixes
+        run: |
+          biome check --write --no-errors-on-unmatched . || echo "Issues found"
+
+      - name: Commit automatic fixes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'style: apply automatic Biome fixes'
+          branch: ${{ github.head_ref }}
+
+      - name: Run Biome for remaining issues via Reviewdog
+        uses: reviewdog/action-biome@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          filter_mode: diff_context
+          fail_level: error
