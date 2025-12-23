@@ -36,7 +36,7 @@ export const vote = new Elysia().post(
                       ? 'BRONZE'
                       : 'IRON'
 
-    const user = (await SabineUser.fetch(body.id)) ?? new SabineUser(body.id)
+    const user = (await SabineUser.fetch(body.user)) ?? new SabineUser(body.user)
 
     await user.addPack(pack, true)
 
@@ -46,10 +46,15 @@ export const vote = new Elysia().post(
   },
   {
     body: z.object({
-      admin: z.boolean(),
-      avatar: z.string(),
-      username: z.string(),
-      id: z.string(),
+      bot: z.string(),
+      user: z.string(),
+      type: z.string(),
+      isWeekend: z.optional(z.boolean()),
+      query: z.optional(z.string()),
+      admin: z.optional(z.boolean()),
+      avatar: z.optional(z.string()),
+      username: z.optional(z.string()),
+      id: z.optional(z.string()),
       discriminator: z.optional(z.string()),
       promotable_bot: z.optional(z.string()),
       promotable_server: z.optional(
