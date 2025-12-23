@@ -1,7 +1,7 @@
 import type * as Discord from 'discord.js'
 import en from './en.json'
-import pt from './pt.json'
 import es from './es.json'
+import pt from './pt.json'
 
 export type Args = {
   [key: string]:
