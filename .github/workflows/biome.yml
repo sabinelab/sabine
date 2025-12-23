@@ -32,7 +32,7 @@ jobs:
           branch: ${{ github.head_ref }}
 
       - name: Run Biome for remaining issues via Reviewdog
-        uses: reviewdog/action-biome@v1
+        uses: mongolyy/reviewdog-action-biome@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
