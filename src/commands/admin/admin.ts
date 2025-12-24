@@ -69,6 +69,10 @@ export default createCommand({
             {
               name: 'en-US',
               value: 'en'
+            },
+            {
+              name: 'es-MX',
+              value: 'es'
             }
           ],
           required: true
@@ -176,6 +180,18 @@ export default createCommand({
           })
 
           await ctx.reply('Agora eu irei interagir em português neste servidor!')
+        },
+        es: async () => {
+          await prisma.guild.update({
+            where: {
+              id: ctx.db.guild?.id
+            },
+            data: {
+              lang: 'es'
+            }
+          })
+
+          await ctx.reply('¡Ahora voy a interactuar en español en este servidor!')
         }
       }
 

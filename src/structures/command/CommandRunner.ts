@@ -18,7 +18,8 @@ const raw: {
   [key: string]: any
 } = {
   pt: JSON.parse(readFileSync(path.resolve('src/i18n/pt.json'), 'utf-8')),
-  en: JSON.parse(readFileSync(path.resolve('src/i18n/en.json'), 'utf-8'))
+  en: JSON.parse(readFileSync(path.resolve('src/i18n/en.json'), 'utf-8')),
+  es: JSON.parse(readFileSync(path.resolve('src/i18n/es.json'), 'utf-8'))
 }
 
 export default class CommandRunner {

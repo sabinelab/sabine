@@ -30,6 +30,10 @@ export default createCommand({
         {
           name: 'en-US',
           value: 'en'
+        },
+        {
+          name: 'es-MX',
+          value: 'es'
         }
       ],
       required: true
@@ -53,16 +57,29 @@ export default createCommand({
           await ctx.reply('Agora eu irei interagir em português com você!')
         }
         break
-      case 'en': {
+      case 'en':
+        {
+          await prisma.user.update({
+            where: {
+              id: ctx.db.user.id
+            },
+            data: {
+              lang: 'en'
+            }
+          })
+          await ctx.reply('Now I will interact in english with you!')
+        }
+        break
+      case 'es': {
         await prisma.user.update({
           where: {
             id: ctx.db.user.id
           },
           data: {
-            lang: 'en'
+            lang: 'es'
           }
         })
-        await ctx.reply('Now I will interact in english with you!')
+        await ctx.reply('¡Ahora voy a interactuar contigo en español!')
       }
     }
   }

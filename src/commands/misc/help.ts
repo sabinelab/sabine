@@ -9,7 +9,8 @@ const raw: {
   [key: string]: any
 } = {
   pt: JSON.parse(fs.readFileSync(path.resolve('src/i18n/pt.json'), 'utf-8')),
-  en: JSON.parse(fs.readFileSync(path.resolve('src/i18n/en.json'), 'utf-8'))
+  en: JSON.parse(fs.readFileSync(path.resolve('src/i18n/en.json'), 'utf-8')),
+  es: JSON.parse(fs.readFileSync(path.resolve('src/i18n/es.json'), 'utf-8'))
 }
 
 export default createCommand({
