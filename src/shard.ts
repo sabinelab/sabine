@@ -8,33 +8,44 @@ import EmbedBuilder from './structures/builders/EmbedBuilder'
 import Logger from './util/Logger'
 import './server'
 
-const currentMap = await Bun.redis.get('arena:map')
-const mapIndex = valorant_maps.findIndex(m => m.name === currentMap)
-const maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+const currentMapInit = await Bun.redis.get('arena:map')
+let mapsInit = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+const mapIndexInit = mapsInit.indexOf(currentMapInit || '')
 
-if (mapIndex >= 0) {
-  maps.splice(mapIndex, 1)
+if (mapIndexInit !== -1) {
+  mapsInit.splice(mapIndexInit, 1)
 }
 
-const map = maps[Math.floor(Math.random() * maps.length)]
+if (mapsInit.length === 0) {
+  mapsInit = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+}
 
-if (!currentMap) await Bun.redis.set('arena:map', map)
+const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)]
+
+if (!currentMapInit && mapInit) await Bun.redis.set('arena:map', mapInit)
 
 const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
 const changeMapQueue = new Bull('arena:map', { redis: env.REDIS_URL })
 
 changeMapQueue.process('arena:map', async () => {
   const currentMap = await Bun.redis.get('arena:map')
-  const mapIndex = valorant_maps.findIndex(m => m.name === currentMap)
-  const maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+  let maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
 
-  if (mapIndex >= 0) {
-    maps.splice(mapIndex, 1)
+  const currentMapIndex = maps.indexOf(currentMap || '')
+
+  if (currentMapIndex !== -1) {
+    maps.splice(currentMapIndex, 1)
+  }
+
+  if (maps.length === 0) {
+    maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
   }
 
   const map = maps[Math.floor(Math.random() * maps.length)]
 
-  await Bun.redis.set('arena:map', map)
+  if (map) {
+    await Bun.redis.set('arena:map', map)
+  }
 })
 
 const processArenaQueue = async () => {
