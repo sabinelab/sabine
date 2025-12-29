@@ -18,7 +18,7 @@
   "author": "levisantosp",
   "license": "ISC",
   "dependencies": {
-    "@elysiajs/cors": "1.4.0",
+    "@elysiajs/cors": "1.4.1",
     "@iamtraction/google-translate": "2.0.1",
     "@prisma/adapter-pg": "7.2.0",
     "@prisma/client": "7.2.0",
