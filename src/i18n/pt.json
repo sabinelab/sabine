@@ -86,7 +86,6 @@
       "remove_all": "Remover todos",
       "removed_all_tournaments": "Todos os torneios foram removidos com sucesso!",
       "resent": "Partidas reenviadas com sucesso!",
-      "buy_premium": "Compre o premium!",
       "invalid_channel2": "Tipo de canal inválido. Considere selecionar um canal de TEXTO ou ANÚNCIOS.",
       "news_enabled": "Funcionalidade de notícias habilitada ao canal {ch}",
       "news_disabled": "Funcionalidade de notícias desabilitada com sucesso!",
@@ -202,6 +201,7 @@
       "request": "{opponent}, {author} quer duelar contra você em uma partida no modo **{mode}**. Vai aceitar ou vai amarelar? 🐔\n-# {opponent} tem 1 minuto para aceitar",
       "button": "Aceitar",
       "duplicated_cards": "Você não pode ter cards duplicados no seu elenco.",
+      "duplicated_cards2": "Your opponent cannot have duplicated cards in roster.",
       "cannot_duel": "Você não pode duelar contra você mesmo.",
       "mode": {
         "ranked": "Ranqueado",
