@@ -1,4 +1,4 @@
-import { SabineGuild } from '@db'
+import { GuildSchema } from '@db'
 import { env } from '@/env'
 import Service from '../../api'
 import createCommand from '../../structures/command/createCommand'
@@ -211,7 +211,7 @@ export default createCommand({
               include: {
                 events: true
               }
-            })) ?? new SabineGuild(ctx.db.guild.id)
+            })) ?? new GuildSchema(ctx.db.guild.id)
 
           if (
             guild.events.filter(e => e.type === 'lol').length +
@@ -275,7 +275,7 @@ export default createCommand({
               include: {
                 events: true
               }
-            })) ?? new SabineGuild(ctx.db.guild.id)
+            })) ?? new GuildSchema(ctx.db.guild.id)
 
           if (
             guild.events.filter(e => e.type === 'lol').length +

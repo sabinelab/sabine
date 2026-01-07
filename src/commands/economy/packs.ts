@@ -79,7 +79,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.iron', {
-                count: ctx.db.user.iron_packs
+                count: ctx.db.profile.iron_packs
               })
             )
           )
@@ -88,7 +88,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};iron`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.iron_packs)
+              .setDisabled(!ctx.db.profile.iron_packs)
           )
       )
       .addSectionComponents(section =>
@@ -96,7 +96,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.bronze', {
-                count: ctx.db.user.bronze_packs
+                count: ctx.db.profile.bronze_packs
               })
             )
           )
@@ -105,7 +105,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.bronze_packs)
+              .setDisabled(!ctx.db.profile.bronze_packs)
           )
       )
       .addSectionComponents(section =>
@@ -113,7 +113,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.silver', {
-                count: ctx.db.user.silver_packs
+                count: ctx.db.profile.silver_packs
               })
             )
           )
@@ -122,7 +122,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};silver`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.silver_packs)
+              .setDisabled(!ctx.db.profile.silver_packs)
           )
       )
       .addSectionComponents(section =>
@@ -130,7 +130,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.gold', {
-                count: ctx.db.user.gold_packs
+                count: ctx.db.profile.gold_packs
               })
             )
           )
@@ -139,7 +139,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};gold`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.gold_packs)
+              .setDisabled(!ctx.db.profile.gold_packs)
           )
       )
       .addSectionComponents(section =>
@@ -147,7 +147,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.platinum', {
-                count: ctx.db.user.platinum_packs
+                count: ctx.db.profile.platinum_packs
               })
             )
           )
@@ -156,7 +156,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.platinum_packs)
+              .setDisabled(!ctx.db.profile.platinum_packs)
           )
       )
       .addSectionComponents(section =>
@@ -164,7 +164,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.diamond', {
-                count: ctx.db.user.diamond_packs
+                count: ctx.db.profile.diamond_packs
               })
             )
           )
@@ -173,7 +173,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.diamond_packs)
+              .setDisabled(!ctx.db.profile.diamond_packs)
           )
       )
       .addSectionComponents(section =>
@@ -181,7 +181,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.ascendant', {
-                count: ctx.db.user.ascendant_packs
+                count: ctx.db.profile.ascendant_packs
               })
             )
           )
@@ -190,7 +190,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.ascendant_packs)
+              .setDisabled(!ctx.db.profile.ascendant_packs)
           )
       )
       .addSectionComponents(section =>
@@ -198,7 +198,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.immortal', {
-                count: ctx.db.user.immortal_packs
+                count: ctx.db.profile.immortal_packs
               })
             )
           )
@@ -207,7 +207,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.immortal_packs)
+              .setDisabled(!ctx.db.profile.immortal_packs)
           )
       )
       .addSectionComponents(section =>
@@ -215,7 +215,7 @@ export default createCommand({
           .addTextDisplayComponents(text =>
             text.setContent(
               ctx.t('commands.packs.type.radiant', {
-                count: ctx.db.user.radiant_packs
+                count: ctx.db.profile.radiant_packs
               })
             )
           )
@@ -224,7 +224,7 @@ export default createCommand({
               .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
-              .setDisabled(!ctx.db.user.radiant_packs)
+              .setDisabled(!ctx.db.profile.radiant_packs)
           )
       )
 
@@ -243,7 +243,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.iron', {
-                  count: ctx.db.user.iron_packs
+                  count: ctx.db.profile.iron_packs
                 })
               )
             )
@@ -252,7 +252,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};iron`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.iron_packs)
+                .setDisabled(!ctx.db.profile.iron_packs)
             )
         )
         .addSectionComponents(section =>
@@ -260,7 +260,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.bronze', {
-                  count: ctx.db.user.bronze_packs
+                  count: ctx.db.profile.bronze_packs
                 })
               )
             )
@@ -269,7 +269,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.bronze_packs)
+                .setDisabled(!ctx.db.profile.bronze_packs)
             )
         )
         .addSectionComponents(section =>
@@ -277,7 +277,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.silver', {
-                  count: ctx.db.user.silver_packs
+                  count: ctx.db.profile.silver_packs
                 })
               )
             )
@@ -286,7 +286,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};silver`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.silver_packs)
+                .setDisabled(!ctx.db.profile.silver_packs)
             )
         )
         .addSectionComponents(section =>
@@ -294,7 +294,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.gold', {
-                  count: ctx.db.user.gold_packs
+                  count: ctx.db.profile.gold_packs
                 })
               )
             )
@@ -303,7 +303,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};gold`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.gold_packs)
+                .setDisabled(!ctx.db.profile.gold_packs)
             )
         )
         .addSectionComponents(section =>
@@ -311,7 +311,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.platinum', {
-                  count: ctx.db.user.platinum_packs
+                  count: ctx.db.profile.platinum_packs
                 })
               )
             )
@@ -320,7 +320,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.platinum_packs)
+                .setDisabled(!ctx.db.profile.platinum_packs)
             )
         )
         .addSectionComponents(section =>
@@ -328,7 +328,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.diamond', {
-                  count: ctx.db.user.diamond_packs
+                  count: ctx.db.profile.diamond_packs
                 })
               )
             )
@@ -337,7 +337,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.diamond_packs)
+                .setDisabled(!ctx.db.profile.diamond_packs)
             )
         )
         .addSectionComponents(section =>
@@ -345,7 +345,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.ascendant', {
-                  count: ctx.db.user.ascendant_packs
+                  count: ctx.db.profile.ascendant_packs
                 })
               )
             )
@@ -354,7 +354,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.ascendant_packs)
+                .setDisabled(!ctx.db.profile.ascendant_packs)
             )
         )
         .addSectionComponents(section =>
@@ -362,7 +362,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.immortal', {
-                  count: ctx.db.user.immortal_packs
+                  count: ctx.db.profile.immortal_packs
                 })
               )
             )
@@ -371,7 +371,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.immortal_packs)
+                .setDisabled(!ctx.db.profile.immortal_packs)
             )
         )
         .addSectionComponents(section =>
@@ -379,7 +379,7 @@ export default createCommand({
             .addTextDisplayComponents(text =>
               text.setContent(
                 t('commands.packs.type.radiant', {
-                  count: ctx.db.user.radiant_packs
+                  count: ctx.db.profile.radiant_packs
                 })
               )
             )
@@ -388,7 +388,7 @@ export default createCommand({
                 .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
-                .setDisabled(!ctx.db.user.radiant_packs)
+                .setDisabled(!ctx.db.profile.radiant_packs)
             )
         )
 
@@ -399,13 +399,16 @@ export default createCommand({
     } else {
       const packs: { [key: string]: () => Promise<unknown> } = {
         iron: async () => {
-          if (ctx.db.user.iron_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.iron_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('iron')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               iron_packs: {
@@ -413,7 +416,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -438,13 +441,16 @@ export default createCommand({
           })
         },
         bronze: async () => {
-          if (ctx.db.user.bronze_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.bronze_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('bronze')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               bronze_packs: {
@@ -452,7 +458,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -477,13 +483,16 @@ export default createCommand({
           })
         },
         silver: async () => {
-          if (ctx.db.user.silver_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.silver_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('silver')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               silver_packs: {
@@ -491,7 +500,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -516,13 +525,16 @@ export default createCommand({
           })
         },
         gold: async () => {
-          if (ctx.db.user.gold_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.gold_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('gold')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               gold_packs: {
@@ -530,7 +542,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -555,13 +567,16 @@ export default createCommand({
           })
         },
         platinum: async () => {
-          if (ctx.db.user.platinum_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.platinum_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('platinum')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               platinum_packs: {
@@ -569,7 +584,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -594,13 +609,16 @@ export default createCommand({
           })
         },
         diamond: async () => {
-          if (ctx.db.user.diamond_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.diamond_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('diamond')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               diamond_packs: {
@@ -608,7 +626,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -633,13 +651,16 @@ export default createCommand({
           })
         },
         ascendant: async () => {
-          if (ctx.db.user.ascendant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.ascendant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('ascendant')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               ascendant_packs: {
@@ -647,7 +668,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -672,13 +693,16 @@ export default createCommand({
           })
         },
         immortal: async () => {
-          if (ctx.db.user.immortal_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.immortal_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('immortal')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               immortal_packs: {
@@ -686,7 +710,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -711,13 +735,16 @@ export default createCommand({
           })
         },
         radiant: async () => {
-          if (ctx.db.user.radiant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.radiant_packs <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('radiant')
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               radiant_packs: {
@@ -725,7 +752,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.user.addPlayersToRoster(players.map(p => p.id.toString()))
+          await ctx.db.profile.addPlayersToRoster(players.map(p => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')

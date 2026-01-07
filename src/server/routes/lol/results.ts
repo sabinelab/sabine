@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { prisma } from '@db'
 import locales from '@i18n'
 import { REST, Routes } from 'discord.js'
 import { Elysia } from 'elysia'
@@ -34,14 +34,32 @@ export const lolResults = new Elysia().post(
 
     const preds = await prisma.prediction.findMany({
       where: {
-        game: 'lol'
+        game: 'lol',
+        match: {
+          in: req.body.map(b => b.id)
+        },
+        status: 'pending'
       },
       include: {
-        teams: true
+        teams: true,
+        profile: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                premium: true
+              }
+            }
+          }
+        }
       }
     })
 
-    if (!guilds.length) return
+    if (!guilds.length) {
+      req.set.status = 'OK'
+
+      return { ok: true }
+    }
 
     const messages: Promise<unknown>[] = []
 
@@ -98,24 +116,24 @@ export const lolResults = new Elysia().post(
       }
     }
 
-    if (!preds.length) return
+    // if (!preds.length) return
 
-    const usersIds = [...new Set(preds.map(pred => pred.userId))]
+    // const usersIds = [...new Set(preds.map(pred => pred.userId))]
 
-    const usersData = await prisma.user.findMany({
-      where: {
-        id: { in: usersIds }
-      }
-    })
+    // const usersData = await prisma.user.findMany({
+    //   where: {
+    //     id: { in: usersIds }
+    //   }
+    // })
 
-    const userMap = new Map<string, SabineUser>()
+    // const userMap = new Map<string, UserSchema>()
 
-    for (const data of usersData) {
-      let user = new SabineUser(data.id)
-      user = Object.assign(user, data)
+    // for (const data of usersData) {
+    //   let user = new UserSchema(data.id)
+    //   user = Object.assign(user, data)
 
-      userMap.set(user.id, user)
-    }
+    //   userMap.set(user.id, user)
+    // }
 
     const transactions: Promise<unknown>[] = []
 
@@ -123,9 +141,9 @@ export const lolResults = new Elysia().post(
       for (const pred of preds) {
         if (data.id !== pred.match) continue
 
-        const user = userMap.get(pred.userId)
+        // const user = userMap.get(pred.userId)
 
-        if (!user) continue
+        // if (!user) continue
 
         const transaction = async () => {
           if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
@@ -153,7 +171,7 @@ export const lolResults = new Elysia().post(
                   odd = calcOdd(oddB)
                 }
 
-                if (user.premium) {
+                if (pred.profile.user.premium) {
                   bonus = Number(pred.bet) / 2
                 }
               }
@@ -172,8 +190,8 @@ export const lolResults = new Elysia().post(
                   status: 'correct'
                 }
               }),
-              prisma.user.update({
-                where: { id: user.id },
+              prisma.profile.update({
+                where: { id: pred.profile.id },
                 data: {
                   correct_predictions: {
                     increment: 1
@@ -184,7 +202,26 @@ export const lolResults = new Elysia().post(
               })
             ])
           } else {
-            await user.addIncorrectPrediction('lol', data.id)
+            await prisma.$transaction([
+              prisma.prediction.update({
+                where: {
+                  id: pred.id
+                },
+                data: {
+                  status: 'incorrect'
+                }
+              }),
+              prisma.profile.update({
+                where: {
+                  id: pred.profile.id
+                },
+                data: {
+                  incorrect_predictions: {
+                    increment: 1
+                  }
+                }
+              })
+            ])
           }
         }
 

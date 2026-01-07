@@ -36,8 +36,8 @@ export default createCommand({
   userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
-    const active_players = ctx.db.user.active_players
-    const reserve_players = ctx.db.user.reserve_players
+    const active_players = ctx.db.profile.active_players
+    const reserve_players = ctx.db.profile.reserve_players
 
     let value = 0
     let ovr = 0
@@ -69,7 +69,9 @@ export default createCommand({
             ctx.t('commands.roster.container.desc', {
               value: Math.floor(value).toLocaleString(),
               ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
-              name: ctx.db.user.team_name ? `${ctx.db.user.team_name} (${ctx.db.user.team_tag})` : '`undefined`'
+              name: ctx.db.profile.team_name
+                ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
+                : '`undefined`'
             })
         )
       )
@@ -110,7 +112,7 @@ export default createCommand({
                 button
                   .setStyle(ButtonStyle.Danger)
                   .setLabel(ctx.t('commands.roster.container.button.remove'))
-                  .setCustomId(`roster;${ctx.db.user.id};remove;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.id};remove;${p};${i}`)
               )
           )
           i++
@@ -145,7 +147,7 @@ export default createCommand({
                 button
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
-                  .setCustomId(`roster;${ctx.db.user.id};promote;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.id};promote;${p};${i}`)
               )
           )
           i++
@@ -158,12 +160,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('1404176223621611572')
-      .setCustomId(`roster;${ctx.db.user.id};previous;${page - 1 < 1 ? 1 : page - 1}`)
+      .setCustomId(`roster;${ctx.db.profile.id};previous;${page - 1 < 1 ? 1 : page - 1}`)
 
     const next = new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('1404176291829121028')
-      .setCustomId(`roster;${ctx.db.user.id};next;${page + 1 > pages ? pages : page + 1}`)
+      .setCustomId(`roster;${ctx.db.profile.id};next;${page + 1 > pages ? pages : page + 1}`)
 
     if (page <= 1) previous.setDisabled()
     if (page >= pages) next.setDisabled()
@@ -220,10 +222,15 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      if (ctx.db.user.active_players.length < 5) {
+      if (ctx.db.profile.active_players.length < 5) {
         await prisma.$transaction(async tx => {
-          const user = await tx.user.findUnique({
-            where: { id: ctx.db.user.id },
+          const user = await tx.profile.findUnique({
+            where: {
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
+            },
             select: { active_players: true, reserve_players: true }
           })
           if (!user) throw new Error('Not found')
@@ -238,9 +245,12 @@ export default createCommand({
 
           user.reserve_players.splice(i, 1)
 
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               reserve_players: user.reserve_players,
@@ -257,7 +267,7 @@ export default createCommand({
       let i = 0
       const options: APISelectMenuOption[] = []
 
-      for (const p of ctx.db.user.active_players) {
+      for (const p of ctx.db.profile.active_players) {
         const player = ctx.app.players.get(p)
 
         if (!player) break
@@ -272,7 +282,7 @@ export default createCommand({
       }
 
       const menu = new SelectMenuBuilder()
-        .setCustomId(`roster;${ctx.db.user.id};promote2;${player.id}`)
+        .setCustomId(`roster;${ctx.db.profile.id};promote2;${player.id}`)
         .setOptions(options)
 
       await ctx.reply(menu.build(t('commands.promote.select_player')))
@@ -283,8 +293,13 @@ export default createCommand({
       const idReserve = ctx.args[3]
 
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
-          where: { id: ctx.db.user.id },
+        const user = await tx.profile.findUnique({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
+          },
           select: { active_players: true, reserve_players: true }
         })
         if (!user) throw new Error('Not found')
@@ -302,9 +317,12 @@ export default createCommand({
         user.reserve_players.splice(iReserve, 1)
         user.reserve_players.push(idActive)
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             active_players: user.active_players,
@@ -317,8 +335,8 @@ export default createCommand({
 
       await ctx.edit('commands.promote.player_promoted', { p: p?.name })
     } else {
-      const active_players = ctx.db.user.active_players
-      const reserve_players = ctx.db.user.reserve_players
+      const active_players = ctx.db.profile.active_players
+      const reserve_players = ctx.db.profile.reserve_players
 
       let value = 0
       let ovr = 0
@@ -353,7 +371,9 @@ export default createCommand({
               t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
                 ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
-                name: ctx.db.user.team_name ? `${ctx.db.user.team_name} (${ctx.db.user.team_tag})` : '`undefined`'
+                name: ctx.db.profile.team_name
+                  ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
+                  : '`undefined`'
               })
           )
         )
@@ -391,7 +411,7 @@ export default createCommand({
                   button
                     .setStyle(ButtonStyle.Danger)
                     .setLabel(t('commands.roster.container.button.remove'))
-                    .setCustomId(`roster;${ctx.db.user.id};remove;${p};${i}`)
+                    .setCustomId(`roster;${ctx.db.profile.id};remove;${p};${i}`)
                 )
             )
             i++
@@ -405,8 +425,13 @@ export default createCommand({
         }
 
         await prisma.$transaction(async tx => {
-          const user = await tx.user.findUnique({
-            where: { id: ctx.db.user.id },
+          const user = await tx.profile.findUnique({
+            where: {
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
+            },
             select: { active_players: true }
           })
           if (!user) throw new Error('Not found')
@@ -417,9 +442,12 @@ export default createCommand({
 
           user.active_players.splice(i, 1)
 
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               reserve_players: {
@@ -460,7 +488,7 @@ export default createCommand({
                   button
                     .setStyle(ButtonStyle.Success)
                     .setLabel(t('commands.roster.container.button.promote'))
-                    .setCustomId(`roster;${ctx.db.user.id};promote;${p};${i}`)
+                    .setCustomId(`roster;${ctx.db.profile.id};promote;${p};${i}`)
                 )
             )
             i++
@@ -473,12 +501,12 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`roster;${ctx.db.user.id};previous;${page - 1}`)
+        .setCustomId(`roster;${ctx.db.profile.id};previous;${page - 1}`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`roster;${ctx.db.user.id};next;${page + 1}`)
+        .setCustomId(`roster;${ctx.db.profile.id};next;${page + 1}`)
 
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()
@@ -497,9 +525,12 @@ export default createCommand({
     const name = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-1`)
     const tag = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-2`)
 
-    await prisma.user.update({
+    await prisma.profile.update({
       where: {
-        id: ctx.db.user.id
+        userId_guildId: {
+          userId: ctx.db.profile.id,
+          guildId: ctx.db.guild.id
+        }
       },
       data: {
         team_name: name,

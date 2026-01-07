@@ -94,15 +94,15 @@ export default createCommand({
         if (!map) return
 
         if (
-          !ctx.db.user.team_name ||
-          !ctx.db.user.arena_metadata ||
-          ctx.db.user.arena_metadata.lineup.length < 5 ||
-          ctx.db.user.arena_metadata?.map !== map
+          !ctx.db.profile.team_name ||
+          !ctx.db.profile.arena_metadata ||
+          ctx.db.profile.arena_metadata.lineup.length < 5 ||
+          ctx.db.profile.arena_metadata?.map !== map
         ) {
           return await ctx.reply('commands.arena.invalid_lineup', { map })
         }
 
-        const isAlreadyInQueue = await ctx.app.redis.get(`arena:in_queue:${ctx.db.user.id}`)
+        const isAlreadyInQueue = await ctx.app.redis.get(`arena:in_queue:${ctx.db.profile.id}`)
 
         if (isAlreadyInQueue) {
           return await ctx.reply('commands.arena.is_already_in_queue')
@@ -112,7 +112,7 @@ export default createCommand({
           userId: string
           channelId?: string
         } = {
-          userId: ctx.db.user.id
+          userId: ctx.db.profile.id
         }
 
         if (ctx.args[1]) {
@@ -120,28 +120,28 @@ export default createCommand({
         }
 
         await Promise.all([
-          ctx.app.redis.set(`arena:in_queue:${ctx.db.user.id}`, JSON.stringify(payload)),
+          ctx.app.redis.set(`arena:in_queue:${ctx.db.profile.id}`, JSON.stringify(payload)),
           ctx.app.redis.lpush('arena:queue', JSON.stringify(payload))
         ])
 
         await ctx.reply('commands.arena.joined')
       },
       leave: async () => {
-        const payload = await ctx.app.redis.get(`arena:in_queue:${ctx.db.user.id}`)
+        const payload = await ctx.app.redis.get(`arena:in_queue:${ctx.db.profile.id}`)
 
         if (!payload) {
           return await ctx.reply('commands.arena.is_not_in_queue')
         }
 
         await Promise.all([
-          ctx.app.redis.del(`arena:in_queue:${ctx.db.user.id}`),
+          ctx.app.redis.del(`arena:in_queue:${ctx.db.profile.id}`),
           ctx.app.redis.lrem('arena:queue', 0, payload)
         ])
 
         await ctx.reply('commands.arena.left')
       },
       lineup: async () => {
-        if (!ctx.db.user.active_players.length && !ctx.db.user.reserve_players.length) {
+        if (!ctx.db.profile.active_players.length && !ctx.db.profile.reserve_players.length) {
           return await ctx.reply('commands.arena.no_players')
         }
 
@@ -154,7 +154,7 @@ export default createCommand({
           .addTextDisplayComponents(text => text.setContent(map))
           .addTextDisplayComponents(text => text.setContent(ctx.t('commands.arena.your_players')))
 
-        const allPlayers = [...ctx.db.user.active_players, ...ctx.db.user.reserve_players]
+        const allPlayers = [...ctx.db.profile.active_players, ...ctx.db.profile.reserve_players]
         let players = [...new Set(allPlayers)]
 
         const pages = Math.ceil(players.length / 10)
@@ -177,7 +177,7 @@ export default createCommand({
 
                 let content: string
 
-                const playerInLineup = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+                const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
                 if (playerInLineup) {
                   const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -190,20 +190,22 @@ export default createCommand({
                 return text.setContent(content)
               })
               .setButtonAccessory(button => {
-                const player = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+                const player = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
                 if (player) {
                   return button
-                    .setCustomId(`arena;${ctx.db.user.id};remove;${p};${i}`)
+                    .setCustomId(`arena;${ctx.db.profile.id};remove;${p};${i}`)
                     .setLabel(ctx.t('commands.arena.remove'))
                     .setStyle(ButtonStyle.Danger)
                 }
 
                 return button
-                  .setCustomId(`arena;${ctx.db.user.id};promote;${p};${i}`)
+                  .setCustomId(`arena;${ctx.db.profile.id};promote;${p};${i}`)
                   .setLabel(ctx.t('commands.arena.promote'))
                   .setStyle(ButtonStyle.Success)
-                  .setDisabled(ctx.db.user.arena_metadata !== null && ctx.db.user.arena_metadata.lineup.length >= 5)
+                  .setDisabled(
+                    ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5
+                  )
               })
           )
 
@@ -213,12 +215,12 @@ export default createCommand({
         const previous = new ButtonBuilder()
           .setStyle(ButtonStyle.Primary)
           .setEmoji('1404176223621611572')
-          .setCustomId(`arena;${ctx.db.user.id};${page - 1 < 1 ? 1 : page - 1};previous`)
+          .setCustomId(`arena;${ctx.db.profile.id};${page - 1 < 1 ? 1 : page - 1};previous`)
 
         const next = new ButtonBuilder()
           .setStyle(ButtonStyle.Primary)
           .setEmoji('1404176291829121028')
-          .setCustomId(`arena;${ctx.db.user.id};${page + 1 > pages ? pages : page + 1};next`)
+          .setCustomId(`arena;${ctx.db.profile.id};${page + 1 > pages ? pages : page + 1};next`)
 
         if (page <= 1) previous.setDisabled()
         if (page >= pages) next.setDisabled()
@@ -256,20 +258,21 @@ export default createCommand({
   },
   async createMessageComponentInteraction({ ctx, t }) {
     if (ctx.args[2] === 'promote') {
-      if (ctx.db.user.arena_metadata && ctx.db.user.arena_metadata.lineup.length >= 5) return
+      if (ctx.db.profile.arena_metadata && ctx.db.profile.arena_metadata.lineup.length >= 5) return
 
       const player = ctx.app.players.get(ctx.args[3])
 
       ctx.setFlags(64)
 
-      if (ctx.db.user.arena_metadata?.lineup.some(line => line.player === player?.id.toString())) {
+      if (ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player?.id.toString())) {
         ctx.setFlags(64)
 
         return await ctx.reply('commands.duel.duplicated_cards')
       }
 
       if (
-        (!ctx.db.user.active_players.includes(ctx.args[3]) && !ctx.db.user.reserve_players.includes(ctx.args[3])) ||
+        (!ctx.db.profile.active_players.includes(ctx.args[3]) &&
+          !ctx.db.profile.reserve_players.includes(ctx.args[3])) ||
         !player
       ) {
         return await ctx.reply('commands.sell.player_not_found')
@@ -348,20 +351,25 @@ export default createCommand({
           content: t('commands.arena.select_agent', { player: player.name }),
           components: [row1, row2, row3, row4]
         }),
-        ctx.app.redis.set(`lineup:select:${ctx.db.user.id}`, ctx.interaction.message.id, 'EX', 300)
+        ctx.app.redis.set(`lineup:select:${ctx.db.profile.id}`, ctx.interaction.message.id, 'EX', 300)
       ])
     } else if (ctx.args[2] === 'remove') {
       ctx.setFlags(64)
 
       const player = ctx.app.players.get(ctx.args[3])
 
-      if (!player || !ctx.db.user.arena_metadata?.lineup.some(line => line.player === player.id.toString())) {
+      if (!player || !ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player.id.toString())) {
         return await ctx.reply('commands.sell.player_not_found')
       }
 
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
-          where: { id: ctx.db.user.id },
+        const user = await tx.profile.findUnique({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
+          },
           select: { arena_metadata: true }
         })
 
@@ -375,16 +383,19 @@ export default createCommand({
 
         metadata.lineup.splice(index, 1)
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             arena_metadata: metadata
           }
         })
 
-        ctx.db.user.arena_metadata = metadata
+        ctx.db.profile.arena_metadata = metadata
       })
 
       const page = 1
@@ -396,7 +407,7 @@ export default createCommand({
         .addTextDisplayComponents(text => text.setContent(map))
         .addTextDisplayComponents(text => text.setContent(t('commands.arena.your_players')))
 
-      const allPlayers = [...ctx.db.user.active_players, ...ctx.db.user.reserve_players]
+      const allPlayers = [...ctx.db.profile.active_players, ...ctx.db.profile.reserve_players]
       let players = [...new Set(allPlayers)]
 
       const pages = Math.ceil(players.length / 10)
@@ -418,7 +429,7 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -431,19 +442,19 @@ export default createCommand({
               return text.setContent(content)
             })
             .setButtonAccessory(button => {
-              const player = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const player = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
               if (player) {
                 return button
-                  .setCustomId(`arena;${ctx.db.user.id};remove;${p};${i}`)
+                  .setCustomId(`arena;${ctx.db.profile.id};remove;${p};${i}`)
                   .setLabel(t('commands.arena.remove'))
                   .setStyle(ButtonStyle.Danger)
               }
 
               return button
-                .setCustomId(`arena;${ctx.db.user.id};promote;${p};${i}`)
+                .setCustomId(`arena;${ctx.db.profile.id};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.user.arena_metadata !== null && ctx.db.user.arena_metadata.lineup.length >= 5)
+                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
             })
         )
 
@@ -453,12 +464,12 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`arena;${ctx.db.user.id};${page - 1};previous`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page - 1};previous`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`arena;${ctx.db.user.id};${page + 1};next`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page + 1};next`)
 
       const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
@@ -483,15 +494,20 @@ export default createCommand({
 
       if (!agent || !player) return
 
-      if (ctx.db.user.arena_metadata?.lineup.some(line => line.agent.name === agent.name)) {
+      if (ctx.db.profile.arena_metadata?.lineup.some(line => line.agent.name === agent.name)) {
         ctx.setFlags(64)
 
         return await ctx.reply('commands.duel.duplicated_agent')
       }
 
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
-          where: { id: ctx.db.user.id },
+        const user = await tx.profile.findUnique({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
+          },
           select: { arena_metadata: true }
         })
 
@@ -512,16 +528,19 @@ export default createCommand({
           }
         })
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             arena_metadata: metadata as any
           }
         })
 
-        ctx.db.user.arena_metadata = metadata
+        ctx.db.profile.arena_metadata = metadata
       })
 
       const page = 1
@@ -533,7 +552,7 @@ export default createCommand({
         .addTextDisplayComponents(text => text.setContent(map))
         .addTextDisplayComponents(text => text.setContent(t('commands.arena.your_players')))
 
-      const allPlayers = [...ctx.db.user.active_players, ...ctx.db.user.reserve_players]
+      const allPlayers = [...ctx.db.profile.active_players, ...ctx.db.profile.reserve_players]
       let players = [...new Set(allPlayers)]
 
       const pages = Math.ceil(players.length / 10)
@@ -555,7 +574,7 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -568,19 +587,19 @@ export default createCommand({
               return text.setContent(content)
             })
             .setButtonAccessory(button => {
-              const player = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const player = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
               if (player) {
                 return button
-                  .setCustomId(`arena;${ctx.db.user.id};remove;${p};${i}`)
+                  .setCustomId(`arena;${ctx.db.profile.id};remove;${p};${i}`)
                   .setLabel(t('commands.arena.remove'))
                   .setStyle(ButtonStyle.Danger)
               }
 
               return button
-                .setCustomId(`arena;${ctx.db.user.id};promote;${p};${i}`)
+                .setCustomId(`arena;${ctx.db.profile.id};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.user.arena_metadata !== null && ctx.db.user.arena_metadata.lineup.length >= 5)
+                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
             })
         )
 
@@ -590,19 +609,19 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`arena;${ctx.db.user.id};${page - 1};previous`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page - 1};previous`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`arena;${ctx.db.user.id};${page + 1};next`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page + 1};next`)
 
       const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()
 
-      const messageId = await ctx.app.redis.get(`lineup:select:${ctx.db.user.id}`)
+      const messageId = await ctx.app.redis.get(`lineup:select:${ctx.db.profile.id}`)
 
       if (!messageId) return
 
@@ -619,10 +638,10 @@ export default createCommand({
           p: player.name,
           agent: agent.name
         }),
-        ctx.app.redis.del(`lineup:select:${ctx.db.user.id}`)
+        ctx.app.redis.del(`lineup:select:${ctx.db.profile.id}`)
       ])
     } else {
-      if (!ctx.db.user.active_players.length && !ctx.db.user.reserve_players.length) {
+      if (!ctx.db.profile.active_players.length && !ctx.db.profile.reserve_players.length) {
         return await ctx.reply('commands.arena.no_players')
       }
 
@@ -635,7 +654,7 @@ export default createCommand({
         .addTextDisplayComponents(text => text.setContent(map))
         .addTextDisplayComponents(text => text.setContent(t('commands.arena.your_players')))
 
-      const allPlayers = [...ctx.db.user.active_players, ...ctx.db.user.reserve_players]
+      const allPlayers = [...ctx.db.profile.active_players, ...ctx.db.profile.reserve_players]
       let players = [...new Set(allPlayers)]
 
       const pages = Math.ceil(players.length / 10)
@@ -657,7 +676,7 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -670,20 +689,20 @@ export default createCommand({
               return text.setContent(content)
             })
             .setButtonAccessory(button => {
-              const player = ctx.db.user.arena_metadata?.lineup.find(line => line.player === p)
+              const player = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
 
               if (player) {
                 return button
-                  .setCustomId(`arena;${ctx.db.user.id};remove;${p};${i}`)
+                  .setCustomId(`arena;${ctx.db.profile.id};remove;${p};${i}`)
                   .setLabel(t('commands.arena.remove'))
                   .setStyle(ButtonStyle.Danger)
               }
 
               return button
-                .setCustomId(`arena;${ctx.db.user.id};promote;${p};${i}`)
+                .setCustomId(`arena;${ctx.db.profile.id};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.user.arena_metadata !== null && ctx.db.user.arena_metadata.lineup.length >= 5)
+                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
             })
         )
 
@@ -693,12 +712,12 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`arena;${ctx.db.user.id};${page - 1};previous`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page - 1};previous`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`arena;${ctx.db.user.id};${page + 1};next`)
+        .setCustomId(`arena;${ctx.db.profile.id};${page + 1};next`)
 
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()

@@ -90,6 +90,7 @@ type MatchOptions = {
   map: string
   content: string
   overtime?: boolean
+  guildId: string
 }
 
 export default class Match {
@@ -107,6 +108,7 @@ export default class Match {
   public mentions: string
   private options: MatchOptions
   public overtime?: boolean
+  public guildId: string
 
   public constructor(options: MatchOptions) {
     this.teams = options.teams
@@ -118,6 +120,7 @@ export default class Match {
     this.mapImage = valorant_maps.filter(m => m.name === this.map)[0].image
     this.mentions = `<@${this.teams[0].user}> <@${this.teams[1].user}>`
     this.overtime = options.overtime
+    this.guildId = options.guildId
 
     if (this.mode === 'unranked') {
       this.maxScore = 13

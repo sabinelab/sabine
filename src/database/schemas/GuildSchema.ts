@@ -3,7 +3,7 @@ import type { $Enums, Event, Guild, LiveMessage, TBDMatch } from '@generated'
 import { hydrateData } from '@/database/hydrate-data'
 import { updateCache, voidCatch } from '@/database/update-cache'
 
-export class SabineGuild implements Guild {
+export class GuildSchema implements Guild {
   public id: string
   public lang: $Enums.Language = 'en'
   public tbd_matches: TBDMatch[] = []
@@ -31,7 +31,7 @@ export class SabineGuild implements Guild {
 
     if (cachedData) {
       const hydrated = hydrateData<typeof this>(JSON.parse(cachedData))
-      const guild = new SabineGuild(id)
+      const guild = new GuildSchema(id)
 
       Object.assign(guild, hydrated)
 
@@ -44,7 +44,7 @@ export class SabineGuild implements Guild {
 
     updateCache(`guild:${id}`, data).catch(voidCatch)
 
-    const guild = new SabineGuild(data.id)
+    const guild = new GuildSchema(data.id)
 
     return Object.assign(guild, data)
   }

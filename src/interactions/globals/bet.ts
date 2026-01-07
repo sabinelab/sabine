@@ -9,7 +9,7 @@ export default createComponentInteraction({
   flags: 64,
   global: true,
   async run({ ctx, t, app }) {
-    if (ctx.db.user.coins < 500) return await ctx.reply('helper.coins_needed')
+    if (ctx.db.profile.coins < 500) return await ctx.reply('helper.coins_needed')
 
     const options = {
       valorant: async () => {
@@ -17,7 +17,10 @@ export default createComponentInteraction({
           where: {
             match: ctx.args[2],
             game: 'valorant',
-            userId: ctx.db.user.id
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           include: {
             teams: true
@@ -67,7 +70,10 @@ export default createComponentInteraction({
           where: {
             match: ctx.args[2],
             game: 'lol',
-            userId: ctx.db.user.id
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           include: {
             teams: true

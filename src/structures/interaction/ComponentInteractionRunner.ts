@@ -1,4 +1,4 @@
-import { SabineGuild, SabineUser } from '@db'
+import { GuildSchema, ProfileSchema } from '@db'
 import type { Blacklist } from '@generated'
 import locales, { type Args, type Content } from '@i18n'
 import type { MessageComponentInteraction } from 'discord.js'
@@ -8,6 +8,8 @@ import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 export default class ComponentInteractionRunner {
   public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
+    if (!interaction.guild || !interaction.guildId) return
+
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
@@ -16,22 +18,25 @@ export default class ComponentInteractionRunner {
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
     const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
 
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
+
     if (blacklist.get(interaction.user.id)) return
     if (blacklist.get(interaction.guildId)) return
 
     if (i?.global && !command) {
       if (!interaction.guild || !interaction.guildId) return
-
-      const guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-      const user = (await SabineUser.fetch(interaction.user.id)) ?? new SabineUser(interaction.user.id)
+      if (!profile) {
+        profile = new ProfileSchema(interaction.user.id, interaction.guild.id)
+      }
 
       const ctx = new ComponentInteractionContext({
         args,
         app: app,
         guild: interaction.guild,
-        locale: user.lang,
+        locale: profile.lang,
         db: {
-          user,
+          profile,
           guild
         },
         interaction
@@ -58,16 +63,7 @@ export default class ComponentInteractionRunner {
 
     if (command) {
       if (!command.createMessageComponentInteraction) return
-
-      let guild: SabineGuild | undefined
-
-      if (interaction.guildId) {
-        guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-      }
-
-      const user = await SabineUser.fetch(interaction.user.id)
-
-      if (!user) {
+      if (!profile) {
         return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
       }
 
@@ -75,9 +71,9 @@ export default class ComponentInteractionRunner {
         args,
         app: app,
         guild: interaction.guild,
-        locale: user.lang,
+        locale: profile.lang,
         db: {
-          user,
+          profile,
           guild
         },
         interaction
@@ -112,15 +108,7 @@ export default class ComponentInteractionRunner {
 
     if (!i) return
 
-    const user = await SabineUser.fetch(interaction.user.id)
-
-    let guild: SabineGuild | undefined
-
-    if (interaction.guildId) {
-      guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-    }
-
-    if (!user) {
+    if (!profile) {
       return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
     }
 
@@ -128,9 +116,9 @@ export default class ComponentInteractionRunner {
       args,
       app,
       guild: interaction.guild,
-      locale: user.lang,
+      locale: profile.lang,
       db: {
-        user,
+        profile,
         guild
       },
       interaction

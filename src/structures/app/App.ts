@@ -16,6 +16,7 @@ import type { Listener } from './createListener'
 type Reminder = {
   user: string
   channel: string
+  guild: string
 }
 
 const __filename = fileURLToPath(import.meta.url)

@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { prisma } from '@db'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
 
@@ -16,29 +16,34 @@ export type Pack =
 export const vote = new Elysia().post(
   '/vote',
   async ({ body, set }) => {
-    const random = Math.random() * 100
-    const pack: Pack =
-      random < 0.5
-        ? 'RADIANT'
-        : random < 2.0
-          ? 'IMMORTAL'
-          : random < 5.0
-            ? 'ASCENDANT'
-            : random < 20.0
-              ? 'DIAMOND'
-              : random < 50.0
-                ? 'PLATINUM'
-                : random < 70.0
-                  ? 'GOLD'
-                  : random < 85.0
-                    ? 'SILVER'
-                    : random < 95.0
-                      ? 'BRONZE'
-                      : 'IRON'
+    // const random = Math.random() * 100
+    // const pack: Pack =
+    //   random < 0.5
+    //     ? 'RADIANT'
+    //     : random < 2.0
+    //       ? 'IMMORTAL'
+    //       : random < 5.0
+    //         ? 'ASCENDANT'
+    //         : random < 20.0
+    //           ? 'DIAMOND'
+    //           : random < 50.0
+    //             ? 'PLATINUM'
+    //             : random < 70.0
+    //               ? 'GOLD'
+    //               : random < 85.0
+    //                 ? 'SILVER'
+    //                 : random < 95.0
+    //                   ? 'BRONZE'
+    //                   : 'IRON'
 
-    const user = (await SabineUser.fetch(body.user)) ?? new SabineUser(body.user)
-
-    await user.addPack(pack, true)
+    await prisma.user.update({
+      where: {
+        id: body.user
+      },
+      data: {
+        collected_vote_reward: false
+      }
+    })
 
     set.status = 'OK'
 

@@ -34,7 +34,10 @@ export default createCommand({
     let transactions = (
       await app.prisma.transaction.findMany({
         where: {
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         }
       })
     ).sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
@@ -119,7 +122,10 @@ export default createCommand({
     let transactions = (
       await app.prisma.transaction.findMany({
         where: {
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         }
       })
     ).sort((a, b) => b.created_at.getTime() - a.created_at.getTime())

@@ -15,8 +15,11 @@ export default createModalSubmitInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.db.user.id,
-            game: 'valorant'
+            game: 'valorant',
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           }
         })
 
@@ -29,7 +32,7 @@ export default createModalSubmitInteraction({
 
         const winnerScore = Math.max(Number(ctx.args[3]), Number(ctx.args[4]))
 
-        await ctx.db.user.addPrediction('valorant', {
+        await ctx.db.profile.addPrediction('valorant', {
           match: data.id!,
           teams: [
             {
@@ -59,8 +62,11 @@ export default createModalSubmitInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.db.user.id,
-            game: 'lol'
+            game: 'lol',
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           }
         })
 
@@ -73,7 +79,7 @@ export default createModalSubmitInteraction({
 
         const winnerScore = Math.max(Number(ctx.args[3]), Number(ctx.args[4]))
 
-        await ctx.db.user.addPrediction('lol', {
+        await ctx.db.profile.addPrediction('lol', {
           match: data.id!,
           teams: [
             {

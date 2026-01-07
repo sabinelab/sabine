@@ -31,7 +31,10 @@ export default createCommand({
   async run({ ctx, t, app }) {
     const matches = await app.prisma.match.findMany({
       where: {
-        userId: ctx.db.user.id
+        profile: {
+          userId: ctx.db.profile.id,
+          guildId: ctx.db.guild.id
+        }
       },
       include: {
         teams: true
@@ -54,16 +57,16 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.user.ranked_wins
-    const unranked_defeats = ctx.db.user.unranked_defeats
-    const unranked_wins = ctx.db.user.unranked_wins
-    const ranked_swiftplay_wins = ctx.db.user.ranked_swiftplay_wins
-    const swiftplay_wins = ctx.db.user.swiftplay_wins
-    const ranked_defeats = ctx.db.user.ranked_defeats
-    const ranked_swiftplay_defeats = ctx.db.user.ranked_swiftplay_defeats
-    const swiftplay_defeats = ctx.db.user.swiftplay_defeats
-    const arena_wins = ctx.db.user.arena_wins
-    const arena_defeats = ctx.db.user.arena_defeats
+    const ranked_wins = ctx.db.profile.ranked_wins
+    const unranked_defeats = ctx.db.profile.unranked_defeats
+    const unranked_wins = ctx.db.profile.unranked_wins
+    const ranked_swiftplay_wins = ctx.db.profile.ranked_swiftplay_wins
+    const swiftplay_wins = ctx.db.profile.swiftplay_wins
+    const ranked_defeats = ctx.db.profile.ranked_defeats
+    const ranked_swiftplay_defeats = ctx.db.profile.ranked_swiftplay_defeats
+    const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
+    const arena_wins = ctx.db.profile.arena_wins
+    const arena_defeats = ctx.db.profile.arena_defeats
     const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
       ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
@@ -81,7 +84,7 @@ export default createCommand({
         total_wins,
         total_defeats,
         total: matches.length,
-        rr: ctx.db.user.rank_rating,
+        rr: ctx.db.profile.rank_rating,
         arena_defeats,
         arena_wins
       }) + '\n\n'
@@ -174,7 +177,10 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx, t, app }) {
     const matches = await app.prisma.match.findMany({
       where: {
-        userId: ctx.db.user.id
+        profile: {
+          userId: ctx.db.profile.id,
+          guildId: ctx.db.guild.id
+        }
       },
       include: {
         teams: true
@@ -197,16 +203,16 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.user.ranked_wins
-    const unranked_defeats = ctx.db.user.unranked_defeats
-    const unranked_wins = ctx.db.user.unranked_wins
-    const ranked_swiftplay_wins = ctx.db.user.ranked_swiftplay_wins
-    const swiftplay_wins = ctx.db.user.swiftplay_wins
-    const ranked_defeats = ctx.db.user.ranked_defeats
-    const ranked_swiftplay_defeats = ctx.db.user.ranked_swiftplay_defeats
-    const swiftplay_defeats = ctx.db.user.swiftplay_defeats
-    const arena_wins = ctx.db.user.arena_wins
-    const arena_defeats = ctx.db.user.arena_defeats
+    const ranked_wins = ctx.db.profile.ranked_wins
+    const unranked_defeats = ctx.db.profile.unranked_defeats
+    const unranked_wins = ctx.db.profile.unranked_wins
+    const ranked_swiftplay_wins = ctx.db.profile.ranked_swiftplay_wins
+    const swiftplay_wins = ctx.db.profile.swiftplay_wins
+    const ranked_defeats = ctx.db.profile.ranked_defeats
+    const ranked_swiftplay_defeats = ctx.db.profile.ranked_swiftplay_defeats
+    const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
+    const arena_wins = ctx.db.profile.arena_wins
+    const arena_defeats = ctx.db.profile.arena_defeats
     const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
       ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
@@ -224,7 +230,7 @@ export default createCommand({
         total_wins,
         total_defeats,
         total: matches.length,
-        rr: ctx.db.user.rank_rating,
+        rr: ctx.db.profile.rank_rating,
         arena_defeats,
         arena_wins
       }) + '\n\n'

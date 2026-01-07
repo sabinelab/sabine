@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -30,14 +30,17 @@ export default createCommand({
   async run({ ctx, app }) {
     const p = app.players.get(ctx.args[0].toString())
 
-    if (!ctx.db.user.active_players.includes(ctx.args[0].toString()) || !p) {
+    if (!ctx.db.profile.active_players.includes(ctx.args[0].toString()) || !p) {
       return await ctx.reply('commands.remove.player_not_found')
     }
 
     await prisma.$transaction(async tx => {
-      const user = await tx.user.findUnique({
+      const user = await tx.profile.findUnique({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         select: {
           active_players: true,
@@ -56,9 +59,12 @@ export default createCommand({
 
       user.active_players.splice(i, 1)
 
-      await tx.user.update({
+      await tx.profile.update({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         data: {
           reserve_players: {
@@ -72,14 +78,15 @@ export default createCommand({
     return await ctx.reply('commands.remove.player_removed', { p: p.name })
   },
   async createAutocompleteInteraction({ i, app }) {
-    const user = await SabineUser.fetch(i.user.id)
-    if (!user) return
+    if (!i.guildId) return
+    const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
+    if (!profile) return
 
     const value = i.options.getString('player', true)
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of user.active_players) {
+    for (const p_id of profile.active_players) {
       const p = app.players.get(p_id)
 
       if (!p) break

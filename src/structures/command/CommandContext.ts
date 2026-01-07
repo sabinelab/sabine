@@ -1,16 +1,16 @@
-import type { SabineGuild, SabineUser } from '@db'
+import type { GuildSchema, ProfileSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
 import type * as Discord from 'discord.js'
 import type App from '../app/App'
 
 type Database = {
-  guild?: SabineGuild
-  user: SabineUser
+  guild: GuildSchema
+  profile: ProfileSchema
 }
 
 type CommandContextOptions = {
   app: App
-  guild?: Discord.Guild | null
+  guild: Discord.Guild
   interaction: Discord.ChatInputCommandInteraction
   locale: string
   db: Database
@@ -38,8 +38,8 @@ export default class CommandContext {
     return locales(this.locale, content, args)
   }
 
-  public async reply(
-    content: Content | Discord.InteractionReplyOptions,
+  public async reply<T extends Content>(
+    content: T | Discord.InteractionReplyOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
     if (typeof content === 'string') {
@@ -60,8 +60,8 @@ export default class CommandContext {
     } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
-  public async edit(
-    content: Content | Discord.InteractionEditReplyOptions,
+  public async edit<T extends Content>(
+    content: T | Discord.InteractionEditReplyOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
     if (typeof content === 'string') {

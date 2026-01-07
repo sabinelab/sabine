@@ -61,6 +61,7 @@ export type Team = {
   side?: 'DEFENSE' | 'ATTACK'
   name: string
   tag: string
+  guildId: string
 }
 
 export type KillEvent = {

@@ -1,3 +1,4 @@
+import { UserSchema } from '@db'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
@@ -14,13 +15,15 @@ export default createCommand({
   category: 'misc',
   userInstall: true,
   async run({ ctx }) {
+    const user = (await UserSchema.fetch(ctx.db.profile.id)) ?? new UserSchema(ctx.db.profile.id)
+
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.vote.title'))
       .setDesc(
         ctx.t('commands.vote.description', {
-          last_vote: ctx.db.user.last_vote ? `<t:${(ctx.db.user.last_vote?.getTime() / 1000).toFixed(0)}:R>` : '`null`',
-          current_streak: ctx.db.user.vote_streak,
-          total: ctx.db.user.votes
+          last_vote: user.last_vote ? `<t:${(user.last_vote?.getTime() / 1000).toFixed(0)}:R>` : '`null`',
+          current_streak: user.vote_streak,
+          total: user.votes
         })
       )
       .setFields({

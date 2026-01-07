@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { ProfileSchema } from '@db'
 import { ComponentType, type InteractionCallbackResponse } from 'discord.js'
 import { type valorant_agents, valorant_maps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
@@ -9,23 +9,23 @@ export default createComponentInteraction({
   name: 'accept',
   time: 60 * 1000,
   async run({ ctx, app, t }) {
-    const user = await SabineUser.fetch(ctx.args[2])
+    const profile = await ProfileSchema.fetch(ctx.args[2], ctx.db.guild.id)
 
     const keys = await app.redis.keys('agent_selection*')
 
-    if (!ctx.db.user.team_name || !ctx.db.user.team_tag) {
+    if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if (ctx.db.user.active_players.length < 5) {
+    if (ctx.db.profile.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
-    if (!user || user.active_players.length < 5) {
+    if (!profile || profile.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if (!user.team_name || !user.team_tag) {
+    if (!profile.team_name || !profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 
@@ -36,7 +36,7 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.already_in_match')
     }
 
-    if ((await app.redis.get(`match:${user.id}`)) || keys.some(key => key.includes(user.id))) {
+    if ((await app.redis.get(`match:${profile.id}`)) || keys.some(key => key.includes(profile.id))) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
@@ -57,8 +57,8 @@ export default createComponentInteraction({
       .setDesc(t('commands.duel.embed.desc'))
       .setFields(
         {
-          name: user.team_name,
-          value: user.active_players
+          name: profile.team_name,
+          value: profile.active_players
             .map(id => {
               const player = app.players.get(id)!
               const ovr = Math.floor(player.ovr)
@@ -68,8 +68,8 @@ export default createComponentInteraction({
           inline: true
         },
         {
-          name: ctx.db.user.team_name,
-          value: ctx.db.user.active_players
+          name: ctx.db.profile.team_name,
+          value: ctx.db.profile.active_players
             .map(id => {
               const player = app.players.get(id)!
               const ovr = Math.floor(player.ovr)
@@ -83,9 +83,9 @@ export default createComponentInteraction({
       .setFooter({ text: t('commands.duel.time') })
 
     const menu1 = new SelectMenuBuilder()
-      .setPlaceholder(user.team_name)
+      .setPlaceholder(profile.team_name)
       .setOptions(
-        ...user.active_players.map(id => {
+        ...profile.active_players.map(id => {
           const player = app.players.get(id)!
           return {
             label: `${player.name}`,
@@ -93,12 +93,12 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${user.id};${ctx.interaction.user.id}`)
+      .setCustomId(`select;${profile.id};${ctx.interaction.user.id}`)
 
     const menu2 = new SelectMenuBuilder()
-      .setPlaceholder(ctx.db.user.team_name!)
+      .setPlaceholder(ctx.db.profile.team_name!)
       .setOptions(
-        ...ctx.db.user.active_players.map(id => {
+        ...ctx.db.profile.active_players.map(id => {
           const player = app.players.get(id)!
           return {
             label: `${player.name}`,
@@ -106,11 +106,11 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${ctx.interaction.user.id};${user.id}`)
+      .setCustomId(`select;${ctx.interaction.user.id};${profile.id}`)
 
     const interaction = (await ctx.edit({
       embeds: [embed],
-      content: `${ctx.interaction.user} <@${user.id}>`,
+      content: `${ctx.interaction.user} <@${profile.id}>`,
       components: [
         {
           type: ComponentType.ActionRow,
@@ -142,7 +142,7 @@ export default createComponentInteraction({
       }[]
     } = {}
 
-    data[ctx.db.user.id] = ctx.db.user.active_players.map(id => {
+    data[ctx.db.profile.id] = ctx.db.profile.active_players.map(id => {
       const p = app.players.get(id)!
       const ovr = p.ovr
       return {
@@ -152,7 +152,7 @@ export default createComponentInteraction({
       }
     })
 
-    data[user.id] = user.active_players.map(id => {
+    data[profile.id] = profile.active_players.map(id => {
       const p = app.players.get(id)!
       const ovr = p.ovr
       return {
@@ -163,7 +163,7 @@ export default createComponentInteraction({
     })
 
     await app.redis.set(
-      `agent_selection:${user.id}:${ctx.interaction.user.id}`,
+      `agent_selection:${profile.id}:${ctx.interaction.user.id}`,
       JSON.stringify({
         ...data,
         messageId: interaction.resource?.message?.id,

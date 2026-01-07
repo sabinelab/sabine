@@ -1,3 +1,4 @@
+import { UserSchema } from '@db'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
@@ -12,7 +13,9 @@ export default createCommand({
   userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t }) {
-    if (!ctx.db.user.premium || ctx.db.user.premium.type !== 'PREMIUM') {
+    const user = await UserSchema.fetch(ctx.db.profile.id)
+
+    if (!user?.premium || user.premium.type !== 'PREMIUM') {
       return await ctx.reply('commands.premium.you_dont_have_premium')
     }
 
@@ -23,7 +26,7 @@ export default createCommand({
 
     const embed = new EmbedBuilder().setTitle('Premium').setDesc(
       t('commands.premium.embed.description', {
-        expiresAt: `<t:${(ctx.db.user.premium.expires_at.getTime() / 1000).toFixed(0)}:R>`
+        expiresAt: `<t:${(user.premium.expires_at.getTime() / 1000).toFixed(0)}:R>`
       })
     )
 

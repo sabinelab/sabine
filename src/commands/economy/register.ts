@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import createCommand from '@/structures/command/createCommand'
 
 export default createCommand({
@@ -14,15 +14,48 @@ export default createCommand({
   cooldown: true,
   userInstall: true,
   async run({ ctx }) {
-    const user = await SabineUser.fetch(ctx.interaction.user.id)
+    const profile = await ProfileSchema.fetch(ctx.db.profile.userId, ctx.db.guild.id)
 
-    if (user) {
+    if (profile) {
       return await ctx.reply('commands.register.already_registered')
     }
 
-    await prisma.user.create({
-      data: {
-        id: ctx.interaction.user.id
+    await prisma.user.upsert({
+      where: {
+        id: ctx.db.profile.userId
+      },
+      update: {
+        profiles: {
+          create: {
+            guild: {
+              connectOrCreate: {
+                where: {
+                  id: ctx.db.guild.id
+                },
+                create: {
+                  id: ctx.db.guild.id
+                }
+              }
+            }
+          }
+        }
+      },
+      create: {
+        profiles: {
+          create: {
+            guild: {
+              connectOrCreate: {
+                where: {
+                  id: ctx.db.guild.id
+                },
+                create: {
+                  id: ctx.db.guild.id
+                }
+              }
+            }
+          }
+        },
+        id: ctx.db.profile.userId
       }
     })
 

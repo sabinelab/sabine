@@ -26,7 +26,7 @@ export default createModalSubmitInteraction({
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.coins) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
@@ -52,8 +52,11 @@ export default createModalSubmitInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.interaction.user.id,
-            game: 'valorant'
+            game: 'valorant',
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           include: {
             teams: true
@@ -71,9 +74,12 @@ export default createModalSubmitInteraction({
               bet: value + (pred.bet ?? 0n)
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.interaction.user.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               coins: {
@@ -108,7 +114,7 @@ export default createModalSubmitInteraction({
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.user.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.coins) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
@@ -134,8 +140,11 @@ export default createModalSubmitInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.interaction.user.id,
-            game: 'lol'
+            game: 'lol',
+            profile: {
+              userId: ctx.interaction.user.id,
+              guildId: ctx.db.guild.id
+            }
           },
           include: {
             teams: true
@@ -153,9 +162,12 @@ export default createModalSubmitInteraction({
               bet: value + (pred.bet ?? 0n)
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.interaction.user.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               coins: {

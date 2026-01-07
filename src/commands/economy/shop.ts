@@ -34,8 +34,8 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.user.id};gold`)
-              .setDisabled(ctx.db.user.fates < price.gold)
+              .setCustomId(`shop;${ctx.db.profile.id};gold`)
+              .setDisabled(ctx.db.profile.fates < price.gold)
           )
       )
       .addSectionComponents(section =>
@@ -47,8 +47,8 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.user.id};platinum`)
-              .setDisabled(ctx.db.user.fates < price.platinum)
+              .setCustomId(`shop;${ctx.db.profile.id};platinum`)
+              .setDisabled(ctx.db.profile.fates < price.platinum)
           )
       )
       .addSectionComponents(section =>
@@ -60,8 +60,8 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.user.id};diamond`)
-              .setDisabled(ctx.db.user.fates < price.diamond)
+              .setCustomId(`shop;${ctx.db.profile.id};diamond`)
+              .setDisabled(ctx.db.profile.fates < price.diamond)
           )
       )
       .addSectionComponents(section =>
@@ -73,8 +73,8 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.user.id};ascendant`)
-              .setDisabled(ctx.db.user.fates < price.ascendant)
+              .setCustomId(`shop;${ctx.db.profile.id};ascendant`)
+              .setDisabled(ctx.db.profile.fates < price.ascendant)
           )
       )
 
@@ -86,14 +86,17 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx }) {
     const args: { [key: string]: () => Promise<unknown> } = {
       gold: async () => {
-        if (ctx.db.user.fates < price.gold) {
+        if (ctx.db.profile.fates < price.gold) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
         await prisma.$transaction(async tx => {
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               fates: {
@@ -108,14 +111,17 @@ export default createCommand({
         await ctx.reply('commands.shop.success.gold', { fates: price.gold })
       },
       platinum: async () => {
-        if (ctx.db.user.fates < price.platinum) {
+        if (ctx.db.profile.fates < price.platinum) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
         await prisma.$transaction(async tx => {
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               fates: {
@@ -130,14 +136,17 @@ export default createCommand({
         await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
       },
       diamond: async () => {
-        if (ctx.db.user.fates < price.diamond) {
+        if (ctx.db.profile.fates < price.diamond) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
         await prisma.$transaction(async tx => {
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               fates: {
@@ -152,14 +161,17 @@ export default createCommand({
         await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
       },
       ascendant: async () => {
-        if (ctx.db.user.fates < price.ascendant) {
+        if (ctx.db.profile.fates < price.ascendant) {
           return await ctx.reply('commands.shop.not_enough')
         }
 
         await prisma.$transaction(async tx => {
-          await tx.user.update({
+          await tx.profile.update({
             where: {
-              id: ctx.db.user.id
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
             },
             data: {
               fates: {

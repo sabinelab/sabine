@@ -53,7 +53,7 @@ export default createCommand({
           value: `Shards: \`${app.shard?.count}\`\nShard ID: \`${ctx.guild?.shard.id}\`\nUptime: \`${ms(
             app.uptime ?? 0,
             {
-              language: ctx.db.user.lang ?? ctx.db.guild!.lang,
+              language: ctx.db.profile.lang ?? ctx.db.guild!.lang,
               round: true
             }
           )}\``,

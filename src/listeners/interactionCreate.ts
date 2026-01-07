@@ -1,4 +1,4 @@
-import { SabineGuild, SabineUser } from '@db'
+import { GuildSchema, UserSchema } from '@db'
 import locales, { type Args } from '@i18n'
 import { type Interaction, InteractionType, ModalSubmitInteraction } from 'discord.js'
 import type App from '../structures/app/App'
@@ -21,12 +21,12 @@ const interactionType: Record<number, (app: App, i: Interaction) => Promise<unkn
     if (!command) return
     if (!command.createAutocompleteInteraction) return
 
-    const user = (await SabineUser.fetch(interaction.user.id)) ?? new SabineUser(interaction.user.id)
+    const user = (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
 
-    let guild: SabineGuild | undefined
+    let guild: GuildSchema | undefined
 
     if (interaction.guildId) {
-      guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
+      guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     }
 
     const t = (content: string, args?: Args) => {

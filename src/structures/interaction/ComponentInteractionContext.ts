@@ -1,16 +1,16 @@
-import type { SabineGuild, SabineUser } from '@db'
+import type { GuildSchema, ProfileSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
 import type * as Discord from 'discord.js'
 import type App from '../app/App'
 
 type Database = {
-  guild?: SabineGuild
-  user: SabineUser
+  guild: GuildSchema
+  profile: ProfileSchema
 }
 
 type ComponentInteractionContextOptions = {
   app: App
-  guild?: Discord.Guild | null
+  guild: Discord.Guild
   interaction: Discord.MessageComponentInteraction
   locale: string
   db: Database
@@ -19,7 +19,7 @@ type ComponentInteractionContextOptions = {
 
 export default class ComponentInteractionContext {
   public app: App
-  public guild?: Discord.Guild | null
+  public guild?: Discord.Guild
   public interaction: Discord.MessageComponentInteraction
   public locale: string
   public db: Database
@@ -40,8 +40,8 @@ export default class ComponentInteractionContext {
     return this
   }
 
-  public async reply(
-    content: Content | Discord.InteractionReplyOptions,
+  public async reply<T extends Content>(
+    content: T | Discord.InteractionReplyOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
     if (typeof content === 'string') {
@@ -69,8 +69,8 @@ export default class ComponentInteractionContext {
     } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
-  public async edit(
-    content: Content | Discord.InteractionEditReplyOptions,
+  public async edit<T extends Content>(
+    content: T | Discord.InteractionEditReplyOptions,
     options?: Args
   ): Promise<Discord.Message | Discord.InteractionCallbackResponse> {
     if (typeof content === 'string') {

@@ -10,8 +10,8 @@ export default createCommand({
   userInstall: true,
   async run({ ctx }) {
     await ctx.reply('commands.claims.res', {
-      claims: ctx.db.user.claims,
-      pity: ctx.db.user.pity
+      claims: ctx.db.profile.claims,
+      pity: ctx.db.profile.pity
     })
   }
 })

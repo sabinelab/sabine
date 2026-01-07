@@ -46,7 +46,10 @@ export default createCommand({
       where: {
         id: BigInt(ctx.args[0]),
         metadata: { not: Prisma.DbNull },
-        userId: ctx.db.user.id
+        profile: {
+          userId: ctx.db.profile.id,
+          guildId: ctx.db.guild.id
+        }
       },
       include: {
         teams: true

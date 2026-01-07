@@ -1,4 +1,4 @@
-import { type ArenaMetadata, prisma, SabineUser } from '@db'
+import { type ArenaMetadata, ProfileSchema, prisma } from '@db'
 import { calcPlayerPrice } from '@sabinelab/players'
 import { ApplicationCommandOptionType } from 'discord.js'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
@@ -57,7 +57,7 @@ export default createCommand({
   messageComponentInteractionTime: 5 * 60 * 1000,
   cooldown: true,
   async run({ ctx, app }) {
-    const user = await SabineUser.fetch(ctx.args[0].toString())
+    const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.profile.id)
 
     const player = app.players.get(ctx.args[1].toString())
 
@@ -75,9 +75,9 @@ export default createCommand({
       return await ctx.reply('commands.trade.cannot_trade')
     }
 
-    if (!user || user.coins < BigInt(ctx.args[2])) {
+    if (!profile || profile.coins < BigInt(ctx.args[2])) {
       return await ctx.reply('commands.trade.missing_coins', {
-        coins: (BigInt(ctx.args[2]) - (!user ? 0n : user.coins)).toLocaleString(),
+        coins: (BigInt(ctx.args[2]) - (!profile ? 0n : profile.coins)).toLocaleString(),
         user: `<@${ctx.args[0]}>`
       })
     }
@@ -108,13 +108,15 @@ export default createCommand({
     })
   },
   async createAutocompleteInteraction({ i, app }) {
-    const user = (await SabineUser.fetch(i.user.id)) ?? new SabineUser(i.user.id)
+    if (!i.guildId) return
+    const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
+    if (!profile) return
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
     const value = i.options.getString('player', true)
 
-    for (const p_id of user.reserve_players) {
+    for (const p_id of profile.reserve_players) {
       const p = app.players.get(p_id)
 
       if (!p) continue
@@ -136,58 +138,70 @@ export default createCommand({
         .map(p => ({ name: p.name, value: p.id }))
     )
   },
-  async createMessageComponentInteraction({ ctx, app }) {
+  async createMessageComponentInteraction({ ctx, app, i }) {
+    if (!i.guildId) return
     if (ctx.args[2] === 'buy') {
-      const user = await SabineUser.fetch(ctx.args[3])
+      const profile = await ProfileSchema.fetch(ctx.args[3], i.guildId)
 
       const player = app.players.get(ctx.args[4])
 
-      if (!user || !player) return
+      if (!profile || !player) return
 
-      const i = user.reserve_players.indexOf(ctx.args[4])
+      const index = profile.reserve_players.indexOf(ctx.args[4])
 
-      if (i === -1 || i === undefined) return
+      if (index === -1 || index === undefined) return
 
-      if (ctx.db.user.coins < BigInt(ctx.args[5])) {
+      if (ctx.db.profile.coins < BigInt(ctx.args[5])) {
         return await ctx.edit('commands.trade.missing_coins', {
-          coins: (BigInt(ctx.args[5]) - ctx.db.user.coins).toLocaleString(),
+          coins: (BigInt(ctx.args[5]) - ctx.db.profile.coins).toLocaleString(),
           user: `<@${ctx.interaction.user}>`
         })
       }
 
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
+        const profile = await tx.profile.findUnique({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           }
         })
 
-        if (!user) return
+        if (!profile) return
 
-        if ((user.arena_metadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())) {
-          const index = (user.arena_metadata as ArenaMetadata)?.lineup.findIndex(
+        if (
+          (profile.arena_metadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())
+        ) {
+          const index = (profile.arena_metadata as ArenaMetadata)?.lineup.findIndex(
             line => line.player === player.id.toString()
           )
 
-          ;(user.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
+          ;(profile.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
         }
 
-        await tx.user.update({
+        const p = await tx.profile.update({
           where: {
-            id: user.id
+            userId_guildId: {
+              userId: profile.userId,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
-            reserve_players: user.reserve_players,
-            arena_metadata: user.arena_metadata ? user.arena_metadata : undefined,
+            reserve_players: profile.reserve_players,
+            arena_metadata: profile.arena_metadata ? profile.arena_metadata : undefined,
             coins: {
               increment: BigInt(ctx.args[5])
             }
           }
         })
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             coins: {
@@ -205,15 +219,15 @@ export default createCommand({
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              userId: ctx.db.user.id,
-              to: user.id
+              profileId: p.id,
+              to: profile.userId
             },
             {
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              userId: user.id,
-              to: ctx.db.user.id
+              profileId: profile.id,
+              to: ctx.db.profile.id
             }
           ]
         })

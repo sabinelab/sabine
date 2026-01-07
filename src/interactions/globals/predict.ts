@@ -14,8 +14,11 @@ export default createComponentInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.db.user.id,
-            game: 'valorant'
+            game: 'valorant',
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           }
         })
 
@@ -71,8 +74,11 @@ export default createComponentInteraction({
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            userId: ctx.db.user.id,
-            game: 'valorant'
+            game: 'valorant',
+            profile: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           }
         })
 

@@ -1,3 +1,4 @@
+import { UserSchema } from '@db'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -9,9 +10,9 @@ export default createCommand({
   category: 'economy',
   userInstall: true,
   async run({ ctx, app, t }) {
-    if (ctx.db.user.daily_time && ctx.db.user.daily_time.getTime() > Date.now()) {
+    if (ctx.db.profile.daily_time && ctx.db.profile.daily_time.getTime() > Date.now()) {
       return await ctx.reply('commands.daily.has_been_claimed', {
-        t: `<t:${(ctx.db.user.daily_time.getTime() / 1000).toFixed(0)}:R>`
+        t: `<t:${(ctx.db.profile.daily_time.getTime() / 1000).toFixed(0)}:R>`
       })
     }
 
@@ -29,7 +30,9 @@ export default createCommand({
 
     const bonus: string[] = []
 
-    if (ctx.db.user.premium) {
+    const user = await UserSchema.fetch(ctx.db.profile.id)
+
+    if (user?.premium) {
       coins *= 5n
       fates = Math.round(fates * 1.5)
 
@@ -89,7 +92,7 @@ export default createCommand({
         bonus.join('\n')
     }
 
-    await ctx.db.user.daily(coins, fates)
+    await ctx.db.profile.daily(coins, fates)
     await ctx.reply(content)
   }
 })

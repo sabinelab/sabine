@@ -48,7 +48,7 @@ export default createCommand({
         {
           await prisma.user.update({
             where: {
-              id: ctx.db.user.id
+              id: ctx.db.profile.id
             },
             data: {
               lang: 'pt'
@@ -61,7 +61,7 @@ export default createCommand({
         {
           await prisma.user.update({
             where: {
-              id: ctx.db.user.id
+              id: ctx.db.profile.id
             },
             data: {
               lang: 'en'
@@ -73,7 +73,7 @@ export default createCommand({
       case 'es': {
         await prisma.user.update({
           where: {
-            id: ctx.db.user.id
+            id: ctx.db.profile.id
           },
           data: {
             lang: 'es'

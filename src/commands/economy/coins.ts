@@ -14,11 +14,12 @@ export default createCommand({
     const users = JSON.parse(value!)
 
     const p =
-      users.data.sort((a: any, b: any) => Number(b.coins - a.coins)).findIndex((p: any) => p.id === ctx.db.user.id) + 1
+      users.data.sort((a: any, b: any) => Number(b.coins - a.coins)).findIndex((p: any) => p.id === ctx.db.profile.id) +
+      1
 
     await ctx.reply('commands.coins.res', {
-      c: ctx.db.user.coins.toLocaleString(),
-      f: ctx.db.user.fates.toLocaleString(),
+      c: ctx.db.profile.coins.toLocaleString(),
+      f: ctx.db.profile.fates.toLocaleString(),
       p
     })
   }

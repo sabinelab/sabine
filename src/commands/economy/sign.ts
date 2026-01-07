@@ -88,19 +88,29 @@ export default createCommand({
 
     const price = player.price
 
-    if (price > ctx.db.user.coins) return ctx.reply('commands.sign.coins_needed')
+    if (price > ctx.db.profile.coins) return ctx.reply('commands.sign.coins_needed')
 
     await app.prisma.$transaction([
       app.prisma.transaction.create({
         data: {
-          userId: ctx.db.user.id,
           player: player.id,
-          type: 'SIGN_PLAYER'
+          type: 'SIGN_PLAYER',
+          profile: {
+            connect: {
+              userId_guildId: {
+                userId: ctx.db.profile.id,
+                guildId: ctx.db.guild.id
+              }
+            }
+          }
         }
       }),
-      app.prisma.user.update({
+      app.prisma.profile.update({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         data: {
           reserve_players: {

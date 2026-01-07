@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import type { APISelectMenuOption } from 'discord.js'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
@@ -39,13 +39,16 @@ export default createCommand({
 
     const options: APISelectMenuOption[] = []
 
-    const players = ctx.db.user.active_players
+    const players = ctx.db.profile.active_players
 
     if (players.length < 5) {
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
+        const user = await tx.profile.findUnique({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           select: {
             active_players: true,
@@ -60,9 +63,12 @@ export default createCommand({
         user.active_players.push(p.id.toString())
         user.reserve_players.splice(i, 1)
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             active_players: user.active_players,
@@ -98,13 +104,17 @@ export default createCommand({
     await ctx.reply(menu.build(t('commands.promote.select_player')))
   },
   async createAutocompleteInteraction({ i, app }) {
-    const user = (await SabineUser.fetch(i.user.id))!
+    if (!i.guildId) return
+
+    const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
+
+    if (!profile) return
 
     const value = i.options.getString('player', true)
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of user.reserve_players) {
+    for (const p_id of profile.reserve_players) {
       const p = app.players.get(p_id)
 
       if (!p) break
@@ -129,9 +139,12 @@ export default createCommand({
     if (!i.isStringSelectMenu()) return
 
     await prisma.$transaction(async tx => {
-      const user = await tx.user.findUnique({
+      const user = await tx.profile.findUnique({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         select: {
           active_players: true,
@@ -153,9 +166,12 @@ export default createCommand({
       user.reserve_players.splice(index, 1)
       user.active_players.push(ctx.args[2])
 
-      await tx.user.update({
+      await tx.profile.update({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         data: {
           reserve_players: user.reserve_players,

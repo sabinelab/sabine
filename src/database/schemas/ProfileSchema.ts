@@ -1,10 +1,11 @@
 import { prisma } from '@db'
-import type { $Enums, Premium, User } from '@generated'
+import type { $Enums, Profile } from '@generated'
+import type { valorant_agents } from '@/config'
 import { hydrateData } from '@/database/hydrate-data'
+import { UserSchema } from '@/database/schemas/UserSchema'
 import { updateCache, voidCatch } from '@/database/update-cache'
-import type { valorant_agents } from '../config'
-import type { Pack } from '../server/routes/util/vote'
-import { app } from '../structures/app/App'
+import type { Pack } from '@/server/routes/util/vote'
+import { app } from '@/structures/app/App'
 
 type PredictionTeam = {
   name: string
@@ -33,13 +34,17 @@ export type ArenaMetadata = {
   lineup: ArenaLineup[]
 }
 
-export class SabineUser implements User {
-  public id: string
+type AddPackOptions = {
+  pack: Pack
+  lastVote: Date
+  voteStreak: number
+}
+
+export class ProfileSchema implements Profile {
+  public id!: string
   public created_at: Date = new Date()
   public correct_predictions: number = 0
   public incorrect_predictions: number = 0
-  public lang: $Enums.Language = 'en'
-  public premium: Premium | null = null
   public active_players: string[] = []
   public reserve_players: string[] = []
   public coins: bigint = 0n
@@ -76,44 +81,65 @@ export class SabineUser implements User {
   public ascendant_packs: number = 0
   public immortal_packs: number = 0
   public radiant_packs: number = 0
-  public last_vote: Date | null = null
-  public vote_streak: number = 0
-  public votes: number = 0
+  public guildId: string
+  public userId: string
+  public lang: $Enums.Language = 'en'
 
-  public constructor(id: string) {
-    this.id = id
+  public constructor(userId: string, guildId: string) {
+    this.userId = userId
+    this.guildId = guildId
   }
 
-  public static async fetch(id: string) {
-    const cachedData = await Bun.redis.get(`user:${id}`)
+  public static async fetch(userId: string, guildId: string) {
+    const cachedData = await Bun.redis.get(`profile:${guildId}:${userId}`)
 
     if (cachedData) {
       const hydrated = hydrateData<typeof this>(JSON.parse(cachedData))
-      const user = new SabineUser(id)
+      const profile = new ProfileSchema(userId, guildId)
 
-      return Object.assign(user, hydrated)
+      return Object.assign(profile, hydrated)
     }
 
-    const data = await prisma.user.findUnique({
-      where: { id },
+    const data = await prisma.profile.findUnique({
+      where: {
+        userId_guildId: {
+          userId,
+          guildId
+        }
+      },
       include: {
-        premium: true
+        user: {
+          select: {
+            lang: true,
+            warn: true
+          }
+        }
       }
     })
 
     if (!data) return data
 
-    updateCache(`user:${id}`, data).catch(voidCatch)
+    const { user, ...rest } = data
+    const finalData = {
+      ...rest,
+      lang: user.lang,
+      warn: user.warn
+    }
 
-    const user = new SabineUser(data.id)
+    updateCache(`profile:${guildId}:${userId}`, finalData).catch(voidCatch)
 
-    return Object.assign(user, data)
+    const profile = new ProfileSchema(data.userId, guildId)
+
+    return Object.assign(profile, finalData)
   }
 
   public async daily(coins: bigint, fates: number) {
-    const user = await prisma.user.update({
+    const user = await prisma.profile.update({
       where: {
-        id: this.id
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       },
       data: {
         coins: {
@@ -123,93 +149,90 @@ export class SabineUser implements User {
           increment: fates
         },
         daily_time: new Date(new Date().setHours(24, 0, 0, 0))
-      },
-      include: {
-        premium: true
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    updateCache(`profile:${this.guildId}:${this.userId}`, user, true).catch(voidCatch)
 
     return Object.assign(this, user)
   }
 
   public async addcoins(amount: bigint) {
-    const user = await prisma.user.update({
+    const user = await prisma.profile.update({
       where: {
-        id: this.id
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       },
       data: {
         coins: {
           increment: amount
         }
-      },
-      include: {
-        premium: true
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    updateCache(`profile:${this.guildId}:${this.userId}`, user, true).catch(voidCatch)
 
     return Object.assign(this, user)
   }
 
   public async addfates(amount: number) {
-    const user = await prisma.user.update({
+    const user = await prisma.profile.update({
       where: {
-        id: this.id
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       },
       data: {
         fates: {
           increment: amount
         }
-      },
-      include: {
-        premium: true
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    updateCache(`profile:${this.guildId}:${this.userId}`, user, true).catch(voidCatch)
 
     return Object.assign(this, user)
   }
 
   public async rmcoins(amount: bigint) {
-    const user = await prisma.user.update({
+    const user = await prisma.profile.update({
       where: {
-        id: this.id
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       },
       data: {
         coins: {
           decrement: amount
         }
-      },
-      include: {
-        premium: true
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    updateCache(`profile:${this.guildId}:${this.userId}`, user, true).catch(voidCatch)
 
     return Object.assign(this, user)
   }
 
   public async rmfates(amount: number) {
-    const user = await prisma.user.update({
+    const user = await prisma.profile.update({
       where: {
-        id: this.id
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       },
       data: {
         fates: {
           decrement: amount
         }
-      },
-      include: {
-        premium: true
       }
     })
 
-    updateCache(`user:${this.id}`, user, true).catch(voidCatch)
+    updateCache(`profile:${this.guildId}:${this.userId}`, user, true).catch(voidCatch)
 
     return Object.assign(this, user)
   }
@@ -220,9 +243,16 @@ export class SabineUser implements User {
       data: {
         ...pred,
         game,
-        userId: this.id,
         teams: {
           create: teams
+        },
+        profile: {
+          connect: {
+            userId_guildId: {
+              userId: this.userId,
+              guildId: this.guildId
+            }
+          }
         }
       }
     })
@@ -235,7 +265,10 @@ export class SabineUser implements User {
       where: {
         match: predictionId,
         game,
-        userId: this.id
+        profile: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       }
     })
 
@@ -244,18 +277,18 @@ export class SabineUser implements User {
     await prisma.$transaction([
       prisma.prediction.update({
         where: {
-          id: pred.id,
-          game,
-          userId: this.id,
-          match: predictionId
+          id: pred.id
         },
         data: {
           status: 'correct'
         }
       }),
-      prisma.user.update({
+      prisma.profile.update({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         data: {
           correct_predictions: {
@@ -273,33 +306,14 @@ export class SabineUser implements User {
       where: {
         match: predictionId,
         game,
-        userId: this.id
+        profile: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
       }
     })
 
     if (!pred) return this
-
-    await prisma.$transaction([
-      prisma.prediction.update({
-        where: {
-          match: predictionId,
-          game,
-          userId: this.id,
-          id: pred.id
-        },
-        data: {
-          status: 'incorrect'
-        }
-      }),
-      prisma.user.update({
-        where: { id: this.id },
-        data: {
-          incorrect_predictions: {
-            increment: 1
-          }
-        }
-      })
-    ])
 
     return this
   }
@@ -316,7 +330,8 @@ export class SabineUser implements User {
     }
 
     if (method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
-      const claimTime = this.premium ? new Date(Date.now() + 5 * 60 * 1000) : new Date(Date.now() + 10 * 60 * 1000)
+      const user = await UserSchema.fetch(this.userId)
+      const claimTime = user?.premium ? new Date(Date.now() + 5 * 60 * 1000) : new Date(Date.now() + 10 * 60 * 1000)
 
       updates.claim_time = claimTime
       updates.claims = { increment: 1 }
@@ -331,7 +346,8 @@ export class SabineUser implements User {
             'reminder',
             {
               channel,
-              user: this.id
+              user: this.id,
+              guild: this.guildId
             },
             {
               delay: claimTime.getTime() - Date.now(),
@@ -347,15 +363,22 @@ export class SabineUser implements User {
       }
     }
 
-    await prisma.$transaction([
+    const [_, profile] = await prisma.$transaction([
       prisma.transaction.create({
         data: {
           type: method,
           player: Number(player),
-          userId: this.id
+          profile: {
+            connect: {
+              userId_guildId: {
+                userId: this.userId,
+                guildId: this.guildId
+              }
+            }
+          }
         }
       }),
-      prisma.user.update({
+      prisma.profile.update({
         where: {
           id: this.id
         },
@@ -363,38 +386,48 @@ export class SabineUser implements User {
       })
     ])
 
-    return this
+    return Object.assign(this, profile)
   }
 
   public async addPlayersToRoster(players: string[]) {
-    await prisma.$transaction([
-      prisma.user.update({
+    await prisma.$transaction(async tx => {
+      const profile = await tx.profile.update({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         data: {
           reserve_players: {
             push: players
           }
+        },
+        select: {
+          id: true
         }
-      }),
-      prisma.transaction.createMany({
+      })
+
+      await tx.transaction.createMany({
         data: players.map(p => ({
           type: 'CLAIM_PLAYER_BY_PACK',
           player: Number(p),
-          userId: this.id
+          profileId: profile.id
         }))
       })
-    ])
+    })
 
     return this
   }
 
   public async sellPlayer(id: string, price: bigint, i: number) {
     await prisma.$transaction(async tx => {
-      const currentData = await tx.user.findUnique({
+      const currentData = await tx.profile.findUnique({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         select: {
           reserve_players: true,
@@ -427,9 +460,12 @@ export class SabineUser implements User {
         }
       }
 
-      await tx.user.update({
+      const profile = await tx.profile.update({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         data: {
           coins: {
@@ -439,6 +475,9 @@ export class SabineUser implements User {
             set: newPlayers
           },
           arena_metadata: newArenaMetadata ? newArenaMetadata : undefined
+        },
+        select: {
+          id: true
         }
       })
 
@@ -447,7 +486,7 @@ export class SabineUser implements User {
           type: 'SELL_PLAYER',
           player: Number(id),
           price,
-          userId: this.id
+          profileId: profile.id
         }
       })
     })
@@ -455,14 +494,8 @@ export class SabineUser implements User {
     return this
   }
 
-  public async addPack(pack: Pack, increaseVoteStreak?: boolean) {
-    const checkStreak = (n: number) => {
-      return n > 0 && n % 20 === 0
-    }
-    const checkDate = (date1: Date, date2: Date | null) => {
-      if (!date2) return false
-      return Math.abs(date1.getTime() - date2.getTime()) <= 24 * 60 * 60 * 1000
-    }
+  public async addPack(options: AddPackOptions) {
+    const checkStreak = (n: number) => n > 0 && n % 20 === 0
 
     const packField = {
       IRON: 'iron_packs',
@@ -475,11 +508,11 @@ export class SabineUser implements User {
       IMMORTAL: 'immortal_packs',
       RADIANT: 'radiant_packs'
     } as const
-    const fieldToIncrement = packField[pack]
+    const fieldToIncrement = packField[options.pack]
 
     const update: any = {}
 
-    if (checkStreak(this.vote_streak + 1) && fieldToIncrement !== 'radiant_packs') {
+    if (checkStreak(options.voteStreak + 1) && fieldToIncrement !== 'radiant_packs') {
       update.radiant_packs = {
         increment: 1
       }
@@ -489,23 +522,8 @@ export class SabineUser implements User {
       }
     }
 
-    if (increaseVoteStreak) {
-      if (!checkDate(new Date(), this.last_vote) && this.vote_streak) {
-        update.vote_streak = 1
-      } else {
-        update.vote_streak = {
-          increment: 1
-        }
-      }
-
-      update.votes = {
-        increment: 1
-      }
-      update.last_vote = new Date()
-    }
-
     await prisma.$transaction([
-      prisma.user.update({
+      prisma.profile.update({
         where: {
           id: this.id
         },
@@ -513,9 +531,16 @@ export class SabineUser implements User {
       }),
       prisma.transaction.create({
         data: {
-          userId: this.id,
           type: 'CLAIM_PACK_BY_VOTE',
-          pack
+          pack: options.pack,
+          profile: {
+            connect: {
+              userId_guildId: {
+                userId: this.userId,
+                guildId: this.guildId
+              }
+            }
+          }
         }
       })
     ])

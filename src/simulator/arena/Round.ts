@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import { valorant_maps, valorant_weapons } from '../../config'
 import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'
@@ -80,8 +80,12 @@ export default class Round extends Match {
   private async finish(score1: number, score2: number) {
     this.finished = true
 
-    const user1 = (await SabineUser.fetch(this.teams[0].user)) || new SabineUser(this.teams[0].user)
-    const user2 = (await SabineUser.fetch(this.teams[1].user)) || new SabineUser(this.teams[1].user)
+    const profile1 =
+      (await ProfileSchema.fetch(this.teams[0].user, this.teams[0].guildId)) ??
+      new ProfileSchema(this.teams[0].user, this.teams[0].guildId)
+    const profile2 =
+      (await ProfileSchema.fetch(this.teams[1].user, this.teams[1].guildId)) ??
+      new ProfileSchema(this.teams[1].user, this.teams[1].guildId)
 
     if (this.mode === 'arena') {
       const max = Math.max(score1, score2)
@@ -93,14 +97,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        user1.arena_wins += 1
-        user1.rank_rating += pts
-        user1.fates += 5
-        user2.arena_defeats += 1
-        user2.rank_rating -= pts - 5
+        profile1.arena_wins += 1
+        profile1.rank_rating += pts
+        profile1.fates += 5
+        profile2.arena_defeats += 1
+        profile2.rank_rating -= pts - 5
 
-        if (user2.rank_rating < 0) {
-          user2.rank_rating = 0
+        if (profile2.rank_rating < 0) {
+          profile2.rank_rating = 0
         }
 
         const stats = {
@@ -127,7 +131,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: pts,
-              userId: this.teams[0].user,
+              profileId: profile1.id,
               winner: true,
               teams: {
                 create: [
@@ -148,7 +152,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: -(pts - 5),
-              userId: this.teams[1].user,
+              profileId: profile2.id,
               winner: false,
               teams: {
                 create: [
@@ -165,9 +169,9 @@ export default class Round extends Match {
               metadata: stats
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user1.id
+              id: profile1.id
             },
             data: {
               arena_wins: {
@@ -181,15 +185,15 @@ export default class Round extends Match {
               }
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user2.id
+              id: profile2.id
             },
             data: {
               arena_defeats: {
                 increment: 1
               },
-              rank_rating: user2.rank_rating
+              rank_rating: profile2.rank_rating
             }
           })
         ])
@@ -200,14 +204,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        user2.arena_wins += 1
-        user2.rank_rating += pts
-        user2.fates += 5
-        user1.arena_defeats += 1
-        user1.rank_rating -= pts - 5
+        profile2.arena_wins += 1
+        profile2.rank_rating += pts
+        profile2.fates += 5
+        profile1.arena_defeats += 1
+        profile1.rank_rating -= pts - 5
 
-        if (user1.rank_rating < 0) {
-          user1.rank_rating = 0
+        if (profile1.rank_rating < 0) {
+          profile1.rank_rating = 0
         }
 
         const stats = {
@@ -234,7 +238,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: pts,
-              userId: this.teams[1].user,
+              profileId: profile2.id,
               winner: true,
               teams: {
                 create: [
@@ -255,7 +259,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: -(pts - 5),
-              userId: this.teams[0].user,
+              profileId: profile1.id,
               winner: false,
               teams: {
                 create: [
@@ -272,9 +276,9 @@ export default class Round extends Match {
               metadata: stats
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user2.id
+              id: profile2.id
             },
             data: {
               arena_wins: {
@@ -288,15 +292,15 @@ export default class Round extends Match {
               }
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user1.id
+              id: profile1.id
             },
             data: {
               arena_defeats: {
                 increment: 1
               },
-              rank_rating: user1.rank_rating
+              rank_rating: profile1.rank_rating
             }
           })
         ])
@@ -307,14 +311,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        user1.arena_wins += 1
-        user1.rank_rating += pts
-        user1.fates += 5
-        user2.arena_defeats += 1
-        user2.rank_rating -= pts - 5
+        profile1.arena_wins += 1
+        profile1.rank_rating += pts
+        profile1.fates += 5
+        profile2.arena_defeats += 1
+        profile2.rank_rating -= pts - 5
 
-        if (user2.rank_rating < 0) {
-          user2.rank_rating = 0
+        if (profile2.rank_rating < 0) {
+          profile2.rank_rating = 0
         }
 
         const stats = {
@@ -341,7 +345,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: pts,
-              userId: this.teams[0].user,
+              profileId: profile1.id,
               winner: true,
               teams: {
                 create: [
@@ -362,7 +366,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: -(pts - 5),
-              userId: this.teams[1].user,
+              profileId: profile2.id,
               winner: false,
               teams: {
                 create: [
@@ -379,9 +383,9 @@ export default class Round extends Match {
               metadata: stats
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user1.id
+              id: profile1.id
             },
             data: {
               arena_wins: {
@@ -395,15 +399,15 @@ export default class Round extends Match {
               }
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user2.id
+              id: profile2.id
             },
             data: {
               arena_defeats: {
                 increment: 1
               },
-              rank_rating: user2.rank_rating
+              rank_rating: profile2.rank_rating
             }
           })
         ])
@@ -414,14 +418,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        user2.arena_wins += 1
-        user2.rank_rating += pts
-        user2.fates += 5
-        user1.arena_defeats += 1
-        user1.rank_rating -= pts - 5
+        profile2.arena_wins += 1
+        profile2.rank_rating += pts
+        profile2.fates += 5
+        profile1.arena_defeats += 1
+        profile1.rank_rating -= pts - 5
 
-        if (user1.rank_rating < 0) {
-          user1.rank_rating = 0
+        if (profile1.rank_rating < 0) {
+          profile1.rank_rating = 0
         }
 
         const stats = {
@@ -448,7 +452,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: pts,
-              userId: this.teams[1].user,
+              profileId: profile2.id,
               winner: true,
               teams: {
                 create: [
@@ -469,7 +473,7 @@ export default class Round extends Match {
             data: {
               mode: 'ARENA',
               points: -(pts - 5),
-              userId: this.teams[0].user,
+              profileId: profile1.id,
               winner: false,
               teams: {
                 create: [
@@ -486,9 +490,9 @@ export default class Round extends Match {
               metadata: stats
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user2.id
+              id: profile2.id
             },
             data: {
               arena_wins: {
@@ -502,15 +506,15 @@ export default class Round extends Match {
               }
             }
           }),
-          prisma.user.update({
+          prisma.profile.update({
             where: {
-              id: user1.id
+              id: profile1.id
             },
             data: {
               arena_defeats: {
                 increment: 1
               },
-              rank_rating: user1.rank_rating
+              rank_rating: profile1.rank_rating
             }
           })
         ])

@@ -1,4 +1,4 @@
-import { SabineGuild, SabineUser } from '@db'
+import { GuildSchema, ProfileSchema } from '@db'
 import type { Blacklist } from '@generated'
 import locales, { type Args, type Content } from '@i18n'
 import type { ModalSubmitInteraction } from 'discord.js'
@@ -7,6 +7,8 @@ import ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 export default class ModalSubmitInteractionRunner {
   public async run(app: App, interaction: ModalSubmitInteraction): Promise<unknown> {
+    if (!interaction.guild || !interaction.guildId) return
+
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
@@ -15,22 +17,23 @@ export default class ModalSubmitInteractionRunner {
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
     const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
 
+    const guild = await GuildSchema.fetch(interaction.guildId) ?? new GuildSchema(interaction.guildId)
+    const profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId) ??
+      new ProfileSchema(interaction.user.id, interaction.guildId)
+
     if (blacklist.get(interaction.user.id)) return
     if (blacklist.get(interaction.guildId)) return
 
     if (i?.global && !command) {
       if (!interaction.guild || !interaction.guildId) return
 
-      const guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-      const user = (await SabineUser.fetch(interaction.user.id)) ?? new SabineUser(interaction.user.id)
-
       const ctx = new ModalSubmitInteractionContext({
         args,
         app: app,
         guild: interaction.guild,
-        locale: user.lang,
+        locale: profile.lang,
         db: {
-          user,
+          profile,
           guild
         },
         interaction
@@ -59,21 +62,13 @@ export default class ModalSubmitInteractionRunner {
 
     if (!command || !command.createModalSubmitInteraction) return
 
-    const user = (await SabineUser.fetch(interaction.user.id)) ?? new SabineUser(interaction.user.id)
-
-    let guild: SabineGuild | undefined
-
-    if (interaction.guildId) {
-      guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-    }
-
     const ctx = new ModalSubmitInteractionContext({
       args,
       app,
       guild: interaction.guild,
-      locale: user.lang,
+      locale: profile.lang,
       db: {
-        user,
+        profile,
         guild
       },
       interaction

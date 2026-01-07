@@ -12,7 +12,7 @@
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate",
     "lint": "bunx biome check",
-    "type-check": "tsc"
+    "check": "tsgo"
   },
   "keywords": [],
   "author": "levisantosp",

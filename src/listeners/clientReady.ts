@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import type { $Enums } from '@generated'
 import t from '@i18n'
 import Bull from 'bull'
@@ -28,10 +28,12 @@ export type ArenaQueue = {
   parsedData1: {
     userId: string
     channelId?: string
+    guildId: string
   }
   parsedData2: {
     userId: string
     channelId?: string
+    guildId: string
   }
 }
 const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
@@ -710,8 +712,8 @@ export default createListener({
       await app.postCommands()
 
       arenaMatchQueue.process('arena', async job => {
-        const player1 = await SabineUser.fetch(job.data.parsedData1.userId)
-        const player2 = await SabineUser.fetch(job.data.parsedData2.userId)
+        const player1 = await ProfileSchema.fetch(job.data.parsedData1.userId, job.data.parsedData1.guildId)
+        const player2 = await ProfileSchema.fetch(job.data.parsedData2.userId, job.data.parsedData2.guildId)
 
         if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
 
@@ -720,17 +722,23 @@ export default createListener({
           if (player1.rank_rating < 0) player1.rank_rating = 0
 
           await prisma.$transaction([
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player1.id
+                userId_guildId: {
+                  userId: player1.userId,
+                  guildId: player1.guildId
+                }
               },
               data: {
                 rank_rating: player1.rank_rating
               }
             }),
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player2.id
+                userId_guildId: {
+                  userId: player2.userId,
+                  guildId: player2.guildId
+                }
               },
               data: {
                 rank_rating: {
@@ -744,9 +752,12 @@ export default createListener({
           if (player2.rank_rating < 0) player2.rank_rating = 0
 
           await prisma.$transaction([
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player1.id
+                userId_guildId: {
+                  userId: player1.userId,
+                  guildId: player1.guildId
+                }
               },
               data: {
                 rank_rating: {
@@ -754,9 +765,12 @@ export default createListener({
                 }
               }
             }),
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player2.id
+                userId_guildId: {
+                  userId: player2.userId,
+                  guildId: player2.guildId
+                }
               },
               data: {
                 rank_rating: player2.rank_rating
@@ -771,17 +785,23 @@ export default createListener({
           if (player2.rank_rating < 0) player2.rank_rating = 0
 
           await prisma.$transaction([
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player1.id
+                userId_guildId: {
+                  userId: player1.userId,
+                  guildId: player1.guildId
+                }
               },
               data: {
                 rank_rating: player1.rank_rating
               }
             }),
-            prisma.user.update({
+            prisma.profile.update({
               where: {
-                id: player2.id
+                userId_guildId: {
+                  userId: player2.userId,
+                  guildId: player2.guildId
+                }
               },
               data: {
                 rank_rating: player2.rank_rating
@@ -809,7 +829,8 @@ export default createListener({
               }),
               name: player1.team_name!,
               tag: player1.team_tag!,
-              user: player1.id
+              user: player1.id,
+              guildId: player1.guildId
             },
             {
               roster: player2.arena_metadata.lineup.map(l => {
@@ -824,7 +845,8 @@ export default createListener({
               }),
               name: player2.team_name!,
               tag: player2.team_tag!,
-              user: player2.id
+              user: player2.id,
+              guildId: player1.guildId
             }
           ],
           map,
@@ -878,25 +900,38 @@ export default createListener({
 
       app.queue
         .process('reminder', async job => {
-          const user = await prisma.user.findUnique({
+          const profile = await prisma.profile.findUnique({
             where: {
-              id: job.data.user
+              userId_guildId: {
+                userId: job.data.user,
+                guildId: job.data.guild
+              }
+            },
+            include: {
+              user: {
+                select: {
+                  lang: true
+                }
+              }
             }
           })
 
-          if (!user) return
+          if (!profile) return
 
-          if (!user.remind || user.reminded || !user.remind_in) return
+          if (!profile.remind || profile.reminded || !profile.remind_in) return
 
-          await rest.post(Routes.channelMessages(user.remind_in), {
+          await rest.post(Routes.channelMessages(profile.remind_in), {
             body: {
-              content: t(user.lang, 'helper.reminder', { user: `<@${user.id}>` })
+              content: t(profile.user.lang, 'helper.reminder', { user: `<@${profile.id}>` })
             }
           })
 
-          await prisma.user.update({
+          await prisma.profile.update({
             where: {
-              id: user.id
+              userId_guildId: {
+                userId: job.data.user,
+                guildId: job.data.guild
+              }
             },
             data: {
               reminded: true

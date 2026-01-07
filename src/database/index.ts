@@ -58,8 +58,35 @@ export const prisma = new PrismaClient({ adapter }).$extends({
 
         return guild
       }
+    },
+    profile: {
+      async update({ args, query }) {
+        const profile = await query(args)
+        Bun.redis.del(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
+
+        return profile
+      },
+      async upsert({ args, query }) {
+        const profile = await query(args)
+        Bun.redis.del(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
+
+        return profile
+      },
+      async create({ args, query }) {
+        const profile = await query(args)
+        Bun.redis.del(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
+
+        return profile
+      },
+      async delete({ args, query }) {
+        const profile = await query(args)
+        Bun.redis.del(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
+
+        return profile
+      }
     }
   }
 })
-export * from './Guild'
-export * from './User'
+export * from './schemas/GuildSchema'
+export * from './schemas/ProfileSchema'
+export * from './schemas/UserSchema'

@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
-import { SabineGuild, SabineUser } from '@db'
+import { GuildSchema, ProfileSchema } from '@db'
 import type { Blacklist } from '@generated'
 import locales from '@i18n'
-import { type ChatInputCommandInteraction, type Guild, type PermissionResolvable, REST, Routes } from 'discord.js'
+import { type ChatInputCommandInteraction, type PermissionResolvable, REST, Routes } from 'discord.js'
 import { voidCatch } from '@/database/update-cache'
 import { env } from '@/env'
 import Logger from '../../util/Logger'
@@ -27,26 +27,22 @@ export default class CommandRunner {
     const command = app.commands.get(interaction.commandName)
 
     if (!command) return
+    if (!interaction.guildId || !interaction.guild) return
 
-    let guild: SabineGuild | undefined
-    let g: Guild | undefined
-
-    if (interaction.guildId) {
-      guild = (await SabineGuild.fetch(interaction.guildId)) ?? new SabineGuild(interaction.guildId)
-      g = app.guilds.cache.get(interaction.guildId)
-    }
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
 
     const rawBlacklist = await app.redis.get('blacklist')
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
     const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
 
-    let user = await SabineUser.fetch(interaction.user.id)
+    let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
-    if (!user && command.name !== 'register' && ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)) {
+    if (!profile && command.name !== 'register' && ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)) {
       return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
     }
-
-    if (!user) user = new SabineUser(interaction.user.id)
+    if(!profile) {
+      profile = new ProfileSchema(interaction.user.id, interaction.guildId)
+    }
 
     const ban = blacklist.get(interaction.user.id)
 
@@ -95,11 +91,11 @@ export default class CommandRunner {
     const ctx = new CommandContext({
       app,
       interaction,
-      locale: user.lang,
-      guild: g,
+      locale: profile.lang,
+      guild: interaction.guild,
       args,
       db: {
-        user,
+        profile,
         guild
       }
     })
@@ -141,7 +137,7 @@ export default class CommandRunner {
 
     const t = ctx.t.bind(ctx)
 
-    if (user.warn) {
+    if (profile.warn) {
       const update = await app.prisma.update.findFirst({
         orderBy: {
           published_at: 'desc'

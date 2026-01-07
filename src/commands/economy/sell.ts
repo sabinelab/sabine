@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { ProfileSchema } from '@db'
 import { calcPlayerPrice } from '@sabinelab/players'
 import createCommand from '../../structures/command/createCommand'
 
@@ -31,28 +31,27 @@ export default createCommand({
   cooldown: true,
   async run({ ctx, app }) {
     const player = app.players.get(ctx.args[0].toString())
-
-    // const i = ctx.db.user.reserve_players.findIndex((p) => p === ctx.args[0])
-    const i = ctx.db.user.reserve_players.indexOf(ctx.args[0].toString())
+    const i = ctx.db.profile.reserve_players.indexOf(ctx.args[0].toString())
 
     if (!player || i === -1) {
       return await ctx.reply('commands.sell.player_not_found')
     }
 
-    await ctx.db.user.sellPlayer(player.id.toString(), BigInt(calcPlayerPrice(player, true)), i)
+    await ctx.db.profile.sellPlayer(player.id.toString(), BigInt(calcPlayerPrice(player, true)), i)
 
     await ctx.reply('commands.sell.sold', { p: player.name, price: calcPlayerPrice(player, true).toLocaleString() })
   },
   async createAutocompleteInteraction({ i, app }) {
-    const user = await SabineUser.fetch(i.user.id)
+    if (!i.guildId) return
+    const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
 
-    if (!user) return
+    if (!profile) return
 
     const value = i.options.getString('player', true)
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of user.reserve_players) {
+    for (const p_id of profile.reserve_players) {
       const p = app.players.get(p_id)
 
       if (!p) break

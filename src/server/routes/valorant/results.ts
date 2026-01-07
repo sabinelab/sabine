@@ -1,4 +1,4 @@
-import { prisma, SabineUser } from '@db'
+import { prisma } from '@db'
 import locales from '@i18n'
 import * as Discord from 'discord.js'
 import { Elysia } from 'elysia'
@@ -40,14 +40,32 @@ export const valorantResults = new Elysia().post(
 
     const preds = await prisma.prediction.findMany({
       where: {
-        game: 'valorant'
+        game: 'valorant',
+        match: {
+          in: req.body.map(b => b.id)
+        },
+        status: 'pending'
       },
       include: {
-        teams: true
+        teams: true,
+        profile: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                premium: true
+              }
+            }
+          }
+        }
       }
     })
 
-    if (!guilds.length) return
+    if (!guilds.length) {
+      req.set.status = 'OK'
+
+      return { ok: true }
+    }
 
     const messages: Promise<unknown>[] = []
 
@@ -122,39 +140,14 @@ export const valorantResults = new Elysia().post(
       }
     }
 
-    if (!preds.length) return
-
-    const usersIds = [...new Set(preds.map(pred => pred.userId))]
-
-    const usersData = await prisma.user.findMany({
-      where: {
-        id: { in: usersIds }
-      }
-    })
-
-    const userMap = new Map<string, SabineUser>()
-
-    for (const data of usersData) {
-      let user = new SabineUser(data.id)
-      user = Object.assign(user, data)
-
-      userMap.set(user.id, user)
-    }
-
     const transactions: Promise<unknown>[] = []
 
     for (const data of req.body) {
-      for (const pred of preds) {
-        if (data.id !== pred.match) continue
+      const matchPreds = preds.filter(p => p.match === data.id)
 
-        const user = userMap.get(pred.userId)
-
-        if (!user) continue
-
+      for (const pred of matchPreds) {
         const transaction = async () => {
           if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
-            user.correct_predictions += 1
-
             let odd: number | null = null
             let bonus = 0
 
@@ -165,7 +158,7 @@ export const valorantResults = new Elysia().post(
                 let oddA = 0
                 let oddB = 0
 
-                for (const p of preds) {
+                for (const p of matchPreds) {
                   if (p.teams[0].winner && p.bet) {
                     oddA += 1
                   } else if (p.teams[1].winner && p.bet) {
@@ -179,7 +172,7 @@ export const valorantResults = new Elysia().post(
                   odd = calcOdd(oddB)
                 }
 
-                if (user.premium) {
+                if (pred.profile.user.premium) {
                   bonus = Math.floor(Number(pred.bet) / 2)
                 }
               }
@@ -198,8 +191,8 @@ export const valorantResults = new Elysia().post(
                   status: 'correct'
                 }
               }),
-              prisma.user.update({
-                where: { id: user.id },
+              prisma.profile.update({
+                where: { id: pred.profile.id },
                 data: {
                   correct_predictions: {
                     increment: 1
@@ -210,7 +203,26 @@ export const valorantResults = new Elysia().post(
               })
             ])
           } else {
-            await user.addIncorrectPrediction('valorant', data.id)
+            await prisma.$transaction([
+              prisma.prediction.update({
+                where: {
+                  id: pred.id
+                },
+                data: {
+                  status: 'incorrect'
+                }
+              }),
+              prisma.profile.update({
+                where: {
+                  id: pred.profile.id
+                },
+                data: {
+                  incorrect_predictions: {
+                    increment: 1
+                  }
+                }
+              })
+            ])
           }
         }
 

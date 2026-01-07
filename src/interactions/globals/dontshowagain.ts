@@ -8,7 +8,7 @@ export default createComponentInteraction({
   async run({ ctx }) {
     await prisma.user.update({
       where: {
-        id: ctx.db.user.id
+        id: ctx.db.profile.id
       },
       data: {
         warn: false

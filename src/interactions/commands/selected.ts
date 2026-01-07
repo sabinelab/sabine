@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { ProfileSchema } from '@db'
 import { ChannelType } from 'discord.js'
 import { valorant_agents, valorant_maps } from '../../config'
 import Match from '../../simulator/vanilla/Match'
@@ -52,9 +52,9 @@ export default createComponentInteraction({
 
     data = JSON.parse((await app.redis.get(key))!)
 
-    const user = await SabineUser.fetch(ctx.args.at(-1)!)
+    const profile = await ProfileSchema.fetch(ctx.args.at(-1)!, ctx.db.guild.id)
 
-    if (!user) return
+    if (!profile) return
 
     const embed = new EmbedBuilder()
       .setTitle(t('commands.duel.embed.title'))
@@ -62,10 +62,10 @@ export default createComponentInteraction({
       .setImage(data.image)
       .setFields(
         {
-          name: key.split(':')[1] === ctx.interaction.user.id ? ctx.db.user.team_name! : user.team_name!,
+          name: key.split(':')[1] === ctx.interaction.user.id ? ctx.db.profile.team_name! : profile.team_name!,
           value:
             key.split(':')[1] === ctx.interaction.user.id
-              ? ctx.db.user.active_players
+              ? ctx.db.profile.active_players
                   .map(id => {
                     const player = app.players.get(id)!
 
@@ -87,16 +87,16 @@ export default createComponentInteraction({
                     return `${emoji} ${player.name} (${ovr})`
                   })
                   .join('\n')
-              : user.active_players
+              : profile.active_players
                   .map(id => {
                     const player = app.players.get(id)!
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[user.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
 
-                    if (data[user.id][i].id.toString() === id && data[user.id][i].agent) {
-                      emoji = valorant_agents.find(agent => agent.name === data[user.id][i].agent!.name)?.emoji
+                    if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
+                      emoji = valorant_agents.find(agent => agent.name === data[profile.id][i].agent!.name)?.emoji
                     }
 
                     const ovr = Math.floor(player.ovr)
@@ -107,10 +107,10 @@ export default createComponentInteraction({
           inline: true
         },
         {
-          name: key.split(':')[1] !== ctx.interaction.user.id ? ctx.db.user.team_name! : user.team_name!,
+          name: key.split(':')[1] !== ctx.interaction.user.id ? ctx.db.profile.team_name! : profile.team_name!,
           value:
             key.split(':')[1] !== ctx.interaction.user.id
-              ? ctx.db.user.active_players
+              ? ctx.db.profile.active_players
                   .map(id => {
                     const player = app.players.get(id)!
 
@@ -132,16 +132,16 @@ export default createComponentInteraction({
                     return `${emoji} ${player.name} (${ovr})`
                   })
                   .join('\n')
-              : user.active_players
+              : profile.active_players
                   .map(id => {
                     const player = app.players.get(id)!
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[user.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
 
-                    if (data[user.id][i].id.toString() === id && data[user.id][i].agent) {
-                      emoji = valorant_agents.find(agent => agent.name === data[user.id][i].agent!.name)?.emoji
+                    if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
+                      emoji = valorant_agents.find(agent => agent.name === data[profile.id][i].agent!.name)?.emoji
                     }
 
                     const ovr = Math.floor(player.ovr)
@@ -169,7 +169,7 @@ export default createComponentInteraction({
 
     if (
       data[ctx.interaction.user.id].filter((p: any) => p.agent).length === 5 &&
-      data[user.id].filter((p: any) => p.agent).length === 5
+      data[profile.id].filter((p: any) => p.agent).length === 5
     ) {
       const timeout = 10000
 
@@ -188,16 +188,16 @@ export default createComponentInteraction({
         let match = new Match({
           teams: [
             {
-              roster: data[ctx.db.user.id],
-              name: ctx.db.user.team_name!,
-              tag: ctx.db.user.team_tag!,
-              user: ctx.db.user.id
+              roster: data[ctx.db.profile.id],
+              name: ctx.db.profile.team_name!,
+              tag: ctx.db.profile.team_tag!,
+              user: ctx.db.profile.id
             },
             {
-              roster: data[user.id],
-              name: user.team_name!,
-              tag: user.team_tag!,
-              user: user.id
+              roster: data[profile.id],
+              name: profile.team_name!,
+              tag: profile.team_tag!,
+              user: profile.id
             }
           ],
           ctx: message!,
@@ -205,7 +205,8 @@ export default createComponentInteraction({
           mode: data.mode,
           map: data.map,
           content: '',
-          overtime: data.mode === 'tournament'
+          overtime: data.mode === 'tournament',
+          guildId: ctx.db.guild.id
         })
 
         const embed = new EmbedBuilder()
@@ -226,16 +227,16 @@ export default createComponentInteraction({
 
         try {
           while (!match.finished) {
-            await app.redis.set(`match:${ctx.db.user.id}`, '1')
-            await app.redis.set(`match:${user.id}`, '1')
+            await app.redis.set(`match:${ctx.db.profile.id}`, '1')
+            await app.redis.set(`match:${profile.id}`, '1')
 
             await match.wait(2500)
 
             match = await match.start()
           }
         } catch (e) {
-          await app.redis.del(`match:${ctx.db.user.id}`)
-          await app.redis.del(`match:${user.id}`)
+          await app.redis.del(`match:${ctx.db.profile.id}`)
+          await app.redis.del(`match:${profile.id}`)
 
           await ctx.reply('commands.duel.error', {
             users: `${ctx.interaction.user} <@${match.teams[1].user}>`,
@@ -244,8 +245,8 @@ export default createComponentInteraction({
 
           await new Logger(app).error(e as Error)
         } finally {
-          await app.redis.del(`match:${ctx.db.user.id}`)
-          await app.redis.del(`match:${user.id}`)
+          await app.redis.del(`match:${ctx.db.profile.id}`)
+          await app.redis.del(`match:${profile.id}`)
         }
       }, timeout)
     } else {

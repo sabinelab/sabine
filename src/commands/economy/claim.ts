@@ -54,25 +54,25 @@ export default createCommand({
   messageComponentInteractionTime: 60 * 1000,
   cooldown: true,
   async run({ ctx, t }) {
-    if (ctx.db.user.claim_time && ctx.db.user.claim_time > new Date()) {
+    if (ctx.db.profile.claim_time && ctx.db.profile.claim_time > new Date()) {
       return await ctx.reply('commands.claim.has_been_claimed', {
-        t: `<t:${(ctx.db.user.claim_time.getTime() / 1000).toFixed(0)}:R>`
+        t: `<t:${(ctx.db.profile.claim_time.getTime() / 1000).toFixed(0)}:R>`
       })
     }
 
     let player: Player
 
-    if (ctx.db.user.pity >= 49) {
+    if (ctx.db.profile.pity >= 49) {
       player = getRandomPlayerByTier('s')
     } else player = getRandomPlayer()
 
     let channel: string | undefined
 
-    if (ctx.interaction.channel && ctx.db.user.remind) {
+    if (ctx.interaction.channel && ctx.db.profile.remind) {
       channel = ctx.interaction.channel?.id
     }
 
-    await ctx.db.user.addPlayerToRoster(player.id.toString(), 'CLAIM_PLAYER_BY_CLAIM_COMMAND', channel)
+    await ctx.db.profile.addPlayerToRoster(player.id.toString(), 'CLAIM_PLAYER_BY_CLAIM_COMMAND', channel)
 
     const embed = new EmbedBuilder()
       .setTitle(player.name)
@@ -107,15 +107,18 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx }) {
     ctx.setFlags(64)
 
-    if (!ctx.db.user.reserve_players.includes(ctx.args[3])) {
+    if (!ctx.db.profile.reserve_players.includes(ctx.args[3])) {
       return await ctx.reply('commands.sell.player_not_found')
     }
 
     if (ctx.args[2] === 'promote') {
       await prisma.$transaction(async tx => {
-        const user = await tx.user.findUnique({
+        const user = await tx.profile.findUnique({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           select: {
             active_players: true,
@@ -141,9 +144,12 @@ export default createCommand({
         user.active_players.push(ctx.args[3])
         user.reserve_players.splice(i, 1)
 
-        await tx.user.update({
+        await tx.profile.update({
           where: {
-            id: ctx.db.user.id
+            userId_guildId: {
+              userId: ctx.db.profile.id,
+              guildId: ctx.db.guild.id
+            }
           },
           data: {
             active_players: user.active_players,
@@ -162,8 +168,8 @@ export default createCommand({
 
       const price = BigInt(calcPlayerPrice(player, true))
 
-      const i = ctx.db.user.reserve_players.indexOf(ctx.args[3])
-      await ctx.db.user.sellPlayer(player.id.toString(), price, i)
+      const i = ctx.db.profile.reserve_players.indexOf(ctx.args[3])
+      await ctx.db.profile.sellPlayer(player.id.toString(), price, i)
 
       await ctx.reply('commands.sell.sold', { p: player.name, price: price.toLocaleString() })
     }

@@ -70,7 +70,10 @@ export default createCommand({
       const predictions = await app.prisma.prediction.findMany({
         where: {
           game: 'valorant',
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         include: {
           teams: true
@@ -94,8 +97,8 @@ export default createCommand({
         })
         .setDesc(
           t('commands.predictions.embed.desc', {
-            correct: ctx.db.user.correct_predictions,
-            wrong: ctx.db.user.incorrect_predictions,
+            correct: ctx.db.profile.correct_predictions,
+            wrong: ctx.db.profile.incorrect_predictions,
             t: predictions.length
           })
         )
@@ -152,7 +155,10 @@ export default createCommand({
       const predictions = await app.prisma.prediction.findMany({
         where: {
           game: 'lol',
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         include: {
           teams: true
@@ -176,8 +182,8 @@ export default createCommand({
         })
         .setDesc(
           t('commands.predictions.embed.desc', {
-            correct: ctx.db.user.correct_predictions,
-            wrong: ctx.db.user.incorrect_predictions,
+            correct: ctx.db.profile.correct_predictions,
+            wrong: ctx.db.profile.incorrect_predictions,
             t: predictions.length
           })
         )
@@ -237,7 +243,10 @@ export default createCommand({
       const predictions = await app.prisma.prediction.findMany({
         where: {
           game: 'valorant',
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         include: {
           teams: true
@@ -266,8 +275,8 @@ export default createCommand({
         })
         .setDesc(
           t('commands.predictions.embed.desc', {
-            correct: ctx.db.user.correct_predictions,
-            wrong: ctx.db.user.incorrect_predictions,
+            correct: ctx.db.profile.correct_predictions,
+            wrong: ctx.db.profile.incorrect_predictions,
             t: predictions.length
           })
         )
@@ -330,7 +339,10 @@ export default createCommand({
       const predictions = await app.prisma.prediction.findMany({
         where: {
           game: 'valorant',
-          userId: ctx.db.user.id
+          profile: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         include: {
           teams: true
@@ -359,8 +371,8 @@ export default createCommand({
         })
         .setDesc(
           t('commands.predictions.embed.desc', {
-            correct: ctx.db.user.correct_predictions,
-            wrong: ctx.db.user.incorrect_predictions,
+            correct: ctx.db.profile.correct_predictions,
+            wrong: ctx.db.profile.incorrect_predictions,
             t: predictions.length
           })
         )

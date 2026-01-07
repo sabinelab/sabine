@@ -1,4 +1,4 @@
-import { SabineUser } from '@db'
+import { ProfileSchema } from '@db'
 import { ApplicationCommandOptionType } from 'discord.js'
 import { valorant_maps } from '../../config'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
@@ -169,12 +169,12 @@ export default createCommand({
       id = ctx.args[1].toString()
     } else id = ctx.args[2].toString()
 
-    const user = await SabineUser.fetch(id)
+    const profile = await ProfileSchema.fetch(id, ctx.db.profile.id)
 
     const authorCounts: { [key: string]: number } = {}
     const userCounts: { [key: string]: number } = {}
 
-    for (const p of ctx.db.user.active_players) {
+    for (const p of ctx.db.profile.active_players) {
       authorCounts[p] = (authorCounts[p] || 0) + 1
     }
 
@@ -182,11 +182,11 @@ export default createCommand({
 
     const keys = await app.redis.keys('agent_selection*')
 
-    if (!ctx.db.user.team_name || !ctx.db.user.team_tag) {
+    if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if (ctx.db.user.active_players.length < 5) {
+    if (ctx.db.profile.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
@@ -194,11 +194,11 @@ export default createCommand({
       return await ctx.reply('commands.duel.duplicated_cards')
     }
 
-    if (!user || user.active_players.length < 5) {
+    if (!profile || profile.active_players.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if (!user.team_name || !user.team_tag) {
+    if (!profile.team_name || !profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 
@@ -209,7 +209,7 @@ export default createCommand({
       return await ctx.reply('commands.duel.already_in_match')
     }
 
-    if ((await app.redis.get(`match:${user.id}`)) || keys.some(key => key.includes(user.id))) {
+    if ((await app.redis.get(`match:${profile.id}`)) || keys.some(key => key.includes(profile.id))) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
@@ -217,7 +217,7 @@ export default createCommand({
       return await ctx.reply('commands.duel.cannot_duel')
     }
 
-    for (const p of user.active_players) {
+    for (const p of profile.active_players) {
       userCounts[p] = (userCounts[p] || 0) + 1
     }
 

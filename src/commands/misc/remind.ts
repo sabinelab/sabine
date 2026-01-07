@@ -12,10 +12,13 @@ export default createCommand({
   },
   category: 'misc',
   async run({ ctx }) {
-    if (!ctx.db.user.remind) {
-      await prisma.user.update({
+    if (!ctx.db.profile.remind) {
+      await prisma.profile.update({
         where: {
-          id: ctx.db.user.id
+          userId_guildId: {
+            userId: ctx.db.profile.id,
+            guildId: ctx.db.guild.id
+          }
         },
         data: {
           remind: true
@@ -25,9 +28,12 @@ export default createCommand({
       return await ctx.reply('commands.remind.enabled')
     }
 
-    await prisma.user.update({
+    await prisma.profile.update({
       where: {
-        id: ctx.db.user.id
+        userId_guildId: {
+          userId: ctx.db.profile.id,
+          guildId: ctx.db.guild.id
+        }
       },
       data: {
         remind: false
