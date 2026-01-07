@@ -8,6 +8,7 @@ on:
       - '.gitignore'
       - 'README*'
       - 'LICENSE'
+      - 'crowdin.yml'
 jobs:
   deploy:
     name: 'Deploy to Production'
