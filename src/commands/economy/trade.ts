@@ -57,7 +57,7 @@ export default createCommand({
   messageComponentInteractionTime: 5 * 60 * 1000,
   cooldown: true,
   async run({ ctx, app }) {
-    const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.profile.id)
+    const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.guild.id)
 
     const player = app.players.get(ctx.args[1].toString())
 
@@ -159,37 +159,56 @@ export default createCommand({
       }
 
       await prisma.$transaction(async tx => {
-        const profile = await tx.profile.findUnique({
+        const sellerProfile = await tx.profile.findUnique({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.args[3],
               guildId: ctx.db.guild.id
             }
           }
         })
 
-        if (!profile) return
-
-        if (
-          (profile.arena_metadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())
-        ) {
-          const index = (profile.arena_metadata as ArenaMetadata)?.lineup.findIndex(
-            line => line.player === player.id.toString()
-          )
-
-          ;(profile.arena_metadata as ArenaMetadata).lineup.splice(index, 1)
-        }
-
-        const p = await tx.profile.update({
+        const buyerProfile = await tx.profile.findUnique({
           where: {
             userId_guildId: {
-              userId: profile.userId,
+              userId: ctx.db.profile.userId,
+              guildId: ctx.db.guild.id
+            }
+          }
+        })
+
+        if (!sellerProfile || !buyerProfile) return
+
+        const sellerReservePlayers = [...sellerProfile.reserve_players]
+        const sellerPlayerIndex = sellerReservePlayers.indexOf(ctx.args[4])
+        if (sellerPlayerIndex === -1) return
+        sellerReservePlayers.splice(sellerPlayerIndex, 1)
+
+        const sellerArenaMetadata = sellerProfile.arena_metadata
+          ? JSON.parse(JSON.stringify(sellerProfile.arena_metadata))
+          : null
+
+        if ((sellerArenaMetadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())) {
+          const lineupIndex = (sellerArenaMetadata as ArenaMetadata)?.lineup.findIndex(
+            line => line.player === player.id.toString()
+          )
+          if (lineupIndex !== -1) {
+            ;(sellerArenaMetadata as ArenaMetadata).lineup.splice(lineupIndex, 1)
+          }
+        }
+
+        const updatedSeller = await tx.profile.update({
+          where: {
+            userId_guildId: {
+              userId: ctx.args[3],
               guildId: ctx.db.guild.id
             }
           },
           data: {
-            reserve_players: profile.reserve_players,
-            arena_metadata: profile.arena_metadata ? profile.arena_metadata : undefined,
+            reserve_players: {
+              set: sellerReservePlayers
+            },
+            arena_metadata: sellerArenaMetadata ? sellerArenaMetadata : undefined,
             coins: {
               increment: BigInt(ctx.args[5])
             }
@@ -199,7 +218,7 @@ export default createCommand({
         await tx.profile.update({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -219,15 +238,15 @@ export default createCommand({
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              profileId: p.id,
-              to: profile.userId
+              profileId: updatedSeller.id,
+              to: buyerProfile.userId
             },
             {
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              profileId: profile.id,
-              to: ctx.db.profile.id
+              profileId: buyerProfile.id,
+              to: sellerProfile.userId
             }
           ]
         })
