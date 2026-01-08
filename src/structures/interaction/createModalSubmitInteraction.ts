@@ -1,9 +1,9 @@
-import type { Args } from '@i18n'
+import type { Args, Content } from '@i18n'
 import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 type CreateModalSubmitInteractionProps = {
   ctx: ModalSubmitInteractionContext
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
 }
 
 export type CreateModalSubmitInteractionOptions = {

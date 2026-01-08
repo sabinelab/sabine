@@ -1,10 +1,10 @@
-import type { Args } from '@i18n'
+import type { Args, Content } from '@i18n'
 import type App from '../app/App'
 import type ComponentInteractionContext from './ComponentInteractionContext'
 
 type CreateInteractionProps = {
   ctx: ComponentInteractionContext
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
   app: App
 }
 

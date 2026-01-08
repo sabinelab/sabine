@@ -1,4 +1,4 @@
-import type { Args } from '@i18n'
+import type { Args, Content } from '@i18n'
 import type * as Discord from 'discord.js'
 import type App from '../app/App'
 import type ComponentInteractionContext from '../interaction/ComponentInteractionContext'
@@ -8,20 +8,20 @@ import type CommandContext from './CommandContext'
 type CommandOptions = {
   ctx: CommandContext
   app: App
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
   id: string
 }
 
 type CreateAutocompleteInteractionOptions = {
   i: Discord.AutocompleteInteraction
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
   app: App
   args?: string[]
 }
 
 type CreateComponentInteractionOptions = {
   ctx: ComponentInteractionContext
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
   i: Discord.MessageComponentInteraction
   app: App
 }
@@ -29,7 +29,7 @@ type CreateComponentInteractionOptions = {
 type CreateModalSubmitInteractionOptions = {
   ctx: ModalSubmitInteractionContext
   app: App
-  t: (content: string, args?: Args) => string
+  t: <T extends Content>(content: T, args?: Args) => string
   i: Discord.ModalSubmitInteraction
 }
 
