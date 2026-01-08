@@ -127,15 +127,10 @@ export default class Round extends Match {
   private async finish(score1: number, score2: number) {
     this.finished = true
 
-    const profile1 =
-      (await ProfileSchema.fetch(this.teams[0].user, this.guildId)) ??
-      new ProfileSchema(this.teams[0].user, this.guildId)
-    const profile2 =
-      (await ProfileSchema.fetch(this.teams[1].user, this.guildId)) ??
-      new ProfileSchema(this.teams[1].user, this.guildId)
+    const profile1 = await ProfileSchema.fetch(this.teams[0].user, this.guildId)
+    const profile2 = await ProfileSchema.fetch(this.teams[1].user, this.guildId)
 
-    console.log(profile1.id)
-    console.log(profile2.id)
+    if(!profile1 || !profile2) return this
 
     if (this.mode === 'ranked') {
       const max = Math.max(score1, score2)

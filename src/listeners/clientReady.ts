@@ -857,7 +857,7 @@ export default createListener({
               }),
               name: player1.team_name!,
               tag: player1.team_tag!,
-              user: player1.id,
+              user: player1.userId,
               guildId: player1.guildId
             },
             {
@@ -873,7 +873,7 @@ export default createListener({
               }),
               name: player2.team_name!,
               tag: player2.team_tag!,
-              user: player2.id,
+              user: player2.userId,
               guildId: player2.guildId
             }
           ],
@@ -895,10 +895,10 @@ export default createListener({
             rest.post(Routes.channelMessages(job.data.parsedData1.channelId), {
               body: {
                 content: t(player1.lang, 'simulator.send_message', {
-                  p1: `<@${player1.id}>`,
-                  p2: `<@${player2.id}>`,
+                  p1: `<@${player1.userId}>`,
+                  p2: `<@${player2.userId}>`,
                   score: `${score1}-${score2}`,
-                  user: `<@${player1.id}>`
+                  user: `<@${player1.userId}>`
                 })
               }
             })
@@ -913,10 +913,10 @@ export default createListener({
             rest.post(Routes.channelMessages(job.data.parsedData2.channelId), {
               body: {
                 content: t(player2.lang, 'simulator.send_message', {
-                  p1: `<@${player1.id}>`,
-                  p2: `<@${player2.id}>`,
+                  p1: `<@${player1.userId}>`,
+                  p2: `<@${player2.userId}>`,
                   score: `${score1}-${score2}`,
-                  user: `<@${player2.id}>`
+                  user: `<@${player2.userId}>`
                 })
               }
             })

@@ -102,7 +102,7 @@ export default createCommand({
           return await ctx.reply('commands.arena.invalid_lineup', { map })
         }
 
-        const isAlreadyInQueue = await ctx.app.redis.get(`arena:in_queue:${ctx.db.profile.userId}`)
+        const isAlreadyInQueue = await ctx.app.redis.exists(`arena:in_queue:${ctx.db.profile.userId}`)
 
         if (isAlreadyInQueue) {
           return await ctx.reply('commands.arena.is_already_in_queue')
@@ -111,8 +111,10 @@ export default createCommand({
         const payload: {
           userId: string
           channelId?: string
+          guildId: string
         } = {
-          userId: ctx.db.profile.userId
+          userId: ctx.db.profile.userId,
+          guildId: ctx.db.guild.id
         }
 
         if (ctx.args[1]) {
