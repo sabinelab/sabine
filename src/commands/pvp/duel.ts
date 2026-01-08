@@ -203,15 +203,15 @@ export default createCommand({
     }
 
     if (
-      (await app.redis.get(`match:${ctx.interaction.user.id}`)) ||
+      (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.interaction.user.id}`)) ||
       keys.some(key => key.includes(ctx.interaction.user.id))
     ) {
       return await ctx.reply('commands.duel.already_in_match')
     }
 
     if (
-      (await app.redis.get(`match:${profile.id}`)) ||
-      keys.some(key => key.includes(profile.id))
+      (await app.redis.get(`match:${ctx.db.guild.id}:${profile.userId}`)) ||
+      keys.some(key => key.includes(profile.userId))
     ) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }

@@ -241,16 +241,16 @@ export default createComponentInteraction({
 
         try {
           while (!match.finished) {
-            await app.redis.set(`match:${ctx.db.profile.userId}`, '1')
-            await app.redis.set(`match:${profile.userId}`, '1')
+            await app.redis.set(`match:${ctx.db.guild.id}:${ctx.db.profile.userId}`, '1')
+            await app.redis.set(`match:${ctx.db.guild.id}:${profile.userId}`, '1')
 
             await match.wait(2500)
 
             match = await match.start()
           }
         } catch (e) {
-          await app.redis.del(`match:${ctx.db.profile.userId}`)
-          await app.redis.del(`match:${profile.userId}`)
+          await app.redis.del(`match:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
+          await app.redis.del(`match:${ctx.db.guild.id}:${profile.userId}`)
 
           await ctx.reply('commands.duel.error', {
             users: `${ctx.interaction.user} <@${match.teams[1].user}>`,
@@ -259,8 +259,8 @@ export default createComponentInteraction({
 
           await new Logger(app).error(e as Error)
         } finally {
-          await app.redis.del(`match:${ctx.db.profile.userId}`)
-          await app.redis.del(`match:${profile.userId}`)
+          await app.redis.del(`match:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
+          await app.redis.del(`match:${ctx.db.guild.id}:${profile.userId}`)
         }
       }, timeout)
     } else {
