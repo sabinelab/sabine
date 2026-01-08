@@ -141,27 +141,6 @@ export default class CommandRunner {
 
     const t = ctx.t.bind(ctx)
 
-    if (profile.warn) {
-      const update = await app.prisma.update.findFirst({
-        orderBy: {
-          published_at: 'desc'
-        }
-      })
-
-      if (update) {
-        const button = new ButtonBuilder()
-          .setLabel(t('helper.dont_show_again'))
-          .defineStyle('red')
-          .setCustomId('dontshowagain')
-          .build(
-            t('helper.warn', {
-              link: `https://sabinebot.xyz/changelog/v${update.id}`
-            })
-          )
-
-        await ctx.reply(button)
-      }
-    }
     if (command.cooldown) {
       const cooldown = await app.redis.get(`cooldown:${interaction.user.id}`)
 
@@ -177,6 +156,27 @@ export default class CommandRunner {
     command
       .run({ ctx, app, t, id: interaction.commandId })
       .then(async () => {
+        if (profile.warn) {
+          const update = await app.prisma.update.findFirst({
+            orderBy: {
+              published_at: 'desc'
+            }
+          })
+
+          if (update) {
+            const button = new ButtonBuilder()
+              .setLabel(t('helper.dont_show_again'))
+              .defineStyle('red')
+              .setCustomId('dontshowagain')
+              .build(
+                t('helper.warn', {
+                  link: `https://sabinebot.xyz/changelog/v${update.id}`
+                })
+              )
+
+            await ctx.reply(button)
+          }
+        }
         if (command.name === 'duel') {
           interaction
             .followUp({
