@@ -114,29 +114,36 @@ export default class App extends Discord.Client {
     const commands: Discord.ApplicationCommandData[] = []
 
     this.commands.forEach(cmd => {
-      const integrationTypes = [Discord.ApplicationIntegrationType.GuildInstall]
-
-      const contexts = [Discord.InteractionContextType.Guild]
-
-      if (cmd.userInstall) {
-        integrationTypes.push(Discord.ApplicationIntegrationType.UserInstall)
-        contexts.push(Discord.InteractionContextType.BotDM, Discord.InteractionContextType.PrivateChannel)
-      }
-
       commands.push({
         name: cmd.name,
         nameLocalizations: cmd.nameLocalizations,
         description: cmd.description,
         descriptionLocalizations: cmd.descriptionLocalizations,
         options: cmd.options,
-        type: 1,
-        integrationTypes,
-        contexts
+        type: 1
       })
     })
 
+    const transformKeys = (obj: unknown): unknown => {
+      if (obj === null || typeof obj !== 'object') return obj
+      if (Array.isArray(obj)) return obj.map(transformKeys)
+
+      const transformed: Record<string, unknown> = {}
+      for (const [key, value] of Object.entries(obj)) {
+        const newKey =
+          key === 'nameLocalizations'
+            ? 'name_localizations'
+            : key === 'descriptionLocalizations'
+              ? 'description_localizations'
+              : key
+        transformed[newKey] = transformKeys(value)
+      }
+
+      return transformed
+    }
+
     await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
-      body: commands
+      body: transformKeys(commands)
     })
   }
 
