@@ -28,7 +28,7 @@ model Profile {
   incorrect_predictions    Int           @default(0) @db.SmallInt
   active_players           String[]
   reserve_players          String[]
-  coins                    BigInt        @default(0)
+  poisons                    BigInt        @default(0)
   team_name                String?       @db.VarChar(20)
   team_tag                 String?       @db.VarChar(4)
   arena_wins               Int           @default(0) @db.SmallInt
@@ -69,7 +69,7 @@ model Profile {
   guildId                  String
 
   @@unique([userId, guildId])
-  @@index([coins])
+  @@index([poisons])
   @@index([correct_predictions])
   @@index([rank_rating])
   @@index([arena_wins])

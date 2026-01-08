@@ -53,11 +53,11 @@
         "footer": "Tu posición: #{pos}",
         "field": "`{t}` predicciones correctas"
       },
-      "coins": {
-        "title": "Top 100 - Tabla de Clasificación de Monedas",
+      "poisons": {
+        "title": "Top 100 - Tabla de Clasificación de Toxinas",
         "author": "Página {page}/{pages}",
         "footer": "Tu posición: #{pos}",
-        "field": "`{t}` monedas"
+        "field": "`{t}` toxinas"
       },
       "rating": {
         "title": "Top 100 - Tabla de Clasificación de Rating",
@@ -187,8 +187,8 @@
       "player_not_found": "¡Jugador no encontrado!",
       "sold": "Vendiste a **{p}** por **{price}** monedas con éxito"
     },
-    "coins": {
-      "res": "- ¡Tienes **{c} monedas** y **{f} destinos**! Estás en el **puesto #{p}** en la tabla de clasificación.\n- Echa un vistazo a otras personas ricas usando `/leaderboard coins`.\n- Reclama **monedas** y **destinos** usando `/daily`."
+    "poisons": {
+      "res": "- ¡Tienes **{c} toxinas** y **{f} destinos**! Estás en el **puesto #{p}** en la tabla de clasificación.\n- Echa un vistazo a otras personas ricas usando `/leaderboard poisons`.\n- Reclama **toxinas** y **destinos** usando `/daily`."
     },
     "duel": {
       "started": "### Partido comenzado",
@@ -245,20 +245,20 @@
     },
     "daily": {
       "has_been_claimed": "Ya has recogido tu recompensa diaria. Intenta de nuevo {t}",
-      "res": "¡Recibiste **{coins}** monedas y **{fates}** destinos hoy!",
-      "bonus": "- Recibiste **{coins}** monedas de bonificación y **{fates}** destinos de bonificación por ser usuario Premium.",
-      "bonus2": "- Recibiste **{coins}** monedas de bonificación y **{fates}** destinos de bonificación por ser usuario Premium Booster.",
-      "bonus3": "- Recibiste **{coins}** monedas de bonificación porque este es un servidor Premium.",
-      "bonus4": "- Recibiste **{coins}** monedas de bonificación porque este es un servidor Premium Booster."
+      "res": "¡Recibiste **{poisons}** toxinas y **{fates}** destinos hoy!",
+      "bonus": "- Recibiste **{poisons}** toxinas de bonificación y **{fates}** destinos de bonificación por ser usuario Premium.",
+      "bonus2": "- Recibiste **{poisons}** toxinas de bonificación y **{fates}** destinos de bonificación por ser usuario Premium Booster.",
+      "bonus3": "- Recibiste **{poisons}** toxinas de bonificación porque este es un servidor Premium.",
+      "bonus4": "- Recibiste **{poisons}** toxinas de bonificación porque este es un servidor Premium Booster."
     },
     "sign": {
       "player_not_found": "¡Jugador no encontrado!",
       "embed": {
-        "desc": "Fichar a este jugador por **{price}** monedas"
+        "desc": "Fichar a este jugador por **{price}** toxinas"
       },
       "buy": "Fichar",
-      "coins_needed": "No tienes suficientes monedas para realizar esta compra",
-      "signed": "¡Fichaste a **{player}** por **{price}** monedas con éxito!"
+      "poisons_needed": "No tienes suficientes toxinas para realizar esta compra",
+      "signed": "¡Fichaste a **{player}** por **{price}** toxinas con éxito!"
     },
     "claims": {
       "res": "Tus reclamos: `{claims}`\nTu pity: `{pity}`\n¡Al alcanzar el pity **50**, tienes garantizada una carta Tier S (85+)!"
@@ -271,12 +271,12 @@
       "devalued_price": "Se vende por"
     },
     "trade": {
-      "missing_coins": "{user} necesita **{coins}** monedas más para comprar tu jugador.",
-      "request": "{user}, {author} quiere venderte **{player} — {collection}** por **{coins}** monedas. ¿Quieres comprar?",
+      "missing_poisons": "{user} necesita **{poisons}** toxinas más para comprar tu jugador.",
+      "request": "{user}, {author} quiere venderte **{player} — {collection}** por **{poisons}** toxinas. ¿Quieres comprar?",
       "make_purchase": "Realizar compra",
       "cancel": "Cancelar",
       "cancelled": "Intercambio cancelado.",
-      "res": "¡Vendiste **{player} — {collection}** a {user} por **{coins}** monedas con éxito!",
+      "res": "¡Vendiste **{player} — {collection}** a {user} por **{poisons}** toxinas con éxito!",
       "invalid_value": "Por favor, proporciona un valor mayor o igual a **{value}**.",
       "cannot_trade": "No puedes intercambiar contigo mismo.",
       "has_been_traded": "Ya intercambiaste un jugador recientemente. Intenta de nuevo {t}",
@@ -286,8 +286,8 @@
       "type": {
         "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Reclamó **{player}** mediante el comando `/claim`",
         "CLAIM_PLAYER_BY_COMMAND": "Recibió **{player}** del sistema (comando `.giveplayer`)",
-        "SELL_PLAYER": "Vendió **{player}** por **{price}** monedas",
-        "TRADE_PLAYER": "Intercambió **{player}** con {user} por **{price}** monedas",
+        "SELL_PLAYER": "Vendió **{player}** por **{price}** toxinas",
+        "TRADE_PLAYER": "Intercambió **{player}** con {user} por **{price}** toxinas",
         "CLAIM_PACK_BY_VOTE": "Recibió un **paquete {pack}** por [votar por el bot](https://discordbotlist.com/bots/sabine/upvote)",
         "CLAIM_PLAYER_BY_PACK": "Reclamó **{player}** abriendo un paquete"
       },
@@ -435,11 +435,11 @@
       "title": "Apostando por {teams}",
       "label": "Inserta la cantidad que quieres apostar"
     },
-    "coins_needed": "Necesitas tener al menos 500 monedas para hacer una apuesta",
-    "invalid_coins": "Inserta un valor válido",
-    "too_much": "No tienes suficientes monedas",
-    "bet_res": "Apostaste **{coins}** monedas en **{team}**\nLa cuota actual es `{odd}x`. El valor puede cambiar a medida que los usuarios hacen apuestas.",
-    "min_value": "La apuesta mínima es de 500 monedas",
+    "poisons_needed": "Necesitas tener al menos 500 toxinas para hacer una apuesta",
+    "invalid_poisons": "Inserta un valor válido",
+    "too_much": "No tienes suficientes toxinas",
+    "bet_res": "Apostaste **{poisons}** toxinas en **{team}**\nLa cuota actual es `{odd}x`. El valor puede cambiar a medida que los usuarios hacen apuestas.",
+    "min_value": "La apuesta mínima es de 500 toxinas",
     "warn": "¡Hay un nuevo parche disponible! Revisa qué ha cambiado en {link}",
     "dont_show_again": "No mostrar de nuevo",
     "wont_be_warned": "No se te volverá a avisar sobre esta actualización.",

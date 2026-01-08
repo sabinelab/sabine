@@ -22,11 +22,11 @@ export default createModalSubmitInteraction({
 
         const value = BigInt(ctx.args[3])
 
-        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.profile.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
@@ -82,7 +82,7 @@ export default createModalSubmitInteraction({
               }
             },
             data: {
-              coins: {
+              poisons: {
                 decrement: value
               }
             }
@@ -93,7 +93,7 @@ export default createModalSubmitInteraction({
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,
-          coins: value.toLocaleString(),
+          poisons: value.toLocaleString(),
           odd
         })
       },
@@ -110,11 +110,11 @@ export default createModalSubmitInteraction({
 
         const value = BigInt(ctx.args[3])
 
-        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_coins')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.profile.coins) return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
 
         let oddA = 0
         let oddB = 0
@@ -170,7 +170,7 @@ export default createModalSubmitInteraction({
               }
             },
             data: {
-              coins: {
+              poisons: {
                 decrement: value
               }
             }
@@ -181,7 +181,7 @@ export default createModalSubmitInteraction({
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,
-          coins: value.toLocaleString(),
+          poisons: value.toLocaleString(),
           odd
         })
       }

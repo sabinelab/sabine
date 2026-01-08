@@ -157,7 +157,7 @@ export const lolResults = new Elysia().post(
               }
             }
 
-            const coins = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
+            const poisons = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
             const fates = 5
 
             await prisma.$transaction([
@@ -176,7 +176,7 @@ export const lolResults = new Elysia().post(
                   correct_predictions: {
                     increment: 1
                   },
-                  coins: { increment: coins },
+                  poisons: { increment: poisons },
                   fates: { increment: fates }
                 }
               })

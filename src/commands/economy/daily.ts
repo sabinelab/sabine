@@ -15,7 +15,7 @@ export default createCommand({
       })
     }
 
-    let coins = BigInt(Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000)
+    let poisons = BigInt(Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000)
 
     let fates = Math.floor(Math.random() * (30 - 20 + 1)) + 20
 
@@ -25,7 +25,7 @@ export default createCommand({
 
     let content =
       t('commands.daily.res', {
-        coins: coins.toLocaleString(),
+        poisons: poisons.toLocaleString(),
         fates
       }) + '\n'
 
@@ -34,23 +34,23 @@ export default createCommand({
     const user = await UserSchema.fetch(ctx.db.profile.userId)
 
     if (user?.premium) {
-      coins *= 5n
+      poisons *= 5n
       fates = Math.round(fates * 1.5)
 
       bonus.push(
         t('commands.daily.bonus', {
-          coins: '5x',
+          poisons: '5x',
           fates: '1.5x'
         })
       )
     }
     if (member?.premiumSince) {
-      coins *= 2n
+      poisons *= 2n
       fates = Math.round(fates * 1.25)
 
       bonus.push(
         t('commands.daily.bonus2', {
-          coins: '2x',
+          poisons: '2x',
           fates: '1.25x'
         })
       )
@@ -65,35 +65,35 @@ export default createCommand({
     })
 
     if (key && key.key.type === 'PREMIUM') {
-      coins = BigInt(Math.round(Number(coins) * 1.5))
+      poisons = BigInt(Math.round(Number(poisons) * 1.5))
 
       bonus.push(
         t('commands.daily.bonus3', {
-          coins: '1.5x'
+          poisons: '1.5x'
         })
       )
     }
 
     if (key && key.key.type === 'BOOSTER') {
-      coins = BigInt(Math.round(Number(coins) * 1.25))
+      poisons = BigInt(Math.round(Number(poisons) * 1.25))
 
       bonus.push(
         t('commands.daily.bonus4', {
-          coins: '1.25x'
+          poisons: '1.25x'
         })
       )
     }
     if (bonus.length) {
       content =
         t('commands.daily.res', {
-          coins: coins.toLocaleString(),
+          poisons: poisons.toLocaleString(),
           fates
         }) +
         '\n' +
         bonus.join('\n')
     }
 
-    await ctx.db.profile.daily(coins, fates)
+    await ctx.db.profile.daily(poisons, fates)
     await ctx.reply(content)
   }
 })

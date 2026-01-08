@@ -74,9 +74,9 @@ export default createCommand({
       return await ctx.reply('commands.trade.cannot_trade')
     }
 
-    if (!profile || profile.coins < BigInt(ctx.args[2])) {
-      return await ctx.reply('commands.trade.missing_coins', {
-        coins: (BigInt(ctx.args[2]) - (!profile ? 0n : profile.coins)).toLocaleString(),
+    if (!profile || profile.poisons < BigInt(ctx.args[2])) {
+      return await ctx.reply('commands.trade.missing_poisons', {
+        poisons: (BigInt(ctx.args[2]) - (!profile ? 0n : profile.poisons)).toLocaleString(),
         user: `<@${ctx.args[0]}>`
       })
     }
@@ -87,7 +87,7 @@ export default createCommand({
         collection: player.collection,
         user: `<@${ctx.args[0]}>`,
         author: ctx.interaction.user.toString(),
-        coins: BigInt(ctx.args[2]).toLocaleString()
+        poisons: BigInt(ctx.args[2]).toLocaleString()
       }),
       components: [
         {
@@ -152,9 +152,9 @@ export default createCommand({
 
       if (index === -1 || index === undefined) return
 
-      if (ctx.db.profile.coins < BigInt(ctx.args[5])) {
-        return await ctx.edit('commands.trade.missing_coins', {
-          coins: (BigInt(ctx.args[5]) - ctx.db.profile.coins).toLocaleString(),
+      if (ctx.db.profile.poisons < BigInt(ctx.args[5])) {
+        return await ctx.edit('commands.trade.missing_poisons', {
+          poisons: (BigInt(ctx.args[5]) - ctx.db.profile.poisons).toLocaleString(),
           user: `<@${ctx.interaction.user}>`
         })
       }
@@ -214,7 +214,7 @@ export default createCommand({
               set: sellerReservePlayers
             },
             arena_metadata: sellerArenaMetadata ? sellerArenaMetadata : undefined,
-            coins: {
+            poisons: {
               increment: BigInt(ctx.args[5])
             }
           }
@@ -228,7 +228,7 @@ export default createCommand({
             }
           },
           data: {
-            coins: {
+            poisons: {
               decrement: BigInt(ctx.args[5])
             },
             reserve_players: {
@@ -261,7 +261,7 @@ export default createCommand({
         player: `${player.name} (${player.ovr})`,
         collection: player.collection,
         user: ctx.interaction.user.toString(),
-        coins: BigInt(ctx.args[5]).toLocaleString()
+        poisons: BigInt(ctx.args[5]).toLocaleString()
       })
     } else {
       await ctx.edit('commands.trade.cancelled')

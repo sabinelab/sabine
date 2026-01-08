@@ -47,7 +47,7 @@ export class ProfileSchema implements Profile {
   public incorrect_predictions: number = 0
   public active_players: string[] = []
   public reserve_players: string[] = []
-  public coins: bigint = 0n
+  public poisons: bigint = 0n
   public team_name: string | null = null
   public team_tag: string | null = null
   public arena_wins: number = 0
@@ -133,7 +133,7 @@ export class ProfileSchema implements Profile {
     return Object.assign(profile, finalData)
   }
 
-  public async daily(coins: bigint, fates: number) {
+  public async daily(poisons: bigint, fates: number) {
     const user = await prisma.profile.update({
       where: {
         userId_guildId: {
@@ -142,8 +142,8 @@ export class ProfileSchema implements Profile {
         }
       },
       data: {
-        coins: {
-          increment: coins
+        poisons: {
+          increment: poisons
         },
         fates: {
           increment: fates
@@ -157,7 +157,7 @@ export class ProfileSchema implements Profile {
     return Object.assign(this, user)
   }
 
-  public async addcoins(amount: bigint) {
+  public async addpoisons(amount: bigint) {
     const user = await prisma.profile.update({
       where: {
         userId_guildId: {
@@ -166,7 +166,7 @@ export class ProfileSchema implements Profile {
         }
       },
       data: {
-        coins: {
+        poisons: {
           increment: amount
         }
       }
@@ -197,7 +197,7 @@ export class ProfileSchema implements Profile {
     return Object.assign(this, user)
   }
 
-  public async rmcoins(amount: bigint) {
+  public async rmpoisons(amount: bigint) {
     const user = await prisma.profile.update({
       where: {
         userId_guildId: {
@@ -206,7 +206,7 @@ export class ProfileSchema implements Profile {
         }
       },
       data: {
-        coins: {
+        poisons: {
           decrement: amount
         }
       }
@@ -417,7 +417,7 @@ export class ProfileSchema implements Profile {
           }
         },
         data: {
-          coins: {
+          poisons: {
             increment: price
           },
           reserve_players: {

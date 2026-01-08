@@ -1,24 +1,29 @@
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: 'coins',
-  description: 'Check your coins',
+  name: 'poisons',
+  description: 'Check your poisons',
   descriptionLocalizations: {
-    'pt-BR': 'Veja seus coins'
+    'pt-BR': 'Veja suas toxinas'
   },
   category: 'economy',
   async run({ ctx, app }) {
-    const value = await app.redis.get('leaderboard:coins')
+    const profiles = await app.prisma.profile.findMany({
+      where: {
+        guildId: ctx.db.guild.id
+      },
+      orderBy: {
+        poisons: 'desc'
+      },
+      take: 100,
+      select: {
+        userId: true
+      }
+    })
+    const p = profiles.findIndex(p => p.userId === ctx.db.profile.userId) + 1
 
-    const users = JSON.parse(value!)
-
-    const p =
-      users.data
-        .sort((a: any, b: any) => Number(b.coins - a.coins))
-        .findIndex((p: any) => p.id === ctx.db.profile.userId) + 1
-
-    await ctx.reply('commands.coins.res', {
-      c: ctx.db.profile.coins.toLocaleString(),
+    await ctx.reply('commands.poisons.res', {
+      c: ctx.db.profile.poisons.toLocaleString(),
       f: ctx.db.profile.fates.toLocaleString(),
       p
     })

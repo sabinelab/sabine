@@ -9,9 +9,9 @@ export default createCommand({
     'pt-BR': 'tabela'
   },
   category: 'esports',
-  description: 'Leaderboard of users with most correct predictions, most victories and most coins',
+  description: 'Leaderboard of users with most correct predictions, rating and poisons',
   descriptionLocalizations: {
-    'pt-BR': 'Tabela de usuários com mais palpites corretos'
+    'pt-BR': 'Tabela de usuários com mais palpites corretos, classificação e toxinas'
   },
   options: [
     {
@@ -48,10 +48,10 @@ export default createCommand({
         },
         {
           type: ApplicationCommandOptionType.Subcommand,
-          name: 'coins',
-          description: 'The local leaderboard of coins',
+          name: 'poisons',
+          description: 'The local leaderboard of poisons',
           descriptionLocalizations: {
-            'pt-BR': 'Tabela local de coins'
+            'pt-BR': 'Tabela local de toxinas'
           },
           options: [
             {
@@ -127,10 +127,10 @@ export default createCommand({
         },
         {
           type: ApplicationCommandOptionType.Subcommand,
-          name: 'coins',
-          description: 'The global leaderboard of coins',
+          name: 'poisons',
+          description: 'The global leaderboard of poisons',
           descriptionLocalizations: {
-            'pt-BR': 'Tabela global de coins'
+            'pt-BR': 'Tabela global de toxinas'
           },
           options: [
             {
@@ -173,11 +173,11 @@ export default createCommand({
       ]
     }
   ],
-  syntax: 'leaderboard global/local <page>',
+  syntax: 'leaderboard/local <page>',
   examples: [
-    'leaderboard global',
-    'leaderboard global 2',
-    'leaderboard global 5',
+    'leaderboard',
+    'leaderboard 2',
+    'leaderboard 5',
     'leaderboard local',
     'leaderboard local 2',
     'leaderboard local 5'

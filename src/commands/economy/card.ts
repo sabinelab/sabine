@@ -55,12 +55,12 @@ export default createCommand({
         },
         {
           name: t('commands.card.price'),
-          value: calcPlayerPrice(player).toLocaleString('en') + ' coins',
+          value: calcPlayerPrice(player).toLocaleString('en') + ' poisons',
           inline: true
         },
         {
           name: t('commands.card.devalued_price'),
-          value: calcPlayerPrice(player, true).toLocaleString('en') + ' coins',
+          value: calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
           inline: true
         }
       )

@@ -39,11 +39,11 @@
         "footer": "Your position: #{pos}",
         "field": "`{t}` correct predictions"
       },
-      "coins": {
-        "title": "Top 100 - Coins Leaderboard",
+      "poisons": {
+        "title": "Top 100 - Poisons Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
-        "field": "`{t}` coins"
+        "field": "`{t}` poisons"
       },
       "rating": {
         "title": "Top 100 - Rating Leaderboard",
@@ -171,10 +171,10 @@
     },
     "sell": {
       "player_not_found": "Player not found!",
-      "sold": "You sold **{p}** for **{price}** coins successfully"
+      "sold": "You sold **{p}** for **{price}** poisons successfully"
     },
-    "coins": {
-      "res": "- You have **{c} coins** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using `/leaderboard coins`.\n- Claim **coins** and **fates** by using `/daily`."
+    "poisons": {
+      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using `/leaderboard poisons`.\n- Claim **poisons** and **fates** by using `/daily`."
     },
     "duel": {
       "started": "### Match started",
@@ -231,11 +231,11 @@
     },
     "daily": {
       "has_been_claimed": "You have already collected your daily reward. Try again {t}",
-      "res": "You received **{coins}** coins and **{fates}** fates today!",
-      "bonus": "- You received **{coins}** bonus coins and **{fates}** bonus fates for being a Premium user.",
-      "bonus2": "- You received **{coins}** bonus coins and **{fates}** bonus fates for being a Premium Booster user.",
-      "bonus3": "- You received **{coins}** bonus coins for this being a Premium server.",
-      "bonus4": "- You received **{coins}** bonus coins for this being a Premium Booster server."
+      "res": "You received **{poisons}** poisons and **{fates}** fates today!",
+      "bonus": "- You received **{poisons}** bonus poisons and **{fates}** bonus fates for being a Premium user.",
+      "bonus2": "- You received **{poisons}** bonus poisons and **{fates}** bonus fates for being a Premium Booster user.",
+      "bonus3": "- You received **{poisons}** bonus poisons for this being a Premium server.",
+      "bonus4": "- You received **{poisons}** bonus poisons for this being a Premium Booster server."
     },
     "claims": {
       "res": "Your claims: `{claims}`\nYour pity: `{pity}`\nUpon reaching pity **50**, you're guaranteed a Tier S card (85+)!"
@@ -248,12 +248,12 @@
       "devalued_price": "Sells for"
     },
     "trade": {
-      "missing_coins": "{user} needs **{coins}** more coins to purchase your player.",
-      "request": "{user}, {author} wants to sell **{player} — {collection}** for you for **{coins}** coins. You wanna buy?",
+      "missing_poisons": "{user} needs **{poisons}** more poisons to purchase your player.",
+      "request": "{user}, {author} wants to sell **{player} — {collection}** for you for **{poisons}** poisons. You wanna buy?",
       "make_purchase": "Make purchase",
       "cancel": "Cancel",
       "cancelled": "Trade cancelled.",
-      "res": "You sold **{player} — {collection}** for {user} for **{coins}** coins succesfully!",
+      "res": "You sold **{player} — {collection}** for {user} for **{poisons}** poisons succesfully!",
       "invalid_value": "Please, provide a value greater than or equal to **{value}**.",
       "cannot_trade": "You cannot trade with yourself.",
       "has_been_traded": "You already traded a player recently. Try again {t}",
@@ -263,8 +263,8 @@
       "type": {
         "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by `/claim` command",
         "CLAIM_PLAYER_BY_COMMAND": "Received **{player}** from the system (`.giveplayer` command)",
-        "SELL_PLAYER": "Sold **{player}** for **{price}** coins",
-        "TRADE_PLAYER": "Traded **{player}** with {user} for **{price}** coins",
+        "SELL_PLAYER": "Sold **{player}** for **{price}** poisons",
+        "TRADE_PLAYER": "Traded **{player}** with {user} for **{price}** poisons",
         "CLAIM_PACK_BY_VOTE": "Received one **{pack} pack** by [voting for the bot](https://discordbotlist.com/bots/sabine/upvote)",
         "CLAIM_PLAYER_BY_PACK": "Claimed **{player}** opening a pack"
       },
@@ -412,11 +412,11 @@
       "title": "Betting for {teams}",
       "label": "Insert the amount you want to bet"
     },
-    "coins_needed": "You need to have at least 500 coins to make a bet",
-    "invalid_coins": "Insert a valid value",
-    "too_much": "You do not have enough coins",
-    "bet_res": "You bet **{coins}** coins on **{team}**\nThe current odd is `{odd}x`. The value can change as users make bets.",
-    "min_value": "The minimum bet is 500 coins",
+    "poisons_needed": "You need to have at least 500 poisons to make a bet",
+    "invalid_poisons": "Insert a valid value",
+    "too_much": "You do not have enough poisons",
+    "bet_res": "You bet **{poisons}** poisons on **{team}**\nThe current odd is `{odd}x`. The value can change as users make bets.",
+    "min_value": "The minimum bet is 500 poisons",
     "warn": "A new patch is available! Check what has changed in {link}",
     "dont_show_again": "Do not show again",
     "wont_be_warned": "You won't be warned about this update again.",

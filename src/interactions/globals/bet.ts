@@ -9,7 +9,7 @@ export default createComponentInteraction({
   flags: 64,
   global: true,
   async run({ ctx, t, app }) {
-    if (ctx.db.profile.coins < 500) return await ctx.reply('helper.coins_needed')
+    if (ctx.db.profile.poisons < 500) return await ctx.reply('helper.poisons_needed')
 
     const options = {
       valorant: async () => {

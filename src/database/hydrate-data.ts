@@ -9,7 +9,7 @@ export const hydrateData = <T>(data: T) => {
     'valorant_resend_time',
     'lol_resend_time'
   ]
-  const bigintFields = ['coins', 'bet']
+  const bigintFields = ['bet', 'poisons']
 
   const obj = data as Record<string, unknown>
 
