@@ -237,15 +237,6 @@
       "bonus3": "- You received **{coins}** bonus coins for this being a Premium server.",
       "bonus4": "- You received **{coins}** bonus coins for this being a Premium Booster server."
     },
-    "sign": {
-      "player_not_found": "Player not found!",
-      "embed": {
-        "desc": "Sign this player for **{price}** coins"
-      },
-      "buy": "Sign",
-      "coins_needed": "You do not have enough coins to make this purchase",
-      "signed": "You signed **{player}** for **{price}** coins succesfully!"
-    },
     "claims": {
       "res": "Your claims: `{claims}`\nYour pity: `{pity}`\nUpon reaching pity **50**, you're guaranteed a Tier S card (85+)!"
     },
