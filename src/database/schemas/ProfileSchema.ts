@@ -260,64 +260,6 @@ export class ProfileSchema implements Profile {
     return this
   }
 
-  public async addCorrectPrediction(game: 'valorant' | 'lol', predictionId: string) {
-    const pred = await prisma.prediction.findFirst({
-      where: {
-        match: predictionId,
-        game,
-        profile: {
-          userId: this.userId,
-          guildId: this.guildId
-        }
-      }
-    })
-
-    if (!pred) return this
-
-    await prisma.$transaction([
-      prisma.prediction.update({
-        where: {
-          id: pred.id
-        },
-        data: {
-          status: 'correct'
-        }
-      }),
-      prisma.profile.update({
-        where: {
-          userId_guildId: {
-            userId: this.userId,
-            guildId: this.guildId
-          }
-        },
-        data: {
-          correct_predictions: {
-            increment: 1
-          }
-        }
-      })
-    ])
-
-    return this
-  }
-
-  public async addIncorrectPrediction(game: 'valorant' | 'lol', predictionId: string) {
-    const pred = await prisma.prediction.findFirst({
-      where: {
-        match: predictionId,
-        game,
-        profile: {
-          userId: this.userId,
-          guildId: this.guildId
-        }
-      }
-    })
-
-    if (!pred) return this
-
-    return this
-  }
-
   public async addPlayerToRoster(
     player: string,
     method: 'CLAIM_PLAYER_BY_CLAIM_COMMAND' | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND',
@@ -346,7 +288,7 @@ export class ProfileSchema implements Profile {
             'reminder',
             {
               channel,
-              user: this.id,
+              user: this.userId,
               guild: this.guildId
             },
             {
@@ -380,7 +322,10 @@ export class ProfileSchema implements Profile {
       }),
       prisma.profile.update({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         data: updates
       })
@@ -525,7 +470,10 @@ export class ProfileSchema implements Profile {
     await prisma.$transaction([
       prisma.profile.update({
         where: {
-          id: this.id
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
         },
         data: update
       }),
