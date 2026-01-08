@@ -116,34 +116,11 @@ export const lolResults = new Elysia().post(
       }
     }
 
-    // if (!preds.length) return
-
-    // const usersIds = [...new Set(preds.map(pred => pred.userId))]
-
-    // const usersData = await prisma.user.findMany({
-    //   where: {
-    //     id: { in: usersIds }
-    //   }
-    // })
-
-    // const userMap = new Map<string, UserSchema>()
-
-    // for (const data of usersData) {
-    //   let user = new UserSchema(data.id)
-    //   user = Object.assign(user, data)
-
-    //   userMap.set(user.id, user)
-    // }
-
     const transactions: Promise<unknown>[] = []
 
     for (const data of req.body) {
       for (const pred of preds) {
         if (data.id !== pred.match) continue
-
-        // const user = userMap.get(pred.userId)
-
-        // if (!user) continue
 
         const transaction = async () => {
           if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {

@@ -15,7 +15,7 @@ export default createCommand({
   category: 'misc',
   userInstall: true,
   async run({ ctx }) {
-    const user = (await UserSchema.fetch(ctx.db.profile.id)) ?? new UserSchema(ctx.db.profile.id)
+    const user = (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
 
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.vote.title'))

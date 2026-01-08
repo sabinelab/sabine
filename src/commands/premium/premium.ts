@@ -13,7 +13,7 @@ export default createCommand({
   userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t }) {
-    const user = await UserSchema.fetch(ctx.db.profile.id)
+    const user = await UserSchema.fetch(ctx.db.profile.userId)
 
     if (!user?.premium || user.premium.type !== 'PREMIUM') {
       return await ctx.reply('commands.premium.you_dont_have_premium')

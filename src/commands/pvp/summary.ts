@@ -47,7 +47,7 @@ export default createCommand({
         id: BigInt(ctx.args[0]),
         metadata: { not: Prisma.DbNull },
         profile: {
-          userId: ctx.db.profile.id,
+          userId: ctx.db.profile.userId,
           guildId: ctx.db.guild.id
         }
       },

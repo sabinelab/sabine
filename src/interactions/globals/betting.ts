@@ -54,7 +54,7 @@ export default createModalSubmitInteraction({
             match: ctx.args[2],
             game: 'valorant',
             profile: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },

@@ -112,7 +112,7 @@ export default createCommand({
                 button
                   .setStyle(ButtonStyle.Danger)
                   .setLabel(ctx.t('commands.roster.container.button.remove'))
-                  .setCustomId(`roster;${ctx.db.profile.id};remove;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.userId};remove;${p};${i}`)
               )
           )
           i++
@@ -147,7 +147,7 @@ export default createCommand({
                 button
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
-                  .setCustomId(`roster;${ctx.db.profile.id};promote;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.userId};promote;${p};${i}`)
               )
           )
           i++
@@ -160,12 +160,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('1404176223621611572')
-      .setCustomId(`roster;${ctx.db.profile.id};previous;${page - 1 < 1 ? 1 : page - 1}`)
+      .setCustomId(`roster;${ctx.db.profile.userId};previous;${page - 1 < 1 ? 1 : page - 1}`)
 
     const next = new ButtonBuilder()
       .setStyle(ButtonStyle.Primary)
       .setEmoji('1404176291829121028')
-      .setCustomId(`roster;${ctx.db.profile.id};next;${page + 1 > pages ? pages : page + 1}`)
+      .setCustomId(`roster;${ctx.db.profile.userId};next;${page + 1 > pages ? pages : page + 1}`)
 
     if (page <= 1) previous.setDisabled()
     if (page >= pages) next.setDisabled()
@@ -182,7 +182,7 @@ export default createCommand({
 
     if (ctx.args[2] === 'team') {
       await i.showModal({
-        customId: `roster;${i.user.id};modal`,
+        customId: `roster;${ctx.db.profile.userId};modal`,
         title: t('commands.roster.modal.title'),
         components: [
           {
@@ -227,7 +227,7 @@ export default createCommand({
           const user = await tx.profile.findUnique({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -248,7 +248,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -282,7 +282,7 @@ export default createCommand({
       }
 
       const menu = new SelectMenuBuilder()
-        .setCustomId(`roster;${ctx.db.profile.id};promote2;${player.id}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};promote2;${player.id}`)
         .setOptions(options)
 
       await ctx.reply(menu.build(t('commands.promote.select_player')))
@@ -296,7 +296,7 @@ export default createCommand({
         const user = await tx.profile.findUnique({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -320,7 +320,7 @@ export default createCommand({
         await tx.profile.update({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -411,7 +411,7 @@ export default createCommand({
                   button
                     .setStyle(ButtonStyle.Danger)
                     .setLabel(t('commands.roster.container.button.remove'))
-                    .setCustomId(`roster;${ctx.db.profile.id};remove;${p};${i}`)
+                    .setCustomId(`roster;${ctx.db.profile.userId};remove;${p};${i}`)
                 )
             )
             i++
@@ -428,7 +428,7 @@ export default createCommand({
           const user = await tx.profile.findUnique({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -445,7 +445,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -488,7 +488,7 @@ export default createCommand({
                   button
                     .setStyle(ButtonStyle.Success)
                     .setLabel(t('commands.roster.container.button.promote'))
-                    .setCustomId(`roster;${ctx.db.profile.id};promote;${p};${i}`)
+                    .setCustomId(`roster;${ctx.db.profile.userId};promote;${p};${i}`)
                 )
             )
             i++
@@ -501,12 +501,12 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`roster;${ctx.db.profile.id};previous;${page - 1}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};previous;${page - 1}`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`roster;${ctx.db.profile.id};next;${page + 1}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};next;${page + 1}`)
 
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()
@@ -528,7 +528,7 @@ export default createCommand({
     await prisma.profile.update({
       where: {
         userId_guildId: {
-          userId: ctx.db.profile.id,
+          userId: ctx.db.profile.userId,
           guildId: ctx.db.guild.id
         }
       },

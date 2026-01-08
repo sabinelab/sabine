@@ -134,6 +134,9 @@ export default class Round extends Match {
       (await ProfileSchema.fetch(this.teams[1].user, this.guildId)) ??
       new ProfileSchema(this.teams[1].user, this.guildId)
 
+    console.log(profile1.id)
+    console.log(profile2.id)
+
     if (this.mode === 'ranked') {
       const max = Math.max(score1, score2)
 
@@ -1342,49 +1345,52 @@ export default class Round extends Match {
         })
       }
     } else if (this.mode === 'tournament' && !this.overtime) {
+      console.log('torneio com ot')
       const max = Math.max(score1, score2)
 
       if (max === 13 && score1 === max) {
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
+        await prisma
+          .$transaction([
+            prisma.match.create({
+              data: {
+                mode: 'TOURNAMENT',
+                profileId: profile1.id,
+                winner: true,
+                teams: {
+                  create: [
+                    {
+                      user: this.teams[0].user,
+                      score: score1
+                    },
+                    {
+                      user: this.teams[1].user,
+                      score: score2
+                    }
+                  ]
+                }
               }
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
+            }),
+            prisma.match.create({
+              data: {
+                mode: 'TOURNAMENT',
+                profileId: profile2.id,
+                winner: false,
+                teams: {
+                  create: [
+                    {
+                      user: this.teams[1].user,
+                      score: score2
+                    },
+                    {
+                      user: this.teams[0].user,
+                      score: score1
+                    }
+                  ]
+                }
               }
-            }
-          })
-        ])
+            })
+          ])
+          .catch(error => console.error('erro torneio com ot', error))
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1514,35 +1520,39 @@ export default class Round extends Match {
     } else {
       const max = Math.max(score1, score2)
 
+      console.log('torneio sem ot')
+
       if (max === 13 && score1 === max) {
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  { user: this.teams[0].user, score: score1 },
-                  { user: this.teams[1].user, score: score2 }
-                ]
+        await prisma
+          .$transaction([
+            prisma.match.create({
+              data: {
+                mode: 'TOURNAMENT',
+                profileId: profile1.id,
+                winner: true,
+                teams: {
+                  create: [
+                    { user: this.teams[0].user, score: score1 },
+                    { user: this.teams[1].user, score: score2 }
+                  ]
+                }
               }
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  { user: this.teams[1].user, score: score2 },
-                  { user: this.teams[0].user, score: score1 }
-                ]
+            }),
+            prisma.match.create({
+              data: {
+                mode: 'TOURNAMENT',
+                profileId: profile2.id,
+                winner: false,
+                teams: {
+                  create: [
+                    { user: this.teams[1].user, score: score2 },
+                    { user: this.teams[0].user, score: score1 }
+                  ]
+                }
               }
-            }
-          })
-        ])
+            })
+          ])
+          .catch(error => console.error('erro torneio sem ot', error))
 
         const embed = new EmbedBuilder()
           .setTitle(this.t(`simulator.mode.${this.mode}`))

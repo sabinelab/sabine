@@ -30,7 +30,7 @@ export default createCommand({
 
     const bonus: string[] = []
 
-    const user = await UserSchema.fetch(ctx.db.profile.id)
+    const user = await UserSchema.fetch(ctx.db.profile.userId)
 
     if (user?.premium) {
       coins *= 5n

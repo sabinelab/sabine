@@ -98,7 +98,7 @@ export default createCommand({
           profile: {
             connect: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             }
@@ -108,7 +108,7 @@ export default createCommand({
       app.prisma.profile.update({
         where: {
           userId_guildId: {
-            userId: ctx.db.profile.id,
+            userId: ctx.db.profile.userId,
             guildId: ctx.db.guild.id
           }
         },

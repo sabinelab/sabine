@@ -34,7 +34,7 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.profile.id};gold`)
+              .setCustomId(`shop;${ctx.db.profile.userId};gold`)
               .setDisabled(ctx.db.profile.fates < price.gold)
           )
       )
@@ -47,7 +47,7 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.profile.id};platinum`)
+              .setCustomId(`shop;${ctx.db.profile.userId};platinum`)
               .setDisabled(ctx.db.profile.fates < price.platinum)
           )
       )
@@ -60,7 +60,7 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.profile.id};diamond`)
+              .setCustomId(`shop;${ctx.db.profile.userId};diamond`)
               .setDisabled(ctx.db.profile.fates < price.diamond)
           )
       )
@@ -73,7 +73,7 @@ export default createCommand({
             button
               .setStyle(ButtonStyle.Success)
               .setLabel(ctx.t('commands.shop.container.button'))
-              .setCustomId(`shop;${ctx.db.profile.id};ascendant`)
+              .setCustomId(`shop;${ctx.db.profile.userId};ascendant`)
               .setDisabled(ctx.db.profile.fates < price.ascendant)
           )
       )
@@ -94,7 +94,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -119,7 +119,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -144,7 +144,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },
@@ -169,7 +169,7 @@ export default createCommand({
           await tx.profile.update({
             where: {
               userId_guildId: {
-                userId: ctx.db.profile.id,
+                userId: ctx.db.profile.userId,
                 guildId: ctx.db.guild.id
               }
             },

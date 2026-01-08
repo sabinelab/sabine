@@ -169,7 +169,7 @@ export default createCommand({
       id = ctx.args[1].toString()
     } else id = ctx.args[2].toString()
 
-    const profile = await ProfileSchema.fetch(id, ctx.db.profile.id)
+    const profile = await ProfileSchema.fetch(id, ctx.db.guild.id)
 
     const authorCounts: { [key: string]: number } = {}
     const userCounts: { [key: string]: number } = {}
@@ -180,7 +180,7 @@ export default createCommand({
 
     const authorDuplicates = Object.values(authorCounts).filter(count => count > 1).length
 
-    const keys = await app.redis.keys('agent_selection*')
+    const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
     if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')

@@ -17,8 +17,9 @@ export default class ModalSubmitInteractionRunner {
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
     const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
 
-    const guild = await GuildSchema.fetch(interaction.guildId) ?? new GuildSchema(interaction.guildId)
-    const profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId) ??
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const profile =
+      (await ProfileSchema.fetch(interaction.user.id, interaction.guildId)) ??
       new ProfileSchema(interaction.user.id, interaction.guildId)
 
     if (blacklist.get(interaction.user.id)) return

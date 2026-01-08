@@ -18,7 +18,7 @@ export default createComponentInteraction({
             match: ctx.args[2],
             game: 'valorant',
             profile: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -71,7 +71,7 @@ export default createComponentInteraction({
             match: ctx.args[2],
             game: 'lol',
             profile: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -90,7 +90,7 @@ export default createComponentInteraction({
         }
 
         await ctx.interaction.showModal({
-          customId: `betting;valorant;${ctx.args[2]}`,
+          customId: `betting;lol;${ctx.args[2]}`,
           title: t('helper.bet_modal.title', {
             teams: `${pred.teams[0].name} vs ${pred.teams[1].name}`
           }),

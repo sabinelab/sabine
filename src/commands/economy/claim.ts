@@ -116,7 +116,7 @@ export default createCommand({
         const user = await tx.profile.findUnique({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },
@@ -147,7 +147,7 @@ export default createCommand({
         await tx.profile.update({
           where: {
             userId_guildId: {
-              userId: ctx.db.profile.id,
+              userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
             }
           },

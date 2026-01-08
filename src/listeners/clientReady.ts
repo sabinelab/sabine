@@ -846,7 +846,7 @@ export default createListener({
               name: player2.team_name!,
               tag: player2.team_tag!,
               user: player2.id,
-              guildId: player1.guildId
+              guildId: player2.guildId
             }
           ],
           map,

@@ -32,7 +32,7 @@ export default createCommand({
     const matches = await app.prisma.match.findMany({
       where: {
         profile: {
-          userId: ctx.db.profile.id,
+          userId: ctx.db.profile.userId,
           guildId: ctx.db.guild.id
         }
       },
@@ -178,7 +178,7 @@ export default createCommand({
     const matches = await app.prisma.match.findMany({
       where: {
         profile: {
-          userId: ctx.db.profile.id,
+          userId: ctx.db.profile.userId,
           guildId: ctx.db.guild.id
         }
       },

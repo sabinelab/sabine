@@ -37,10 +37,14 @@ export default class CommandRunner {
 
     let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
-    if (!profile && command.name !== 'register' && ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)) {
+    if (
+      !profile &&
+      command.name !== 'register' &&
+      ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)
+    ) {
       return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
     }
-    if(!profile) {
+    if (!profile) {
       profile = new ProfileSchema(interaction.user.id, interaction.guildId)
     }
 

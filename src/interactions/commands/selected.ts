@@ -15,7 +15,7 @@ export default createComponentInteraction({
 
     const agentName = ctx.interaction.values[0]
 
-    const keys = await app.redis.keys('agent_selection*')
+    const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
     const key = keys.find(key => key.includes(ctx.interaction.user.id))
 
     if (!key) return
@@ -188,16 +188,16 @@ export default createComponentInteraction({
         let match = new Match({
           teams: [
             {
-              roster: data[ctx.db.profile.id],
+              roster: data[ctx.db.profile.userId],
               name: ctx.db.profile.team_name!,
               tag: ctx.db.profile.team_tag!,
-              user: ctx.db.profile.id
+              user: ctx.db.profile.userId
             },
             {
-              roster: data[profile.id],
+              roster: data[profile.userId],
               name: profile.team_name!,
               tag: profile.team_tag!,
-              user: profile.id
+              user: profile.userId
             }
           ],
           ctx: message!,
@@ -220,23 +220,23 @@ export default createComponentInteraction({
 
         await message.edit({ embeds: [embed] })
 
-        const keys = await app.redis.keys('agent_selection*')
+        const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
         const key = keys.filter(k => k.includes(ctx.interaction.user.id))[0]
 
         await app.redis.del(key)
 
         try {
           while (!match.finished) {
-            await app.redis.set(`match:${ctx.db.profile.id}`, '1')
-            await app.redis.set(`match:${profile.id}`, '1')
+            await app.redis.set(`match:${ctx.db.profile.userId}`, '1')
+            await app.redis.set(`match:${profile.userId}`, '1')
 
             await match.wait(2500)
 
             match = await match.start()
           }
         } catch (e) {
-          await app.redis.del(`match:${ctx.db.profile.id}`)
-          await app.redis.del(`match:${profile.id}`)
+          await app.redis.del(`match:${ctx.db.profile.userId}`)
+          await app.redis.del(`match:${profile.userId}`)
 
           await ctx.reply('commands.duel.error', {
             users: `${ctx.interaction.user} <@${match.teams[1].user}>`,
@@ -245,8 +245,8 @@ export default createComponentInteraction({
 
           await new Logger(app).error(e as Error)
         } finally {
-          await app.redis.del(`match:${ctx.db.profile.id}`)
-          await app.redis.del(`match:${profile.id}`)
+          await app.redis.del(`match:${ctx.db.profile.userId}`)
+          await app.redis.del(`match:${profile.userId}`)
         }
       }, timeout)
     } else {

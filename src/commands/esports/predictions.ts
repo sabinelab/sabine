@@ -71,7 +71,7 @@ export default createCommand({
         where: {
           game: 'valorant',
           profile: {
-            userId: ctx.db.profile.id,
+            userId: ctx.db.profile.userId,
             guildId: ctx.db.guild.id
           }
         },
@@ -156,7 +156,7 @@ export default createCommand({
         where: {
           game: 'lol',
           profile: {
-            userId: ctx.db.profile.id,
+            userId: ctx.db.profile.userId,
             guildId: ctx.db.guild.id
           }
         },
@@ -244,7 +244,7 @@ export default createCommand({
         where: {
           game: 'valorant',
           profile: {
-            userId: ctx.db.profile.id,
+            userId: ctx.db.profile.userId,
             guildId: ctx.db.guild.id
           }
         },
@@ -340,7 +340,7 @@ export default createCommand({
         where: {
           game: 'valorant',
           profile: {
-            userId: ctx.db.profile.id,
+            userId: ctx.db.profile.userId,
             guildId: ctx.db.guild.id
           }
         },
