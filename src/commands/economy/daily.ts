@@ -3,6 +3,9 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'daily',
+  nameLocalizations: {
+    'pt-BR': 'diário'
+  },
   description: 'Get your daily reward',
   descriptionLocalizations: {
     'pt-BR': 'Obtenha sua recompensa diária'
