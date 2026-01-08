@@ -1,0 +1,35 @@
+model Transaction {
+  id         String          @id @default(uuid())
+  profile    Profile         @relation(fields: [profileId], references: [id])
+  profileId  String
+  type       TransactionType
+  player     Int?            @db.SmallInt
+  pack       Pack?
+  price      BigInt?
+  to         String?
+  created_at DateTime        @default(now())
+
+  @@index([profileId, type])
+}
+
+enum Pack {
+  IRON
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+  ASCENDANT
+  IMMORTAL
+  RADIANT
+}
+
+enum TransactionType {
+  CLAIM_PLAYER_BY_CLAIM_COMMAND
+  CLAIM_PLAYER_BY_COMMAND
+  SELL_PLAYER
+  TRADE_PLAYER
+  SIGN_PLAYER
+  CLAIM_PACK_BY_VOTE
+  CLAIM_PLAYER_BY_PACK
+}

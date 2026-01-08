@@ -1,0 +1,15 @@
+model Update {
+  id           String    @id
+  published_at DateTime  @default(now())
+  content      Content[]
+}
+
+model Content {
+  id       String @id @default(uuid())
+  update   Update @relation(fields: [updateId], references: [id])
+  updateId String
+  lang     String
+  text     String
+
+  @@index([updateId])
+}

@@ -1,0 +1,87 @@
+model Guild {
+  id                         String        @id
+  lang                       Language      @default(en)
+  events                     Event[]
+  valorant_resend_time       DateTime?
+  valorant_matches           String[]      @default([])
+  valorant_news_channel      String?
+  valorant_live_feed_channel String?
+  lol_resend_time            DateTime?
+  lol_matches                String[]      @default([])
+  lol_news_channel           String?
+  lol_live_feed_channel      String?
+  tbd_matches                TBDMatch[]
+  key                        GuildKey?
+  tournaments_length         Int           @default(5) @db.SmallInt
+  partner                    Boolean?
+  invite                     String?
+  live_messages              LiveMessage[]
+  guildKeyId                 String?
+  users                      Profile[]
+}
+
+model LiveMessage {
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String
+  message String
+  event   String
+
+  @@index([guildId])
+}
+
+model GuildKey {
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String @unique
+  key     Key    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+  keyId   String
+
+  @@unique([guildId, keyId])
+  @@index([guildId, keyId])
+}
+
+model Key {
+  id         String     @id @default(uuid())
+  type       KeyType
+  expires_at DateTime?
+  user       String
+  active     Boolean    @default(false)
+  active_in  String[]   @default([])
+  guildKeys  GuildKey[]
+
+  @@index([user, type])
+}
+
+model TBDMatch {
+  id      String    @id @default(uuid())
+  guild   Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String
+  matchId String
+  type    EventType
+  channel String
+
+  @@index([guildId])
+}
+
+model Event {
+  id       String    @id @default(uuid())
+  guild    Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId  String
+  type     EventType
+  name     String
+  channel1 String
+  channel2 String
+
+  @@index([guildId, type])
+}
+
+enum KeyType {
+  BOOSTER
+  PREMIUM
+}
+
+enum EventType {
+  valorant
+  lol
+}

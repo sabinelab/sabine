@@ -1,0 +1,54 @@
+model Profile {
+  id                       String        @id @default(uuid())
+  created_at               DateTime      @default(now())
+  predictions              Prediction[]
+  correct_predictions      Int           @default(0) @db.SmallInt
+  incorrect_predictions    Int           @default(0) @db.SmallInt
+  active_players           String[]
+  reserve_players          String[]
+  poisons                  BigInt        @default(0)
+  team_name                String?       @db.VarChar(20)
+  team_tag                 String?       @db.VarChar(4)
+  arena_wins               Int           @default(0) @db.SmallInt
+  ranked_wins              Int           @default(0) @db.SmallInt
+  unranked_wins            Int           @default(0) @db.SmallInt
+  swiftplay_wins           Int           @default(0) @db.SmallInt
+  ranked_swiftplay_wins    Int           @default(0) @db.SmallInt
+  arena_defeats            Int           @default(0) @db.SmallInt
+  ranked_defeats           Int           @default(0) @db.SmallInt
+  unranked_defeats         Int           @default(0) @db.SmallInt
+  swiftplay_defeats        Int           @default(0) @db.SmallInt
+  ranked_swiftplay_defeats Int           @default(0) @db.SmallInt
+  arena_metadata           Json?
+  daily_time               DateTime?
+  claim_time               DateTime?
+  pity                     Int           @default(0) @db.SmallInt
+  claims                   Int           @default(0)
+  fates                    Int           @default(0) @db.SmallInt
+  rank_rating              Int           @default(0)
+  remind                   Boolean?
+  remind_in                String?
+  reminded                 Boolean       @default(true)
+  transactions             Transaction[]
+  career                   Match[]
+  warned                   Boolean?
+  iron_packs               Int           @default(0)
+  bronze_packs             Int           @default(0)
+  silver_packs             Int           @default(0)
+  gold_packs               Int           @default(0)
+  platinum_packs           Int           @default(0)
+  diamond_packs            Int           @default(0)
+  ascendant_packs          Int           @default(0)
+  immortal_packs           Int           @default(0)
+  radiant_packs            Int           @default(0)
+  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                   String
+  guild                    Guild         @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId                  String
+
+  @@unique([userId, guildId])
+  @@index([poisons])
+  @@index([correct_predictions])
+  @@index([rank_rating])
+  @@index([arena_wins])
+}

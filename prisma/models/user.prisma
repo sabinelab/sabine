@@ -1,0 +1,26 @@
+model User {
+  id                    String    @id
+  created_at            DateTime  @default(now())
+  lang                  Language  @default(en)
+  premium               Premium?
+  last_vote             DateTime?
+  vote_streak           Int       @default(0)
+  votes                 Int       @default(0)
+  collected_vote_reward Boolean   @default(true)
+  warn                  Boolean   @default(false)
+  profiles              Profile[]
+}
+
+model Premium {
+  id         String      @id @default(uuid())
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String      @unique
+  type       PremiumType
+  expires_at DateTime
+
+  @@index([userId])
+}
+
+enum PremiumType {
+  PREMIUM
+}
