@@ -34,8 +34,8 @@ export default class CommandContext {
     this.args = options.args
   }
 
-  public t(content: Content, args?: Args) {
-    return locales(this.locale, content, args)
+  public t<T extends Content>(content: T, args?: Args) {
+    return locales<T>(this.locale, content, args)
   }
 
   public async reply<T extends Content>(
