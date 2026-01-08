@@ -40,6 +40,10 @@ export default class ComponentInteractionContext {
     return this
   }
 
+  public t<T extends Content>(content: T, args?: Args) {
+    return locales<T>(this.locale, content, args)
+  }
+
   public async reply<T extends Content>(
     content: T | Discord.InteractionReplyOptions,
     options?: Args
