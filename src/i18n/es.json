@@ -188,7 +188,7 @@
       "sold": "Vendiste a **{p}** por **{price}** monedas con éxito"
     },
     "coins": {
-      "res": "- ¡Tienes **{c} monedas** y **{f} destinos**! Estás en el **puesto #{p}** en la tabla de clasificación.\n- Echa un vistazo a otras personas ricas usando `/leaderboard global coins`.\n- Reclama **monedas** y **destinos** usando `/daily`."
+      "res": "- ¡Tienes **{c} monedas** y **{f} destinos**! Estás en el **puesto #{p}** en la tabla de clasificación.\n- Echa un vistazo a otras personas ricas usando `/leaderboard coins`.\n- Reclama **monedas** y **destinos** usando `/daily`."
     },
     "duel": {
       "started": "### Partido comenzado",
