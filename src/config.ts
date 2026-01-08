@@ -351,7 +351,8 @@ export const valorant_maps: {
     name: 'Breeze',
     meta_agents: ['Viper', 'Jett', 'Cypher', 'KAY/O', 'Sova', 'Harbor'],
     image: 'https://imgur.com/p5Bxsca.png',
-    sides: ['A', 'B']
+    sides: ['A', 'B'],
+    current_map_pool: true
   },
   {
     name: 'Fracture',
@@ -410,7 +411,6 @@ export const valorant_maps: {
   {
     name: 'Sunset',
     meta_agents: ['Raze', 'Neon', 'Fade', 'Sova', 'Breach', 'Gekko', 'Viper', 'Omen', 'Cypher'],
-    current_map_pool: true,
     image: 'https://imgur.com/MuMwr1F.png',
     sides: ['A', 'B']
   },
