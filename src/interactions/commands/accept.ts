@@ -11,7 +11,7 @@ export default createComponentInteraction({
   async run({ ctx, app, t }) {
     const profile = await ProfileSchema.fetch(ctx.args[2], ctx.db.guild.id)
 
-    const keys = await app.redis.keys('agent_selection*')
+    const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
     if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
@@ -93,7 +93,7 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${profile.id};${ctx.interaction.user.id}`)
+      .setCustomId(`select;${profile.userId};${ctx.interaction.user.id}`)
 
     const menu2 = new SelectMenuBuilder()
       .setPlaceholder(ctx.db.profile.team_name!)
@@ -106,11 +106,11 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${ctx.interaction.user.id};${profile.id}`)
+      .setCustomId(`select;${ctx.interaction.user.id};${profile.userId}`)
 
     const interaction = (await ctx.edit({
       embeds: [embed],
-      content: `${ctx.interaction.user} <@${profile.id}>`,
+      content: `${ctx.interaction.user} <@${profile.userId}>`,
       components: [
         {
           type: ComponentType.ActionRow,
@@ -142,7 +142,7 @@ export default createComponentInteraction({
       }[]
     } = {}
 
-    data[ctx.db.profile.id] = ctx.db.profile.active_players.map(id => {
+    data[ctx.db.profile.userId] = ctx.db.profile.active_players.map(id => {
       const p = app.players.get(id)!
       const ovr = p.ovr
       return {
@@ -152,7 +152,7 @@ export default createComponentInteraction({
       }
     })
 
-    data[profile.id] = profile.active_players.map(id => {
+    data[profile.userId] = profile.active_players.map(id => {
       const p = app.players.get(id)!
       const ovr = p.ovr
       return {
@@ -163,7 +163,7 @@ export default createComponentInteraction({
     })
 
     await app.redis.set(
-      `agent_selection:${profile.id}:${ctx.interaction.user.id}`,
+      `agent_selection:${ctx.db.guild.id}:${profile.userId}:${ctx.interaction.user.id}`,
       JSON.stringify({
         ...data,
         messageId: interaction.resource?.message?.id,
