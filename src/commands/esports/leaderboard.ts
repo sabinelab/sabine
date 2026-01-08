@@ -1,5 +1,9 @@
-import { ApplicationCommandOptionType } from 'discord.js'
-import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonBuilder,
+  ButtonStyle
+} from 'discord.js'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -15,1225 +19,659 @@ export default createCommand({
   },
   options: [
     {
-      type: ApplicationCommandOptionType.SubcommandGroup,
-      name: 'local',
-      description: 'Shows the leaderboard of this server',
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'predictions',
+      nameLocalizations: {
+        'pt-BR': 'palpites'
+      },
+      description: 'The leaderboard of predictions',
       descriptionLocalizations: {
-        'pt-BR': 'Mostra a tabela desse servidor'
+        'pt-BR': 'Tabela de palpites'
       },
       options: [
         {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'predictions',
+          type: ApplicationCommandOptionType.String,
+          name: 'page',
           nameLocalizations: {
-            'pt-BR': 'palpites'
+            'pt-BR': 'página'
           },
-          description: 'The local leaderboard of predictions',
+          description: 'Insert the page',
           descriptionLocalizations: {
-            'pt-BR': 'Tabela local de palpites'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
-        },
-        {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'poisons',
-          description: 'The local leaderboard of poisons',
-          descriptionLocalizations: {
-            'pt-BR': 'Tabela local de toxinas'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
-        },
-        {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'rating',
-          nameLocalizations: {
-            'pt-BR': 'classificação'
-          },
-          description: 'The local leaderboard of rating',
-          descriptionLocalizations: {
-            'pt-BR': 'Tabela local de classificação'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
+            'pt-BR': 'Informe a página'
+          }
         }
       ]
     },
     {
-      type: ApplicationCommandOptionType.SubcommandGroup,
-      name: 'global',
-      description: 'Shows the global leaderboard',
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'poisons',
+      nameLocalizations: {
+        'pt-BR': 'toxinas'
+      },
+      description: 'The leaderboard of poisons',
       descriptionLocalizations: {
-        'pt-BR': 'Mostra a tabela global'
+        'pt-BR': 'Tabela de toxinas'
       },
       options: [
         {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'predictions',
+          type: ApplicationCommandOptionType.String,
+          name: 'page',
           nameLocalizations: {
-            'pt-BR': 'palpites'
+            'pt-BR': 'página'
           },
-          description: 'The global leaderboard of predictions',
+          description: 'Insert the page',
           descriptionLocalizations: {
-            'pt-BR': 'Tabela global de palpites'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
-        },
+            'pt-BR': 'Informe a página'
+          }
+        }
+      ]
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'rating',
+      nameLocalizations: {
+        'pt-BR': 'classificação'
+      },
+      description: 'The leaderboard of rating',
+      descriptionLocalizations: {
+        'pt-BR': 'Tabela de classificação'
+      },
+      options: [
         {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'poisons',
-          description: 'The global leaderboard of poisons',
-          descriptionLocalizations: {
-            'pt-BR': 'Tabela global de toxinas'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
-        },
-        {
-          type: ApplicationCommandOptionType.Subcommand,
-          name: 'rating',
+          type: ApplicationCommandOptionType.String,
+          name: 'page',
           nameLocalizations: {
-            'pt-BR': 'classificação'
+            'pt-BR': 'página'
           },
-          description: 'The global leaderboard of rating',
+          description: 'Insert the page',
           descriptionLocalizations: {
-            'pt-BR': 'Tabela global de classificação'
-          },
-          options: [
-            {
-              type: ApplicationCommandOptionType.String,
-              name: 'page',
-              nameLocalizations: {
-                'pt-BR': 'página'
-              },
-              description: 'Insert the page',
-              descriptionLocalizations: {
-                'pt-BR': 'Informe a página'
-              }
-            }
-          ]
+            'pt-BR': 'Informe a página'
+          }
         }
       ]
     }
   ],
-  syntax: 'leaderboard/local <page>',
-  examples: [
-    'leaderboard',
-    'leaderboard 2',
-    'leaderboard 5',
-    'leaderboard local',
-    'leaderboard local 2',
-    'leaderboard local 5'
-  ],
+  syntax: 'leaderboard predictions/poisons/rating <page>',
+  examples: ['leaderboard predictions 1', 'leaderboard poisons 2', 'leaderboard rating 3'],
   isThinking: true,
   messageComponentInteractionTime: 10 * 60 * 1000,
-  async run({ ctx, t, app }) {
-    if (ctx.args[0] === 'local' && ctx.guild) {
-      if (ctx.args[1] === 'predictions') {
-        const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        let page = Number(ctx.args[1])
-
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
+  async run({ ctx, app }) {
+    if (ctx.args[0] === 'poisons') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          poisons: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          poisons: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          poisons: true
         }
+      })
 
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.predictions.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
+      const array = profiles
+      const page = Number(ctx.args[1]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.poisons.author', {
+            page,
+            pages
           })
-          .setTitle(t('commands.leaderboard.predictions.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
+        })
+        .setTitle(ctx.t('commands.leaderboard.poisons.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.poisons.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    poisons: profile.poisons.toLocaleString()
+                  })
+                : ctx.t('commands.leaderboard.poisons.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    poisons: profile.poisons.toLocaleString()
+                  })
             })
-          )
+            .join('\n')
+        )
 
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.predictions.field', {
-              t: user.correct_predictions
-            })
-          )
-        }
-
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
         embed.setFooter({
-          text: t('commands.leaderboard.predictions.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;predictions`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;local;predictions`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[1] === 'coins') {
-        const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        let page = Number(ctx.args[1])
-
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.coins.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.coins.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.coins.field', {
-              t: BigInt(user.coins).toLocaleString('en')
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.coins.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;coins`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;local;coins`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[1] === 'rating') {
-        const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        let page = Number(ctx.args[1])
-
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.rating.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.rating.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.rating.field', {
-              rr: user.rank_rating
-            })
-          )
-        }
-        embed.setFooter({
-          text: t('commands.leaderboard.rating.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;rating`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;local;rating`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
         })
       }
-    } else {
-      if (ctx.args[1] === 'predictions') {
-        const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
 
-        let users = value.data
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
 
-        const array = users
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
 
-        let page = Number(ctx.args[1])
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
 
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
+      await ctx.reply({
+        embeds: [embed],
+        components: [row]
+      })
+    } else if (ctx.args[0] === 'rating') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          rank_rating: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          rank_rating: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          rank_rating: true
         }
+      })
 
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.predictions.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
+      const array = profiles
+      const page = Number(ctx.args[1]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.rating.author', {
+            page,
+            pages
           })
-          .setTitle(t('commands.leaderboard.predictions.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
+        })
+        .setTitle(ctx.t('commands.leaderboard.rating.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.rating.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    rr: profile.rank_rating
+                  })
+                : ctx.t('commands.leaderboard.rating.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    rr: profile.rank_rating
+                  })
             })
-          )
+            .join('\n')
+        )
 
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.predictions.field', {
-              t: user.correct_predictions
-            })
-          )
-        }
-
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
         embed.setFooter({
-          text: t('commands.leaderboard.predictions.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;predictions`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;global;predictions`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[1] === 'coins') {
-        const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
-
-        let users = value.data
-
-        const array = users
-
-        let page = Number(ctx.args[1])
-
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.coins.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.coins.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.coins.field', {
-              t: BigInt(user.coins).toLocaleString('en')
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.coins.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;coins`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;global;coins`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[1] === 'rating') {
-        const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
-
-        let users = value.data
-
-        const array = users
-
-        let page = Number(ctx.args[1])
-
-        if (!page || page === 1 || Number.isNaN(page)) {
-          users = users.slice(0, 10)
-          page = 1
-        } else users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.rating.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.rating.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.rating.field', {
-              rr: user.rank_rating
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.rating.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;rating`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page + 1 > Math.ceil(array.length / 10) ? Math.ceil(array.length / 10) : page + 1};next;global;rating`
-          )
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= Math.ceil(array.length / 10)) next.setDisabled()
-
-        await ctx.reply({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
         })
       }
+
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
+
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
+
+      await ctx.reply({
+        embeds: [embed],
+        components: [row]
+      })
+    }
+    else if (ctx.args[0] === 'predictions') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          correct_predictions: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          correct_predictions: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          correct_predictions: true
+        }
+      })
+
+      const array = profiles
+      const page = Number(ctx.args[1]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.predictions.author', {
+            page,
+            pages
+          })
+        })
+        .setTitle(ctx.t('commands.leaderboard.predictions.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.predictions.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    predictions: profile.correct_predictions
+                  })
+                : ctx.t('commands.leaderboard.predictions.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    predictions: profile.correct_predictions
+                  })
+            })
+            .join('\n')
+        )
+
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
+        embed.setFooter({
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+        })
+      }
+
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
+
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
+
+      await ctx.reply({
+        embeds: [embed],
+        components: [row]
+      })
     }
   },
-  async createMessageComponentInteraction({ ctx, t, app }) {
-    if (ctx.args[4] === 'local' && ctx.guild) {
-      if (ctx.args[5] === 'predictions') {
-        const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        const page = Number(ctx.args[2]) || 1
-
-        const pages = Math.ceil(array.length / 10)
-
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
+  async createMessageComponentInteraction({ ctx, app }) {
+    if (ctx.args[2] === 'poisons') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          poisons: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          poisons: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          poisons: true
         }
+      })
 
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.predictions.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
+      const array = profiles
+      const page = Number(ctx.args[4]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.poisons.author', {
+            page,
+            pages
           })
-          .setTitle(t('commands.leaderboard.predictions.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
+        })
+        .setTitle(ctx.t('commands.leaderboard.poisons.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.poisons.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    poisons: profile.poisons.toLocaleString()
+                  })
+                : ctx.t('commands.leaderboard.poisons.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    poisons: profile.poisons.toLocaleString()
+                  })
             })
-          )
+            .join('\n')
+        )
 
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.predictions.field', {
-              t: user.correct_predictions
-            })
-          )
-        }
-
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
         embed.setFooter({
-          text: t('commands.leaderboard.predictions.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1};previous;local;predictions`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;local;predictions`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[5] === 'coins') {
-        const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        const page = Number(ctx.args[2]) || 1
-
-        const pages = Math.ceil(array.length / 10)
-
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.coins.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.coins.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.coins.field', {
-              t: BigInt(user.coins).toLocaleString('en')
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.coins.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;local;coins`)
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;local;coins`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[5] === 'rating') {
-        const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
-
-        let users = value.data.filter((user: any) => ctx.guild!.members.cache.get(user.id))
-
-        const array = users
-
-        const page = Number(ctx.args[2]) || 1
-
-        const pages = Math.ceil(array.length / 10)
-
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.rating.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.rating.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.rating.field', {
-              rr: user.rank_rating
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.rating.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;local;rating`)
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;local;rating`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
         })
       }
-    } else {
-      if (ctx.args[5] === 'predictions') {
-        const value = JSON.parse((await app.redis.get('leaderboard:predictions'))!)
 
-        let users = value.data
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
 
-        const array = users
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
 
-        const page = Number(ctx.args[2]) || 1
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
 
-        const pages = Math.ceil(array.length / 10)
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
+      await ctx.edit({
+        embeds: [embed],
+        components: [row]
+      })
+    }
+    else if (ctx.args[2] === 'rating') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          rank_rating: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          rank_rating: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          rank_rating: true
         }
+      })
 
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.predictions.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
+      const array = profiles
+      const page = Number(ctx.args[4]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.rating.author', {
+            page,
+            pages
           })
-          .setTitle(t('commands.leaderboard.predictions.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
+        })
+        .setTitle(ctx.t('commands.leaderboard.rating.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.rating.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    rr: profile.rank_rating
+                  })
+                : ctx.t('commands.leaderboard.rating.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    rr: profile.rank_rating
+                  })
             })
-          )
+            .join('\n')
+        )
 
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.predictions.field', {
-              t: user.correct_predictions
-            })
-          )
-        }
-
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
         embed.setFooter({
-          text: t('commands.leaderboard.predictions.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(
-            `leaderboard;${ctx.interaction.user.id};${page - 1};previous;global;predictions`
-          )
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;global;predictions`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[5] === 'coins') {
-        const value = JSON.parse((await app.redis.get('leaderboard:coins'))!)
-
-        let users = value.data
-
-        const array = users
-
-        const page = Number(ctx.args[2]) || 1
-
-        const pages = Math.ceil(array.length / 10)
-
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.coins.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.coins.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.coins.field', {
-              t: BigInt(user.coins).toLocaleString('en')
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.coins.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;global;coins`)
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;global;coins`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
-        })
-      } else if (ctx.args[5] === 'rating') {
-        const value = JSON.parse((await app.redis.get('leaderboard:rating'))!)
-
-        let users = value.data
-
-        const array = users
-
-        const page = Number(ctx.args[2]) || 1
-
-        const pages = Math.ceil(array.length / 10)
-
-        users = users.slice(page * 10 - 10, page * 10)
-
-        if (!users.length) {
-          return await ctx.reply('commands.leaderboard.no_users')
-        }
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: t('commands.leaderboard.rating.author', {
-              page,
-              pages: Math.ceil(array.length / 10)
-            })
-          })
-          .setTitle(t('commands.leaderboard.rating.title'))
-          .setThumb((await app.getUser(array[0].id!))?.avatarURL({ size: 2048 }) ?? '')
-          .setDesc(
-            t('commands.leaderboard.desc', {
-              last: `<t:${(value.updated_at / 1000).toFixed(0)}:R>`
-            })
-          )
-
-        let pos = 0
-
-        if (!Number.isNaN(page) && page > 1) pos = page * 10 - 10
-
-        for (const user of users) {
-          pos++
-
-          const u = await app.getUser(user.id)
-
-          let field = `${pos} - ${!u ? '*unknown*' : u.username}`
-
-          if (pos === 1) field = `🥇 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 2) field = `🥈 - ${!u ? '*unknown*' : u.username}`
-          else if (pos === 3) field = `🥉 - ${!u ? '*unknown*' : u.username}`
-
-          embed.addField(
-            field,
-            t('commands.leaderboard.rating.field', {
-              rr: user.rank_rating
-            })
-          )
-        }
-
-        embed.setFooter({
-          text: t('commands.leaderboard.rating.footer', {
-            pos: array.findIndex((user: any) => user.id === ctx.interaction.user.id) + 1
-          })
-        })
-
-        const previous = new ButtonBuilder()
-          .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;global;rating`)
-          .defineStyle('blue')
-
-        const next = new ButtonBuilder()
-          .setEmoji('1404176291829121028')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page + 1};next;global;rating`)
-          .defineStyle('blue')
-
-        if (page <= 1) previous.setDisabled()
-
-        if (page >= pages) next.setDisabled()
-
-        return await ctx.edit({
-          embeds: [embed],
-          components: [
-            {
-              type: 1,
-              components: [previous, next]
-            }
-          ]
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
         })
       }
+
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
+
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
+
+      await ctx.edit({
+        embeds: [embed],
+        components: [row]
+      })
+    }
+    else if (ctx.args[2] === 'predictions') {
+      let profiles = await app.prisma.profile.findMany({
+        where: {
+          guildId: ctx.db.guild.id,
+          correct_predictions: {
+            gt: 0
+          }
+        },
+        orderBy: {
+          correct_predictions: 'desc'
+        },
+        take: 100,
+        select: {
+          userId: true,
+          correct_predictions: true
+        }
+      })
+
+      const array = profiles
+      const page = Number(ctx.args[4]) || 1
+      const pages = Math.ceil(array.length / 10)
+
+      profiles = profiles.slice(page * 10 - 10, page * 10)
+
+      if (!profiles.length) {
+        return await ctx.reply('commands.leaderboard.no_users')
+      }
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name: ctx.t('commands.leaderboard.predictions.author', {
+            page,
+            pages
+          })
+        })
+        .setTitle(ctx.t('commands.leaderboard.predictions.title'))
+        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setDesc(
+          profiles
+            .map((profile, i) => {
+              const position = (page - 1) * 10 + i + 1
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
+
+              return profile.userId === ctx.db.profile.userId
+                ? ctx.t('commands.leaderboard.predictions.description1', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    predictions: profile.correct_predictions
+                  })
+                : ctx.t('commands.leaderboard.predictions.description2', {
+                    pos,
+                    user: `<@${profile.userId}>`,
+                    predictions: profile.correct_predictions
+                  })
+            })
+            .join('\n')
+        )
+
+      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      if (pos) {
+        embed.setFooter({
+          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+        })
+      }
+
+      const previous = new ButtonBuilder()
+        .setEmoji('1404176223621611572')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;previous;${page - 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      const next = new ButtonBuilder()
+        .setEmoji('1404176291829121028')
+        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;next;${page + 1}`)
+        .setStyle(ButtonStyle.Primary)
+
+      if (page <= 1) {
+        previous.setDisabled()
+      }
+      if (page >= pages) {
+        next.setDisabled()
+      }
+
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
+
+      await ctx.edit({
+        embeds: [embed],
+        components: [row]
+      })
     }
   }
 })
