@@ -19,7 +19,7 @@ type ComponentInteractionContextOptions = {
 
 export default class ComponentInteractionContext {
   public app: App
-  public guild?: Discord.Guild
+  public guild: Discord.Guild
   public interaction: Discord.MessageComponentInteraction
   public locale: string
   public db: Database

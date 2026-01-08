@@ -19,7 +19,7 @@ type CommandContextOptions = {
 
 export default class CommandContext {
   public app: App
-  public guild?: Discord.Guild | null
+  public guild: Discord.Guild
   public interaction: Discord.ChatInputCommandInteraction
   public locale: string
   public db: Database
