@@ -10,20 +10,6 @@
       "no_predictions": "You do not have predictions.",
       "no_pages": "Nothing to show in this page."
     },
-    "player": {
-      "insert_player": "Provide the name of a player.",
-      "player_not_found": "No players have been found with that name.",
-      "embed": {
-        "desc": "Name: `{name}`\nCurrent team: {team}\nPast teams: {pt}\nLast match: {lt}"
-      }
-    },
-    "team": {
-      "insert_team": "Provide the name of a team.",
-      "team_not_found": "No teams have been found with that name.",
-      "embed": {
-        "desc": "Players: {p}\nStaff: {s}\nLast match: {lt}\nNext match: {n}"
-      }
-    },
     "help": {
       "command_not_found": "Command not found.",
       "name": "Name",
