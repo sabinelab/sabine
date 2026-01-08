@@ -37,21 +37,23 @@
         "title": "Top 100 - Predictions Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
-        "field": "`{t}` correct predictions"
+        "description1": "**{pos} {user} — `{predictions}` correct predictions**",
+        "description2": "{pos} {user} — `{predictions}` correct predictions"
       },
       "poisons": {
         "title": "Top 100 - Poisons Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
-        "field": "`{t}` poisons"
+        "description1": "**{pos} {user} — `{poisons}` poisons**",
+        "description2": "{pos} {user} — `{poisons}` poisons"
       },
       "rating": {
         "title": "Top 100 - Rating Leaderboard",
         "author": "Page {page}/{pages}",
         "footer": "Your position: #{pos}",
-        "field": "Rating: `{rr}RR`"
-      },
-      "desc": "The leaderboard is updated every 10 minutes\nLast update: {last}"
+        "description1": "**{pos} {user} — `{rr}` points**",
+        "description2": "{pos} {user} — `{rr}` points"
+      }
     },
     "admin": {
       "tournament_has_been_added": "This tournament already has been added.",
