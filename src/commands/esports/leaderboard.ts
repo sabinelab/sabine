@@ -713,7 +713,6 @@ export default createCommand({
       }
     }
   },
-  userInstall: true,
   async createMessageComponentInteraction({ ctx, t, app }) {
     if (ctx.args[4] === 'local' && ctx.guild) {
       if (ctx.args[5] === 'predictions') {

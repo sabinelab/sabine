@@ -33,7 +33,6 @@ export default createCommand({
       }
     }
   ],
-  userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
     const active_players = ctx.db.profile.active_players

@@ -48,7 +48,6 @@ export type Command = {
   botPermissions?: Discord.PermissionResolvable[]
   onlyDev?: boolean
   ephemeral?: boolean
-  userInstall?: boolean
   isThinking?: boolean
   messageComponentInteractionTime?: number
   modalSubmitInteractionTime?: number

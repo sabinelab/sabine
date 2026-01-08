@@ -49,7 +49,6 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Obtenha um jogador aleatório'
   },
-  userInstall: true,
   isThinking: true,
   messageComponentInteractionTime: 60 * 1000,
   cooldown: true,

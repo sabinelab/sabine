@@ -26,7 +26,6 @@ export default createCommand({
       required: true
     }
   ],
-  userInstall: true,
   async run({ ctx, app }) {
     const p = app.players.get(ctx.args[0].toString())
 

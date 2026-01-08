@@ -11,7 +11,6 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Mostra as informações do bot'
   },
-  userInstall: true,
   async run({ ctx, app, t }) {
     const creator = await app.getUser('441932495693414410')
 

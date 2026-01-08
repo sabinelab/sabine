@@ -16,7 +16,6 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Pesquise uma carta'
   },
-  userInstall: true,
   options: [
     {
       type: ApplicationCommandOptionType.String,

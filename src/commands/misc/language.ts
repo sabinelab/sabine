@@ -41,7 +41,6 @@ export default createCommand({
   ],
   syntax: 'language [lang]',
   examples: ['language en-US', 'language pt-BR'],
-  userInstall: true,
   async run({ ctx }) {
     switch (ctx.args[0]) {
       case 'pt':

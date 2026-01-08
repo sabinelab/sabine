@@ -12,7 +12,6 @@ export default createCommand({
   },
   category: 'economy',
   cooldown: true,
-  userInstall: true,
   async run({ ctx }) {
     const profile = await ProfileSchema.fetch(ctx.db.profile.userId, ctx.db.guild.id)
 

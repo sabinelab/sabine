@@ -7,7 +7,6 @@ export default createCommand({
     'pt-BR': 'Veja seus coins'
   },
   category: 'economy',
-  userInstall: true,
   async run({ ctx, app }) {
     const value = await app.redis.get('leaderboard:coins')
 

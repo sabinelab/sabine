@@ -39,7 +39,6 @@ export default createCommand({
   ],
   syntax: 'help <command>',
   examples: ['help', 'help ping', 'help team', 'help player'],
-  userInstall: true,
   async run({ ctx, app, t }) {
     if (ctx.args[0]?.toString()) {
       const cmd = app.commands.get(ctx.args[0].toString())

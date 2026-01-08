@@ -64,7 +64,6 @@ export default createCommand({
     'predictions lol 2',
     'predictions valorant 5'
   ],
-  userInstall: true,
   async run({ ctx, t, app }) {
     if (ctx.args[0] === 'valorant') {
       const predictions = await app.prisma.prediction.findMany({

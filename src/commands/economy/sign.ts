@@ -29,7 +29,6 @@ export default createCommand({
       required: true
     }
   ],
-  userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
     const player = app.players.get(ctx.args[0].toString())

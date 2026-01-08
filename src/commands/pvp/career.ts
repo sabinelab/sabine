@@ -26,7 +26,6 @@ export default createCommand({
       }
     }
   ],
-  userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
     const matches = await app.prisma.match.findMany({

@@ -20,7 +20,6 @@ export default createCommand({
     'pt-BR': 'Loja de pacotes de cartas'
   },
   messageComponentInteractionTime: 5 * 60 * 1000,
-  userInstall: true,
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)

@@ -13,7 +13,6 @@ export default createCommand({
     'pt-BR': 'Vote no bot'
   },
   category: 'misc',
-  userInstall: true,
   async run({ ctx }) {
     const user = (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
 

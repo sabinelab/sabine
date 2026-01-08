@@ -14,7 +14,6 @@ export default createCommand({
     'pt-BR': 'Negocie um jogador'
   },
   category: 'economy',
-  userInstall: true,
   options: [
     {
       type: ApplicationCommandOptionType.User,

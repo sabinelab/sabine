@@ -28,7 +28,6 @@ export default createCommand({
       autocomplete: true
     }
   ],
-  userInstall: true,
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
     const p = app.players.get(ctx.args[0].toString())
