@@ -2,6 +2,9 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'poisons',
+  nameLocalizations: {
+    'pt-BR': 'toxinas'
+  },
   description: 'Check your poisons',
   descriptionLocalizations: {
     'pt-BR': 'Veja suas toxinas'
