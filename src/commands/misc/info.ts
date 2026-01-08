@@ -73,7 +73,9 @@ export default createCommand({
               new ButtonBuilder()
                 .setLabel(t('commands.info.invite'))
                 .defineStyle('link')
-                .setURL('https://discord.com/oauth2/authorize?app_id=1235576817683922954&scope=bot&permissions=388096')
+                .setURL(
+                  'https://discord.com/oauth2/authorize?app_id=1235576817683922954&scope=bot&permissions=388096'
+                )
             ]
           }
         ]

@@ -114,12 +114,18 @@ export default createCommand({
               ? '`Infinity`'
               : `${guild.events.length}/${ctx.db.guild!.tournaments_length}`,
           id,
-          vlr_news: !ctx.db.guild!.valorant_news_channel ? '`undefined`' : `<#${ctx.db.guild!.valorant_news_channel}>`,
+          vlr_news: !ctx.db.guild!.valorant_news_channel
+            ? '`undefined`'
+            : `<#${ctx.db.guild!.valorant_news_channel}>`,
           vlr_live: !ctx.db.guild!.valorant_live_feed_channel
             ? '`undefined`'
             : `<#${ctx.db.guild!.valorant_live_feed_channel}>`,
-          lol_news: !ctx.db.guild!.lol_news_channel ? '`undefined`' : `<#${ctx.db.guild!.lol_news_channel}>`,
-          lol_live: !ctx.db.guild!.lol_live_feed_channel ? '`undefined`' : `<#${ctx.db.guild!.lol_live_feed_channel}>`
+          lol_news: !ctx.db.guild!.lol_news_channel
+            ? '`undefined`'
+            : `<#${ctx.db.guild!.lol_news_channel}>`,
+          lol_live: !ctx.db.guild!.lol_live_feed_channel
+            ? '`undefined`'
+            : `<#${ctx.db.guild!.lol_live_feed_channel}>`
         })
       )
 
@@ -243,7 +249,9 @@ export default createCommand({
         }
       }))!
 
-      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'VALORANT' }))
+      const embed = new EmbedBuilder().setDesc(
+        t('commands.admin.tournaments', { game: 'VALORANT' })
+      )
 
       for (const event of guild.events) {
         embed.addField(
@@ -273,7 +281,9 @@ export default createCommand({
         }
       }))!
 
-      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'League of Legends' }))
+      const embed = new EmbedBuilder().setDesc(
+        t('commands.admin.tournaments', { game: 'League of Legends' })
+      )
 
       for (const event of guild.events) {
         embed.addField(
@@ -408,7 +418,9 @@ export default createCommand({
               .some(e => {
                 const tour = tournaments[e.name]
                 if (!tour) return false
-                return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+                return tour.some(regex =>
+                  regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+                )
               })
 
             if (events2) return true
@@ -438,7 +450,9 @@ export default createCommand({
             const events2 = guild.events.some(e => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+              return tour.some(regex =>
+                regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+              )
             })
 
             if (events2) return true
@@ -570,7 +584,10 @@ export default createCommand({
 
           if (container.components.length) {
             const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-              new ButtonBuilder().setLabel(t('helper.pickem.label')).setStyle(ButtonStyle.Primary).setCustomId('pickem')
+              new ButtonBuilder()
+                .setLabel(t('helper.pickem.label'))
+                .setStyle(ButtonStyle.Primary)
+                .setCustomId('pickem')
             )
 
             await channel
@@ -644,7 +661,11 @@ export default createCommand({
 
       const res2 = await service.getResults('lol')
 
-      if (guild.lol_matches.length && !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])) return
+      if (
+        guild.lol_matches.length &&
+        !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])
+      )
+        return
 
       const matches: {
         matchId: string

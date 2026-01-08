@@ -14,13 +14,16 @@ export default createCommand({
   },
   category: 'misc',
   async run({ ctx }) {
-    const user = (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
+    const user =
+      (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
 
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.vote.title'))
       .setDesc(
         ctx.t('commands.vote.description', {
-          last_vote: user.last_vote ? `<t:${(user.last_vote?.getTime() / 1000).toFixed(0)}:R>` : '`null`',
+          last_vote: user.last_vote
+            ? `<t:${(user.last_vote?.getTime() / 1000).toFixed(0)}:R>`
+            : '`null`',
           current_streak: user.vote_streak,
           total: user.votes
         })

@@ -90,7 +90,9 @@ export default createCommand({
     if (page === 1) {
       if (active_players.length) {
         container.addTextDisplayComponents(text =>
-          text.setContent(ctx.t('commands.roster.container.active_players', { total: active_players.length }))
+          text.setContent(
+            ctx.t('commands.roster.container.active_players', { total: active_players.length })
+          )
         )
 
         let i = 0
@@ -124,7 +126,9 @@ export default createCommand({
 
       if (players.length) {
         container.addTextDisplayComponents(text =>
-          text.setContent(ctx.t('commands.roster.container.reserve_players', { total: reserve_players.length }))
+          text.setContent(
+            ctx.t('commands.roster.container.reserve_players', { total: reserve_players.length })
+          )
         )
 
         let i = 0
@@ -389,7 +393,9 @@ export default createCommand({
       if (page === 1) {
         if (active_players.length) {
           container.addTextDisplayComponents(text =>
-            text.setContent(t('commands.roster.container.active_players', { total: active_players.length }))
+            text.setContent(
+              t('commands.roster.container.active_players', { total: active_players.length })
+            )
           )
 
           let i = 0
@@ -465,7 +471,9 @@ export default createCommand({
 
         if (players.length) {
           container.addTextDisplayComponents(text =>
-            text.setContent(t('commands.roster.container.reserve_players', { total: reserve_players.length }))
+            text.setContent(
+              t('commands.roster.container.reserve_players', { total: reserve_players.length })
+            )
           )
 
           let i = 0

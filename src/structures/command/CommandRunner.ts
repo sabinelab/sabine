@@ -3,7 +3,12 @@ import path from 'node:path'
 import { GuildSchema, ProfileSchema } from '@db'
 import type { Blacklist } from '@generated'
 import locales from '@i18n'
-import { type ChatInputCommandInteraction, type PermissionResolvable, REST, Routes } from 'discord.js'
+import {
+  type ChatInputCommandInteraction,
+  type PermissionResolvable,
+  REST,
+  Routes
+} from 'discord.js'
 import { voidCatch } from '@/database/update-cache'
 import { env } from '@/env'
 import Logger from '../../util/Logger'
@@ -29,7 +34,8 @@ export default class CommandRunner {
     if (!command) return
     if (!interaction.guildId || !interaction.guild) return
 
-    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
 
     const rawBlacklist = await app.redis.get('blacklist')
     const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
@@ -87,7 +93,11 @@ export default class CommandRunner {
     if (sub) args.push(sub)
 
     for (const option of (interaction.options as any)._hoistedOptions) {
-      if (typeof option.value === 'string' || typeof option.value === 'number' || typeof option.value === 'boolean') {
+      if (
+        typeof option.value === 'string' ||
+        typeof option.value === 'number' ||
+        typeof option.value === 'boolean'
+      ) {
         args.push(option.value)
       }
     }
@@ -150,7 +160,12 @@ export default class CommandRunner {
         })
       }
 
-      await app.redis.set(`cooldown:${interaction.user.id}`, (Date.now() + 5000).toString(), 'EX', 5)
+      await app.redis.set(
+        `cooldown:${interaction.user.id}`,
+        (Date.now() + 5000).toString(),
+        'EX',
+        5
+      )
     }
 
     command
@@ -206,7 +221,10 @@ export default class CommandRunner {
             .setDesc(`The command \`${cmd.join(' ')}\` has been executed in \`${ctx.guild?.name}\``)
             .addField('Server ID', `\`${ctx.guild?.id}\``)
             .addField('Owner', `\`${owner?.username}\` (\`${owner?.id}\`)`)
-            .addField('Command author', `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`)
+            .addField(
+              'Command author',
+              `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`
+            )
         } else {
           embed
             .setAuthor({
@@ -215,7 +233,10 @@ export default class CommandRunner {
             })
             .setTitle('New slash command executed')
             .setDesc(`The command \`${cmd.join(' ')}\` has been executed in DM`)
-            .addField('Command author', `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`)
+            .addField(
+              'Command author',
+              `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`
+            )
         }
 
         if (ctx.guild) {

@@ -85,7 +85,10 @@ const processArenaQueue = async () => {
       return await Bun.redis.del(`arena:in_queue:${parsedData2.userId}`)
     }
 
-    await Bun.redis.del(`arena:in_queue:${parsedData1.userId}`, `arena:in_queue:${parsedData2.userId}`)
+    await Bun.redis.del(
+      `arena:in_queue:${parsedData1.userId}`,
+      `arena:in_queue:${parsedData2.userId}`
+    )
 
     await arenaMatchQueue.add('arena', { parsedData1, parsedData2 })
 

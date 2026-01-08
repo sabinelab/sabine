@@ -19,7 +19,9 @@ export type Content = Keys<Locale> | (string & {})
 type Locale = typeof en
 
 type Keys<T> = T extends object
-  ? { [K in keyof T]: K extends string ? (T[K] extends object ? `${K}.${Keys<T[K]>}` : K) : never }[keyof T]
+  ? {
+      [K in keyof T]: K extends string ? (T[K] extends object ? `${K}.${Keys<T[K]>}` : K) : never
+    }[keyof T]
   : never
 
 const locale: {

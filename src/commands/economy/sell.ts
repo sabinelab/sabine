@@ -38,7 +38,10 @@ export default createCommand({
 
     await ctx.db.profile.sellPlayer(player.id.toString(), BigInt(calcPlayerPrice(player, true)), i)
 
-    await ctx.reply('commands.sell.sold', { p: player.name, price: calcPlayerPrice(player, true).toLocaleString() })
+    await ctx.reply('commands.sell.sold', {
+      p: player.name,
+      price: calcPlayerPrice(player, true).toLocaleString()
+    })
   },
   async createAutocompleteInteraction({ i, app }) {
     if (!i.guildId) return

@@ -21,7 +21,8 @@ const interactionType: Record<number, (app: App, i: Interaction) => Promise<unkn
     if (!command) return
     if (!command.createAutocompleteInteraction) return
 
-    const user = (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
+    const user =
+      (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
 
     let guild: GuildSchema | undefined
 

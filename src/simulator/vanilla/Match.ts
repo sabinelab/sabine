@@ -100,7 +100,12 @@ export default class Match {
   public readonly ctx: Message
   public content: string = ''
   public t: (content: string, args?: Args) => string
-  public readonly mode: 'unranked' | 'ranked' | 'swiftplay:unranked' | 'swiftplay:ranked' | 'tournament'
+  public readonly mode:
+    | 'unranked'
+    | 'ranked'
+    | 'swiftplay:unranked'
+    | 'swiftplay:ranked'
+    | 'tournament'
   public maxScore: number = 0
   public switchSidesAt: number = 12
   public map: string
@@ -224,7 +229,9 @@ export default class Match {
         if (
           !valorant_maps
             .filter(m => m.name === this.map)[0]
-            .meta_agents.includes(p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number])
+            .meta_agents.includes(
+              p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number]
+            )
         ) {
           p.aim *= 0.95
           p.HS *= 0.95

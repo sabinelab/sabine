@@ -58,7 +58,8 @@ export default createComponentInteraction({
                   style: 1,
                   minLength: 3,
                   required: true,
-                  placeholder: 'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
+                  placeholder:
+                    'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
                 }
               ]
             }
@@ -105,7 +106,8 @@ export default createComponentInteraction({
                   style: 1,
                   minLength: 3,
                   required: true,
-                  placeholder: 'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
+                  placeholder:
+                    'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
                 }
               ]
             }

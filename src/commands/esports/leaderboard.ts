@@ -339,7 +339,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;coins`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;coins`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()
@@ -425,7 +427,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;rating`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;local;rating`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()
@@ -601,7 +605,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;coins`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;coins`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()
@@ -687,7 +693,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;rating`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;global;rating`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()
@@ -778,7 +786,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;local;predictions`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1};previous;local;predictions`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()
@@ -1032,7 +1042,9 @@ export default createCommand({
 
         const previous = new ButtonBuilder()
           .setEmoji('1404176223621611572')
-          .setCustomId(`leaderboard;${ctx.interaction.user.id};${page - 1};previous;global;predictions`)
+          .setCustomId(
+            `leaderboard;${ctx.interaction.user.id};${page - 1};previous;global;predictions`
+          )
           .defineStyle('blue')
 
         const next = new ButtonBuilder()

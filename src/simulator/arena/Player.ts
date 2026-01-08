@@ -64,14 +64,18 @@ export default class Player {
     if (this.teamCredits >= 2500 && !this.weapon.primary) {
       let primary = valorant_weapons.filter(w => w.price > 800 && w.price + 1000 <= this.credits)
 
-      let secondary = valorant_weapons.filter(w => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits)
+      let secondary = valorant_weapons.filter(
+        w => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits
+      )
 
       if (!primary.length) {
         primary = valorant_weapons.filter(w => w.price > 800 && w.price + 400 <= this.credits)
       }
 
       if (!secondary.length) {
-        secondary = valorant_weapons.filter(w => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits)
+        secondary = valorant_weapons.filter(
+          w => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits
+        )
       }
 
       let weapon: (typeof valorant_weapons)[number]
@@ -164,7 +168,8 @@ export default class Player {
   private chooseShoot(mov: number) {
     let steepness = 0.12
     let midpoint = 70
-    let prob = (1 / (1 + Math.exp(-steepness * (this.stats.aim - midpoint)))) * (1 - (mov / 100) * 0.2)
+    let prob =
+      (1 / (1 + Math.exp(-steepness * (this.stats.aim - midpoint)))) * (1 - (mov / 100) * 0.2)
     let random = Math.random()
 
     if (random <= prob) {

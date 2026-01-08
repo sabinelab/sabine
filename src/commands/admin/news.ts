@@ -108,7 +108,8 @@ export default createCommand({
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some(t => t === channel.type))
+            return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.update({
             where: {
@@ -125,7 +126,8 @@ export default createCommand({
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some(t => t === channel.type))
+            return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.update({
             where: {

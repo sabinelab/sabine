@@ -209,7 +209,10 @@ export default createCommand({
       return await ctx.reply('commands.duel.already_in_match')
     }
 
-    if ((await app.redis.get(`match:${profile.id}`)) || keys.some(key => key.includes(profile.id))) {
+    if (
+      (await app.redis.get(`match:${profile.id}`)) ||
+      keys.some(key => key.includes(profile.id))
+    ) {
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 

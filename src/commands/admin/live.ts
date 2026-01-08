@@ -44,9 +44,11 @@ export default createCommand({
             {
               type: ApplicationCommandOptionType.Boolean,
               name: 'spam',
-              description: 'Select whether you want the bot to spam messages from live matches or not',
+              description:
+                'Select whether you want the bot to spam messages from live matches or not',
               descriptionLocalizations: {
-                'pt-BR': 'Selecione se você deseja que bot envie mensagens de spam de partidas ao vivo ou não'
+                'pt-BR':
+                  'Selecione se você deseja que bot envie mensagens de spam de partidas ao vivo ou não'
               }
             }
           ]
@@ -116,7 +118,8 @@ export default createCommand({
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
+          if (![0, 5].some(t => t === channel.type))
+            return await ctx.reply('commands.live.invalid_channel')
 
           await prisma.guild.update({
             where: {
@@ -133,7 +136,8 @@ export default createCommand({
 
           const channel = ctx.guild.channels.cache.get(ctx.args[2].toString())!
 
-          if (![0, 5].some(t => t === channel.type)) return await ctx.reply('commands.live.invalid_channel')
+          if (![0, 5].some(t => t === channel.type))
+            return await ctx.reply('commands.live.invalid_channel')
 
           await prisma.guild.update({
             where: {

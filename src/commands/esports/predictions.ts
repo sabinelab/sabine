@@ -133,11 +133,15 @@ export default createCommand({
       }
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`predictions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;valorant`)
+        .setCustomId(
+          `predictions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;valorant`
+        )
         .defineStyle('blue')
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`predictions;${ctx.interaction.user.id};${page + 1 > pages ? pages : page + 1};next;valorant`)
+        .setCustomId(
+          `predictions;${ctx.interaction.user.id};${page + 1 > pages ? pages : page + 1};next;valorant`
+        )
         .defineStyle('blue')
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()
@@ -218,11 +222,15 @@ export default createCommand({
       }
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`predictions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;lol`)
+        .setCustomId(
+          `predictions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous;lol`
+        )
         .defineStyle('blue')
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`predictions;${ctx.interaction.user.id};${page + 1 > pages ? pages : page + 1};next;lol`)
+        .setCustomId(
+          `predictions;${ctx.interaction.user.id};${page + 1 > pages ? pages : page + 1};next;lol`
+        )
         .defineStyle('blue')
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()

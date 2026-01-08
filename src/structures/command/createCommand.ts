@@ -53,8 +53,12 @@ export type Command = {
   modalSubmitInteractionTime?: number
   cooldown?: boolean
   run: (props: CommandOptions) => Promise<unknown>
-  createAutocompleteInteraction?: (options: CreateAutocompleteInteractionOptions) => Promise<unknown>
-  createMessageComponentInteraction?: (options: CreateComponentInteractionOptions) => Promise<unknown>
+  createAutocompleteInteraction?: (
+    options: CreateAutocompleteInteractionOptions
+  ) => Promise<unknown>
+  createMessageComponentInteraction?: (
+    options: CreateComponentInteractionOptions
+  ) => Promise<unknown>
   createModalSubmitInteraction?: (options: CreateModalSubmitInteractionOptions) => Promise<unknown>
 }
 

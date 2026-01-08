@@ -71,7 +71,11 @@ export default createCommand({
       channel = ctx.interaction.channel?.id
     }
 
-    await ctx.db.profile.addPlayerToRoster(player.id.toString(), 'CLAIM_PLAYER_BY_CLAIM_COMMAND', channel)
+    await ctx.db.profile.addPlayerToRoster(
+      player.id.toString(),
+      'CLAIM_PLAYER_BY_CLAIM_COMMAND',
+      channel
+    )
 
     const embed = new EmbedBuilder()
       .setTitle(player.name)

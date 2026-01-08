@@ -96,7 +96,9 @@ export default createCommand({
             new ButtonBuilder()
               .defineStyle('green')
               .setLabel(ctx.t('commands.trade.make_purchase'))
-              .setCustomId(`trade;${ctx.args[0]};buy;${ctx.interaction.user.id};${player.id};${ctx.args[2]}`),
+              .setCustomId(
+                `trade;${ctx.args[0]};buy;${ctx.interaction.user.id};${player.id};${ctx.args[2]}`
+              ),
             new ButtonBuilder()
               .defineStyle('red')
               .setLabel(ctx.t('commands.trade.cancel'))
@@ -187,7 +189,11 @@ export default createCommand({
           ? JSON.parse(JSON.stringify(sellerProfile.arena_metadata))
           : null
 
-        if ((sellerArenaMetadata as ArenaMetadata | null)?.lineup.some(line => line.player === player.id.toString())) {
+        if (
+          (sellerArenaMetadata as ArenaMetadata | null)?.lineup.some(
+            line => line.player === player.id.toString()
+          )
+        ) {
           const lineupIndex = (sellerArenaMetadata as ArenaMetadata)?.lineup.findIndex(
             line => line.player === player.id.toString()
           )

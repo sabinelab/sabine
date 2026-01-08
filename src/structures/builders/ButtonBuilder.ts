@@ -1,4 +1,8 @@
-import { ButtonStyle, ButtonBuilder as DJSButtonBuilder, type InteractionReplyOptions } from 'discord.js'
+import {
+  ButtonStyle,
+  ButtonBuilder as DJSButtonBuilder,
+  type InteractionReplyOptions
+} from 'discord.js'
 
 export default class ButtonBuilder extends DJSButtonBuilder {
   public defineStyle(style: 'blue' | 'gray' | 'green' | 'red' | 'link') {

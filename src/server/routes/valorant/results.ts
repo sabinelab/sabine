@@ -147,7 +147,10 @@ export const valorantResults = new Elysia().post(
 
       for (const pred of matchPreds) {
         const transaction = async () => {
-          if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
+          if (
+            pred.teams[0].score === data.teams[0].score &&
+            pred.teams[1].score === data.teams[1].score
+          ) {
             let odd: number | null = null
             let bonus = 0
 

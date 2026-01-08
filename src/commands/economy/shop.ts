@@ -40,7 +40,9 @@ export default createCommand({
       .addSectionComponents(section =>
         section
           .addTextDisplayComponents(text =>
-            text.setContent(ctx.t('commands.shop.container.text.platinum', { price: price.platinum }))
+            text.setContent(
+              ctx.t('commands.shop.container.text.platinum', { price: price.platinum })
+            )
           )
           .setButtonAccessory(button =>
             button
@@ -66,7 +68,9 @@ export default createCommand({
       .addSectionComponents(section =>
         section
           .addTextDisplayComponents(text =>
-            text.setContent(ctx.t('commands.shop.container.text.ascendant', { price: price.ascendant }))
+            text.setContent(
+              ctx.t('commands.shop.container.text.ascendant', { price: price.ascendant })
+            )
           )
           .setButtonAccessory(button =>
             button

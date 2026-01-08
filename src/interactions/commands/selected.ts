@@ -62,7 +62,10 @@ export default createComponentInteraction({
       .setImage(data.image)
       .setFields(
         {
-          name: key.split(':')[1] === ctx.interaction.user.id ? ctx.db.profile.team_name! : profile.team_name!,
+          name:
+            key.split(':')[1] === ctx.interaction.user.id
+              ? ctx.db.profile.team_name!
+              : profile.team_name!,
           value:
             key.split(':')[1] === ctx.interaction.user.id
               ? ctx.db.profile.active_players
@@ -71,7 +74,9 @@ export default createComponentInteraction({
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[ctx.interaction.user.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[ctx.interaction.user.id].findIndex(
+                      (p: any) => p.id.toString() === id
+                    )
 
                     if (
                       data[ctx.interaction.user.id][i].id.toString() === id &&
@@ -96,7 +101,9 @@ export default createComponentInteraction({
                     const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
 
                     if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
-                      emoji = valorant_agents.find(agent => agent.name === data[profile.id][i].agent!.name)?.emoji
+                      emoji = valorant_agents.find(
+                        agent => agent.name === data[profile.id][i].agent!.name
+                      )?.emoji
                     }
 
                     const ovr = Math.floor(player.ovr)
@@ -107,7 +114,10 @@ export default createComponentInteraction({
           inline: true
         },
         {
-          name: key.split(':')[1] !== ctx.interaction.user.id ? ctx.db.profile.team_name! : profile.team_name!,
+          name:
+            key.split(':')[1] !== ctx.interaction.user.id
+              ? ctx.db.profile.team_name!
+              : profile.team_name!,
           value:
             key.split(':')[1] !== ctx.interaction.user.id
               ? ctx.db.profile.active_players
@@ -116,7 +126,9 @@ export default createComponentInteraction({
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[ctx.interaction.user.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[ctx.interaction.user.id].findIndex(
+                      (p: any) => p.id.toString() === id
+                    )
 
                     if (
                       data[ctx.interaction.user.id][i].id.toString() === id &&
@@ -141,7 +153,9 @@ export default createComponentInteraction({
                     const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
 
                     if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
-                      emoji = valorant_agents.find(agent => agent.name === data[profile.id][i].agent!.name)?.emoji
+                      emoji = valorant_agents.find(
+                        agent => agent.name === data[profile.id][i].agent!.name
+                      )?.emoji
                     }
 
                     const ovr = Math.floor(player.ovr)

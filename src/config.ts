@@ -336,13 +336,36 @@ export const valorant_maps: {
 }[] = [
   {
     name: 'Ascent',
-    meta_agents: ['Jett', 'Killjoy', 'Sova', 'KAY/O', 'Omen', 'Vyse', 'Yoru', 'Waylay', 'Cypher', 'Chamber'],
+    meta_agents: [
+      'Jett',
+      'Killjoy',
+      'Sova',
+      'KAY/O',
+      'Omen',
+      'Vyse',
+      'Yoru',
+      'Waylay',
+      'Cypher',
+      'Chamber'
+    ],
     image: 'https://imgur.com/HUdWHux.png',
     sides: ['A', 'B']
   },
   {
     name: 'Bind',
-    meta_agents: ['Raze', 'Brimstone', 'Viper', 'Skye', 'Fade', 'Gekko', 'Neon', 'Yoru', 'Cypher', 'Omen', 'KAY/O'],
+    meta_agents: [
+      'Raze',
+      'Brimstone',
+      'Viper',
+      'Skye',
+      'Fade',
+      'Gekko',
+      'Neon',
+      'Yoru',
+      'Cypher',
+      'Omen',
+      'KAY/O'
+    ],
     current_map_pool: true,
     image: 'https://imgur.com/vSP4vQB.png',
     sides: ['A', 'B']
@@ -355,7 +378,17 @@ export const valorant_maps: {
   },
   {
     name: 'Fracture',
-    meta_agents: ['Brimstone', 'Raze', 'Neon', 'Vyse', 'Killjoy', 'Cypher', 'Fade', 'Breach', 'Skye'],
+    meta_agents: [
+      'Brimstone',
+      'Raze',
+      'Neon',
+      'Vyse',
+      'Killjoy',
+      'Cypher',
+      'Fade',
+      'Breach',
+      'Skye'
+    ],
     image: 'https://imgur.com/Fsas50g.png',
     sides: ['A', 'B']
   },
@@ -389,21 +422,55 @@ export const valorant_maps: {
   },
   {
     name: 'Pearl',
-    meta_agents: ['Yoru', 'Jett', 'Astra', 'Viper', 'Vyse', 'Killjoy', 'Cypher', 'KAY/O', 'Fade', 'Sova'],
+    meta_agents: [
+      'Yoru',
+      'Jett',
+      'Astra',
+      'Viper',
+      'Vyse',
+      'Killjoy',
+      'Cypher',
+      'KAY/O',
+      'Fade',
+      'Sova'
+    ],
     image: 'https://imgur.com/P1189zs.png',
     sides: ['A', 'B'],
     current_map_pool: true
   },
   {
     name: 'Split',
-    meta_agents: ['Raze', 'Yoru', 'Jett', 'Breach', 'Fade', 'Skye', 'Astra', 'Omen', 'Viper', 'Cypher'],
+    meta_agents: [
+      'Raze',
+      'Yoru',
+      'Jett',
+      'Breach',
+      'Fade',
+      'Skye',
+      'Astra',
+      'Omen',
+      'Viper',
+      'Cypher'
+    ],
     image: 'https://imgur.com/36tar4S.png',
     sides: ['A', 'B'],
     current_map_pool: true
   },
   {
     name: 'Lotus',
-    meta_agents: ['Raze', 'Yoru', 'Neon', 'Fade', 'Tejo', 'Gekko', 'Vyse', 'Cypher', 'Killjoy', 'Viper', 'Omen'],
+    meta_agents: [
+      'Raze',
+      'Yoru',
+      'Neon',
+      'Fade',
+      'Tejo',
+      'Gekko',
+      'Vyse',
+      'Cypher',
+      'Killjoy',
+      'Viper',
+      'Omen'
+    ],
     image: 'https://imgur.com/CLq6LKn.png',
     sides: ['A', 'B', 'C']
   },
@@ -416,14 +483,36 @@ export const valorant_maps: {
   },
   {
     name: 'Abyss',
-    meta_agents: ['Astra', 'Omen', 'KAY/O', 'Sova', 'Cypher', 'Vyse', 'Chamber', 'Jett', 'Yoru', 'Neon'],
+    meta_agents: [
+      'Astra',
+      'Omen',
+      'KAY/O',
+      'Sova',
+      'Cypher',
+      'Vyse',
+      'Chamber',
+      'Jett',
+      'Yoru',
+      'Neon'
+    ],
     current_map_pool: true,
     image: 'https://imgur.com/7b8pgQz.png',
     sides: ['A', 'B']
   },
   {
     name: 'Corrode',
-    meta_agents: ['Yoru', 'Waylay', 'Neon', 'Omen', 'Fade', 'Sova', 'Viper', 'Vyse', 'Chamber', 'Sage'],
+    meta_agents: [
+      'Yoru',
+      'Waylay',
+      'Neon',
+      'Omen',
+      'Fade',
+      'Sova',
+      'Viper',
+      'Vyse',
+      'Chamber',
+      'Sage'
+    ],
     current_map_pool: true,
     image: 'https://imgur.com/2rmdsWE.png',
     sides: ['A', 'B']

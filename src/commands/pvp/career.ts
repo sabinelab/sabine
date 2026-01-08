@@ -66,9 +66,14 @@ export default createCommand({
     const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
     const arena_wins = ctx.db.profile.arena_wins
     const arena_defeats = ctx.db.profile.arena_defeats
-    const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
+    const total_wins =
+      ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
-      ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
+      ranked_defeats +
+      unranked_defeats +
+      swiftplay_defeats +
+      ranked_swiftplay_defeats +
+      arena_defeats
 
     let content =
       t('commands.career.embed.desc', {
@@ -212,9 +217,14 @@ export default createCommand({
     const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
     const arena_wins = ctx.db.profile.arena_wins
     const arena_defeats = ctx.db.profile.arena_defeats
-    const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
+    const total_wins =
+      ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
-      ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
+      ranked_defeats +
+      unranked_defeats +
+      swiftplay_defeats +
+      ranked_swiftplay_defeats +
+      arena_defeats
 
     let content =
       t('commands.career.embed.desc', {

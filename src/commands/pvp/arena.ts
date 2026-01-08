@@ -177,10 +177,14 @@ export default createCommand({
 
                 let content: string
 
-                const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
+                const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(
+                  line => line.player === p
+                )
 
                 if (playerInLineup) {
-                  const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
+                  const emoji = valorant_agents.find(
+                    a => a.name === playerInLineup.agent.name
+                  )?.emoji
 
                   content = `- ${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`
                 } else {
@@ -204,7 +208,8 @@ export default createCommand({
                   .setLabel(ctx.t('commands.arena.promote'))
                   .setStyle(ButtonStyle.Success)
                   .setDisabled(
-                    ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5
+                    ctx.db.profile.arena_metadata !== null &&
+                      ctx.db.profile.arena_metadata.lineup.length >= 5
                   )
               })
           )
@@ -264,7 +269,9 @@ export default createCommand({
 
       ctx.setFlags(64)
 
-      if (ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player?.id.toString())) {
+      if (
+        ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player?.id.toString())
+      ) {
         ctx.setFlags(64)
 
         return await ctx.reply('commands.duel.duplicated_cards')
@@ -351,14 +358,22 @@ export default createCommand({
           content: t('commands.arena.select_agent', { player: player.name }),
           components: [row1, row2, row3, row4]
         }),
-        ctx.app.redis.set(`lineup:select:${ctx.db.profile.userId}`, ctx.interaction.message.id, 'EX', 300)
+        ctx.app.redis.set(
+          `lineup:select:${ctx.db.profile.userId}`,
+          ctx.interaction.message.id,
+          'EX',
+          300
+        )
       ])
     } else if (ctx.args[2] === 'remove') {
       ctx.setFlags(64)
 
       const player = ctx.app.players.get(ctx.args[3])
 
-      if (!player || !ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player.id.toString())) {
+      if (
+        !player ||
+        !ctx.db.profile.arena_metadata?.lineup.some(line => line.player === player.id.toString())
+      ) {
         return await ctx.reply('commands.sell.player_not_found')
       }
 
@@ -429,7 +444,9 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(
+                line => line.player === p
+              )
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -454,7 +471,10 @@ export default createCommand({
                 .setCustomId(`arena;${ctx.db.profile.userId};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
+                .setDisabled(
+                  ctx.db.profile.arena_metadata !== null &&
+                    ctx.db.profile.arena_metadata.lineup.length >= 5
+                )
             })
         )
 
@@ -574,7 +594,9 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(
+                line => line.player === p
+              )
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -599,7 +621,10 @@ export default createCommand({
                 .setCustomId(`arena;${ctx.db.profile.userId};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
+                .setDisabled(
+                  ctx.db.profile.arena_metadata !== null &&
+                    ctx.db.profile.arena_metadata.lineup.length >= 5
+                )
             })
         )
 
@@ -676,7 +701,9 @@ export default createCommand({
 
               let content: string
 
-              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(line => line.player === p)
+              const playerInLineup = ctx.db.profile.arena_metadata?.lineup.find(
+                line => line.player === p
+              )
 
               if (playerInLineup) {
                 const emoji = valorant_agents.find(a => a.name === playerInLineup.agent.name)?.emoji
@@ -702,7 +729,10 @@ export default createCommand({
                 .setCustomId(`arena;${ctx.db.profile.userId};promote;${p};${i}`)
                 .setLabel(t('commands.arena.promote'))
                 .setStyle(ButtonStyle.Success)
-                .setDisabled(ctx.db.profile.arena_metadata !== null && ctx.db.profile.arena_metadata.lineup.length >= 5)
+                .setDisabled(
+                  ctx.db.profile.arena_metadata !== null &&
+                    ctx.db.profile.arena_metadata.lineup.length >= 5
+                )
             })
         )
 

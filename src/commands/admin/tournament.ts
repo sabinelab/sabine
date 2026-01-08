@@ -218,7 +218,9 @@ export default createCommand({
               guild.events.filter(e => e.type === 'valorant').length >=
             ctx.db.guild.tournaments_length
           )
-            return ctx.reply('commands.tournament.limit_reached', { cmd: `</tournament remove valorant:${id}>` })
+            return ctx.reply('commands.tournament.limit_reached', {
+              cmd: `</tournament remove valorant:${id}>`
+            })
 
           if (ctx.args[3].toString() === ctx.args[4].toString())
             return ctx.reply('commands.tournament.channels_must_be_different')
@@ -282,7 +284,9 @@ export default createCommand({
               guild.events.filter(e => e.type === 'valorant').length >=
             ctx.db.guild.tournaments_length
           )
-            return ctx.reply('commands.tournament.limit_reached', { cmd: `</tournament remove lol:${id}>` })
+            return ctx.reply('commands.tournament.limit_reached', {
+              cmd: `</tournament remove lol:${id}>`
+            })
           if (ctx.args[3].toString() === ctx.args[4].toString())
             return ctx.reply('commands.tournament.channels_must_be_different')
           if (
@@ -488,7 +492,9 @@ export default createCommand({
 
           if (!guild) return
 
-          const events = guild.events.map(e => e.name).filter(e => e.toLowerCase().includes(value.toLowerCase()))
+          const events = guild.events
+            .map(e => e.name)
+            .filter(e => e.toLowerCase().includes(value.toLowerCase()))
 
           events.unshift(t('commands.tournament.remove_all'))
 

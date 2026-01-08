@@ -196,7 +196,9 @@ export default class Match {
         if (
           !valorant_maps
             .filter(m => m.name === this.map)[0]
-            .meta_agents.includes(p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number])
+            .meta_agents.includes(
+              p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number]
+            )
         ) {
           p.aim *= 0.95
           p.HS *= 0.95

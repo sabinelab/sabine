@@ -64,8 +64,12 @@ export default createCommand({
 
       if (cmd.syntax) embed.addField(t('commands.help.syntax'), `\`/${cmd.syntax}\``)
       if (cmd.syntaxes)
-        embed.addField(t('commands.help.syntax'), cmd.syntaxes.map(syntax => `\`/${syntax}\``).join('\n'))
-      if (cmd.examples) embed.addField(t('commands.help.examples'), cmd.examples.map(ex => `\`/${ex}\``).join('\n'))
+        embed.addField(
+          t('commands.help.syntax'),
+          cmd.syntaxes.map(syntax => `\`/${syntax}\``).join('\n')
+        )
+      if (cmd.examples)
+        embed.addField(t('commands.help.examples'), cmd.examples.map(ex => `\`/${ex}\``).join('\n'))
       if (cmd.permissions)
         embed.addField(
           t('commands.help.permissions'),

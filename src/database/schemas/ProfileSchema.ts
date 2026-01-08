@@ -262,7 +262,9 @@ export class ProfileSchema implements Profile {
 
   public async addPlayerToRoster(
     player: string,
-    method: 'CLAIM_PLAYER_BY_CLAIM_COMMAND' | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND',
+    method:
+      | 'CLAIM_PLAYER_BY_CLAIM_COMMAND'
+      | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND',
     channel?: string
   ) {
     const updates: any = {
@@ -273,7 +275,9 @@ export class ProfileSchema implements Profile {
 
     if (method === 'CLAIM_PLAYER_BY_CLAIM_COMMAND') {
       const user = await UserSchema.fetch(this.userId)
-      const claimTime = user?.premium ? new Date(Date.now() + 5 * 60 * 1000) : new Date(Date.now() + 10 * 60 * 1000)
+      const claimTime = user?.premium
+        ? new Date(Date.now() + 5 * 60 * 1000)
+        : new Date(Date.now() + 10 * 60 * 1000)
 
       updates.claim_time = claimTime
       updates.claims = { increment: 1 }

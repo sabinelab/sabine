@@ -33,7 +33,8 @@ export default class App extends Discord.Client {
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
   public queue: typeof queue
-  public interactions: Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions> = new Map()
+  public interactions: Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions> =
+    new Map()
   public players = new Map<string, Player>()
   public emoji = new Map<string, string>()
   public emojiAliases = new Map<string, string>()
@@ -51,7 +52,9 @@ export default class App extends Discord.Client {
       if (listener.name === 'ready')
         this.once('ready', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
       else
-        this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
+        this.on(listener.name, (...args) =>
+          listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e))
+        )
     }
 
     for (const folder of readdirSync(path.resolve(__dirname, '../../commands'))) {

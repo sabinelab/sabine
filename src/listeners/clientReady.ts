@@ -45,7 +45,10 @@ const tournaments: { [key: string]: RegExp[] } = {
 }
 
 const sendValorantMatches = async (app: App) => {
-  const [res, res2] = await Promise.all([service.getMatches('valorant'), service.getResults('valorant')])
+  const [res, res2] = await Promise.all([
+    service.getMatches('valorant'),
+    service.getResults('valorant')
+  ])
 
   if (!res || !res.length) return
 
@@ -121,7 +124,9 @@ const sendValorantMatches = async (app: App) => {
             .some(e => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+              return tour.some(regex =>
+                regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+              )
             })
 
           if (events2) return true
@@ -141,7 +146,9 @@ const sendValorantMatches = async (app: App) => {
           const events2 = guild.events.some(e => {
             const tour = tournaments[e.name]
             if (!tour) return false
-            return tour.some(regex => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+            return tour.some(regex =>
+              regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+            )
           })
 
           if (events2) return true
@@ -191,7 +198,9 @@ const sendValorantMatches = async (app: App) => {
         for (const e of guild.events) {
           if (
             e.name === d.tournament.name ||
-            tournaments[e.name]?.some(regex => regex.test(d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase()))
+            tournaments[e.name]?.some(regex =>
+              regex.test(d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase())
+            )
           ) {
             if (d.stage.toLowerCase().includes('showmatch')) continue
 
@@ -506,7 +515,11 @@ const sendLolMatches = async (app: App) => {
       type: $Enums.EventType
     }[] = []
 
-    if (guild.lol_matches.length && !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])) continue
+    if (
+      guild.lol_matches.length &&
+      !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])
+    )
+      continue
 
     guild.lol_matches = []
 
@@ -712,12 +725,21 @@ export default createListener({
       await app.postCommands()
 
       arenaMatchQueue.process('arena', async job => {
-        const player1 = await ProfileSchema.fetch(job.data.parsedData1.userId, job.data.parsedData1.guildId)
-        const player2 = await ProfileSchema.fetch(job.data.parsedData2.userId, job.data.parsedData2.guildId)
+        const player1 = await ProfileSchema.fetch(
+          job.data.parsedData1.userId,
+          job.data.parsedData1.guildId
+        )
+        const player2 = await ProfileSchema.fetch(
+          job.data.parsedData2.userId,
+          job.data.parsedData2.guildId
+        )
 
         if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
 
-        if (player1.arena_metadata.lineup.length < 5 && player2.arena_metadata.lineup.length === 5) {
+        if (
+          player1.arena_metadata.lineup.length < 5 &&
+          player2.arena_metadata.lineup.length === 5
+        ) {
           player1.rank_rating -= 15
           if (player1.rank_rating < 0) player1.rank_rating = 0
 
@@ -747,7 +769,10 @@ export default createListener({
               }
             })
           ])
-        } else if (player1.arena_metadata.lineup.length === 5 && player2.arena_metadata.lineup.length < 5) {
+        } else if (
+          player1.arena_metadata.lineup.length === 5 &&
+          player2.arena_metadata.lineup.length < 5
+        ) {
           player2.rank_rating -= 10
           if (player2.rank_rating < 0) player2.rank_rating = 0
 
@@ -777,7 +802,10 @@ export default createListener({
               }
             })
           ])
-        } else if (player1.arena_metadata.lineup.length < 5 && player2.arena_metadata.lineup.length < 5) {
+        } else if (
+          player1.arena_metadata.lineup.length < 5 &&
+          player2.arena_metadata.lineup.length < 5
+        ) {
           player1.rank_rating -= 15
           player2.rank_rating -= 15
 

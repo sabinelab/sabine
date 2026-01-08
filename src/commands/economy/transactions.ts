@@ -90,7 +90,9 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176223621611572')
-      .setCustomId(`transactions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous`)
+      .setCustomId(
+        `transactions;${ctx.interaction.user.id};${page - 1 < 1 ? 1 : page - 1};previous`
+      )
 
     const next = new ButtonBuilder()
       .defineStyle('blue')
