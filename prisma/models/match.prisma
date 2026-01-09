@@ -6,7 +6,7 @@ model Match {
   winner    Boolean
   teams     CareerTeam[]
   points    Int?         @db.SmallInt
-  metadata  Json?
+  metadata  Json
   when      DateTime     @default(now())
 
   @@index([profileId, mode])
