@@ -10,6 +10,7 @@ model Profile {
   team_name                String?       @db.VarChar(20)
   team_tag                 String?       @db.VarChar(4)
   team_xp                  Int           @default(0) @db.SmallInt
+  team_required_xp         Int           @default(500) @db.SmallInt
   team_level               Int           @default(1) @db.SmallInt
   arena_wins               Int           @default(0) @db.SmallInt
   ranked_wins              Int           @default(0) @db.SmallInt
