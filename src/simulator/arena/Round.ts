@@ -111,13 +111,17 @@ export default class Round extends Match {
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             })),
             ...this.teams[1].roster.map(p => ({
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             }))
           ],
           map: this.mapImage,
@@ -218,13 +222,17 @@ export default class Round extends Match {
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             })),
             ...this.teams[1].roster.map(p => ({
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             }))
           ],
           map: this.mapImage,
@@ -325,13 +333,17 @@ export default class Round extends Match {
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             })),
             ...this.teams[1].roster.map(p => ({
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             }))
           ],
           map: this.mapImage,
@@ -432,13 +444,17 @@ export default class Round extends Match {
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             })),
             ...this.teams[1].roster.map(p => ({
               id: p.id.toString(),
               kills: p.kills,
               deaths: p.deaths,
-              agent: p.agent.name
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
             }))
           ],
           map: this.mapImage,
