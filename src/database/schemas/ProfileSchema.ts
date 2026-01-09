@@ -50,6 +50,8 @@ export class ProfileSchema implements Profile {
   public poisons: bigint = 0n
   public team_name: string | null = null
   public team_tag: string | null = null
+  public team_xp: number = 0
+  public team_level: number = 1
   public arena_wins: number = 0
   public ranked_wins: number = 0
   public unranked_wins: number = 0
