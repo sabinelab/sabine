@@ -189,16 +189,12 @@ export default class CommandRunner {
                 })
               )
 
-            await ctx.reply(button)
-          }
-        }
-        if (command.name === 'duel') {
-          interaction
-            .followUp({
-              content: t('helper.new_game_mode'),
+            interaction.followUp({
+              ...button,
               flags: 'Ephemeral'
             })
             .catch(voidCatch)
+          }
         }
         if (env.DEVS.includes(interaction.user.id)) return
 
