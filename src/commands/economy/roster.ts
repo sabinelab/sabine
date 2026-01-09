@@ -9,6 +9,15 @@ import {
 } from 'discord.js'
 import SelectMenuBuilder from '@/structures/builders/SelectMenuBuilder'
 import createCommand from '@/structures/command/createCommand'
+import { createProgressBar } from '@/util/createProgressBar'
+import { formatNumber } from '@/util/formatNumber'
+
+const getUpgradeCost = (level: number) => {
+  const base = 10_000
+  const multiplier = 1.45
+
+  return Math.floor(base * (multiplier ** (level - 1)))
+}
 
 export default createCommand({
   name: 'roster',
@@ -70,7 +79,10 @@ export default createCommand({
               ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
               name: ctx.db.profile.team_name
                 ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
-                : '`undefined`'
+                : '`undefined`',
+              level: ctx.db.profile.team_level,
+              xp: `${ctx.db.profile.team_xp}/${ctx.db.profile.team_required_xp}`,
+              progress: createProgressBar(ctx.db.profile.team_xp / ctx.db.profile.team_required_xp)
             })
         )
       )
@@ -79,12 +91,24 @@ export default createCommand({
           new ButtonBuilder()
             .setLabel(ctx.t('commands.roster.change_team'))
             .setCustomId(`roster;${ctx.interaction.user.id};team`)
-            .setStyle(ButtonStyle.Primary)
+            .setStyle(ButtonStyle.Primary),
+          new ButtonBuilder()
+            .setLabel(ctx.t('commands.roster.practice'))
+            .setCustomId(`roster;${ctx.interaction.user.id};practice`)
+            .setStyle(ButtonStyle.Secondary)
+            .setDisabled(ctx.db.profile.team_required_xp <= ctx.db.profile.team_xp),
+          new ButtonBuilder()
+            .setLabel(ctx.t('commands.roster.upgrade', {
+              cost: formatNumber(getUpgradeCost(ctx.db.profile.team_level))
+            }))
+            .setCustomId(`roster;${ctx.interaction.user.id};upgrade`)
+            .setStyle(ButtonStyle.Success)
+            .setDisabled(ctx.db.profile.team_required_xp > ctx.db.profile.team_xp)
         )
       )
       .addSeparatorComponents(separator => separator)
 
-    const pages = Math.ceil(reserve_players.length / 10) + 1
+    const pages = Math.ceil(reserve_players.length / 5) + 1
     let page = (ctx.args[0] as number) ?? 1
 
     if (page === 1) {
@@ -122,7 +146,7 @@ export default createCommand({
     } else {
       page -= 1
 
-      const players = reserve_players.slice(page * 10 - 10, page * 10)
+      const players = reserve_players.slice(page * 5 - 5, page * 5)
 
       if (players.length) {
         container.addTextDisplayComponents(text =>
@@ -185,7 +209,7 @@ export default createCommand({
 
     if (ctx.args[2] === 'team') {
       await i.showModal({
-        customId: `roster;${ctx.db.profile.userId};modal`,
+        customId: `roster;${ctx.db.profile.userId};team`,
         title: t('commands.roster.modal.title'),
         components: [
           {
@@ -193,7 +217,7 @@ export default createCommand({
             components: [
               {
                 type: 4,
-                customId: `roster;${i.user.id};modal;response-1`,
+                customId: `roster;${i.user.id};team;response-1`,
                 label: t('commands.roster.modal.team_name'),
                 style: 1,
                 minLength: 2,
@@ -207,7 +231,7 @@ export default createCommand({
             components: [
               {
                 type: 4,
-                customId: `roster;${i.user.id};modal;response-2`,
+                customId: `roster;${i.user.id};team;response-2`,
                 label: t('commands.roster.modal.team_tag'),
                 style: 1,
                 minLength: 2,
@@ -337,6 +361,68 @@ export default createCommand({
       const p = ctx.app.players.get(ctx.args[3])
 
       await ctx.edit('commands.promote.player_promoted', { p: p?.name })
+    } else if (ctx.args[2] === 'practice') {
+      await i.showModal({
+        customId: `roster;${ctx.db.profile.userId};practice`,
+        title: ctx.t('commands.roster.modal.practice.title'),
+        components: [
+          {
+            type: 1,
+            components: [
+              {
+                type: 4,
+                customId: `roster;${ctx.db.profile.userId};practice;response`,
+                label: ctx.t('commands.roster.modal.practice.description'),
+                style: 1,
+                minLength: 1,
+                required: true,
+                placeholder: ctx.t('commands.roster.modal.practice.max', {
+                  max: ctx.db.profile.team_required_xp - ctx.db.profile.team_xp
+                })
+              }
+            ]
+          }
+        ]
+      })
+    } else if (ctx.args[2] === 'upgrade') {
+      if (ctx.db.profile.team_xp < ctx.db.profile.team_required_xp) {
+        return await ctx.reply('commands.roster.xp_needed')
+      }
+      if (ctx.db.profile.team_level >= 15) {
+        return await ctx.reply('commands.roster.max_level_reached')
+      }
+      
+      const cost = getUpgradeCost(ctx.db.profile.team_level)
+      if (ctx.db.profile.poisons < cost) {
+        return await ctx.reply('commands.roster.poisons_needed', {
+          required_poisons: cost.toLocaleString(),
+          poisons: ctx.db.profile.poisons.toLocaleString()
+        })
+      }
+
+      const profile = await prisma.profile.update({
+        where: {
+          userId_guildId: {
+            userId: ctx.db.profile.userId,
+            guildId: ctx.db.guild.id
+          }
+        },
+        data: {
+          team_level: {
+            increment: 1
+          },
+          team_required_xp: Math.floor(ctx.db.profile.team_required_xp * 1.3),
+          team_xp: 0,
+          poisons: {
+            decrement: cost
+          }
+        }
+      })
+
+      await ctx.reply('commands.roster.upgraded', {
+        level: profile.team_level,
+        poisons: cost.toLocaleString()
+      })
     } else {
       const active_players = ctx.db.profile.active_players
       const reserve_players = ctx.db.profile.reserve_players
@@ -363,7 +449,7 @@ export default createCommand({
       }
 
       let page = Number(ctx.args[3])
-      const pages = Math.ceil(reserve_players.length / 10) + 1
+      const pages = Math.ceil(reserve_players.length / 5) + 1
 
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
@@ -376,7 +462,12 @@ export default createCommand({
                 ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
                 name: ctx.db.profile.team_name
                   ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
-                  : '`undefined`'
+                  : '`undefined`',
+                level: ctx.db.profile.team_level,
+                xp: `${ctx.db.profile.team_xp}/${ctx.db.profile.team_required_xp}`,
+                progress: createProgressBar(
+                  ctx.db.profile.team_xp / ctx.db.profile.team_required_xp
+                )
               })
           )
         )
@@ -385,7 +476,19 @@ export default createCommand({
             new ButtonBuilder()
               .setLabel(t('commands.roster.change_team'))
               .setCustomId(`roster;${ctx.interaction.user.id};team`)
-              .setStyle(ButtonStyle.Primary)
+              .setStyle(ButtonStyle.Primary),
+            new ButtonBuilder()
+              .setLabel(ctx.t('commands.roster.practice'))
+              .setCustomId(`roster;${ctx.interaction.user.id};practice`)
+              .setStyle(ButtonStyle.Secondary)
+              .setDisabled(ctx.db.profile.team_required_xp <= ctx.db.profile.team_xp),
+            new ButtonBuilder()
+              .setLabel(ctx.t('commands.roster.upgrade', {
+                cost: formatNumber(getUpgradeCost(ctx.db.profile.team_level))
+              }))
+              .setCustomId(`roster;${ctx.interaction.user.id};upgrade`)
+              .setStyle(ButtonStyle.Success)
+              .setDisabled(ctx.db.profile.team_required_xp > ctx.db.profile.team_xp)
           )
         )
         .addSeparatorComponents(separator => separator)
@@ -467,7 +570,7 @@ export default createCommand({
       } else {
         page -= 1
 
-        const players = reserve_players.slice(page * 10 - 10, page * 10)
+        const players = reserve_players.slice(page * 5 - 5, page * 5)
 
         if (players.length) {
           container.addTextDisplayComponents(text =>
@@ -527,23 +630,71 @@ export default createCommand({
     }
   },
   async createModalSubmitInteraction({ ctx, i }) {
-    await i.deferReply({ flags: 64 })
+    ctx.setFlags(64)
 
-    const name = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-1`)
-    const tag = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-2`)
+    if (ctx.args[2] === 'modal') {
+      const name = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-1`)
+      const tag = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-2`)
 
-    await prisma.profile.update({
-      where: {
-        userId_guildId: {
-          userId: ctx.db.profile.userId,
-          guildId: ctx.db.guild.id
+      await prisma.profile.update({
+        where: {
+          userId_guildId: {
+            userId: ctx.db.profile.userId,
+            guildId: ctx.db.guild.id
+          }
+        },
+        data: {
+          team_name: name,
+          team_tag: tag
         }
-      },
-      data: {
-        team_name: name,
-        team_tag: tag
+      })
+      await ctx.reply('commands.roster.team_info_changed', { name, tag })
+    } else if (ctx.args[2] === 'practice') {
+      const value = Number(i.fields.getTextInputValue(`roster;${i.user.id};practice;response`))
+
+      if (ctx.db.profile.team_xp >= ctx.db.profile.team_required_xp) {
+        return await ctx.reply('commands.roster.max_xp_reached')
       }
-    })
-    await ctx.reply('commands.roster.team_info_changed', { name, tag })
+      if (
+        Number.isNaN(value) ||
+        value > ctx.db.profile.team_required_xp - ctx.db.profile.team_xp ||
+        value <= 0
+      ) {
+        return await ctx.reply('commands.roster.invalid_value', {
+          value: ctx.db.profile.team_required_xp - ctx.db.profile.team_xp
+        })
+      }
+
+      const decrementValue = value * 0.5
+
+      if (ctx.db.profile.fates < decrementValue) {
+        return await ctx.reply('commands.roster.value_too_short', {
+          required_fates: decrementValue.toLocaleString(),
+          fates: ctx.db.profile.fates.toLocaleString()
+        })
+      }
+
+      const profile = await prisma.profile.update({
+        where: {
+          userId_guildId: {
+            userId: ctx.db.profile.userId,
+            guildId: ctx.db.guild.id
+          }
+        },
+        data: {
+          fates: {
+            decrement: decrementValue
+          },
+          team_xp: {
+            increment: value
+          }
+        }
+      })
+
+      await ctx.reply('commands.roster.practiced', {
+        xp: profile.team_xp,
+        cost: decrementValue.toLocaleString()
+      })
+    }
   }
 })
