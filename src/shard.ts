@@ -74,7 +74,7 @@ const processArenaQueue = async () => {
         await Bun.redis.lpush('arena:queue', payload2)
       }
 
-      return await Bun.redis.del(`arena:in_queue:${parsedData1.userId}`)
+      return await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`)
     }
 
     if (!p2InQueue) {
@@ -82,10 +82,10 @@ const processArenaQueue = async () => {
         await Bun.redis.lpush('arena:queue', payload1)
       }
 
-      return await Bun.redis.del(`arena:in_queue:${parsedData2.userId}`)
+      return await Bun.redis.unlink(`arena:in_queue:${parsedData2.userId}`)
     }
 
-    await Bun.redis.del(
+    await Bun.redis.unlink(
       `arena:in_queue:${parsedData1.userId}`,
       `arena:in_queue:${parsedData2.userId}`
     )
@@ -128,7 +128,7 @@ for (const pattern of patterns) {
 const keys = [...keysToDelete]
 
 if (keys.length) {
-  await Bun.redis.del(...keys)
+  await Bun.redis.unlink(...keys)
 }
 
 await updateRedis()
