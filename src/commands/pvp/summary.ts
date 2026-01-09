@@ -70,7 +70,9 @@ export default createCommand({
     const summary = match.metadata as Metadata
 
     const embed = new EmbedBuilder()
-      .setTitle(ctx.t('commands.summary.embed.title'))
+      .setTitle(ctx.t('commands.summary.embed.title', {
+        mode: ctx.t(`commands.career.mode.${match.mode}`)
+      }))
       .setDesc(
         `### <@${match.teams[0].user}> ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} <@${match.teams[1].user}>\n`
       )
