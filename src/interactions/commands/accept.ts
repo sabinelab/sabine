@@ -4,6 +4,8 @@ import { type valorant_agents, valorant_maps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
+import { calcPlayerOvr } from '@sabinelab/players'
+import { getBuff } from '@/util/getBuff'
 
 export default createComponentInteraction({
   name: 'accept',
@@ -147,7 +149,16 @@ export default createComponentInteraction({
 
     data[ctx.db.profile.userId] = ctx.db.profile.active_players.map(id => {
       const p = app.players.get(id)!
-      const ovr = p.ovr
+      const buff = 1 + getBuff(ctx.db.profile.team_level)
+
+      p.ACS *= buff
+      p.HS *= buff
+      p.aggression *= buff
+      p.aim *= buff
+      p.gamesense *= buff
+      p.movement *= buff
+
+      const ovr = calcPlayerOvr(p)
       return {
         ...p,
         ovr,
@@ -157,7 +168,16 @@ export default createComponentInteraction({
 
     data[profile.userId] = profile.active_players.map(id => {
       const p = app.players.get(id)!
-      const ovr = p.ovr
+      const buff = 1 + getBuff(profile.team_level)
+
+      p.ACS *= buff
+      p.HS *= buff
+      p.aggression *= buff
+      p.aim *= buff
+      p.gamesense *= buff
+      p.movement *= buff
+
+      const ovr = calcPlayerOvr(p)
       return {
         ...p,
         ovr,

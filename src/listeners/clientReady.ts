@@ -20,6 +20,8 @@ import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import type { MatchesData } from '@/types'
 import Logger from '@/util/Logger'
+import { getBuff } from '@/util/getBuff'
+import { calcPlayerOvr } from '@sabinelab/players'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service(env.AUTH)
@@ -847,6 +849,15 @@ export default createListener({
             {
               roster: player1.arena_metadata.lineup.map(l => {
                 const player = app.players.get(l.player)!
+                const buff = 1 + getBuff(player1.team_level)
+
+                player.ACS *= buff
+                player.HS *= buff
+                player.aggression *= buff
+                player.aim *= buff
+                player.gamesense *= buff
+                player.movement *= buff
+                player.ovr = calcPlayerOvr(player)
 
                 return {
                   ...player,
@@ -863,6 +874,15 @@ export default createListener({
             {
               roster: player2.arena_metadata.lineup.map(l => {
                 const player = app.players.get(l.player)!
+                const buff = 1 + getBuff(player2.team_level)
+
+                player.ACS *= buff
+                player.HS *= buff
+                player.aggression *= buff
+                player.aim *= buff
+                player.gamesense *= buff
+                player.movement *= buff
+                player.ovr = calcPlayerOvr(player)
 
                 return {
                   ...player,
@@ -884,6 +904,8 @@ export default createListener({
         while (!match.finished) {
           match = await match.start()
         }
+
+        console.log(match.teams.find(t => t.user === '441932495693414410')?.roster)
 
         const messages: Promise<unknown>[] = []
 
