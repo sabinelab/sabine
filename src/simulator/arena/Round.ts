@@ -179,7 +179,7 @@ export default class Round extends Match {
                 increment: pts
               },
               fates: {
-                increment: 5
+                increment: 35
               }
             }
           }),
@@ -286,7 +286,7 @@ export default class Round extends Match {
                 increment: pts
               },
               fates: {
-                increment: 5
+                increment: 35
               }
             }
           }),
@@ -393,7 +393,7 @@ export default class Round extends Match {
                 increment: pts
               },
               fates: {
-                increment: 5
+                increment: 35
               }
             }
           }),
@@ -500,7 +500,7 @@ export default class Round extends Match {
                 increment: pts
               },
               fates: {
-                increment: 5
+                increment: 35
               }
             }
           }),

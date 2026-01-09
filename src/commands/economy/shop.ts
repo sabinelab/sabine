@@ -3,10 +3,10 @@ import { ButtonStyle, ContainerBuilder } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 
 const price = {
-  ascendant: 500,
-  diamond: 250,
-  platinum: 200,
-  gold: 150
+  ascendant: 3500,
+  diamond: 1750,
+  platinum: 1400,
+  gold: 1050
 } as const
 
 export default createCommand({

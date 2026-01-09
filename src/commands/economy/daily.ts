@@ -20,7 +20,7 @@ export default createCommand({
 
     let poisons = BigInt(Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000)
 
-    let fates = Math.floor(Math.random() * (30 - 20 + 1)) + 20
+    let fates = Math.floor(Math.random() * (210 - 140 + 1)) + 140
 
     const member = app.guilds.cache
       .get('1233965003850125433')
