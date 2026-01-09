@@ -18,6 +18,9 @@ export default createCommand({
     {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'unranked',
+      nameLocalizations: {
+        'pt-BR': 'sem-classificação'
+      },
       description: 'Start a unranked duel',
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto sem classificação'
@@ -40,6 +43,9 @@ export default createCommand({
     {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'ranked',
+      nameLocalizations: {
+        'pt-BR': 'ranqueado'
+      },
       description: 'Start a ranked duel',
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto ranqueado'
@@ -73,6 +79,9 @@ export default createCommand({
         {
           type: ApplicationCommandOptionType.Subcommand,
           name: 'unranked',
+          nameLocalizations: {
+            'pt-BR': 'sem-classificação'
+          },
           description: 'Start a unranked swiftplay duel',
           descriptionLocalizations: {
             'pt-BR': 'Inicia um confronto frenético sem classificação'
@@ -95,6 +104,9 @@ export default createCommand({
         {
           type: ApplicationCommandOptionType.Subcommand,
           name: 'ranked',
+          nameLocalizations: {
+            'pt-BR': 'ranqueado'
+          },
           description: 'Start a ranked swiftplay duel',
           descriptionLocalizations: {
             'pt-BR': 'Inicia um confronto frenético ranqueado'
