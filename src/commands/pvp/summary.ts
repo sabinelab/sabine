@@ -9,6 +9,8 @@ type Stats = {
   kills: number
   deaths: number
   agent: string
+  ovr: number
+  name: string
 }
 
 type Metadata = {
@@ -78,11 +80,8 @@ export default createCommand({
           value: summary.stats
             .slice(0, 5)
             .map(p => {
-              const player = ctx.app.players.get(p.id)
 
-              if (!player) return false
-
-              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${p.kills}/${p.deaths}\``
+              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),
           inline: true
@@ -92,11 +91,8 @@ export default createCommand({
           value: summary.stats
             .slice(-5)
             .map(p => {
-              const player = ctx.app.players.get(p.id)
 
-              if (!player) return false
-
-              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${p.kills}/${p.deaths}\``
+              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),
           inline: true
