@@ -20,6 +20,7 @@ export default createComponentInteraction({
       .setOptions(
         ...valorant_agents
           .filter(a => a.role === 'controller')
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
             return {
               label: agent.name,
@@ -34,6 +35,7 @@ export default createComponentInteraction({
       .setOptions(
         ...valorant_agents
           .filter(a => a.role === 'duelist')
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
             return {
               label: agent.name,
@@ -48,6 +50,7 @@ export default createComponentInteraction({
       .setOptions(
         ...valorant_agents
           .filter(a => a.role === 'initiator')
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
             return {
               label: agent.name,
@@ -62,6 +65,7 @@ export default createComponentInteraction({
       .setOptions(
         ...valorant_agents
           .filter(a => a.role === 'sentinel')
+          .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
             return {
               label: agent.name,
