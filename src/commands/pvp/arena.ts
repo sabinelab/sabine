@@ -102,7 +102,9 @@ export default createCommand({
           return await ctx.reply('commands.arena.invalid_lineup', { map })
         }
 
-        const isAlreadyInQueue = await ctx.app.redis.exists(`arena:in_queue:${ctx.db.profile.userId}`)
+        const isAlreadyInQueue = await ctx.app.redis.exists(
+          `arena:in_queue:${ctx.db.profile.userId}`
+        )
 
         if (isAlreadyInQueue) {
           return await ctx.reply('commands.arena.is_already_in_queue')
@@ -136,7 +138,7 @@ export default createCommand({
         }
 
         await Promise.all([
-          ctx.app.redis.del(`arena:in_queue:${ctx.db.profile.userId}`),
+          ctx.app.redis.unlink(`arena:in_queue:${ctx.db.profile.userId}`),
           ctx.app.redis.lrem('arena:queue', 0, payload)
         ])
 
@@ -665,7 +667,7 @@ export default createCommand({
           p: player.name,
           agent: agent.name
         }),
-        ctx.app.redis.del(`lineup:select:${ctx.db.profile.userId}`)
+        ctx.app.redis.unlink(`lineup:select:${ctx.db.profile.userId}`)
       ])
     } else {
       if (!ctx.db.profile.active_players.length && !ctx.db.profile.reserve_players.length) {
