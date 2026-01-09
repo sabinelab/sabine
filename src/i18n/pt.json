@@ -342,7 +342,7 @@
     "summary": {
       "match_not_found": "Esta partida não pôde ser encontrada. Verifique a semente e tente novamente.",
       "embed": {
-        "title": "Resumo (Modo Arena)"
+        "title": "Modo de Jogo: {mode} | Resumo"
       }
     },
     "shop": {

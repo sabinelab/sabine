@@ -335,7 +335,7 @@
     "summary": {
       "match_not_found": "This match could not be found. Check the seed and try again.",
       "embed": {
-        "title": "Summary (Arena Mode)"
+        "title": "Game Mode: {mode} | Summary"
       }
     },
     "shop": {
