@@ -145,7 +145,7 @@
     "roster": {
       "container": {
         "title": "### Your Roster",
-        "desc": "Team name: **{name}**\nRoster value: `{value}`\nRoster overall: `{ovr}`",
+        "desc": "Team name: **{name}**\nTeam level: `{level}`\nTeam XP: `{xp}` {progress}\nRoster value: `{value}`\nRoster overall: `{ovr}`",
         "active_players": "### Active Players ({total})",
         "reserve_players": "### Reserve Players ({total})",
         "button": {
@@ -153,14 +153,28 @@
           "remove": "Remove"
         }
       },
-      "generate_file": "Generate full roster .txt file",
       "change_team": "Change team name or tag",
+      "practice": "Practice (0.5 fates per XP)",
+      "upgrade": "Upgrade ({cost} poisons)",
       "modal": {
         "title": "Insert the new name and tag",
         "team_name": "New name",
-        "team_tag": "New tag"
+        "team_tag": "New tag",
+        "practice": {
+          "title": "Improve your team",
+          "description": "Insert the amount of XP",
+          "max": "Maximum XP accepted: {max}"
+        }
       },
-      "team_info_changed": "You changed the name of your team to **{name}** and the tag to **{tag}** successfully!"
+      "team_info_changed": "You changed the name of your team to **{name}** and the tag to **{tag}** successfully!",
+      "invalid_value": "Please, provide a value less than or equal to {value}.",
+      "value_too_short": "You need at least **{required_fates} fates** to do this and you have **{fates}**.",
+      "max_xp_reached": "Your team has reached the maximum XP. Consider leveling it up using the `Upgrade` button.",
+      "practiced": "You practiced with your team for **{cost} fates**, and now it has {xp} XP!",
+      "max_level_reached": "Your team has reached the maximum level. Congratulations! 🎉",
+      "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade your team and you have **{poisons}**.",
+      "xp_needed": "Your team doesn't have enough XP for this.",
+      "upgraded": "You upgraded your team for **{poisons} poisons**, and now it's now level {level}!"
     },
     "promote": {
       "player_not_found": "Player not found!",
