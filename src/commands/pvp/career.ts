@@ -118,7 +118,7 @@ export default createCommand({
             user: `<@${match.teams[1].user}>`,
             points: match.points! > 0 ? `+${match.points}` : match.points
           }
-        )}\n`
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
       } else if (match.mode === 'ARENA') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
@@ -143,7 +143,7 @@ export default createCommand({
             score: `${match.teams[0].score}-${match.teams[1].score}`,
             user: `<@${match.teams[1].user}>`
           }
-        )}\n`
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
       }
     }
 
@@ -269,7 +269,7 @@ export default createCommand({
             user: `<@${match.teams[1].user}>`,
             points: match.points! > 0 ? `+${match.points}` : match.points
           }
-        )}\n`
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
       } else if (match.mode === 'ARENA') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
@@ -294,7 +294,7 @@ export default createCommand({
             score: `${match.teams[0].score}-${match.teams[1].score}`,
             user: `<@${match.teams[1].user}>`
           }
-        )}\n`
+        )}\n  - ${t('commands.career.seed')}: \`${match.id}\`\n`
       }
     }
 
