@@ -130,7 +130,7 @@ export default class Round extends Match {
     const profile1 = await ProfileSchema.fetch(this.teams[0].user, this.guildId)
     const profile2 = await ProfileSchema.fetch(this.teams[1].user, this.guildId)
 
-    if(!profile1 || !profile2) return this
+    if (!profile1 || !profile2) return this
 
     if (this.mode === 'ranked') {
       const max = Math.max(score1, score2)
@@ -152,6 +152,29 @@ export default class Round extends Match {
           profile2.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -170,7 +193,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -190,7 +214,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -279,6 +304,29 @@ export default class Round extends Match {
           profile1.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -297,7 +345,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -317,7 +366,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -407,6 +457,29 @@ export default class Round extends Match {
           profile2.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -425,7 +498,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -445,7 +519,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -535,6 +610,29 @@ export default class Round extends Match {
           profile1.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -553,7 +651,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -573,7 +672,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -667,6 +767,29 @@ export default class Round extends Match {
           profile2.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -685,7 +808,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -705,7 +829,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -795,6 +920,29 @@ export default class Round extends Match {
           profile1.rank_rating = 0
         }
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -813,7 +961,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -833,7 +982,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -914,6 +1064,29 @@ export default class Round extends Match {
         profile1.swiftplay_wins += 1
         profile2.swiftplay_defeats += 1
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -931,7 +1104,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -950,7 +1124,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -1020,6 +1195,29 @@ export default class Round extends Match {
         profile2.swiftplay_wins += 1
         profile1.swiftplay_defeats += 1
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -1037,7 +1235,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -1056,7 +1255,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -1130,6 +1330,29 @@ export default class Round extends Match {
         profile1.unranked_wins += 1
         profile2.unranked_defeats += 1
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -1147,7 +1370,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -1166,7 +1390,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -1236,6 +1461,29 @@ export default class Round extends Match {
         profile2.unranked_wins += 1
         profile1.unranked_defeats += 1
 
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -1253,7 +1501,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -1272,7 +1521,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.profile.update({
@@ -1344,6 +1594,29 @@ export default class Round extends Match {
       const max = Math.max(score1, score2)
 
       if (max === 13 && score1 === max) {
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma
           .$transaction([
             prisma.match.create({
@@ -1362,7 +1635,8 @@ export default class Round extends Match {
                       score: score2
                     }
                   ]
-                }
+                },
+                metadata: stats
               }
             }),
             prisma.match.create({
@@ -1381,7 +1655,8 @@ export default class Round extends Match {
                       score: score1
                     }
                   ]
-                }
+                },
+                metadata: stats
               }
             })
           ])
@@ -1429,6 +1704,29 @@ export default class Round extends Match {
           }
         })
       } else if (max === 13 && score2 === max) {
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -1446,7 +1744,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -1465,7 +1764,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           })
         ])
@@ -1518,6 +1818,29 @@ export default class Round extends Match {
       console.log('torneio sem ot')
 
       if (max === 13 && score1 === max) {
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma
           .$transaction([
             prisma.match.create({
@@ -1530,7 +1853,8 @@ export default class Round extends Match {
                     { user: this.teams[0].user, score: score1 },
                     { user: this.teams[1].user, score: score2 }
                   ]
-                }
+                },
+                metadata: stats
               }
             }),
             prisma.match.create({
@@ -1543,7 +1867,8 @@ export default class Round extends Match {
                     { user: this.teams[1].user, score: score2 },
                     { user: this.teams[0].user, score: score1 }
                   ]
-                }
+                },
+                metadata: stats
               }
             })
           ])
@@ -1591,6 +1916,29 @@ export default class Round extends Match {
           }
         })
       } else if (max === 13 && score2 === max) {
+        const stats = {
+          stats: [
+            ...this.teams[0].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            })),
+            ...this.teams[1].roster.map(p => ({
+              id: p.id.toString(),
+              kills: p.kills,
+              deaths: p.deaths,
+              agent: p.agent.name,
+              ovr: p.ovr,
+              name: p.name
+            }))
+          ],
+          map: this.mapImage,
+          teams: [this.teams[0].name, this.teams[1].name]
+        }
+
         await prisma.$transaction([
           prisma.match.create({
             data: {
@@ -1608,7 +1956,8 @@ export default class Round extends Match {
                     score: score1
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           }),
           prisma.match.create({
@@ -1627,7 +1976,8 @@ export default class Round extends Match {
                     score: score2
                   }
                 ]
-              }
+              },
+              metadata: stats
             }
           })
         ])
