@@ -27,7 +27,7 @@ model Profile {
   claim_time               DateTime?
   pity                     Int           @default(0) @db.SmallInt
   claims                   Int           @default(0)
-  fates                    Int           @default(0) @db.SmallInt
+  fates                    Float         @default(0) @db.DoublePrecision
   rank_rating              Int           @default(0)
   remind                   Boolean?
   remind_in                String?
