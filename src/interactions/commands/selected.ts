@@ -98,11 +98,14 @@ export default createComponentInteraction({
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[profile.userId].findIndex((p: any) => p.id.toString() === id)
 
-                    if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
+                    if (
+                      data[profile.userId][i].id.toString() === id &&
+                      data[profile.userId][i].agent
+                    ) {
                       emoji = valorant_agents.find(
-                        agent => agent.name === data[profile.id][i].agent!.name
+                        agent => agent.name === data[profile.userId][i].agent!.name
                       )?.emoji
                     }
 
@@ -150,11 +153,14 @@ export default createComponentInteraction({
 
                     let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-                    const i = data[profile.id].findIndex((p: any) => p.id.toString() === id)
+                    const i = data[profile.userId].findIndex((p: any) => p.id.toString() === id)
 
-                    if (data[profile.id][i].id.toString() === id && data[profile.id][i].agent) {
+                    if (
+                      data[profile.userId][i].id.toString() === id &&
+                      data[profile.userId][i].agent
+                    ) {
                       emoji = valorant_agents.find(
-                        agent => agent.name === data[profile.id][i].agent!.name
+                        agent => agent.name === data[profile.userId][i].agent!.name
                       )?.emoji
                     }
 
@@ -183,7 +189,7 @@ export default createComponentInteraction({
 
     if (
       data[ctx.interaction.user.id].filter((p: any) => p.agent).length === 5 &&
-      data[profile.id].filter((p: any) => p.agent).length === 5
+      data[profile.userId].filter((p: any) => p.agent).length === 5
     ) {
       const timeout = 10000
 
