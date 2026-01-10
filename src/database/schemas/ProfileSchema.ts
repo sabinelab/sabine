@@ -1,6 +1,5 @@
 import { prisma } from '@db'
 import type { $Enums, Profile } from '@generated'
-import type { valorant_agents } from '@/config'
 import { hydrateData } from '@/database/hydrate-data'
 import { UserSchema } from '@/database/schemas/UserSchema'
 import { updateCache, voidCatch } from '@/database/update-cache'
@@ -21,19 +20,6 @@ type Prediction = {
   odd: number | null
 }
 
-type ArenaLineup = {
-  player: string
-  agent: {
-    name: string
-    role: (typeof valorant_agents)[number]['role']
-  }
-}
-
-export type ArenaMetadata = {
-  map: string
-  lineup: ArenaLineup[]
-}
-
 type AddPackOptions = {
   pack: Pack
   lastVote: Date
@@ -45,14 +31,9 @@ export class ProfileSchema implements Profile {
   public created_at: Date = new Date()
   public correct_predictions: number = 0
   public incorrect_predictions: number = 0
-  public active_players: string[] = []
-  public reserve_players: string[] = []
   public poisons: bigint = 0n
   public team_name: string | null = null
   public team_tag: string | null = null
-  public team_xp: number = 0
-  public team_required_xp: number = 500
-  public team_level: number = 1
   public arena_wins: number = 0
   public ranked_wins: number = 0
   public unranked_wins: number = 0
@@ -63,7 +44,6 @@ export class ProfileSchema implements Profile {
   public unranked_defeats: number = 0
   public swiftplay_defeats: number = 0
   public ranked_swiftplay_defeats: number = 0
-  public arena_metadata: ArenaMetadata | null = null
   public daily_time: Date | null = null
   public claim_time: Date | null = null
   public warn: boolean = false
@@ -351,8 +331,21 @@ export class ProfileSchema implements Profile {
           }
         },
         data: {
-          reserve_players: {
-            push: players
+          cards: {
+            createMany: {
+              data: players.map(p => {
+                const player = app.players.get(p)!
+
+                return {
+                  playerId: p,
+                  aim: player.aim,
+                  hs: player.HS,
+                  movement: player.movement,
+                  acs: player.ACS,
+                  gamesense: player.gamesense
+                }
+              })
+            }
           }
         },
         select: {
@@ -372,73 +365,26 @@ export class ProfileSchema implements Profile {
     return this
   }
 
-  public async sellPlayer(id: string, price: bigint, i: number) {
+  public async sellPlayer(id: number | bigint, price: bigint) {
     await prisma.$transaction(async tx => {
-      const currentData = await tx.profile.findUnique({
-        where: {
-          userId_guildId: {
-            userId: this.userId,
-            guildId: this.guildId
-          }
-        },
+      const card = await tx.card.delete({
+        where: { id },
         select: {
-          reserve_players: true,
-          arena_metadata: true
-        }
-      })
-
-      if (!currentData) return
-
-      const currentPlayers = currentData.reserve_players
-
-      if (!currentPlayers[i] || currentPlayers[i] !== id) {
-        const index = currentPlayers.indexOf(id)
-        if (index === -1) return
-
-        i = index
-      }
-
-      const newPlayers = [...currentPlayers]
-      newPlayers.splice(i, 1)
-
-      const newArenaMetadata = currentData.arena_metadata
-        ? JSON.parse(JSON.stringify(currentData.arena_metadata))
-        : null
-
-      if (newArenaMetadata?.lineup) {
-        const index = newArenaMetadata.lineup.findIndex((line: any) => line.player === id)
-        if (index !== -1) {
-          newArenaMetadata.lineup.splice(index, 1)
-        }
-      }
-
-      const profile = await tx.profile.update({
-        where: {
-          userId_guildId: {
-            userId: this.userId,
-            guildId: this.guildId
-          }
-        },
-        data: {
-          poisons: {
-            increment: price
+          profile: {
+            select: {
+              id: true
+            }
           },
-          reserve_players: {
-            set: newPlayers
-          },
-          arena_metadata: newArenaMetadata ? newArenaMetadata : undefined
-        },
-        select: {
-          id: true
+          playerId: true
         }
       })
 
       await tx.transaction.create({
         data: {
           type: 'SELL_PLAYER',
-          player: Number(id),
+          player: Number(card.playerId),
           price,
-          profileId: profile.id
+          profileId: card.profile.id
         }
       })
     })
