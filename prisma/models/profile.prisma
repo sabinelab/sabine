@@ -4,14 +4,10 @@ model Profile {
   predictions              Prediction[]
   correct_predictions      Int           @default(0) @db.SmallInt
   incorrect_predictions    Int           @default(0) @db.SmallInt
-  active_players           String[]
-  reserve_players          String[]
+  cards                    Card[]
   poisons                  BigInt        @default(0)
   team_name                String?       @db.VarChar(20)
   team_tag                 String?       @db.VarChar(4)
-  team_xp                  Int           @default(0) @db.SmallInt
-  team_required_xp         Int           @default(500) @db.SmallInt
-  team_level               Int           @default(1) @db.SmallInt
   arena_wins               Int           @default(0) @db.SmallInt
   ranked_wins              Int           @default(0) @db.SmallInt
   unranked_wins            Int           @default(0) @db.SmallInt
@@ -22,7 +18,6 @@ model Profile {
   unranked_defeats         Int           @default(0) @db.SmallInt
   swiftplay_defeats        Int           @default(0) @db.SmallInt
   ranked_swiftplay_defeats Int           @default(0) @db.SmallInt
-  arena_metadata           Json?
   daily_time               DateTime?
   claim_time               DateTime?
   pity                     Int           @default(0) @db.SmallInt
