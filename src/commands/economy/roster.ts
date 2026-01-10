@@ -11,12 +11,13 @@ import SelectMenuBuilder from '@/structures/builders/SelectMenuBuilder'
 import createCommand from '@/structures/command/createCommand'
 import { createProgressBar } from '@/util/createProgressBar'
 import { formatNumber } from '@/util/formatNumber'
+import { getBuff } from '@/util/getBuff'
 
 const getUpgradeCost = (level: number) => {
-  const base = 10_000
+  const base = 25_000
   const multiplier = 1.45
 
-  return Math.floor(base * (multiplier ** (level - 1)))
+  return Math.floor(base * multiplier ** (level - 1))
 }
 
 export default createCommand({
@@ -44,14 +45,19 @@ export default createCommand({
   ],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
-    const active_players = ctx.db.profile.active_players
-    const reserve_players = ctx.db.profile.reserve_players
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: ctx.db.profile.id
+      }
+    })
+    const activeCards = cards.filter(c => c.active_roster)
+    const subCards = cards.filter(c => !c.active_roster)
 
     let value = 0
     let ovr = 0
 
-    for (const p of active_players) {
-      const player = ctx.app.players.get(p)
+    for (const c of activeCards) {
+      const player = ctx.app.players.get(c.playerId)
 
       if (!player) continue
 
@@ -59,8 +65,8 @@ export default createCommand({
       value += player.price
     }
 
-    for (const p of reserve_players) {
-      const player = ctx.app.players.get(p)
+    for (const c of subCards) {
+      const player = ctx.app.players.get(c.playerId)
 
       if (!player) continue
 
@@ -76,13 +82,10 @@ export default createCommand({
             '\n' +
             ctx.t('commands.roster.container.desc', {
               value: Math.floor(value).toLocaleString(),
-              ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
+              ovr: Math.floor(ovr / (activeCards.length + subCards.length)),
               name: ctx.db.profile.team_name
                 ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
-                : '`undefined`',
-              level: ctx.db.profile.team_level,
-              xp: `${ctx.db.profile.team_xp}/${ctx.db.profile.team_required_xp}`,
-              progress: createProgressBar(ctx.db.profile.team_xp / ctx.db.profile.team_required_xp)
+                : '`undefined`'
             })
         )
       )
@@ -91,93 +94,116 @@ export default createCommand({
           new ButtonBuilder()
             .setLabel(ctx.t('commands.roster.change_team'))
             .setCustomId(`roster;${ctx.interaction.user.id};team`)
-            .setStyle(ButtonStyle.Primary),
-          new ButtonBuilder()
-            .setLabel(ctx.t('commands.roster.practice'))
-            .setCustomId(`roster;${ctx.interaction.user.id};practice`)
-            .setStyle(ButtonStyle.Secondary)
-            .setDisabled(ctx.db.profile.team_required_xp <= ctx.db.profile.team_xp),
-          new ButtonBuilder()
-            .setLabel(ctx.t('commands.roster.upgrade', {
-              cost: formatNumber(getUpgradeCost(ctx.db.profile.team_level))
-            }))
-            .setCustomId(`roster;${ctx.interaction.user.id};upgrade`)
-            .setStyle(ButtonStyle.Success)
-            .setDisabled(ctx.db.profile.team_required_xp > ctx.db.profile.team_xp)
+            .setStyle(ButtonStyle.Primary)
         )
       )
       .addSeparatorComponents(separator => separator)
 
-    const pages = Math.ceil(reserve_players.length / 5) + 1
+    const pages = Math.ceil(subCards.length / 5) + 1
     let page = (ctx.args[0] as number) ?? 1
 
     if (page === 1) {
-      if (active_players.length) {
+      if (activeCards.length) {
         container.addTextDisplayComponents(text =>
           text.setContent(
-            ctx.t('commands.roster.container.active_players', { total: active_players.length })
+            ctx.t('commands.roster.container.active_players', { total: activeCards.length })
           )
         )
 
-        let i = 0
-        for (const p of active_players) {
-          container.addSectionComponents(section =>
-            section
-              .addTextDisplayComponents(text => {
-                const player = ctx.app.players.get(p)
+        for (const c of activeCards) {
+          container
+            .addTextDisplayComponents(text => {
+              const player = ctx.app.players.get(c.playerId)
 
-                if (!player) return text
+              if (!player) return text
 
-                const emoji = ctx.app.emoji.get(player.role)
-                const content = `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`
+              const emoji = ctx.app.emoji.get(player.role)
 
-                return text.setContent(content)
-              })
-              .setButtonAccessory(button =>
-                button
+              return text.setContent(
+                ctx.t('commands.roster.container.card_content', {
+                  card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                  level: c.level,
+                  xp: `${c.xp}/${c.required_xp}`,
+                  progress: createProgressBar(c.xp / c.required_xp)
+                })
+              )
+            })
+            .addActionRowComponents(row =>
+              row.setComponents(
+                new ButtonBuilder()
                   .setStyle(ButtonStyle.Danger)
                   .setLabel(ctx.t('commands.roster.container.button.remove'))
-                  .setCustomId(`roster;${ctx.db.profile.userId};remove;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.userId};remove;${c.id}`),
+                new ButtonBuilder()
+                  .setLabel(ctx.t('commands.roster.practice'))
+                  .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
+                  .setStyle(ButtonStyle.Secondary)
+                  .setDisabled(c.required_xp <= c.xp),
+                new ButtonBuilder()
+                  .setLabel(
+                    ctx.t('commands.roster.upgrade', {
+                      cost: formatNumber(getUpgradeCost(c.level))
+                    })
+                  )
+                  .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
+                  .setStyle(ButtonStyle.Success)
+                  .setDisabled(c.required_xp > c.xp)
               )
-          )
-          i++
+            )
         }
       }
     } else {
       page -= 1
 
-      const players = reserve_players.slice(page * 5 - 5, page * 5)
+      const players = subCards.slice(page * 5 - 5, page * 5)
 
       if (players.length) {
         container.addTextDisplayComponents(text =>
           text.setContent(
-            ctx.t('commands.roster.container.reserve_players', { total: reserve_players.length })
+            ctx.t('commands.roster.container.reserve_players', { total: subCards.length })
           )
         )
 
-        let i = 0
+        for (const c of players) {
+          container
+            .addTextDisplayComponents(text => {
+              const player = ctx.app.players.get(c.playerId)
 
-        for (const p of players) {
-          container.addSectionComponents(section =>
-            section
-              .addTextDisplayComponents(text => {
-                const player = ctx.app.players.get(p)
+              if (!player) return text
 
-                if (!player) return text
+              const emoji = ctx.app.emoji.get(player.role)
 
-                const emoji = ctx.app.emoji.get(player.role)
-                const content = `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`
-
-                return text.setContent(content)
-              })
-              .setButtonAccessory(button =>
-                button
+              return text.setContent(
+                ctx.t('commands.roster.container.card_content', {
+                  card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                  level: c.level,
+                  xp: `${c.xp}/${c.required_xp}`,
+                  progress: createProgressBar(c.xp / c.required_xp)
+                })
+              )
+            })
+            .addActionRowComponents(row =>
+              row.setComponents(
+                new ButtonBuilder()
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
-                  .setCustomId(`roster;${ctx.db.profile.userId};promote;${p};${i}`)
+                  .setCustomId(`roster;${ctx.db.profile.userId};promote;${c.id}`),
+                new ButtonBuilder()
+                  .setLabel(ctx.t('commands.roster.practice'))
+                  .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
+                  .setStyle(ButtonStyle.Secondary)
+                  .setDisabled(c.required_xp <= c.xp),
+                new ButtonBuilder()
+                  .setLabel(
+                    ctx.t('commands.roster.upgrade', {
+                      cost: formatNumber(getUpgradeCost(c.level))
+                    })
+                  )
+                  .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
+                  .setStyle(ButtonStyle.Success)
+                  .setDisabled(c.required_xp > c.xp)
               )
-          )
-          i++
+            )
         }
       }
 
@@ -243,127 +269,125 @@ export default createCommand({
         ]
       })
     } else if (ctx.args[2] === 'promote') {
-      const player = ctx.app.players.get(ctx.args[3])
+      const cards = await prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id
+        }
+      })
+      const card = cards.find(c => c.id === BigInt(ctx.args[3]))
+      if (!card || card.active_roster) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
 
+      const player = ctx.app.players.get(card.playerId)
       if (!player) {
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      if (ctx.db.profile.active_players.length < 5) {
-        await prisma.$transaction(async tx => {
-          const user = await tx.profile.findUnique({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            select: { active_players: true, reserve_players: true }
-          })
-          if (!user) throw new Error('Not found')
-
-          if (user.active_players.length >= 5) {
-            throw new Error('Roster full')
+      if (cards.filter(c => c.active_roster).length < 5) {
+        await prisma.card.update({
+          where: {
+            id: BigInt(ctx.args[3])
+          },
+          data: {
+            active_roster: true
           }
-
-          const i = user.reserve_players.indexOf(player.id.toString())
-
-          if (i === -1) throw new Error('Not found')
-
-          user.reserve_players.splice(i, 1)
-
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              reserve_players: user.reserve_players,
-              active_players: {
-                push: player.id.toString()
-              }
-            }
-          })
         })
 
         return await ctx.reply('commands.promote.player_promoted', { p: player.name })
       }
 
-      let i = 0
       const options: APISelectMenuOption[] = []
 
-      for (const p of ctx.db.profile.active_players) {
-        const player = ctx.app.players.get(p)
+      for (const c of cards.filter(c => c.active_roster)) {
+        const player = ctx.app.players.get(c.playerId)
 
         if (!player) break
 
         options.push({
           label: `${player.name} (${Math.floor(player.ovr)})`,
           description: player.role,
-          value: `${i};${player.id}`
+          value: c.id.toString()
         })
-
-        i++
       }
 
       const menu = new SelectMenuBuilder()
-        .setCustomId(`roster;${ctx.db.profile.userId};promote2;${player.id}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};promote2;${card.id}`)
         .setOptions(options)
 
       await ctx.reply(menu.build(t('commands.promote.select_player')))
+    } else if (ctx.args[2] === 'remove') {
+      const card = await prisma.card.findUnique({
+        where: {
+          profileId: ctx.db.profile.id,
+          id: BigInt(ctx.args[3])
+        }
+      })
+      if (!card) {
+        return await ctx.reply('commands.remove.player_not_found')
+      }
+
+      const p = ctx.app.players.get(card.playerId)
+      if (!p) {
+        return await ctx.reply('commands.remove.player_not_found')
+      }
+
+      await prisma.card.update({
+        where: {
+          id: card.id
+        },
+        data: {
+          active_roster: false
+        }
+      })
+
+      await ctx.reply('commands.remove.player_removed', {
+        p: p.name
+      })
     } else if (ctx.args[2] === 'promote2') {
       if (!ctx.interaction.isStringSelectMenu()) return
 
-      const idActive = ctx.interaction.values[0].split(';')[1]
-      const idReserve = ctx.args[3]
+      const idActive = ctx.interaction.values[0].split(';')[0]
+      const idSub = ctx.args[3]
 
-      await prisma.$transaction(async tx => {
-        const user = await tx.profile.findUnique({
+      const [card] = await prisma.$transaction([
+        prisma.card.update({
           where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
-          },
-          select: { active_players: true, reserve_players: true }
-        })
-        if (!user) throw new Error('Not found')
-
-        const iActive = user.active_players.indexOf(idActive)
-        const iReserve = user.reserve_players.indexOf(idReserve)
-
-        if (iActive === -1 || iReserve === -1) {
-          throw new Error('Player not found')
-        }
-
-        user.active_players.splice(iActive, 1)
-        user.active_players.push(idReserve)
-
-        user.reserve_players.splice(iReserve, 1)
-        user.reserve_players.push(idActive)
-
-        await tx.profile.update({
-          where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
+            id: BigInt(idSub)
           },
           data: {
-            active_players: user.active_players,
-            reserve_players: user.reserve_players
+            active_roster: true
+          }
+        }),
+        prisma.card.update({
+          where: {
+            id: BigInt(idActive)
+          },
+          data: {
+            active_roster: false
           }
         })
-      })
+      ])
 
-      const p = ctx.app.players.get(ctx.args[3])
+      const p = ctx.app.players.get(card.playerId)
 
       await ctx.edit('commands.promote.player_promoted', { p: p?.name })
     } else if (ctx.args[2] === 'practice') {
+      const card = await prisma.card.findUnique({
+        where: {
+          id: BigInt(ctx.args[3]),
+          profileId: ctx.db.profile.id
+        }
+      })
+      if (!card) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+      if (!ctx.app.players.get(card.playerId)) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+
       await i.showModal({
-        customId: `roster;${ctx.db.profile.userId};practice`,
+        customId: `roster;${ctx.db.profile.userId};practice;${card.id}`,
         title: ctx.t('commands.roster.modal.practice.title'),
         components: [
           {
@@ -371,28 +395,43 @@ export default createCommand({
             components: [
               {
                 type: 4,
-                customId: `roster;${ctx.db.profile.userId};practice;response`,
+                customId: `roster;${ctx.db.profile.userId};practice;${ctx.args[3]};response`,
                 label: ctx.t('commands.roster.modal.practice.description'),
                 style: 1,
                 minLength: 1,
                 required: true,
                 placeholder: ctx.t('commands.roster.modal.practice.max', {
-                  max: ctx.db.profile.team_required_xp - ctx.db.profile.team_xp
-                })
+                  max: card.required_xp - card.xp
+                }),
+                value: (card.required_xp - card.xp).toString()
               }
             ]
           }
         ]
       })
     } else if (ctx.args[2] === 'upgrade') {
-      if (ctx.db.profile.team_xp < ctx.db.profile.team_required_xp) {
+      const card = await prisma.card.findUnique({
+        where: {
+          id: BigInt(ctx.args[3]),
+          profileId: ctx.db.profile.id
+        }
+      })
+      if (!card) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+
+      const p = ctx.app.players.get(card.playerId)
+      if (!p) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+      if (card.xp < card.required_xp) {
         return await ctx.reply('commands.roster.xp_needed')
       }
-      if (ctx.db.profile.team_level >= 15) {
+      if (card.level >= 15) {
         return await ctx.reply('commands.roster.max_level_reached')
       }
-      
-      const cost = getUpgradeCost(ctx.db.profile.team_level)
+
+      const cost = getUpgradeCost(card.level)
       if (ctx.db.profile.poisons < cost) {
         return await ctx.reply('commands.roster.poisons_needed', {
           required_poisons: cost.toLocaleString(),
@@ -400,38 +439,55 @@ export default createCommand({
         })
       }
 
-      const profile = await prisma.profile.update({
-        where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
-        },
-        data: {
-          team_level: {
-            increment: 1
+      const buff = 1 + getBuff(card.level + 1)
+      await prisma.$transaction([
+        prisma.profile.update({
+          where: {
+            id: ctx.db.profile.id
           },
-          team_required_xp: Math.floor(ctx.db.profile.team_required_xp * 1.3),
-          team_xp: 0,
-          poisons: {
-            decrement: cost
+          data: {
+            poisons: {
+              decrement: cost
+            }
           }
-        }
-      })
+        }),
+        prisma.card.update({
+          where: {
+            id: card.id
+          },
+          data: {
+            level: {
+              increment: 1
+            },
+            required_xp: Math.floor(card.required_xp * 1.3),
+            xp: 0,
+            aim: p.aim * buff,
+            hs: p.HS * buff,
+            movement: p.movement * buff,
+            acs: p.ACS * buff,
+            gamesense: p.gamesense * buff
+          }
+        })
+      ])
 
       await ctx.reply('commands.roster.upgraded', {
-        level: profile.team_level,
+        level: card.level + 1,
         poisons: cost.toLocaleString()
       })
     } else {
-      const active_players = ctx.db.profile.active_players
-      const reserve_players = ctx.db.profile.reserve_players
+      const cards = await prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id
+        }
+      })
+      const activeCards = cards.filter(c => c.active_roster)
+      const subCards = cards.filter(c => !c.active_roster)
 
       let value = 0
       let ovr = 0
 
-      for (const p of active_players) {
-        const player = ctx.app.players.get(p)
+      for (const c of activeCards) {
+        const player = ctx.app.players.get(c.playerId)
 
         if (!player) continue
 
@@ -439,169 +495,145 @@ export default createCommand({
         value += player.price
       }
 
-      for (const p of reserve_players) {
-        const player = ctx.app.players.get(p)
+      for (const c of subCards) {
+        const player = ctx.app.players.get(c.playerId)
 
         if (!player) continue
 
         ovr += player.ovr
         value += player.price
       }
-
-      let page = Number(ctx.args[3])
-      const pages = Math.ceil(reserve_players.length / 5) + 1
 
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
         .addTextDisplayComponents(text =>
           text.setContent(
-            t('commands.roster.container.title') +
+            ctx.t('commands.roster.container.title') +
               '\n' +
-              t('commands.roster.container.desc', {
+              ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
-                ovr: Math.floor(ovr / (active_players.length + reserve_players.length)),
+                ovr: Math.floor(ovr / (activeCards.length + subCards.length)),
                 name: ctx.db.profile.team_name
                   ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
-                  : '`undefined`',
-                level: ctx.db.profile.team_level,
-                xp: `${ctx.db.profile.team_xp}/${ctx.db.profile.team_required_xp}`,
-                progress: createProgressBar(
-                  ctx.db.profile.team_xp / ctx.db.profile.team_required_xp
-                )
+                  : '`undefined`'
               })
           )
         )
         .addActionRowComponents(row =>
           row.setComponents(
             new ButtonBuilder()
-              .setLabel(t('commands.roster.change_team'))
+              .setLabel(ctx.t('commands.roster.change_team'))
               .setCustomId(`roster;${ctx.interaction.user.id};team`)
-              .setStyle(ButtonStyle.Primary),
-            new ButtonBuilder()
-              .setLabel(ctx.t('commands.roster.practice'))
-              .setCustomId(`roster;${ctx.interaction.user.id};practice`)
-              .setStyle(ButtonStyle.Secondary)
-              .setDisabled(ctx.db.profile.team_required_xp <= ctx.db.profile.team_xp),
-            new ButtonBuilder()
-              .setLabel(ctx.t('commands.roster.upgrade', {
-                cost: formatNumber(getUpgradeCost(ctx.db.profile.team_level))
-              }))
-              .setCustomId(`roster;${ctx.interaction.user.id};upgrade`)
-              .setStyle(ButtonStyle.Success)
-              .setDisabled(ctx.db.profile.team_required_xp > ctx.db.profile.team_xp)
+              .setStyle(ButtonStyle.Primary)
           )
         )
         .addSeparatorComponents(separator => separator)
 
+      const pages = Math.ceil(subCards.length / 5) + 1
+      let page = Number(ctx.args[3]) ?? 1
+
       if (page === 1) {
-        if (active_players.length) {
+        if (activeCards.length) {
           container.addTextDisplayComponents(text =>
             text.setContent(
-              t('commands.roster.container.active_players', { total: active_players.length })
+              ctx.t('commands.roster.container.active_players', { total: activeCards.length })
             )
           )
 
-          let i = 0
-          for (const p of active_players) {
-            container.addSectionComponents(section =>
-              section
-                .addTextDisplayComponents(text => {
-                  const player = ctx.app.players.get(p)
+          for (const c of activeCards) {
+            container
+              .addTextDisplayComponents(text => {
+                const player = ctx.app.players.get(c.playerId)
 
-                  if (!player) return text
+                if (!player) return text
 
-                  const emoji = ctx.app.emoji.get(player.role)
-                  const content = `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`
+                const emoji = ctx.app.emoji.get(player.role)
 
-                  return text.setContent(content)
-                })
-                .setButtonAccessory(button =>
-                  button
-                    .setStyle(ButtonStyle.Danger)
-                    .setLabel(t('commands.roster.container.button.remove'))
-                    .setCustomId(`roster;${ctx.db.profile.userId};remove;${p};${i}`)
+                return text.setContent(
+                  ctx.t('commands.roster.container.card_content', {
+                    card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                    level: c.level,
+                    xp: `${c.xp}/${c.required_xp}`,
+                    progress: createProgressBar(c.xp / c.required_xp)
+                  })
                 )
-            )
-            i++
+              })
+              .addActionRowComponents(row =>
+                row.setComponents(
+                  new ButtonBuilder()
+                    .setStyle(ButtonStyle.Danger)
+                    .setLabel(ctx.t('commands.roster.container.button.remove'))
+                    .setCustomId(`roster;${ctx.db.profile.userId};remove;${c.id}`),
+                  new ButtonBuilder()
+                    .setLabel(ctx.t('commands.roster.practice'))
+                    .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(c.required_xp <= c.xp),
+                  new ButtonBuilder()
+                    .setLabel(
+                      ctx.t('commands.roster.upgrade', {
+                        cost: formatNumber(getUpgradeCost(c.level))
+                      })
+                    )
+                    .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
+                    .setStyle(ButtonStyle.Success)
+                    .setDisabled(c.required_xp > c.xp)
+                )
+              )
           }
         }
-      } else if (ctx.args[2] === 'remove') {
-        const player = ctx.app.players.get(ctx.args[3])
-
-        if (!player) {
-          return await ctx.reply('commands.remove.player_not_found')
-        }
-
-        await prisma.$transaction(async tx => {
-          const user = await tx.profile.findUnique({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            select: { active_players: true }
-          })
-          if (!user) throw new Error('Not found')
-
-          const i = user.active_players.indexOf(player.id.toString())
-
-          if (i === -1) throw new Error('Player not found')
-
-          user.active_players.splice(i, 1)
-
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              reserve_players: {
-                push: player.id.toString()
-              },
-              active_players: user.active_players
-            }
-          })
-        })
-
-        await ctx.reply('commands.remove.player_removed', { p: player.name })
       } else {
         page -= 1
 
-        const players = reserve_players.slice(page * 5 - 5, page * 5)
+        const players = subCards.slice(page * 5 - 5, page * 5)
 
         if (players.length) {
           container.addTextDisplayComponents(text =>
             text.setContent(
-              t('commands.roster.container.reserve_players', { total: reserve_players.length })
+              ctx.t('commands.roster.container.reserve_players', { total: subCards.length })
             )
           )
 
-          let i = 0
+          for (const c of players) {
+            container
+              .addTextDisplayComponents(text => {
+                const player = ctx.app.players.get(c.playerId)
 
-          for (const p of players) {
-            container.addSectionComponents(section =>
-              section
-                .addTextDisplayComponents(text => {
-                  const player = ctx.app.players.get(p)
+                if (!player) return text
 
-                  if (!player) return text
+                const emoji = ctx.app.emoji.get(player.role)
 
-                  const emoji = ctx.app.emoji.get(player.role)
-                  const content = `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`
-
-                  return text.setContent(content)
-                })
-                .setButtonAccessory(button =>
-                  button
-                    .setStyle(ButtonStyle.Success)
-                    .setLabel(t('commands.roster.container.button.promote'))
-                    .setCustomId(`roster;${ctx.db.profile.userId};promote;${p};${i}`)
+                return text.setContent(
+                  ctx.t('commands.roster.container.card_content', {
+                    card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                    level: c.level,
+                    xp: `${c.xp}/${c.required_xp}`,
+                    progress: createProgressBar(c.xp / c.required_xp)
+                  })
                 )
-            )
-            i++
+              })
+              .addActionRowComponents(row =>
+                row.setComponents(
+                  new ButtonBuilder()
+                    .setStyle(ButtonStyle.Success)
+                    .setLabel(ctx.t('commands.roster.container.button.promote'))
+                    .setCustomId(`roster;${ctx.db.profile.userId};promote;${c.id}`),
+                  new ButtonBuilder()
+                    .setLabel(ctx.t('commands.roster.practice'))
+                    .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
+                    .setStyle(ButtonStyle.Secondary)
+                    .setDisabled(c.required_xp <= c.xp),
+                  new ButtonBuilder()
+                    .setLabel(
+                      ctx.t('commands.roster.upgrade', {
+                        cost: formatNumber(getUpgradeCost(c.level))
+                      })
+                    )
+                    .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
+                    .setStyle(ButtonStyle.Success)
+                    .setDisabled(c.required_xp > c.xp)
+                )
+              )
           }
         }
 
@@ -611,12 +643,12 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(`roster;${ctx.db.profile.userId};previous;${page - 1}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};previous;${page - 1 < 1 ? 1 : page - 1}`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176291829121028')
-        .setCustomId(`roster;${ctx.db.profile.userId};next;${page + 1}`)
+        .setCustomId(`roster;${ctx.db.profile.userId};next;${page + 1 > pages ? pages : page + 1}`)
 
       if (page <= 1) previous.setDisabled()
       if (page >= pages) next.setDisabled()
@@ -650,18 +682,31 @@ export default createCommand({
       })
       await ctx.reply('commands.roster.team_info_changed', { name, tag })
     } else if (ctx.args[2] === 'practice') {
-      const value = Number(i.fields.getTextInputValue(`roster;${i.user.id};practice;response`))
+      const card = await prisma.card.findUnique({
+        where: {
+          id: BigInt(ctx.args[3]),
+          profileId: ctx.db.profile.id
+        }
+      })
+      if (!card) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
 
-      if (ctx.db.profile.team_xp >= ctx.db.profile.team_required_xp) {
+      const p = ctx.app.players.get(card.playerId)
+      if (!p) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+
+      const value = Number(
+        i.fields.getTextInputValue(`roster;${i.user.id};practice;${card.id};response`)
+      )
+
+      if (card.xp >= card.required_xp) {
         return await ctx.reply('commands.roster.max_xp_reached')
       }
-      if (
-        Number.isNaN(value) ||
-        value > ctx.db.profile.team_required_xp - ctx.db.profile.team_xp ||
-        value <= 0
-      ) {
+      if (Number.isNaN(value) || value > card.required_xp - card.xp || value <= 0) {
         return await ctx.reply('commands.roster.invalid_value', {
-          value: ctx.db.profile.team_required_xp - ctx.db.profile.team_xp
+          value: card.required_xp - card.xp
         })
       }
 
@@ -674,26 +719,33 @@ export default createCommand({
         })
       }
 
-      const profile = await prisma.profile.update({
-        where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
-        },
-        data: {
-          fates: {
-            decrement: decrementValue
+      await prisma.$transaction([
+        prisma.card.update({
+          where: {
+            id: card.id
           },
-          team_xp: {
-            increment: value
+          data: {
+            xp: {
+              increment: value
+            }
           }
-        }
-      })
+        }),
+        prisma.profile.update({
+          where: {
+            id: ctx.db.profile.id
+          },
+          data: {
+            fates: {
+              decrement: decrementValue
+            }
+          }
+        })
+      ])
 
       await ctx.reply('commands.roster.practiced', {
-        xp: profile.team_xp,
-        cost: decrementValue.toLocaleString()
+        xp: card.xp + value,
+        cost: decrementValue.toLocaleString(),
+        card: p.name
       })
     }
   }
