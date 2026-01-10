@@ -37,12 +37,12 @@ export default createCommand({
     const user = await UserSchema.fetch(ctx.db.profile.userId)
 
     if (user?.premium) {
-      poisons *= 5n
+      poisons *= 3n
       fates = Math.round(fates * 1.5)
 
       bonus.push(
         t('commands.daily.bonus', {
-          poisons: '5x',
+          poisons: '3x',
           fates: '1.5x'
         })
       )
