@@ -1,4 +1,4 @@
-import { ProfileSchema, prisma } from '@db'
+import { prisma } from '@db'
 import type { $Enums } from '@generated'
 import t from '@i18n'
 import Bull from 'bull'
@@ -14,13 +14,13 @@ import {
   Routes
 } from 'discord.js'
 import Service from '@/api'
+import type { valorant_agents } from '@/config'
 import { env } from '@/env'
 import Match from '@/simulator/arena/Match'
 import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import type { MatchesData } from '@/types'
 import Logger from '@/util/Logger'
-import type { valorant_agents } from '@/config'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service(env.AUTH)
@@ -788,15 +788,9 @@ export default createListener({
         // )
 
         // if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
-        if (
-          (!player1 || !player2) ||
-          (!player1.cards.length || !player2.cards.length)
-        ) return
+        if (!player1 || !player2 || !player1.cards.length || !player2.cards.length) return
 
-        if (
-          player1.cards.length < 5 &&
-          player2.cards.length === 5
-        ) {
+        if (player1.cards.length < 5 && player2.cards.length === 5) {
           player1.rank_rating -= 15
           if (player1.rank_rating < 0) player1.rank_rating = 0
 
@@ -826,10 +820,7 @@ export default createListener({
               }
             })
           ])
-        } else if (
-          player1.cards.length === 5 &&
-          player2.cards.length < 5
-        ) {
+        } else if (player1.cards.length === 5 && player2.cards.length < 5) {
           player2.rank_rating -= 10
           if (player2.rank_rating < 0) player2.rank_rating = 0
 
@@ -859,10 +850,7 @@ export default createListener({
               }
             })
           ])
-        } else if (
-          player1.cards.length < 5 &&
-          player2.cards.length < 5
-        ) {
+        } else if (player1.cards.length < 5 && player2.cards.length < 5) {
           player1.rank_rating -= 15
           player2.rank_rating -= 15
 

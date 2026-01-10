@@ -286,8 +286,7 @@ export default createCommand({
         embeds: [embed],
         components: [row]
       })
-    }
-    else if (ctx.args[0] === 'predictions') {
+    } else if (ctx.args[0] === 'predictions') {
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
@@ -480,8 +479,7 @@ export default createCommand({
         embeds: [embed],
         components: [row]
       })
-    }
-    else if (ctx.args[2] === 'rating') {
+    } else if (ctx.args[2] === 'rating') {
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
@@ -576,8 +574,7 @@ export default createCommand({
         embeds: [embed],
         components: [row]
       })
-    }
-    else if (ctx.args[2] === 'predictions') {
+    } else if (ctx.args[2] === 'predictions') {
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,

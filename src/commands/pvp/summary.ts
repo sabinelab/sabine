@@ -70,9 +70,11 @@ export default createCommand({
     const summary = match.metadata as Metadata
 
     const embed = new EmbedBuilder()
-      .setTitle(ctx.t('commands.summary.embed.title', {
-        mode: ctx.t(`commands.career.mode.${match.mode}`)
-      }))
+      .setTitle(
+        ctx.t('commands.summary.embed.title', {
+          mode: ctx.t(`commands.career.mode.${match.mode}`)
+        })
+      )
       .setDesc(
         `### <@${match.teams[0].user}> ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} <@${match.teams[1].user}>\n`
       )
@@ -82,7 +84,6 @@ export default createCommand({
           value: summary.stats
             .slice(0, 5)
             .map(p => {
-
               return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),
@@ -93,7 +94,6 @@ export default createCommand({
           value: summary.stats
             .slice(-5)
             .map(p => {
-
               return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),

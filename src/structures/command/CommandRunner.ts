@@ -189,11 +189,12 @@ export default class CommandRunner {
                 })
               )
 
-            interaction.followUp({
-              ...button,
-              flags: 'Ephemeral'
-            })
-            .catch(voidCatch)
+            interaction
+              .followUp({
+                ...button,
+                flags: 'Ephemeral'
+              })
+              .catch(voidCatch)
           }
         }
         if (env.DEVS.includes(interaction.user.id)) return
