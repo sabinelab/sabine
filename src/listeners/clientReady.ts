@@ -20,8 +20,7 @@ import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import type { MatchesData } from '@/types'
 import Logger from '@/util/Logger'
-import { getBuff } from '@/util/getBuff'
-import { calcPlayerOvr } from '@sabinelab/players'
+import type { valorant_agents } from '@/config'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service(env.AUTH)
@@ -727,20 +726,76 @@ export default createListener({
       await app.postCommands()
 
       arenaMatchQueue.process('arena', async job => {
-        const player1 = await ProfileSchema.fetch(
-          job.data.parsedData1.userId,
-          job.data.parsedData1.guildId
-        )
-        const player2 = await ProfileSchema.fetch(
-          job.data.parsedData2.userId,
-          job.data.parsedData2.guildId
-        )
+        // const player1 = await ProfileSchema.fetch(
+        //   job.data.parsedData1.userId,
+        //   job.data.parsedData1.guildId
+        // )
+        const player1 = await prisma.profile.findUnique({
+          where: {
+            userId_guildId: {
+              userId: job.data.parsedData1.userId,
+              guildId: job.data.parsedData1.guildId
+            }
+          },
+          include: {
+            cards: {
+              where: {
+                arena_roster: true,
+                arena_agent_name: {
+                  not: null
+                },
+                arena_agent_role: {
+                  not: null
+                }
+              }
+            },
+            user: {
+              select: {
+                lang: true
+              }
+            }
+          }
+        })
+        const player2 = await prisma.profile.findUnique({
+          where: {
+            userId_guildId: {
+              userId: job.data.parsedData2.userId,
+              guildId: job.data.parsedData2.guildId
+            }
+          },
+          include: {
+            cards: {
+              where: {
+                arena_roster: true,
+                arena_agent_name: {
+                  not: null
+                },
+                arena_agent_role: {
+                  not: null
+                }
+              }
+            },
+            user: {
+              select: {
+                lang: true
+              }
+            }
+          }
+        })
+        // const player2 = await ProfileSchema.fetch(
+        //   job.data.parsedData2.userId,
+        //   job.data.parsedData2.guildId
+        // )
 
-        if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
+        // if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
+        if (
+          (!player1 || !player2) ||
+          (!player1.cards.length || !player2.cards.length)
+        ) return
 
         if (
-          player1.arena_metadata.lineup.length < 5 &&
-          player2.arena_metadata.lineup.length === 5
+          player1.cards.length < 5 &&
+          player2.cards.length === 5
         ) {
           player1.rank_rating -= 15
           if (player1.rank_rating < 0) player1.rank_rating = 0
@@ -772,8 +827,8 @@ export default createListener({
             })
           ])
         } else if (
-          player1.arena_metadata.lineup.length === 5 &&
-          player2.arena_metadata.lineup.length < 5
+          player1.cards.length === 5 &&
+          player2.cards.length < 5
         ) {
           player2.rank_rating -= 10
           if (player2.rank_rating < 0) player2.rank_rating = 0
@@ -805,8 +860,8 @@ export default createListener({
             })
           ])
         } else if (
-          player1.arena_metadata.lineup.length < 5 &&
-          player2.arena_metadata.lineup.length < 5
+          player1.cards.length < 5 &&
+          player2.cards.length < 5
         ) {
           player1.rank_rating -= 15
           player2.rank_rating -= 15
@@ -847,21 +902,15 @@ export default createListener({
         let match = new Match({
           teams: [
             {
-              roster: player1.arena_metadata.lineup.map(l => {
-                const player = app.players.get(l.player)!
-                const buff = 1 + getBuff(player1.team_level)
-
-                player.ACS *= buff
-                player.HS *= buff
-                player.aggression *= buff
-                player.aim *= buff
-                player.gamesense *= buff
-                player.movement *= buff
-                player.ovr = calcPlayerOvr(player)
+              roster: player1.cards.map(c => {
+                const player = app.players.get(c.playerId)!
 
                 return {
                   ...player,
-                  agent: l.agent,
+                  agent: {
+                    name: c.arena_agent_name!,
+                    role: c.arena_agent_role as (typeof valorant_agents)[number]['role']
+                  },
                   credits: 800,
                   life: 100
                 }
@@ -872,21 +921,15 @@ export default createListener({
               guildId: player1.guildId
             },
             {
-              roster: player2.arena_metadata.lineup.map(l => {
-                const player = app.players.get(l.player)!
-                const buff = 1 + getBuff(player2.team_level)
-
-                player.ACS *= buff
-                player.HS *= buff
-                player.aggression *= buff
-                player.aim *= buff
-                player.gamesense *= buff
-                player.movement *= buff
-                player.ovr = calcPlayerOvr(player)
+              roster: player2.cards.map(c => {
+                const player = app.players.get(c.playerId)!
 
                 return {
                   ...player,
-                  agent: l.agent,
+                  agent: {
+                    name: c.arena_agent_name!,
+                    role: c.arena_agent_role as (typeof valorant_agents)[number]['role']
+                  },
                   credits: 800,
                   life: 100
                 }
@@ -916,7 +959,7 @@ export default createListener({
           messages.push(
             rest.post(Routes.channelMessages(job.data.parsedData1.channelId), {
               body: {
-                content: t(player1.lang, 'simulator.send_message', {
+                content: t(player1.user.lang, 'simulator.send_message', {
                   p1: `<@${player1.userId}>`,
                   p2: `<@${player2.userId}>`,
                   score: `${score1}-${score2}`,
@@ -934,7 +977,7 @@ export default createListener({
           messages.push(
             rest.post(Routes.channelMessages(job.data.parsedData2.channelId), {
               body: {
-                content: t(player2.lang, 'simulator.send_message', {
+                content: t(player2.user.lang, 'simulator.send_message', {
                   p1: `<@${player1.userId}>`,
                   p2: `<@${player2.userId}>`,
                   score: `${score1}-${score2}`,
