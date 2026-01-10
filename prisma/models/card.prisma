@@ -13,5 +13,5 @@ model Card {
   arena_agent   String?
   level         Int     @default(1) @db.SmallInt
   xp            Int     @default(0) @db.SmallInt
-  required_xp Int @default(100)
+  required_xp   Int     @default(100)
 }
