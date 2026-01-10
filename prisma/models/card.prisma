@@ -1,17 +1,18 @@
 model Card {
-  id            BigInt  @id @default(autoincrement())
-  profile       Profile @relation(fields: [profileId], references: [id])
-  profileId     String
-  playerId      String
-  aim           Float   @db.DoublePrecision
-  hs            Float   @db.DoublePrecision
-  movement      Float   @db.DoublePrecision
-  acs           Float   @db.DoublePrecision
-  gamesense     Float   @db.DoublePrecision
-  active_roster Boolean @default(false)
-  arena_roster  Boolean @default(false)
-  arena_agent   String?
-  level         Int     @default(1) @db.SmallInt
-  xp            Int     @default(0) @db.SmallInt
-  required_xp   Int     @default(100)
+  id               BigInt  @id @default(autoincrement())
+  profile          Profile @relation(fields: [profileId], references: [id])
+  profileId        String
+  playerId         String
+  aim              Float   @db.DoublePrecision
+  hs               Float   @db.DoublePrecision
+  movement         Float   @db.DoublePrecision
+  acs              Float   @db.DoublePrecision
+  gamesense        Float   @db.DoublePrecision
+  active_roster    Boolean @default(false)
+  arena_roster     Boolean @default(false)
+  arena_agent_name String?
+  arena_agent_role String?
+  level            Int     @default(1) @db.SmallInt
+  xp               Int     @default(0) @db.SmallInt
+  required_xp      Int     @default(100)
 }
