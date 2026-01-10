@@ -8,6 +8,7 @@ model Card {
   movement         Float   @db.DoublePrecision
   acs              Float   @db.DoublePrecision
   gamesense        Float   @db.DoublePrecision
+  aggression       Float   @db.DoublePrecision
   active_roster    Boolean @default(false)
   arena_roster     Boolean @default(false)
   arena_agent_name String?
@@ -15,4 +16,6 @@ model Card {
   level            Int     @default(1) @db.SmallInt
   xp               Int     @default(0) @db.SmallInt
   required_xp      Int     @default(100)
+
+  @@index([profileId, active_roster, id(sort: Desc)])
 }
