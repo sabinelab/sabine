@@ -27,8 +27,8 @@ export const vote = new Elysia().post(
         },
         voteStreak: checkDate(new Date(), user?.lastVote)
           ? {
-            increment: 1
-          }
+              increment: 1
+            }
           : undefined
       }
     })
