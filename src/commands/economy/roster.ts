@@ -465,7 +465,8 @@ export default createCommand({
             hs: p.HS * buff,
             movement: p.movement * buff,
             acs: p.ACS * buff,
-            gamesense: p.gamesense * buff
+            gamesense: p.gamesense * buff,
+            aggression: p.aggression * buff
           }
         })
       ])
