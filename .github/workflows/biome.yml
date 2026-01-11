@@ -1,6 +1,8 @@
 name: Biome Format and Check
 
 on:
+  push:
+    branches: ["**"]
   pull_request:
 
 jobs:
@@ -23,18 +25,22 @@ jobs:
 
       - name: Attempt to apply Biome fixes
         run: |
-          biome check --write --no-errors-on-unmatched . || echo "Issues found"
+          biome check --write --no-errors-on-unmatched . || echo "Issues found, attempting auto-commit..."
 
       - name: Commit automatic fixes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'style: apply automatic Biome fixes'
-          branch: ${{ github.head_ref }}
 
-      - name: Run Biome for remaining issues via Reviewdog
+      - name: Run Biome via Reviewdog (PR Only)
+        if: github.event_name == 'pull_request'
         uses: mongolyy/reviewdog-action-biome@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
           filter_mode: diff_context
           fail_level: error
+
+      - name: Run Biome Check (Push Only)
+        if: github.event_name == 'push'
+        run: biome ci .
