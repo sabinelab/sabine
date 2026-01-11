@@ -12,6 +12,7 @@ import createCommand from '@/structures/command/createCommand'
 import { createProgressBar } from '@/util/createProgressBar'
 import { formatNumber } from '@/util/formatNumber'
 import { getBuff } from '@/util/getBuff'
+import { calcPlayerOvr } from '@sabinelab/players'
 
 const getUpgradeCost = (level: number) => {
   const base = 25_000
@@ -61,7 +62,7 @@ export default createCommand({
 
       if (!player) continue
 
-      ovr += player.ovr
+      ovr += c.overall
       value += player.price
     }
 
@@ -70,7 +71,7 @@ export default createCommand({
 
       if (!player) continue
 
-      ovr += player.ovr
+      ovr += c.overall
       value += player.price
     }
 
@@ -121,7 +122,7 @@ export default createCommand({
 
               return text.setContent(
                 ctx.t('commands.roster.container.card_content', {
-                  card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                  card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                   level: c.level,
                   xp: `${c.xp}/${c.required_xp}`,
                   progress: createProgressBar(c.xp / c.required_xp)
@@ -175,7 +176,7 @@ export default createCommand({
 
               return text.setContent(
                 ctx.t('commands.roster.container.card_content', {
-                  card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                  card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                   level: c.level,
                   xp: `${c.xp}/${c.required_xp}`,
                   progress: createProgressBar(c.xp / c.required_xp)
@@ -305,7 +306,7 @@ export default createCommand({
         if (!player) break
 
         options.push({
-          label: `${player.name} (${Math.floor(player.ovr)})`,
+          label: `${player.name} (${Math.floor(c.overall)})`,
           description: player.role,
           value: c.id.toString()
         })
@@ -466,7 +467,16 @@ export default createCommand({
             movement: p.movement * buff,
             acs: p.ACS * buff,
             gamesense: p.gamesense * buff,
-            aggression: p.aggression * buff
+            aggression: p.aggression * buff,
+            overall: calcPlayerOvr({
+              ...p,
+              aim: p.aim * buff,
+              HS: p.HS * buff,
+              movement: p.movement * buff,
+              ACS: p.ACS * buff,
+              gamesense: p.gamesense * buff,
+              aggression: p.aggression * buff
+            })
           }
         })
       ])
@@ -493,7 +503,7 @@ export default createCommand({
 
         if (!player) continue
 
-        ovr += player.ovr
+        ovr += c.overall
         value += player.price
       }
 
@@ -502,7 +512,7 @@ export default createCommand({
 
         if (!player) continue
 
-        ovr += player.ovr
+        ovr += c.overall
         value += player.price
       }
 
@@ -553,7 +563,7 @@ export default createCommand({
 
                 return text.setContent(
                   ctx.t('commands.roster.container.card_content', {
-                    card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                    card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                     level: c.level,
                     xp: `${c.xp}/${c.required_xp}`,
                     progress: createProgressBar(c.xp / c.required_xp)
@@ -607,7 +617,7 @@ export default createCommand({
 
                 return text.setContent(
                   ctx.t('commands.roster.container.card_content', {
-                    card: `${emoji} ${player.name} (${Math.floor(player.ovr)}) — ${player.collection}`,
+                    card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                     level: c.level,
                     xp: `${c.xp}/${c.required_xp}`,
                     progress: createProgressBar(c.xp / c.required_xp)
