@@ -354,7 +354,10 @@ export default createCommand({
         }
       })
 
-      const map = t('commands.arena.map', { map: await ctx.app.redis.get('arena:map') })
+      const map = t('commands.arena.map', {
+        map: await ctx.app.redis.get('arena:map'),
+        cmd: `</roster:${ctx.app.commands.get('roster')?.id}>`
+      })
       const cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
@@ -448,7 +451,10 @@ export default createCommand({
         }
       })
 
-      const map = t('commands.arena.map', { map: await ctx.app.redis.get('arena:map') })
+      const map = t('commands.arena.map', {
+        map: await ctx.app.redis.get('arena:map'),
+        cmd: `</roster:${ctx.app.commands.get('roster')?.id}>`
+      })
       cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
