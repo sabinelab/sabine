@@ -1,9 +1,9 @@
 import { prisma } from '@db'
 import type { $Enums, Profile } from '@generated'
+import type { Pack } from '@/commands/misc/vote'
 import { hydrateData } from '@/database/hydrate-data'
 import { UserSchema } from '@/database/schemas/UserSchema'
 import { updateCache, voidCatch } from '@/database/update-cache'
-import type { Pack } from '@/server/routes/util/vote'
 import { app } from '@/structures/app/App'
 
 type PredictionTeam = {
@@ -22,7 +22,6 @@ type Prediction = {
 
 type AddPackOptions = {
   pack: Pack
-  lastVote: Date
   voteStreak: number
 }
 
