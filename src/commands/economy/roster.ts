@@ -473,7 +473,8 @@ export default createCommand({
 
       await ctx.reply('commands.roster.upgraded', {
         level: card.level + 1,
-        poisons: cost.toLocaleString()
+        poisons: cost.toLocaleString(),
+        card: p.name
       })
     } else {
       const cards = await prisma.card.findMany({
