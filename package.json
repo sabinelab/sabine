@@ -8,7 +8,7 @@
     "test": "bun test.ts",
     "start": "bun src/shard.ts",
     "dev": "bun --watch .",
-    "build": "bunx biome check && tsc",
+    "build": "bunx biome check && tsgo",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate",
     "lint": "bunx biome check",
