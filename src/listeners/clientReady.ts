@@ -890,14 +890,21 @@ export default createListener({
         let match = new Match({
           teams: [
             {
-              roster: player1.cards.map(c => {
-                const player = app.players.get(c.playerId)!
+              roster: player1.cards.map(card => {
+                const player = app.players.get(card.playerId)!
 
                 return {
                   ...player,
+                  aim: card.aim,
+                  ACS: card.acs,
+                  aggression: card.aggression,
+                  gamesense: card.gamesense,
+                  HS: card.hs,
+                  movement: card.movement,
+                  ovr: card.overall,
                   agent: {
-                    name: c.arena_agent_name!,
-                    role: c.arena_agent_role as (typeof valorant_agents)[number]['role']
+                    name: card.arena_agent_name!,
+                    role: card.arena_agent_role as (typeof valorant_agents)[number]['role']
                   },
                   credits: 800,
                   life: 100
@@ -909,14 +916,21 @@ export default createListener({
               guildId: player1.guildId
             },
             {
-              roster: player2.cards.map(c => {
-                const player = app.players.get(c.playerId)!
+              roster: player2.cards.map(card => {
+                const player = app.players.get(card.playerId)!
 
                 return {
                   ...player,
+                  aim: card.aim,
+                  ACS: card.acs,
+                  aggression: card.aggression,
+                  gamesense: card.gamesense,
+                  HS: card.hs,
+                  movement: card.movement,
+                  ovr: card.overall,
                   agent: {
-                    name: c.arena_agent_name!,
-                    role: c.arena_agent_role as (typeof valorant_agents)[number]['role']
+                    name: card.arena_agent_name!,
+                    role: card.arena_agent_role as (typeof valorant_agents)[number]['role']
                   },
                   credits: 800,
                   life: 100
@@ -935,8 +949,6 @@ export default createListener({
         while (!match.finished) {
           match = await match.start()
         }
-
-        console.log(match.teams.find(t => t.user === '441932495693414410')?.roster)
 
         const messages: Promise<unknown>[] = []
 

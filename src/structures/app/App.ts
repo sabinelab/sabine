@@ -148,9 +148,9 @@ export default class App extends Discord.Client {
       return transformed
     }
 
-    const res = await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
+    const res = (await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
       body: transformKeys(commands)
-    }) as {
+    })) as {
       name: string
       id: string
     }[]
