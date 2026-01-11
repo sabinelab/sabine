@@ -1,23 +1,26 @@
 model Card {
-  id               BigInt  @id @default(autoincrement())
-  profile          Profile @relation(fields: [profileId], references: [id])
-  profileId        String
-  playerId         String
-  aim              Float   @db.DoublePrecision
-  hs               Float   @db.DoublePrecision
-  movement         Float   @db.DoublePrecision
-  acs              Float   @db.DoublePrecision
-  gamesense        Float   @db.DoublePrecision
-  aggression       Float   @db.DoublePrecision
-  overall          Float   @db.DoublePrecision
-  active_roster    Boolean @default(false)
-  arena_roster     Boolean @default(false)
-  arena_agent_name String?
-  arena_agent_role String?
-  level            Int     @default(1) @db.SmallInt
-  xp               Int     @default(0) @db.SmallInt
-  required_xp      Int     @default(100)
+  id        BigInt  @id @default(autoincrement())
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @map("profile_id")
+  playerId  String  @map("player_id")
 
-  @@index([profileId, active_roster, id(sort: Desc)])
-  @@index([profileId, arena_roster, id])
+  aim        Float @db.DoublePrecision
+  hs         Float @db.DoublePrecision
+  movement   Float @db.DoublePrecision
+  acs        Float @db.DoublePrecision
+  gamesense  Float @db.DoublePrecision
+  aggression Float @db.DoublePrecision
+  overall    Float @db.DoublePrecision
+
+  activeRoster   Boolean @default(false) @map("active_roster")
+  arenaRoster    Boolean @default(false) @map("arena_roster")
+  arenaAgentName String? @map("arena_agent_name")
+  arenaAgentRole String? @map("arena_agent_role")
+
+  level      Int @default(1) @db.SmallInt
+  xp         Int @default(0) @db.SmallInt
+  requiredXp Int @default(100) @map("required_xp")
+
+  @@index([profileId, activeRoster, id(sort: Desc)])
+  @@index([profileId, arenaRoster, id])
 }

@@ -126,7 +126,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              valorant_live_feed_channel: channel.id
+              valorantLiveFeedChannel: channel.id
             }
           })
           await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
@@ -144,7 +144,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              lol_live_feed_channel: channel.id
+              lolLiveFeedChannel: channel.id
             }
           })
           await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
@@ -162,7 +162,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              valorant_live_feed_channel: null
+              valorantLiveFeedChannel: null
             }
           })
           await ctx.reply('commands.live.live_disabled')
@@ -175,7 +175,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              lol_live_feed_channel: null
+              lolLiveFeedChannel: null
             }
           })
           await ctx.reply('commands.live.live_disabled')

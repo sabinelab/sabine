@@ -77,7 +77,7 @@ export default createCommand({
     const cards = await prisma.card.findMany({
       where: {
         profileId: ctx.db.profile.id,
-        arena_roster: true
+        arenaRoster: true
       }
     })
 
@@ -90,8 +90,8 @@ export default createCommand({
         }
 
         if (
-          !ctx.db.profile.team_name ||
-          cards.filter(c => c.arena_agent_name && c.arena_roster && c.arena_agent_role).length < 5
+          !ctx.db.profile.teamName ||
+          cards.filter(c => c.arenaAgentName && c.arenaRoster && c.arenaAgentRole).length < 5
         ) {
           return await ctx.reply('commands.arena.invalid_lineup', {
             map,
@@ -178,8 +178,8 @@ export default createCommand({
 
               let content: string
 
-              if (c.arena_agent_name && c.arena_agent_role) {
-                const emoji = valorant_agents.find(a => a.name === c.arena_agent_name)?.emoji
+              if (c.arenaAgentName && c.arenaAgentRole) {
+                const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
 
                 content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
               } else {
@@ -334,7 +334,7 @@ export default createCommand({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id,
-          active_roster: true
+          activeRoster: true
         }
       })
       const player = ctx.app.players.get(card?.playerId ?? '')
@@ -348,9 +348,9 @@ export default createCommand({
           id: card.id
         },
         data: {
-          arena_agent_name: null,
-          arena_agent_role: null,
-          arena_roster: false
+          arenaAgentName: null,
+          arenaAgentRole: null,
+          arenaRoster: false
         }
       })
 
@@ -358,7 +358,7 @@ export default createCommand({
       const cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          arena_roster: true
+          arenaRoster: true
         }
       })
 
@@ -376,8 +376,8 @@ export default createCommand({
 
             let content: string
 
-            if (c.arena_agent_name && c.arena_agent_role) {
-              const emoji = valorant_agents.find(a => a.name === c.arena_agent_name)?.emoji
+            if (c.arenaAgentName && c.arenaAgentRole) {
+              const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {
@@ -415,7 +415,7 @@ export default createCommand({
       let cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          arena_roster: true
+          arenaRoster: true
         }
       })
 
@@ -423,7 +423,7 @@ export default createCommand({
       const agent = valorant_agents.find(a => a.name === value)
       const card = await prisma.card.findFirst({
         where: {
-          arena_roster: true,
+          arenaRoster: true,
           profileId: ctx.db.profile.id,
           id: BigInt(ctx.args[3])
         }
@@ -432,7 +432,7 @@ export default createCommand({
 
       if (!agent || !player || !card) return
 
-      if (cards.some(c => c.arena_agent_name === agent.name)) {
+      if (cards.some(c => c.arenaAgentName === agent.name)) {
         ctx.setFlags(64)
 
         return await ctx.reply('commands.duel.duplicated_agent')
@@ -443,8 +443,8 @@ export default createCommand({
           id: card.id
         },
         data: {
-          arena_agent_name: agent.name,
-          arena_agent_role: agent.role
+          arenaAgentName: agent.name,
+          arenaAgentRole: agent.role
         }
       })
 
@@ -452,7 +452,7 @@ export default createCommand({
       cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          arena_roster: true
+          arenaRoster: true
         }
       })
 
@@ -470,8 +470,8 @@ export default createCommand({
 
             let content: string
 
-            if (c.arena_agent_name && c.arena_agent_role) {
-              const emoji = valorant_agents.find(a => a.name === c.arena_agent_name)?.emoji
+            if (c.arenaAgentName && c.arenaAgentRole) {
+              const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {

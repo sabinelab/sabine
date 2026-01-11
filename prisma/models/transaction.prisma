@@ -1,15 +1,17 @@
 model Transaction {
-  id         String          @id @default(uuid())
-  profile    Profile         @relation(fields: [profileId], references: [id])
-  profileId  String
-  type       TransactionType
-  player     Int?            @db.SmallInt
-  pack       Pack?
-  price      BigInt?
-  to         String?
-  created_at DateTime        @default(now())
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @map("profile_id")
 
-  @@index([profileId, created_at(sort: Desc)])
+  type   TransactionType
+  player Int?            @db.SmallInt
+  pack   Pack?
+  price  BigInt?
+  to     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([profileId, createdAt(sort: Desc)])
 }
 
 enum Pack {

@@ -1,10 +1,10 @@
 model Blacklist {
-  id      String        @id
-  type    BlacklistType
-  name    String?
-  when    DateTime      @default(now())
-  reason  String
-  ends_at DateTime?
+  id     String        @id
+  type   BlacklistType
+  name   String?
+  when   DateTime      @default(now())
+  reason String
+  endsAt DateTime?     @map("ends_at")
 
   @@index([type])
 }

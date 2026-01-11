@@ -5,15 +5,13 @@ import { updateCache, voidCatch } from '@/database/update-cache'
 
 export class UserSchema implements User {
   public id: string
-  public created_at: Date = new Date()
-  public correct_predictions: number = 0
-  public incorrect_predictions: number = 0
+  public createdAt: Date = new Date()
   public lang: $Enums.Language = 'en'
   public premium: Premium | null = null
-  public last_vote: Date | null = null
-  public vote_streak: number = 0
+  public lastVote: Date | null = null
+  public voteStreak: number = 0
   public votes: number = 0
-  public collected_vote_reward: boolean = true
+  public collectedVoteReward: boolean = true
   public warn: boolean = false
 
   public constructor(id: string) {

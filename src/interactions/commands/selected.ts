@@ -117,13 +117,13 @@ export default createComponentInteraction({
       ctx.app.prisma.card.findMany({
         where: {
           profileId: profile.id,
-          active_roster: true
+          activeRoster: true
         }
       }),
       ctx.app.prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          active_roster: true
+          activeRoster: true
         }
       })
     ])
@@ -136,7 +136,7 @@ export default createComponentInteraction({
       .setImage(data.image)
       .setFields(
         {
-          name: isAuthor ? ctx.db.profile.team_name! : profile.team_name!,
+          name: isAuthor ? ctx.db.profile.teamName! : profile.teamName!,
           value: isAuthor
             ? renderTeam({
                 app: ctx.app,
@@ -153,7 +153,7 @@ export default createComponentInteraction({
           inline: true
         },
         {
-          name: !isAuthor ? ctx.db.profile.team_name! : profile.team_name!,
+          name: !isAuthor ? ctx.db.profile.teamName! : profile.teamName!,
           value: !isAuthor
             ? renderTeam({
                 app: ctx.app,
@@ -207,14 +207,14 @@ export default createComponentInteraction({
           teams: [
             {
               roster: data[ctx.db.profile.userId],
-              name: ctx.db.profile.team_name!,
-              tag: ctx.db.profile.team_tag!,
+              name: ctx.db.profile.teamName!,
+              tag: ctx.db.profile.teamTag!,
               user: ctx.db.profile.userId
             },
             {
               roster: data[profile.userId],
-              name: profile.team_name!,
-              tag: profile.team_tag!,
+              name: profile.teamName!,
+              tag: profile.teamTag!,
               user: profile.userId
             }
           ],

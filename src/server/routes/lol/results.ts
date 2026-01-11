@@ -173,7 +173,7 @@ export const lolResults = new Elysia().post(
               prisma.profile.update({
                 where: { id: pred.profile.id },
                 data: {
-                  correct_predictions: {
+                  correctPredictions: {
                     increment: 1
                   },
                   poisons: { increment: poisons },
@@ -196,7 +196,7 @@ export const lolResults = new Elysia().post(
                   id: pred.profile.id
                 },
                 data: {
-                  incorrect_predictions: {
+                  incorrectPredictions: {
                     increment: 1
                   }
                 }

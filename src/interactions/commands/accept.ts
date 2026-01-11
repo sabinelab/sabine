@@ -18,20 +18,20 @@ export default createComponentInteraction({
       ctx.app.prisma.card.findMany({
         where: {
           profileId: profile.id,
-          active_roster: true
+          activeRoster: true
         }
       }),
       ctx.app.prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          active_roster: true
+          activeRoster: true
         }
       })
     ])
 
     const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
-    if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
+    if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
@@ -43,7 +43,7 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if (!profile.team_name || !profile.team_tag) {
+    if (!profile.teamName || !profile.teamTag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 
@@ -78,7 +78,7 @@ export default createComponentInteraction({
       .setDesc(t('commands.duel.embed.desc'))
       .setFields(
         {
-          name: profile.team_name,
+          name: profile.teamName,
           value: userCards
             .map(card => {
               const player = app.players.get(card.playerId)!
@@ -89,7 +89,7 @@ export default createComponentInteraction({
           inline: true
         },
         {
-          name: ctx.db.profile.team_name,
+          name: ctx.db.profile.teamName,
           value: authorCards
             .map(card => {
               const player = app.players.get(card.playerId)!
@@ -104,7 +104,7 @@ export default createComponentInteraction({
       .setFooter({ text: t('commands.duel.time') })
 
     const menu1 = new SelectMenuBuilder()
-      .setPlaceholder(profile.team_name)
+      .setPlaceholder(profile.teamName)
       .setOptions(
         ...userCards.map(card => {
           const player = app.players.get(card.playerId)!
@@ -117,7 +117,7 @@ export default createComponentInteraction({
       .setCustomId(`select;${profile.userId};${ctx.interaction.user.id}`)
 
     const menu2 = new SelectMenuBuilder()
-      .setPlaceholder(ctx.db.profile.team_name!)
+      .setPlaceholder(ctx.db.profile.teamName!)
       .setOptions(
         ...authorCards.map(card => {
           const player = app.players.get(card.playerId)!

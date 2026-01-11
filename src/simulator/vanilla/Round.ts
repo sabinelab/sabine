@@ -142,14 +142,14 @@ export default class Round extends Match {
         const maxPts = 40
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile1.ranked_wins += 1
-        profile1.rank_rating += pts
+        profile1.rankedWins += 1
+        profile1.rankRating += pts
         profile1.fates += 5
-        profile2.ranked_defeats += 1
-        profile2.rank_rating -= pts - 5
+        profile2.rankedDefeats += 1
+        profile2.rankRating -= pts - 5
 
-        if (profile2.rank_rating < 0) {
-          profile2.rank_rating = 0
+        if (profile2.rankRating < 0) {
+          profile2.rankRating = 0
         }
 
         const stats = {
@@ -232,10 +232,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_wins: {
+              rankedWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -248,10 +248,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_defeats: {
+              rankedDefeats: {
                 increment: 1
               },
-              rank_rating: profile2.rank_rating
+              rankRating: profile2.rankRating
             }
           })
         ])
@@ -303,14 +303,14 @@ export default class Round extends Match {
         const maxPts = 40
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile2.ranked_wins += 1
-        profile2.rank_rating += pts
+        profile2.rankedWins += 1
+        profile2.rankRating += pts
         profile2.fates += 5
-        profile1.ranked_defeats += 1
-        profile1.rank_rating -= pts - 5
+        profile1.rankedDefeats += 1
+        profile1.rankRating -= pts - 5
 
-        if (profile1.rank_rating < 0) {
-          profile1.rank_rating = 0
+        if (profile1.rankRating < 0) {
+          profile1.rankRating = 0
         }
 
         const stats = {
@@ -393,10 +393,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_wins: {
+              rankedWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -409,10 +409,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_defeats: {
+              rankedDefeats: {
                 increment: 1
               },
-              rank_rating: profile1.rank_rating
+              rankRating: profile1.rankRating
             }
           })
         ])
@@ -465,14 +465,14 @@ export default class Round extends Match {
         const maxPts = 40
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile1.ranked_wins += 1
-        profile1.rank_rating += pts
+        profile1.rankedWins += 1
+        profile1.rankRating += pts
         profile1.fates += 5
-        profile2.ranked_defeats += 1
-        profile2.rank_rating -= pts - 5
+        profile2.rankedDefeats += 1
+        profile2.rankRating -= pts - 5
 
-        if (profile2.rank_rating < 0) {
-          profile2.rank_rating = 0
+        if (profile2.rankRating < 0) {
+          profile2.rankRating = 0
         }
 
         const stats = {
@@ -555,10 +555,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_wins: {
+              rankedWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -571,10 +571,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_defeats: {
+              rankedDefeats: {
                 increment: 1
               },
-              rank_rating: profile2.rank_rating
+              rankRating: profile2.rankRating
             }
           })
         ])
@@ -627,14 +627,14 @@ export default class Round extends Match {
         const maxPts = 40
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile2.ranked_wins += 1
-        profile2.rank_rating += pts
+        profile2.rankedWins += 1
+        profile2.rankRating += pts
         profile2.fates += 5
-        profile1.ranked_defeats += 1
-        profile1.rank_rating -= pts - 5
+        profile1.rankedDefeats += 1
+        profile1.rankRating -= pts - 5
 
-        if (profile1.rank_rating < 0) {
-          profile1.rank_rating = 0
+        if (profile1.rankRating < 0) {
+          profile1.rankRating = 0
         }
 
         const stats = {
@@ -717,10 +717,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_wins: {
+              rankedWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -733,10 +733,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_defeats: {
+              rankedDefeats: {
                 increment: 1
               },
-              rank_rating: profile1.rank_rating
+              rankRating: profile1.rankRating
             }
           })
         ])
@@ -793,14 +793,14 @@ export default class Round extends Match {
         const maxPts = 15
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile1.ranked_swiftplay_wins += 1
-        profile1.rank_rating += pts
+        profile1.rankedSwiftplayWins += 1
+        profile1.rankRating += pts
         profile1.fates += 1
-        profile2.ranked_swiftplay_defeats += 1
-        profile2.rank_rating -= pts - 5
+        profile2.rankedSwiftplayDefeats += 1
+        profile2.rankRating -= pts - 5
 
-        if (profile2.rank_rating < 0) {
-          profile2.rank_rating = 0
+        if (profile2.rankRating < 0) {
+          profile2.rankRating = 0
         }
 
         const stats = {
@@ -883,10 +883,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_swiftplay_wins: {
+              rankedSwiftplayWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -899,10 +899,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_swiftplay_defeats: {
+              rankedSwiftplayDefeats: {
                 increment: 1
               },
-              rank_rating: profile2.rank_rating
+              rankRating: profile2.rankRating
             }
           })
         ])
@@ -955,14 +955,14 @@ export default class Round extends Match {
         const maxPts = 15
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile2.ranked_swiftplay_wins += 1
-        profile2.rank_rating += pts
+        profile2.rankedSwiftplayWins += 1
+        profile2.rankRating += pts
         profile2.fates += 1
-        profile1.ranked_swiftplay_defeats += 1
-        profile1.rank_rating -= pts - 5
+        profile1.rankedSwiftplayDefeats += 1
+        profile1.rankRating -= pts - 5
 
-        if (profile1.rank_rating < 0) {
-          profile1.rank_rating = 0
+        if (profile1.rankRating < 0) {
+          profile1.rankRating = 0
         }
 
         const stats = {
@@ -1045,10 +1045,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              ranked_swiftplay_wins: {
+              rankedSwiftplayWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -1061,10 +1061,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              ranked_swiftplay_defeats: {
+              rankedSwiftplayDefeats: {
                 increment: 1
               },
-              rank_rating: profile1.rank_rating
+              rankRating: profile1.rankRating
             }
           })
         ])
@@ -1115,8 +1115,8 @@ export default class Round extends Match {
       const max = Math.max(score1, score2)
 
       if (max === 5 && score1 === max) {
-        profile1.swiftplay_wins += 1
-        profile2.swiftplay_defeats += 1
+        profile1.swiftplayWins += 1
+        profile2.swiftplayDefeats += 1
 
         const stats = {
           stats: [
@@ -1196,7 +1196,7 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              swiftplay_wins: {
+              swiftplayWins: {
                 increment: 1
               }
             }
@@ -1206,7 +1206,7 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              swiftplay_defeats: {
+              swiftplayDefeats: {
                 increment: 1
               }
             }
@@ -1255,8 +1255,8 @@ export default class Round extends Match {
           }
         })
       } else if (max === 5 && score2 === max) {
-        profile2.swiftplay_wins += 1
-        profile1.swiftplay_defeats += 1
+        profile2.swiftplayWins += 1
+        profile1.swiftplayDefeats += 1
 
         const stats = {
           stats: [
@@ -1336,7 +1336,7 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              swiftplay_wins: {
+              swiftplayWins: {
                 increment: 1
               }
             }
@@ -1346,7 +1346,7 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              swiftplay_defeats: {
+              swiftplayDefeats: {
                 increment: 1
               }
             }
@@ -1399,8 +1399,8 @@ export default class Round extends Match {
       const max = Math.max(score1, score2)
 
       if (max === 13 && score1 === max) {
-        profile1.unranked_wins += 1
-        profile2.unranked_defeats += 1
+        profile1.unrankedWins += 1
+        profile2.unrankedDefeats += 1
 
         const stats = {
           stats: [
@@ -1480,7 +1480,7 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              unranked_wins: {
+              unrankedWins: {
                 increment: 1
               }
             }
@@ -1490,7 +1490,7 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              unranked_defeats: {
+              unrankedDefeats: {
                 increment: 1
               }
             }
@@ -1539,8 +1539,8 @@ export default class Round extends Match {
           }
         })
       } else if (max === 13 && score2 === max) {
-        profile2.unranked_wins += 1
-        profile1.unranked_defeats += 1
+        profile2.unrankedWins += 1
+        profile1.unrankedDefeats += 1
 
         const stats = {
           stats: [
@@ -1620,7 +1620,7 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              unranked_wins: {
+              unrankedWins: {
                 increment: 1
               }
             }
@@ -1630,7 +1630,7 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              unranked_defeats: {
+              unrankedDefeats: {
                 increment: 1
               }
             }

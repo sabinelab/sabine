@@ -195,17 +195,17 @@ export default createCommand({
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
-          rank_rating: {
+          rankRating: {
             gt: 0
           }
         },
         orderBy: {
-          rank_rating: 'desc'
+          rankRating: 'desc'
         },
         take: 100,
         select: {
           userId: true,
-          rank_rating: true
+          rankRating: true
         }
       })
 
@@ -245,12 +245,12 @@ export default createCommand({
                 ? ctx.t('commands.leaderboard.rating.description1', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    rr: profile.rank_rating
+                    rr: profile.rankRating
                   })
                 : ctx.t('commands.leaderboard.rating.description2', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    rr: profile.rank_rating
+                    rr: profile.rankRating
                   })
             })
             .join('\n')
@@ -290,17 +290,17 @@ export default createCommand({
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
-          correct_predictions: {
+          correctPredictions: {
             gt: 0
           }
         },
         orderBy: {
-          correct_predictions: 'desc'
+          correctPredictions: 'desc'
         },
         take: 100,
         select: {
           userId: true,
-          correct_predictions: true
+          correctPredictions: true
         }
       })
 
@@ -340,12 +340,12 @@ export default createCommand({
                 ? ctx.t('commands.leaderboard.predictions.description1', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    predictions: profile.correct_predictions
+                    predictions: profile.correctPredictions
                   })
                 : ctx.t('commands.leaderboard.predictions.description2', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    predictions: profile.correct_predictions
+                    predictions: profile.correctPredictions
                   })
             })
             .join('\n')
@@ -483,17 +483,17 @@ export default createCommand({
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
-          rank_rating: {
+          rankRating: {
             gt: 0
           }
         },
         orderBy: {
-          rank_rating: 'desc'
+          rankRating: 'desc'
         },
         take: 100,
         select: {
           userId: true,
-          rank_rating: true
+          rankRating: true
         }
       })
 
@@ -533,12 +533,12 @@ export default createCommand({
                 ? ctx.t('commands.leaderboard.rating.description1', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    rr: profile.rank_rating
+                    rr: profile.rankRating
                   })
                 : ctx.t('commands.leaderboard.rating.description2', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    rr: profile.rank_rating
+                    rr: profile.rankRating
                   })
             })
             .join('\n')
@@ -578,17 +578,17 @@ export default createCommand({
       let profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
-          correct_predictions: {
+          correctPredictions: {
             gt: 0
           }
         },
         orderBy: {
-          correct_predictions: 'desc'
+          correctPredictions: 'desc'
         },
         take: 100,
         select: {
           userId: true,
-          correct_predictions: true
+          correctPredictions: true
         }
       })
 
@@ -628,12 +628,12 @@ export default createCommand({
                 ? ctx.t('commands.leaderboard.predictions.description1', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    predictions: profile.correct_predictions
+                    predictions: profile.correctPredictions
                   })
                 : ctx.t('commands.leaderboard.predictions.description2', {
                     pos,
                     user: `<@${profile.userId}>`,
-                    predictions: profile.correct_predictions
+                    predictions: profile.correctPredictions
                   })
             })
             .join('\n')

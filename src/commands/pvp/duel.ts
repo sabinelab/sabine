@@ -190,13 +190,13 @@ export default createCommand({
       ctx.app.prisma.card.findMany({
         where: {
           profileId: profile.id,
-          active_roster: true
+          activeRoster: true
         }
       }),
       ctx.app.prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          active_roster: true
+          activeRoster: true
         }
       })
     ])
@@ -211,7 +211,7 @@ export default createCommand({
       authorCounts[c.playerId] = (authorCounts[c.playerId] || 0) + 1
     }
 
-    if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
+    if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
@@ -227,7 +227,7 @@ export default createCommand({
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
-    if (!profile.team_name || !profile.team_tag) {
+    if (!profile.teamName || !profile.teamTag) {
       return await ctx.reply('commands.duel.needed_team_name_2')
     }
 

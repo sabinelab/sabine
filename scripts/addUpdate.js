@@ -13,7 +13,7 @@ export default async function (version, content) {
           data: content
         }
       },
-      published_at: new Date()
+      publishedAt: new Date()
     }
   })
 }

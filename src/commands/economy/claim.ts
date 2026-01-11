@@ -53,9 +53,9 @@ export default createCommand({
   messageComponentInteractionTime: 60 * 1000,
   cooldown: true,
   async run({ ctx, t }) {
-    if (ctx.db.profile.claim_time && ctx.db.profile.claim_time > new Date()) {
+    if (ctx.db.profile.claimTime && ctx.db.profile.claimTime > new Date()) {
       return await ctx.reply('commands.claim.has_been_claimed', {
-        t: `<t:${(ctx.db.profile.claim_time.getTime() / 1000).toFixed(0)}:R>`
+        t: `<t:${(ctx.db.profile.claimTime.getTime() / 1000).toFixed(0)}:R>`
       })
     }
 
@@ -149,7 +149,7 @@ export default createCommand({
             id: card.id
           },
           data: {
-            active_roster: true
+            activeRoster: true
           }
         })
       })
@@ -161,7 +161,7 @@ export default createCommand({
         where: {
           playerId: ctx.args[3],
           profileId: ctx.db.profile.id,
-          active_roster: false
+          activeRoster: false
         }
       })
 

@@ -1,29 +1,33 @@
 model Guild {
-  id                         String        @id
-  lang                       Language      @default(en)
-  events                     Event[]
-  valorant_resend_time       DateTime?
-  valorant_matches           String[]      @default([])
-  valorant_news_channel      String?
-  valorant_live_feed_channel String?
-  lol_resend_time            DateTime?
-  lol_matches                String[]      @default([])
-  lol_news_channel           String?
-  lol_live_feed_channel      String?
-  tbd_matches                TBDMatch[]
-  key                        GuildKey?
-  tournaments_length         Int           @default(5) @db.SmallInt
-  partner                    Boolean?
-  invite                     String?
-  live_messages              LiveMessage[]
-  guildKeyId                 String?
-  users                      Profile[]
+  id     String   @id
+  lang   Language @default(en)
+  events Event[]
+
+  valorantResendTime      DateTime? @map("valorant_resend_time")
+  valorantMatches         String[]  @default([]) @map("valorant_matches")
+  valorantNewsChannel     String?   @map("valorant_news_channel")
+  valorantLiveFeedChannel String?   @map("valorant_live_feed_channel")
+
+  lolResendTime      DateTime? @map("lol_resend_time")
+  lolMatches         String[]  @default([]) @map("lol_matches")
+  lolNewsChannel     String?   @map("lol_news_channel")
+  lolLiveFeedChannel String?   @map("lol_live_feed_channel")
+
+  tbdMatches        TBDMatch[]
+  tournamentsLength Int           @default(5) @map("tournaments_length") @db.SmallInt
+  partner           Boolean?
+  invite            String?
+  liveMessages      LiveMessage[]
+  key               GuildKey?
+  guildKeyId        String?       @map("guild_key_id")
+
+  users Profile[]
 }
 
 model LiveMessage {
   id      String @id @default(uuid())
   guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  guildId String
+  guildId String @map("guild_id")
   message String
   event   String
 
@@ -33,30 +37,34 @@ model LiveMessage {
 model GuildKey {
   id      String @id @default(uuid())
   guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  guildId String @unique
-  key     Key    @relation(fields: [keyId], references: [id], onDelete: Cascade)
-  keyId   String
+  guildId String @unique @map("guild_id")
+
+  key   Key    @relation(fields: [keyId], references: [id], onDelete: Cascade)
+  keyId String @map("key_id")
 
   @@unique([guildId, keyId])
 }
 
 model Key {
-  id         String     @id @default(uuid())
-  type       KeyType
-  expires_at DateTime?
-  user       String
-  active     Boolean    @default(false)
-  active_in  String[]   @default([])
-  guildKeys  GuildKey[]
+  id   String  @id @default(uuid())
+  type KeyType
+
+  expiresAt DateTime? @map("expires_at")
+  user      String
+  active    Boolean   @default(false)
+
+  activeIn  String[]   @default([]) @map("active_in")
+  guildKeys GuildKey[]
 
   @@index([user, type])
 }
 
 model TBDMatch {
-  id      String    @id @default(uuid())
-  guild   Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  guildId String
-  matchId String
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String @map("guild_id")
+
+  matchId String    @map("match_id")
   type    EventType
   channel String
 
@@ -64,9 +72,10 @@ model TBDMatch {
 }
 
 model Event {
-  id       String    @id @default(uuid())
-  guild    Guild     @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  guildId  String
+  id      String @id @default(uuid())
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String @map("guild_id")
+
   type     EventType
   name     String
   channel1 String

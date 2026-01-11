@@ -56,16 +56,16 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.profile.ranked_wins
-    const unranked_defeats = ctx.db.profile.unranked_defeats
-    const unranked_wins = ctx.db.profile.unranked_wins
-    const ranked_swiftplay_wins = ctx.db.profile.ranked_swiftplay_wins
-    const swiftplay_wins = ctx.db.profile.swiftplay_wins
-    const ranked_defeats = ctx.db.profile.ranked_defeats
-    const ranked_swiftplay_defeats = ctx.db.profile.ranked_swiftplay_defeats
-    const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
-    const arena_wins = ctx.db.profile.arena_wins
-    const arena_defeats = ctx.db.profile.arena_defeats
+    const ranked_wins = ctx.db.profile.rankedWins
+    const unranked_defeats = ctx.db.profile.unrankedDefeats
+    const unranked_wins = ctx.db.profile.unrankedWins
+    const ranked_swiftplay_wins = ctx.db.profile.rankedSwiftplayWins
+    const swiftplay_wins = ctx.db.profile.swiftplayWins
+    const ranked_defeats = ctx.db.profile.rankedDefeats
+    const ranked_swiftplay_defeats = ctx.db.profile.rankedSwiftplayDefeats
+    const swiftplay_defeats = ctx.db.profile.swiftplayDefeats
+    const arena_wins = ctx.db.profile.arenaWins
+    const arena_defeats = ctx.db.profile.arenaDefeats
     const total_wins =
       ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
@@ -88,7 +88,7 @@ export default createCommand({
         total_wins,
         total_defeats,
         total: matches.length,
-        rr: ctx.db.profile.rank_rating,
+        rr: ctx.db.profile.rankRating,
         arena_defeats,
         arena_wins
       }) + '\n\n'
@@ -207,16 +207,16 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.profile.ranked_wins
-    const unranked_defeats = ctx.db.profile.unranked_defeats
-    const unranked_wins = ctx.db.profile.unranked_wins
-    const ranked_swiftplay_wins = ctx.db.profile.ranked_swiftplay_wins
-    const swiftplay_wins = ctx.db.profile.swiftplay_wins
-    const ranked_defeats = ctx.db.profile.ranked_defeats
-    const ranked_swiftplay_defeats = ctx.db.profile.ranked_swiftplay_defeats
-    const swiftplay_defeats = ctx.db.profile.swiftplay_defeats
-    const arena_wins = ctx.db.profile.arena_wins
-    const arena_defeats = ctx.db.profile.arena_defeats
+    const ranked_wins = ctx.db.profile.rankedWins
+    const unranked_defeats = ctx.db.profile.unrankedDefeats
+    const unranked_wins = ctx.db.profile.unrankedWins
+    const ranked_swiftplay_wins = ctx.db.profile.rankedSwiftplayWins
+    const swiftplay_wins = ctx.db.profile.swiftplayWins
+    const ranked_defeats = ctx.db.profile.rankedDefeats
+    const ranked_swiftplay_defeats = ctx.db.profile.rankedSwiftplayDefeats
+    const swiftplay_defeats = ctx.db.profile.swiftplayDefeats
+    const arena_wins = ctx.db.profile.arenaWins
+    const arena_defeats = ctx.db.profile.arenaDefeats
     const total_wins =
       ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
@@ -239,7 +239,7 @@ export default createCommand({
         total_wins,
         total_defeats,
         total: matches.length,
-        rr: ctx.db.profile.rank_rating,
+        rr: ctx.db.profile.rankRating,
         arena_defeats,
         arena_wins
       }) + '\n\n'

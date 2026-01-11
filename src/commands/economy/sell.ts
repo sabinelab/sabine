@@ -33,7 +33,7 @@ export default createCommand({
       where: {
         id: BigInt(ctx.args[0]),
         profileId: ctx.db.profile.id,
-        active_roster: false
+        activeRoster: false
       }
     })
     const player = app.players.get(card?.playerId ?? '')
@@ -60,7 +60,7 @@ export default createCommand({
     const cards = await prisma.card.findMany({
       where: {
         profileId: profile.id,
-        active_roster: false
+        activeRoster: false
       }
     })
 

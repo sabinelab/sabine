@@ -116,7 +116,7 @@ export default createCommand({
               id: ctx.guild.id
             },
             data: {
-              valorant_news_channel: channel.id
+              valorantNewsChannel: channel.id
             }
           })
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
@@ -134,7 +134,7 @@ export default createCommand({
               id: ctx.guild.id
             },
             data: {
-              lol_news_channel: channel.id
+              lolNewsChannel: channel.id
             }
           })
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
@@ -152,7 +152,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              valorant_news_channel: null
+              valorantNewsChannel: null
             }
           })
           await ctx.reply('commands.news.news_disabled')
@@ -165,7 +165,7 @@ export default createCommand({
               id: ctx.db.guild.id
             },
             data: {
-              valorant_news_channel: null
+              lolNewsChannel: null
             }
           })
           await ctx.reply('commands.news.news_disabled')

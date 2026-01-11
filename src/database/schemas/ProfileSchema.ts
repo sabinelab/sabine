@@ -28,42 +28,42 @@ type AddPackOptions = {
 
 export class ProfileSchema implements Profile {
   public id!: string
-  public created_at: Date = new Date()
-  public correct_predictions: number = 0
-  public incorrect_predictions: number = 0
+  public createdAt: Date = new Date()
+  public correctPredictions: number = 0
+  public incorrectPredictions: number = 0
   public poisons: bigint = 0n
-  public team_name: string | null = null
-  public team_tag: string | null = null
-  public arena_wins: number = 0
-  public ranked_wins: number = 0
-  public unranked_wins: number = 0
-  public swiftplay_wins: number = 0
-  public ranked_swiftplay_wins: number = 0
-  public arena_defeats: number = 0
-  public ranked_defeats: number = 0
-  public unranked_defeats: number = 0
-  public swiftplay_defeats: number = 0
-  public ranked_swiftplay_defeats: number = 0
-  public daily_time: Date | null = null
-  public claim_time: Date | null = null
+  public teamName: string | null = null
+  public teamTag: string | null = null
+  public arenaWins: number = 0
+  public rankedWins: number = 0
+  public unrankedWins: number = 0
+  public swiftplayWins: number = 0
+  public rankedSwiftplayWins: number = 0
+  public arenaDefeats: number = 0
+  public rankedDefeats: number = 0
+  public unrankedDefeats: number = 0
+  public swiftplayDefeats: number = 0
+  public rankedSwiftplayDefeats: number = 0
+  public dailyTime: Date | null = null
+  public claimTime: Date | null = null
   public warn: boolean = false
   public pity: number = 0
   public claims: number = 0
   public fates: number = 0
-  public rank_rating: number = 50
+  public rankRating: number = 50
   public remind: boolean | null = null
-  public remind_in: string | null = null
+  public remindIn: string | null = null
   public reminded: boolean = true
   public warned: boolean | null = null
-  public iron_packs: number = 0
-  public bronze_packs: number = 0
-  public silver_packs: number = 0
-  public gold_packs: number = 0
-  public platinum_packs: number = 0
-  public diamond_packs: number = 0
-  public ascendant_packs: number = 0
-  public immortal_packs: number = 0
-  public radiant_packs: number = 0
+  public ironPacks: number = 0
+  public bronzePacks: number = 0
+  public silverPacks: number = 0
+  public goldPacks: number = 0
+  public platinumPacks: number = 0
+  public diamondPacks: number = 0
+  public ascendantPacks: number = 0
+  public immortalPacks: number = 0
+  public radiantPacks: number = 0
   public guildId: string
   public userId: string
   public lang: $Enums.Language = 'en'
@@ -131,7 +131,7 @@ export class ProfileSchema implements Profile {
         fates: {
           increment: fates
         },
-        daily_time: new Date(new Date().setHours(24, 0, 0, 0))
+        dailyTime: new Date(new Date().setHours(24, 0, 0, 0))
       }
     })
 
@@ -273,13 +273,13 @@ export class ProfileSchema implements Profile {
         ? new Date(Date.now() + 5 * 60 * 1000)
         : new Date(Date.now() + 10 * 60 * 1000)
 
-      updates.claim_time = claimTime
+      updates.claimTime = claimTime
       updates.claims = { increment: 1 }
       updates.reminded = false
       updates.pity = { increment: 1 }
 
       if (channel) {
-        updates.remind_in = channel
+        updates.remindIn = channel
 
         if (this.remind) {
           await app.queue.add(
@@ -423,22 +423,22 @@ export class ProfileSchema implements Profile {
     const checkStreak = (n: number) => n > 0 && n % 20 === 0
 
     const packField = {
-      IRON: 'iron_packs',
-      BRONZE: 'bronze_packs',
-      SILVER: 'silver_packs',
-      GOLD: 'gold_packs',
-      PLATINUM: 'platinum_packs',
-      DIAMOND: 'diamond_packs',
-      ASCENDANT: 'ascendant_packs',
-      IMMORTAL: 'immortal_packs',
-      RADIANT: 'radiant_packs'
+      IRON: 'ironPacks',
+      BRONZE: 'bronzePacks',
+      SILVER: 'silverPacks',
+      GOLD: 'goldPacks',
+      PLATINUM: 'platinumPacks',
+      DIAMOND: 'diamondPacks',
+      ASCENDANT: 'ascendantPacks',
+      IMMORTAL: 'immortalPacks',
+      RADIANT: 'radiantPacks'
     } as const
     const fieldToIncrement = packField[options.pack]
 
     const update: any = {}
 
-    if (checkStreak(options.voteStreak + 1) && fieldToIncrement !== 'radiant_packs') {
-      update.radiant_packs = {
+    if (checkStreak(options.voteStreak + 1) && fieldToIncrement !== 'radiantPacks') {
+      update.radiantPacks = {
         increment: 1
       }
     } else {

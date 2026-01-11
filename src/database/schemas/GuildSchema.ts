@@ -6,19 +6,19 @@ import { updateCache, voidCatch } from '@/database/update-cache'
 export class GuildSchema implements Guild {
   public id: string
   public lang: $Enums.Language = 'en'
-  public tbd_matches: TBDMatch[] = []
+  public tbdMatches: TBDMatch[] = []
   public guildKeyId: string | null = null
   public events: Event[] = []
-  public live_messages: LiveMessage[] = []
-  public valorant_resend_time: Date | null = null
-  public valorant_matches: string[] = []
-  public valorant_news_channel: string | null = null
-  public valorant_live_feed_channel: string | null = null
-  public lol_resend_time: Date | null = null
-  public lol_matches: string[] = []
-  public lol_news_channel: string | null = null
-  public lol_live_feed_channel: string | null = null
-  public tournaments_length: number = 5
+  public liveMessages: LiveMessage[] = []
+  public valorantResendTime: Date | null = null
+  public valorantMatches: string[] = []
+  public valorantNewsChannel: string | null = null
+  public valorantLiveFeedChannel: string | null = null
+  public lolResendTime: Date | null = null
+  public lolMatches: string[] = []
+  public lolNewsChannel: string | null = null
+  public lolLiveFeedChannel: string | null = null
+  public tournamentsLength: number = 5
   public partner: boolean | null = null
   public invite: string | null = null
 

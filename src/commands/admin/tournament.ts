@@ -216,7 +216,7 @@ export default createCommand({
           if (
             guild.events.filter(e => e.type === 'lol').length +
               guild.events.filter(e => e.type === 'valorant').length >=
-            ctx.db.guild.tournaments_length
+            ctx.db.guild.tournamentsLength
           )
             return ctx.reply('commands.tournament.limit_reached', {
               cmd: `</tournament remove valorant:${id}>`
@@ -282,7 +282,7 @@ export default createCommand({
           if (
             guild.events.filter(e => e.type === 'lol').length +
               guild.events.filter(e => e.type === 'valorant').length >=
-            ctx.db.guild.tournaments_length
+            ctx.db.guild.tournamentsLength
           )
             return ctx.reply('commands.tournament.limit_reached', {
               cmd: `</tournament remove lol:${id}>`

@@ -15,7 +15,7 @@ export const lolLive = new Elysia().post(
   async req => {
     const guilds = await prisma.guild.findMany({
       where: {
-        lol_live_feed_channel: {
+        lolLiveFeedChannel: {
           not: null
         }
       },
@@ -25,7 +25,7 @@ export const lolLive = new Elysia().post(
             type: 'lol'
           }
         },
-        live_messages: true
+        liveMessages: true
       }
     })
 
@@ -35,7 +35,7 @@ export const lolLive = new Elysia().post(
 
     for (const data of req.body) {
       for (const guild of guilds) {
-        const channel = app.channels.cache.get(guild.lol_live_feed_channel!) as TextChannel
+        const channel = app.channels.cache.get(guild.lolLiveFeedChannel!) as TextChannel
 
         if (!channel) continue
 
@@ -69,7 +69,7 @@ export const lolLive = new Elysia().post(
           .setCustomId(`stream;lol;${data.id}`)
 
         messages.push(
-          rest.post(Routes.channelMessages(guild.valorant_live_feed_channel!), {
+          rest.post(Routes.channelMessages(guild.lolLiveFeedChannel!), {
             body: {
               embeds: [embed.toJSON()],
               components: [

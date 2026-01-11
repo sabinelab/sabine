@@ -39,7 +39,7 @@ export default createCommand({
           }
         }
       })
-    ).sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+    ).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
     const array = transactions
 
@@ -60,7 +60,7 @@ export default createCommand({
     let description = ''
 
     for (const transaction of transactions) {
-      const timestamp = (transaction.created_at.getTime() / 1000).toFixed(0)
+      const timestamp = (transaction.createdAt.getTime() / 1000).toFixed(0)
 
       if (transaction.player) {
         const player = app.players.get(transaction.player.toString())
@@ -129,7 +129,7 @@ export default createCommand({
           }
         }
       })
-    ).sort((a, b) => b.created_at.getTime() - a.created_at.getTime())
+    ).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
     const array = transactions
 
@@ -149,7 +149,7 @@ export default createCommand({
     let description = ''
 
     for (const transaction of transactions) {
-      const timestamp = (transaction.created_at.getTime() / 1000).toFixed(0)
+      const timestamp = (transaction.createdAt.getTime() / 1000).toFixed(0)
 
       if (transaction.player) {
         const player = app.players.get(transaction.player.toString())

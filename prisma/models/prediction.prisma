@@ -1,14 +1,17 @@
 model Prediction {
-  id         String           @id @default(uuid())
-  profile    Profile          @relation(fields: [profileId], references: [id])
-  profileId  String
-  match      String
-  game       Game
-  teams      Team[]
-  status     PredictionStatus @default(pending)
-  bet        BigInt?
-  odd        Int?             @db.SmallInt
-  created_at DateTime         @default(now())
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @map("profile_id")
+
+  match String
+  game  Game
+  teams Team[]
+
+  status PredictionStatus @default(pending)
+  bet    BigInt?
+  odd    Int?             @db.SmallInt
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@index([profileId, game])
   @@index([profileId, game, match])
@@ -18,10 +21,11 @@ model Prediction {
 model Team {
   id           String     @id @default(uuid())
   prediction   Prediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
-  predictionId String
-  name         String
-  score        String
-  winner       Boolean?
+  predictionId String     @map("prediction_id")
+
+  name   String
+  score  String
+  winner Boolean?
 
   @@index([predictionId])
 }

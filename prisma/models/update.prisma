@@ -1,15 +1,15 @@
 model Update {
-  id           String    @id
-  published_at DateTime  @default(now())
-  content      Content[]
+  id          String    @id
+  publishedAt DateTime  @default(now()) @map("published_at")
+  content     Content[]
 
-  @@index([published_at(sort: Desc)])
+  @@index([publishedAt(sort: Desc)])
 }
 
 model Content {
   id       String @id @default(uuid())
   update   Update @relation(fields: [updateId], references: [id])
-  updateId String
+  updateId String @map("update_id")
   lang     String
   text     String
 

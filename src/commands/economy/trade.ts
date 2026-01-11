@@ -121,7 +121,7 @@ export default createCommand({
     const cards = await prisma.card.findMany({
       where: {
         profileId: profile.id,
-        active_roster: false
+        activeRoster: false
       }
     })
 
@@ -179,10 +179,10 @@ export default createCommand({
           },
           data: {
             profileId: ctx.db.profile.id,
-            arena_agent_name: null,
-            arena_agent_role: null,
-            arena_roster: false,
-            active_roster: false
+            arenaAgentName: null,
+            arenaAgentRole: null,
+            arenaRoster: false,
+            activeRoster: false
           }
         }),
         prisma.profile.update({

@@ -64,9 +64,9 @@ export default class CommandRunner {
       return await interaction.reply({
         content: locales(guild?.lang ?? 'en', 'helper.banned', {
           reason: ban.reason,
-          ends: !ban.ends_at
+          ends: !ban.endsAt
             ? Infinity
-            : `<t:${(new Date(ban.ends_at).getTime() / 1000).toFixed(0)}:F> | <t:${(new Date(ban.ends_at).getTime() / 1000).toFixed(0)}:R>`,
+            : `<t:${(new Date(ban.endsAt).getTime() / 1000).toFixed(0)}:F> | <t:${(new Date(ban.endsAt).getTime() / 1000).toFixed(0)}:R>`,
           when: `<t:${(new Date(ban.when).getTime() / 1000).toFixed(0)}:F> | <t:${(new Date(ban.when).getTime() / 1000).toFixed(0)}:R>`
         }),
         flags: 64,
@@ -174,7 +174,7 @@ export default class CommandRunner {
         if (profile.warn) {
           const update = await app.prisma.update.findFirst({
             orderBy: {
-              published_at: 'desc'
+              publishedAt: 'desc'
             }
           })
 

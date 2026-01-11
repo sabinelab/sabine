@@ -95,14 +95,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile1.arena_wins += 1
-        profile1.rank_rating += pts
+        profile1.arenaWins += 1
+        profile1.rankRating += pts
         profile1.fates += 5
-        profile2.arena_defeats += 1
-        profile2.rank_rating -= pts - 5
+        profile2.arenaDefeats += 1
+        profile2.rankRating -= pts - 5
 
-        if (profile2.rank_rating < 0) {
-          profile2.rank_rating = 0
+        if (profile2.rankRating < 0) {
+          profile2.rankRating = 0
         }
 
         const stats = {
@@ -185,10 +185,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              arena_wins: {
+              arenaWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -201,10 +201,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              arena_defeats: {
+              arenaDefeats: {
                 increment: 1
               },
-              rank_rating: profile2.rank_rating
+              rankRating: profile2.rankRating
             }
           })
         ])
@@ -215,14 +215,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile2.arena_wins += 1
-        profile2.rank_rating += pts
+        profile2.arenaWins += 1
+        profile2.rankRating += pts
         profile2.fates += 5
-        profile1.arena_defeats += 1
-        profile1.rank_rating -= pts - 5
+        profile1.arenaDefeats += 1
+        profile1.rankRating -= pts - 5
 
-        if (profile1.rank_rating < 0) {
-          profile1.rank_rating = 0
+        if (profile1.rankRating < 0) {
+          profile1.rankRating = 0
         }
 
         const stats = {
@@ -305,10 +305,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              arena_wins: {
+              arenaWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -321,10 +321,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              arena_defeats: {
+              arenaDefeats: {
                 increment: 1
               },
-              rank_rating: profile1.rank_rating
+              rankRating: profile1.rankRating
             }
           })
         ])
@@ -335,14 +335,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile1.arena_wins += 1
-        profile1.rank_rating += pts
+        profile1.arenaWins += 1
+        profile1.rankRating += pts
         profile1.fates += 5
-        profile2.arena_defeats += 1
-        profile2.rank_rating -= pts - 5
+        profile2.arenaDefeats += 1
+        profile2.rankRating -= pts - 5
 
-        if (profile2.rank_rating < 0) {
-          profile2.rank_rating = 0
+        if (profile2.rankRating < 0) {
+          profile2.rankRating = 0
         }
 
         const stats = {
@@ -425,10 +425,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              arena_wins: {
+              arenaWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -441,10 +441,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              arena_defeats: {
+              arenaDefeats: {
                 increment: 1
               },
-              rank_rating: profile2.rank_rating
+              rankRating: profile2.rankRating
             }
           })
         ])
@@ -455,14 +455,14 @@ export default class Round extends Match {
         const maxPts = 60
         const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
 
-        profile2.arena_wins += 1
-        profile2.rank_rating += pts
+        profile2.arenaWins += 1
+        profile2.rankRating += pts
         profile2.fates += 5
-        profile1.arena_defeats += 1
-        profile1.rank_rating -= pts - 5
+        profile1.arenaDefeats += 1
+        profile1.rankRating -= pts - 5
 
-        if (profile1.rank_rating < 0) {
-          profile1.rank_rating = 0
+        if (profile1.rankRating < 0) {
+          profile1.rankRating = 0
         }
 
         const stats = {
@@ -545,10 +545,10 @@ export default class Round extends Match {
               id: profile2.id
             },
             data: {
-              arena_wins: {
+              arenaWins: {
                 increment: 1
               },
-              rank_rating: {
+              rankRating: {
                 increment: pts
               },
               fates: {
@@ -561,10 +561,10 @@ export default class Round extends Match {
               id: profile1.id
             },
             data: {
-              arena_defeats: {
+              arenaDefeats: {
                 increment: 1
               },
-              rank_rating: profile1.rank_rating
+              rankRating: profile1.rankRating
             }
           })
         ])

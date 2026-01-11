@@ -105,7 +105,7 @@ export default createCommand({
               fates: {
                 decrement: price.gold
               },
-              gold_packs: {
+              goldPacks: {
                 increment: 1
               }
             }
@@ -130,7 +130,7 @@ export default createCommand({
               fates: {
                 decrement: price.platinum
               },
-              platinum_packs: {
+              platinumPacks: {
                 increment: 1
               }
             }
@@ -155,7 +155,7 @@ export default createCommand({
               fates: {
                 decrement: price.diamond
               },
-              diamond_packs: {
+              diamondPacks: {
                 increment: 1
               }
             }
@@ -180,7 +180,7 @@ export default createCommand({
               fates: {
                 decrement: price.ascendant
               },
-              ascendant_packs: {
+              ascendantPacks: {
                 increment: 1
               }
             }

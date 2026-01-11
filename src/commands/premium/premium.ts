@@ -25,7 +25,7 @@ export default createCommand({
 
     const embed = new EmbedBuilder().setTitle('Premium').setDesc(
       t('commands.premium.embed.description', {
-        expiresAt: `<t:${(user.premium.expires_at.getTime() / 1000).toFixed(0)}:R>`
+        expiresAt: `<t:${(user.premium.expiresAt.getTime() / 1000).toFixed(0)}:R>`
       })
     )
 
@@ -47,11 +47,11 @@ export default createCommand({
     const embed = new EmbedBuilder()
 
     for (const key of keys) {
-      if (key.expires_at) {
+      if (key.expiresAt) {
         embed.addField(
           key.type,
           t('commands.premium.embed.field.value', {
-            expiresAt: `<t:${(key.expires_at.getTime() / 1000).toFixed(0)}:R>`,
+            expiresAt: `<t:${(key.expiresAt.getTime() / 1000).toFixed(0)}:R>`,
             key: key.id
           })
         )

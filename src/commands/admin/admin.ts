@@ -110,22 +110,22 @@ export default createCommand({
         t('commands.admin.desc', {
           lang: ctx.db.guild!.lang.replace('en', 'English').replace('pt', 'Português'),
           limit:
-            ctx.db.guild!.tournaments_length === Infinity
+            ctx.db.guild!.tournamentsLength === Infinity
               ? '`Infinity`'
-              : `${guild.events.length}/${ctx.db.guild!.tournaments_length}`,
+              : `${guild.events.length}/${ctx.db.guild!.tournamentsLength}`,
           id,
-          vlr_news: !ctx.db.guild!.valorant_news_channel
+          vlr_news: !ctx.db.guild!.valorantNewsChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.valorant_news_channel}>`,
-          vlr_live: !ctx.db.guild!.valorant_live_feed_channel
+            : `<#${ctx.db.guild!.valorantNewsChannel}>`,
+          vlr_live: !ctx.db.guild!.valorantLiveFeedChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.valorant_live_feed_channel}>`,
-          lol_news: !ctx.db.guild!.lol_news_channel
+            : `<#${ctx.db.guild!.valorantLiveFeedChannel}>`,
+          lol_news: !ctx.db.guild!.lolNewsChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.lol_news_channel}>`,
-          lol_live: !ctx.db.guild!.lol_live_feed_channel
+            : `<#${ctx.db.guild!.lolNewsChannel}>`,
+          lol_live: !ctx.db.guild!.lolLiveFeedChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.lol_live_feed_channel}>`
+            : `<#${ctx.db.guild!.lolLiveFeedChannel}>`
         })
       )
 
@@ -216,14 +216,14 @@ export default createCommand({
         }
       })
 
-      if (!key || !key.key.expires_at) {
+      if (!key || !key.key.expiresAt) {
         return await ctx.reply('commands.admin.no_premium')
       }
 
       const embed = new EmbedBuilder().setTitle('Premium').setDesc(
         t('commands.admin.premium', {
           key: key.key.type,
-          expiresAt: `<t:${(key.key.expires_at.getTime() / 1000).toFixed(0)}:R>`
+          expiresAt: `<t:${(key.key.expiresAt.getTime() / 1000).toFixed(0)}:R>`
         })
       )
 
@@ -300,9 +300,9 @@ export default createCommand({
     } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'vlr') {
       ctx.setFlags(64)
 
-      if (ctx.db.guild.valorant_resend_time && ctx.db.guild.valorant_resend_time > new Date()) {
+      if (ctx.db.guild.valorantResendTime && ctx.db.guild.valorantResendTime > new Date()) {
         return await ctx.reply('commands.admin.resend_time', {
-          t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>`
+          t: `<t:${(ctx.db.guild.valorantResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
       }
 
@@ -323,9 +323,9 @@ export default createCommand({
     } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'lol') {
       ctx.setFlags(64)
 
-      if (ctx.db.guild.lol_resend_time && ctx.db.guild.lol_resend_time > new Date()) {
+      if (ctx.db.guild.lolResendTime && ctx.db.guild.lolResendTime > new Date()) {
         return await ctx.reply('commands.admin.resend_time', {
-          t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>`
+          t: `<t:${(ctx.db.guild.lolResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
       }
 
@@ -344,9 +344,9 @@ export default createCommand({
         ]
       })
     } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'vlr') {
-      if (ctx.db.guild.valorant_resend_time && ctx.db.guild.valorant_resend_time > new Date()) {
+      if (ctx.db.guild.valorantResendTime && ctx.db.guild.valorantResendTime > new Date()) {
         return await ctx.edit('commands.admin.resend_time', {
-          t: `<t:${(ctx.db.guild.valorant_resend_time.getTime() / 1000).toFixed(0)}:R>`
+          t: `<t:${(ctx.db.guild.valorantResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
       }
 
@@ -360,7 +360,7 @@ export default createCommand({
               type: 'valorant'
             }
           },
-          tbd_matches: {
+          tbdMatches: {
             where: {
               type: 'valorant'
             }
@@ -369,8 +369,8 @@ export default createCommand({
         }
       }))!
 
-      guild.valorant_matches = []
-      guild.valorant_resend_time = new Date(Date.now() + 3600000)
+      guild.valorantMatches = []
+      guild.valorantResendTime = new Date(Date.now() + 3600000)
 
       await ctx.edit('commands.admin.resending')
 
@@ -380,8 +380,8 @@ export default createCommand({
 
       const res2 = await service.getResults('valorant')
       if (
-        guild.valorant_matches.length &&
-        !res2.some(d => d.id === guild.valorant_matches[guild.valorant_matches.length - 1])
+        guild.valorantMatches.length &&
+        !res2.some(d => d.id === guild.valorantMatches[guild.valorantMatches.length - 1])
       )
         return
 
@@ -507,11 +507,11 @@ export default createCommand({
                 app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
-              const index = guild.valorant_matches.findIndex(m => m === d.id)
+              const index = guild.valorantMatches.findIndex(m => m === d.id)
 
-              if (index > -1) guild.valorant_matches.splice(index, 1)
+              if (index > -1) guild.valorantMatches.splice(index, 1)
 
-              guild.valorant_matches.push(d.id!)
+              guild.valorantMatches.push(d.id!)
 
               if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
                 if (!channelBatches.has(e.channel1)) {
@@ -605,8 +605,8 @@ export default createCommand({
           id: ctx.interaction.guildId!
         },
         data: {
-          valorant_matches: guild.valorant_matches,
-          tbd_matches: {
+          valorantMatches: guild.valorantMatches,
+          tbdMatches: {
             deleteMany: {
               type: 'valorant'
             },
@@ -618,15 +618,15 @@ export default createCommand({
                 }))
               : undefined
           },
-          valorant_resend_time: guild.valorant_resend_time
+          valorantResendTime: guild.valorantResendTime
         }
       })
 
       await ctx.edit('commands.admin.resent')
     } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'lol') {
-      if (ctx.db.guild.lol_resend_time && ctx.db.guild.lol_resend_time > new Date()) {
+      if (ctx.db.guild.lolResendTime && ctx.db.guild.lolResendTime > new Date()) {
         return await ctx.edit('commands.admin.resend_time', {
-          t: `<t:${(ctx.db.guild.lol_resend_time.getTime() / 1000).toFixed(0)}:R>`
+          t: `<t:${(ctx.db.guild.lolResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
       }
 
@@ -640,7 +640,7 @@ export default createCommand({
               type: 'lol'
             }
           },
-          tbd_matches: {
+          tbdMatches: {
             where: {
               type: 'lol'
             }
@@ -649,9 +649,9 @@ export default createCommand({
         }
       }))!
 
-      guild.lol_matches = []
-      guild.tbd_matches = []
-      guild.lol_resend_time = new Date(Date.now() + 3600000)
+      guild.lolMatches = []
+      guild.tbdMatches = []
+      guild.lolResendTime = new Date(Date.now() + 3600000)
 
       await ctx.edit('commands.admin.resending')
 
@@ -662,8 +662,8 @@ export default createCommand({
       const res2 = await service.getResults('lol')
 
       if (
-        guild.lol_matches.length &&
-        !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])
+        guild.lolMatches.length &&
+        !res2.some(d => d.id === guild.lolMatches[guild.lolMatches.length - 1])
       )
         return
 
@@ -725,11 +725,11 @@ export default createCommand({
                 app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
-              const index = guild.lol_matches.findIndex(m => m === d.id)
+              const index = guild.lolMatches.findIndex(m => m === d.id)
 
-              if (index > -1) guild.lol_matches.splice(index, 1)
+              if (index > -1) guild.lolMatches.splice(index, 1)
 
-              guild.lol_matches.push(d.id!)
+              guild.lolMatches.push(d.id!)
 
               if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
                 if (!channelBatches.has(e.channel1)) {
@@ -813,11 +813,11 @@ export default createCommand({
           id: ctx.interaction.guildId!
         },
         data: {
-          lol_matches: guild.lol_matches,
-          tbd_matches: {
-            create: guild.tbd_matches
+          lolMatches: guild.lolMatches,
+          tbdMatches: {
+            create: guild.tbdMatches
           },
-          lol_resend_time: guild.lol_resend_time
+          lolResendTime: guild.lolResendTime
         }
       })
 

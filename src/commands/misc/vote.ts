@@ -21,10 +21,10 @@ export default createCommand({
       .setTitle(ctx.t('commands.vote.title'))
       .setDesc(
         ctx.t('commands.vote.description', {
-          last_vote: user.last_vote
-            ? `<t:${(user.last_vote?.getTime() / 1000).toFixed(0)}:R>`
+          last_vote: user.lastVote
+            ? `<t:${(user.lastVote?.getTime() / 1000).toFixed(0)}:R>`
             : '`null`',
-          current_streak: user.vote_streak,
+          current_streak: user.voteStreak,
           total: user.votes
         })
       )

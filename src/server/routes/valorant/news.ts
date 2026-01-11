@@ -14,7 +14,7 @@ export const news = new Elysia().post(
   async req => {
     const guilds = await prisma.guild.findMany({
       where: {
-        valorant_news_channel: {
+        valorantNewsChannel: {
           not: null
         }
       }
@@ -38,7 +38,7 @@ export const news = new Elysia().post(
           .setURL(data.url)
 
         messages.push(
-          rest.post(Routes.channelMessages(guild.valorant_news_channel!), {
+          rest.post(Routes.channelMessages(guild.valorantNewsChannel!), {
             body: {
               embeds: [embed.toJSON()],
               components: [

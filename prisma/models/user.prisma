@@ -1,22 +1,25 @@
 model User {
-  id                    String    @id
-  created_at            DateTime  @default(now())
-  lang                  Language  @default(en)
-  premium               Premium?
-  last_vote             DateTime?
-  vote_streak           Int       @default(0)
-  votes                 Int       @default(0)
-  collected_vote_reward Boolean   @default(true)
-  warn                  Boolean   @default(false)
-  profiles              Profile[]
+  id        String   @id
+  createdAt DateTime @default(now()) @map("created_at")
+  lang      Language @default(en)
+  premium   Premium?
+
+  lastVote   DateTime? @map("last_vote")
+  voteStreak Int       @default(0) @map("vote_streak")
+  votes      Int       @default(0)
+
+  collectedVoteReward Boolean @default(true) @map("collected_vote_reward")
+  warn                Boolean @default(false)
+
+  profiles Profile[]
 }
 
 model Premium {
-  id         String      @id @default(uuid())
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String      @unique
-  type       PremiumType
-  expires_at DateTime
+  id        String      @id @default(uuid())
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String      @unique @map("user_id")
+  type      PremiumType
+  expiresAt DateTime    @map("expires_at")
 }
 
 enum PremiumType {

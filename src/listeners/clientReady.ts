@@ -61,7 +61,7 @@ const sendValorantMatches = async (app: App) => {
         }
       },
       key: true,
-      tbd_matches: {
+      tbdMatches: {
         where: {
           type: 'valorant'
         }
@@ -84,12 +84,12 @@ const sendValorantMatches = async (app: App) => {
     }[] = []
 
     if (
-      guild.valorant_matches.length &&
-      !res2.some(d => d.id === guild.valorant_matches[guild.valorant_matches.length - 1])
+      guild.valorantMatches.length &&
+      !res2.some(d => d.id === guild.valorantMatches[guild.valorantMatches.length - 1])
     )
       continue
 
-    guild.valorant_matches = []
+    guild.valorantMatches = []
 
     let data: MatchesData[]
 
@@ -214,11 +214,11 @@ const sendValorantMatches = async (app: App) => {
               app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
               app.emoji.get('default')
 
-            const index = guild.valorant_matches.findIndex(m => m === d.id)
+            const index = guild.valorantMatches.findIndex(m => m === d.id)
 
-            if (index > -1) guild.valorant_matches.splice(index, 1)
+            if (index > -1) guild.valorantMatches.splice(index, 1)
 
-            guild.valorant_matches.push(d.id!)
+            guild.valorantMatches.push(d.id!)
 
             if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
               if (!channelBatches.has(e.channel1)) {
@@ -313,8 +313,8 @@ const sendValorantMatches = async (app: App) => {
           id: guild.id
         },
         data: {
-          valorant_matches: guild.valorant_matches,
-          tbd_matches: {
+          valorantMatches: guild.valorantMatches,
+          tbdMatches: {
             deleteMany: {
               type: 'valorant'
             },
@@ -326,7 +326,7 @@ const sendValorantMatches = async (app: App) => {
                 }))
               : undefined
           },
-          live_messages: {
+          liveMessages: {
             deleteMany: {}
           }
         }
@@ -348,7 +348,7 @@ const sendValorantTBDMatches = async (app: App) => {
 
   const guilds = await app.prisma.guild.findMany({
     include: {
-      tbd_matches: {
+      tbdMatches: {
         where: {
           type: 'valorant'
         }
@@ -362,11 +362,11 @@ const sendValorantTBDMatches = async (app: App) => {
   const updateGuildThunks: (() => Promise<unknown>)[] = []
 
   for (const guild of guilds) {
-    if (!guild.tbd_matches.length) continue
+    if (!guild.tbdMatches.length) continue
 
     const channelBatches = new Map<string, any[]>()
 
-    for (const match of guild.tbd_matches) {
+    for (const match of guild.tbdMatches) {
       const data = res
         .map(body => ({
           ...body,
@@ -392,7 +392,7 @@ const sendValorantTBDMatches = async (app: App) => {
 
         channelBatches.get(match.channel)?.push({ data, emoji1, emoji2, match })
 
-        const m = guild.tbd_matches.filter(m => m.id === match.id)[0]
+        const m = guild.tbdMatches.filter(m => m.id === match.id)[0]
 
         const thunk = async () => {
           await app.prisma.guild.update({
@@ -400,7 +400,7 @@ const sendValorantTBDMatches = async (app: App) => {
               id: guild.id
             },
             data: {
-              tbd_matches: {
+              tbdMatches: {
                 delete: {
                   id: m.id
                 }
@@ -494,7 +494,7 @@ const sendLolMatches = async (app: App) => {
         }
       },
       key: true,
-      tbd_matches: {
+      tbdMatches: {
         where: {
           type: 'lol'
         }
@@ -517,12 +517,12 @@ const sendLolMatches = async (app: App) => {
     }[] = []
 
     if (
-      guild.lol_matches.length &&
-      !res2.some(d => d.id === guild.lol_matches[guild.lol_matches.length - 1])
+      guild.lolMatches.length &&
+      !res2.some(d => d.id === guild.lolMatches[guild.lolMatches.length - 1])
     )
       continue
 
-    guild.lol_matches = []
+    guild.lolMatches = []
 
     let data: MatchesData[]
 
@@ -581,11 +581,11 @@ const sendLolMatches = async (app: App) => {
               app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
               app.emoji.get('default')
 
-            const index = guild.lol_matches.findIndex(m => m === d.id)
+            const index = guild.lolMatches.findIndex(m => m === d.id)
 
-            if (index > -1) guild.lol_matches.splice(index, 1)
+            if (index > -1) guild.lolMatches.splice(index, 1)
 
-            if (!d.stage.toLowerCase().includes('showmatch')) guild.lol_matches.push(d.id!)
+            if (!d.stage.toLowerCase().includes('showmatch')) guild.lolMatches.push(d.id!)
 
             if (d.stage.toLowerCase().includes('showmatch')) continue
 
@@ -673,8 +673,8 @@ const sendLolMatches = async (app: App) => {
           id: guild.id
         },
         data: {
-          lol_matches: guild.lol_matches,
-          tbd_matches: {
+          lolMatches: guild.lolMatches,
+          tbdMatches: {
             deleteMany: {
               type: 'lol'
             },
@@ -684,7 +684,7 @@ const sendLolMatches = async (app: App) => {
               channel: m.channel
             }))
           },
-          live_messages: {
+          liveMessages: {
             deleteMany: {}
           }
         }
@@ -736,11 +736,11 @@ export default createListener({
           include: {
             cards: {
               where: {
-                arena_roster: true,
-                arena_agent_name: {
+                arenaRoster: true,
+                arenaAgentName: {
                   not: null
                 },
-                arena_agent_role: {
+                arenaAgentRole: {
                   not: null
                 }
               }
@@ -762,11 +762,11 @@ export default createListener({
           include: {
             cards: {
               where: {
-                arena_roster: true,
-                arena_agent_name: {
+                arenaRoster: true,
+                arenaAgentName: {
                   not: null
                 },
-                arena_agent_role: {
+                arenaAgentRole: {
                   not: null
                 }
               }
@@ -778,17 +778,12 @@ export default createListener({
             }
           }
         })
-        // const player2 = await ProfileSchema.fetch(
-        //   job.data.parsedData2.userId,
-        //   job.data.parsedData2.guildId
-        // )
 
-        // if (!player1 || !player1.arena_metadata || !player2 || !player2.arena_metadata) return
         if (!player1 || !player2 || !player1.cards.length || !player2.cards.length) return
 
         if (player1.cards.length < 5 && player2.cards.length === 5) {
-          player1.rank_rating -= 15
-          if (player1.rank_rating < 0) player1.rank_rating = 0
+          player1.rankRating -= 15
+          if (player1.rankRating < 0) player1.rankRating = 0
 
           await prisma.$transaction([
             prisma.profile.update({
@@ -799,7 +794,7 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: player1.rank_rating
+                rankRating: player1.rankRating
               }
             }),
             prisma.profile.update({
@@ -810,15 +805,15 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: {
+                rankRating: {
                   increment: 10
                 }
               }
             })
           ])
         } else if (player1.cards.length === 5 && player2.cards.length < 5) {
-          player2.rank_rating -= 10
-          if (player2.rank_rating < 0) player2.rank_rating = 0
+          player2.rankRating -= 10
+          if (player2.rankRating < 0) player2.rankRating = 0
 
           await prisma.$transaction([
             prisma.profile.update({
@@ -829,7 +824,7 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: {
+                rankRating: {
                   increment: 10
                 }
               }
@@ -842,16 +837,16 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: player2.rank_rating
+                rankRating: player2.rankRating
               }
             })
           ])
         } else if (player1.cards.length < 5 && player2.cards.length < 5) {
-          player1.rank_rating -= 15
-          player2.rank_rating -= 15
+          player1.rankRating -= 15
+          player2.rankRating -= 15
 
-          if (player1.rank_rating < 0) player1.rank_rating = 0
-          if (player2.rank_rating < 0) player2.rank_rating = 0
+          if (player1.rankRating < 0) player1.rankRating = 0
+          if (player2.rankRating < 0) player2.rankRating = 0
 
           await prisma.$transaction([
             prisma.profile.update({
@@ -862,7 +857,7 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: player1.rank_rating
+                rankRating: player1.rankRating
               }
             }),
             prisma.profile.update({
@@ -873,7 +868,7 @@ export default createListener({
                 }
               },
               data: {
-                rank_rating: player2.rank_rating
+                rankRating: player2.rankRating
               }
             })
           ])
@@ -899,15 +894,15 @@ export default createListener({
                   movement: card.movement,
                   ovr: card.overall,
                   agent: {
-                    name: card.arena_agent_name!,
-                    role: card.arena_agent_role as (typeof valorant_agents)[number]['role']
+                    name: card.arenaAgentName!,
+                    role: card.arenaAgentRole as (typeof valorant_agents)[number]['role']
                   },
                   credits: 800,
                   life: 100
                 }
               }),
-              name: player1.team_name!,
-              tag: player1.team_tag!,
+              name: player1.teamName!,
+              tag: player1.teamTag!,
               user: player1.userId,
               guildId: player1.guildId
             },
@@ -925,15 +920,15 @@ export default createListener({
                   movement: card.movement,
                   ovr: card.overall,
                   agent: {
-                    name: card.arena_agent_name!,
-                    role: card.arena_agent_role as (typeof valorant_agents)[number]['role']
+                    name: card.arenaAgentName!,
+                    role: card.arenaAgentRole as (typeof valorant_agents)[number]['role']
                   },
                   credits: 800,
                   life: 100
                 }
               }),
-              name: player2.team_name!,
-              tag: player2.team_tag!,
+              name: player2.teamName!,
+              tag: player2.teamTag!,
               user: player2.userId,
               guildId: player2.guildId
             }
@@ -1007,9 +1002,9 @@ export default createListener({
 
           if (!profile) return
 
-          if (!profile.remind || profile.reminded || !profile.remind_in) return
+          if (!profile.remind || profile.reminded || !profile.remindIn) return
 
-          await rest.post(Routes.channelMessages(profile.remind_in), {
+          await rest.post(Routes.channelMessages(profile.remindIn), {
             body: {
               content: t(profile.user.lang, 'helper.reminder', { user: `<@${profile.id}>` })
             }

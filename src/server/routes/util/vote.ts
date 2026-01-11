@@ -41,7 +41,7 @@ export const vote = new Elysia().post(
         id: body.user
       },
       data: {
-        collected_vote_reward: false
+        collectedVoteReward: false
       }
     })
 

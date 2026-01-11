@@ -51,8 +51,8 @@ export default createCommand({
         profileId: ctx.db.profile.id
       }
     })
-    const activeCards = cards.filter(c => c.active_roster)
-    const subCards = cards.filter(c => !c.active_roster)
+    const activeCards = cards.filter(c => c.activeRoster)
+    const subCards = cards.filter(c => !c.activeRoster)
 
     let value = 0
     let ovr = 0
@@ -84,8 +84,8 @@ export default createCommand({
             ctx.t('commands.roster.container.desc', {
               value: Math.floor(value).toLocaleString(),
               ovr: Math.floor(ovr / (activeCards.length + subCards.length)),
-              name: ctx.db.profile.team_name
-                ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
+              name: ctx.db.profile.teamName
+                ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
                 : '`undefined`'
             })
         )
@@ -124,8 +124,8 @@ export default createCommand({
                 ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                   level: c.level,
-                  xp: `${c.xp}/${c.required_xp}`,
-                  progress: createProgressBar(c.xp / c.required_xp)
+                  xp: `${c.xp}/${c.requiredXp}`,
+                  progress: createProgressBar(c.xp / c.requiredXp)
                 })
               )
             })
@@ -139,12 +139,12 @@ export default createCommand({
                   .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
                   .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
                   .setStyle(ButtonStyle.Primary)
-                  .setDisabled(c.arena_roster),
+                  .setDisabled(c.arenaRoster),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                   .setStyle(ButtonStyle.Secondary)
-                  .setDisabled(c.required_xp <= c.xp),
+                  .setDisabled(c.requiredXp <= c.xp),
                 new ButtonBuilder()
                   .setLabel(
                     ctx.t('commands.roster.upgrade', {
@@ -153,7 +153,7 @@ export default createCommand({
                   )
                   .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
                   .setStyle(ButtonStyle.Success)
-                  .setDisabled(c.required_xp > c.xp)
+                  .setDisabled(c.requiredXp > c.xp)
               )
             )
         }
@@ -183,8 +183,8 @@ export default createCommand({
                 ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                   level: c.level,
-                  xp: `${c.xp}/${c.required_xp}`,
-                  progress: createProgressBar(c.xp / c.required_xp)
+                  xp: `${c.xp}/${c.requiredXp}`,
+                  progress: createProgressBar(c.xp / c.requiredXp)
                 })
               )
             })
@@ -198,12 +198,12 @@ export default createCommand({
                   .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
                   .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
                   .setStyle(ButtonStyle.Primary)
-                  .setDisabled(c.arena_roster),
+                  .setDisabled(c.arenaRoster),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                   .setStyle(ButtonStyle.Secondary)
-                  .setDisabled(c.required_xp <= c.xp),
+                  .setDisabled(c.requiredXp <= c.xp),
                 new ButtonBuilder()
                   .setLabel(
                     ctx.t('commands.roster.upgrade', {
@@ -212,7 +212,7 @@ export default createCommand({
                   )
                   .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
                   .setStyle(ButtonStyle.Success)
-                  .setDisabled(c.required_xp > c.xp)
+                  .setDisabled(c.requiredXp > c.xp)
               )
             )
         }
@@ -255,7 +255,7 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-1`,
-                label: t('commands.roster.modal.team_name'),
+                label: t('commands.roster.modal.teamName'),
                 style: 1,
                 minLength: 2,
                 maxLength: 20,
@@ -269,7 +269,7 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-2`,
-                label: t('commands.roster.modal.team_tag'),
+                label: t('commands.roster.modal.teamTag'),
                 style: 1,
                 minLength: 2,
                 maxLength: 4,
@@ -283,11 +283,11 @@ export default createCommand({
       const cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id,
-          active_roster: false
+          activeRoster: false
         }
       })
       const card = cards.find(c => c.id === BigInt(ctx.args[3]))
-      if (!card || card.active_roster) {
+      if (!card || card.activeRoster) {
         return await ctx.reply('commands.roster.already_promoted')
       }
 
@@ -296,13 +296,13 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      if (cards.filter(c => c.active_roster).length < 5) {
+      if (cards.filter(c => c.activeRoster).length < 5) {
         await prisma.card.update({
           where: {
             id: BigInt(ctx.args[3])
           },
           data: {
-            active_roster: true
+            activeRoster: true
           }
         })
 
@@ -311,7 +311,7 @@ export default createCommand({
 
       const options: APISelectMenuOption[] = []
 
-      for (const c of cards.filter(c => c.active_roster)) {
+      for (const c of cards.filter(c => c.activeRoster)) {
         const player = ctx.app.players.get(c.playerId)
 
         if (!player) break
@@ -349,7 +349,7 @@ export default createCommand({
           id: card.id
         },
         data: {
-          active_roster: false
+          activeRoster: false
         }
       })
 
@@ -368,7 +368,7 @@ export default createCommand({
             id: BigInt(idSub)
           },
           data: {
-            active_roster: true
+            activeRoster: true
           }
         }),
         prisma.card.update({
@@ -376,7 +376,7 @@ export default createCommand({
             id: BigInt(idActive)
           },
           data: {
-            active_roster: false
+            activeRoster: false
           }
         })
       ])
@@ -413,9 +413,9 @@ export default createCommand({
                 minLength: 1,
                 required: true,
                 placeholder: ctx.t('commands.roster.modal.practice.max', {
-                  max: card.required_xp - card.xp
+                  max: card.requiredXp - card.xp
                 }),
-                value: (card.required_xp - card.xp).toString()
+                value: (card.requiredXp - card.xp).toString()
               }
             ]
           }
@@ -429,7 +429,7 @@ export default createCommand({
       })
       const card = cards.find(c => c.id === BigInt(ctx.args[3]))
 
-      if (!card || card.arena_roster) {
+      if (!card || card.arenaRoster) {
         return await ctx.reply('commands.roster.already_promoted')
       }
 
@@ -438,13 +438,13 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      if (cards.filter(c => c.arena_roster).length < 5) {
+      if (cards.filter(c => c.arenaRoster).length < 5) {
         await prisma.card.update({
           where: {
             id: BigInt(ctx.args[3])
           },
           data: {
-            arena_roster: true
+            arenaRoster: true
           }
         })
 
@@ -455,7 +455,7 @@ export default createCommand({
 
       const options: APISelectMenuOption[] = []
 
-      for (const c of cards.filter(c => c.arena_roster)) {
+      for (const c of cards.filter(c => c.arenaRoster)) {
         const player = ctx.app.players.get(c.playerId)
 
         if (!player) break
@@ -484,9 +484,9 @@ export default createCommand({
             id: BigInt(idSub)
           },
           data: {
-            arena_roster: true,
-            arena_agent_name: null,
-            arena_agent_role: null
+            arenaRoster: true,
+            arenaAgentName: null,
+            arenaAgentRole: null
           }
         }),
         prisma.card.update({
@@ -494,9 +494,9 @@ export default createCommand({
             id: BigInt(idActive)
           },
           data: {
-            arena_roster: false,
-            arena_agent_name: null,
-            arena_agent_role: null
+            arenaRoster: false,
+            arenaAgentName: null,
+            arenaAgentRole: null
           }
         })
       ])
@@ -519,7 +519,7 @@ export default createCommand({
       if (!p) {
         return await ctx.reply('commands.promote.player_not_found')
       }
-      if (card.xp < card.required_xp) {
+      if (card.xp < card.requiredXp) {
         return await ctx.reply('commands.roster.xp_needed')
       }
       if (card.level >= 15) {
@@ -554,7 +554,7 @@ export default createCommand({
             level: {
               increment: 1
             },
-            required_xp: Math.floor(card.required_xp * 1.3),
+            requiredXp: Math.floor(card.requiredXp * 1.3),
             xp: 0,
             aim: p.aim * buff,
             hs: p.HS * buff,
@@ -586,8 +586,8 @@ export default createCommand({
           profileId: ctx.db.profile.id
         }
       })
-      const activeCards = cards.filter(c => c.active_roster)
-      const subCards = cards.filter(c => !c.active_roster)
+      const activeCards = cards.filter(c => c.activeRoster)
+      const subCards = cards.filter(c => !c.activeRoster)
 
       let value = 0
       let ovr = 0
@@ -619,8 +619,8 @@ export default createCommand({
               ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
                 ovr: Math.floor(ovr / (activeCards.length + subCards.length)),
-                name: ctx.db.profile.team_name
-                  ? `${ctx.db.profile.team_name} (${ctx.db.profile.team_tag})`
+                name: ctx.db.profile.teamName
+                  ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
                   : '`undefined`'
               })
           )
@@ -659,8 +659,8 @@ export default createCommand({
                   ctx.t('commands.roster.container.card_content', {
                     card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                     level: c.level,
-                    xp: `${c.xp}/${c.required_xp}`,
-                    progress: createProgressBar(c.xp / c.required_xp)
+                    xp: `${c.xp}/${c.requiredXp}`,
+                    progress: createProgressBar(c.xp / c.requiredXp)
                   })
                 )
               })
@@ -674,12 +674,12 @@ export default createCommand({
                     .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
                     .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(c.arena_roster),
+                    .setDisabled(c.arenaRoster),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
                     .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                     .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(c.required_xp <= c.xp),
+                    .setDisabled(c.requiredXp <= c.xp),
                   new ButtonBuilder()
                     .setLabel(
                       ctx.t('commands.roster.upgrade', {
@@ -688,7 +688,7 @@ export default createCommand({
                     )
                     .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
                     .setStyle(ButtonStyle.Success)
-                    .setDisabled(c.required_xp > c.xp)
+                    .setDisabled(c.requiredXp > c.xp)
                 )
               )
           }
@@ -718,8 +718,8 @@ export default createCommand({
                   ctx.t('commands.roster.container.card_content', {
                     card: `**${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}**`,
                     level: c.level,
-                    xp: `${c.xp}/${c.required_xp}`,
-                    progress: createProgressBar(c.xp / c.required_xp)
+                    xp: `${c.xp}/${c.requiredXp}`,
+                    progress: createProgressBar(c.xp / c.requiredXp)
                   })
                 )
               })
@@ -733,12 +733,12 @@ export default createCommand({
                     .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
                     .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
                     .setStyle(ButtonStyle.Primary)
-                    .setDisabled(c.arena_roster),
+                    .setDisabled(c.arenaRoster),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
                     .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                     .setStyle(ButtonStyle.Secondary)
-                    .setDisabled(c.required_xp <= c.xp),
+                    .setDisabled(c.requiredXp <= c.xp),
                   new ButtonBuilder()
                     .setLabel(
                       ctx.t('commands.roster.upgrade', {
@@ -747,7 +747,7 @@ export default createCommand({
                     )
                     .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${c.id}`)
                     .setStyle(ButtonStyle.Success)
-                    .setDisabled(c.required_xp > c.xp)
+                    .setDisabled(c.requiredXp > c.xp)
                 )
               )
           }
@@ -792,8 +792,8 @@ export default createCommand({
           }
         },
         data: {
-          team_name: name,
-          team_tag: tag
+          teamName: name,
+          teamTag: tag
         }
       })
       await ctx.reply('commands.roster.team_info_changed', { name, tag })
@@ -817,12 +817,12 @@ export default createCommand({
         i.fields.getTextInputValue(`roster;${i.user.id};practice;${card.id};response`)
       )
 
-      if (card.xp >= card.required_xp) {
+      if (card.xp >= card.requiredXp) {
         return await ctx.reply('commands.roster.max_xp_reached')
       }
-      if (Number.isNaN(value) || value > card.required_xp - card.xp || value <= 0) {
+      if (Number.isNaN(value) || value > card.requiredXp - card.xp || value <= 0) {
         return await ctx.reply('commands.roster.invalid_value', {
-          value: card.required_xp - card.xp
+          value: card.requiredXp - card.xp
         })
       }
 

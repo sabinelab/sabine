@@ -21,7 +21,7 @@ export const valorantLive = new Elysia().post(
   async req => {
     const guilds = await prisma.guild.findMany({
       where: {
-        valorant_live_feed_channel: {
+        valorantLiveFeedChannel: {
           not: null
         }
       },
@@ -31,7 +31,7 @@ export const valorantLive = new Elysia().post(
             type: 'valorant'
           }
         },
-        live_messages: true
+        liveMessages: true
       }
     })
 
@@ -81,7 +81,7 @@ export const valorantLive = new Elysia().post(
           .setURL(data.url)
 
         messages.push(
-          rest.post(Routes.channelMessages(guild.valorant_live_feed_channel!), {
+          rest.post(Routes.channelMessages(guild.valorantLiveFeedChannel!), {
             body: {
               embeds: [embed.toJSON()],
               components: [

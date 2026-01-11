@@ -34,7 +34,7 @@ export default createCommand({
       where: {
         id: BigInt(ctx.args[0]),
         profileId: ctx.db.profile.id,
-        active_roster: false
+        activeRoster: false
       }
     })
     const p = app.players.get(card?.playerId ?? '')
@@ -48,7 +48,7 @@ export default createCommand({
     const cards = await prisma.card.findMany({
       where: {
         profileId: ctx.db.profile.id,
-        active_roster: true
+        activeRoster: true
       }
     })
 
@@ -58,7 +58,7 @@ export default createCommand({
           id: card.id
         },
         data: {
-          active_roster: true
+          activeRoster: true
         }
       })
 
@@ -98,7 +98,7 @@ export default createCommand({
     const cards = await prisma.card.findMany({
       where: {
         profileId: profile.id,
-        active_roster: false
+        activeRoster: false
       }
     })
 
@@ -135,7 +135,7 @@ export default createCommand({
           id: BigInt(idSub)
         },
         data: {
-          active_roster: true
+          activeRoster: true
         }
       }),
       prisma.card.update({
@@ -143,7 +143,7 @@ export default createCommand({
           id: BigInt(idActive)
         },
         data: {
-          active_roster: false
+          activeRoster: false
         }
       })
     ])

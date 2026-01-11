@@ -12,9 +12,9 @@ export default createCommand({
   },
   category: 'economy',
   async run({ ctx, app, t }) {
-    if (ctx.db.profile.daily_time && ctx.db.profile.daily_time.getTime() > Date.now()) {
+    if (ctx.db.profile.dailyTime && ctx.db.profile.dailyTime.getTime() > Date.now()) {
       return await ctx.reply('commands.daily.has_been_claimed', {
-        t: `<t:${(ctx.db.profile.daily_time.getTime() / 1000).toFixed(0)}:R>`
+        t: `<t:${(ctx.db.profile.dailyTime.getTime() / 1000).toFixed(0)}:R>`
       })
     }
 
