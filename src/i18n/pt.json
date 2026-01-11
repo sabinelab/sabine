@@ -37,22 +37,22 @@
         "title": "Top 100 - Tabela de Palpites",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "description1": "**{pos} {user} — `{predictions}` correct predictions**",
-        "description2": "{pos} {user} — `{predictions}` correct predictions"
+        "description1": "**{pos} {user} — `{predictions}` palpites corretos**",
+        "description2": "{pos} {user} — `{predictions}` palpites corretos"
       },
       "poisons": {
         "title": "Top 100 - Tabela de Toxinas",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "description1": "**{pos} {user} — `{poisons}` poisons**",
-        "description2": "{pos} {user} — `{poisons}` poisons"
+        "description1": "**{pos} {user} — `{poisons}` toxinas**",
+        "description2": "{pos} {user} — `{poisons}` toxinas"
       },
       "rating": {
         "title": "Top 100 - Tabela de Classificação",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "description1": "**{pos} {user} — `{rr}` points**",
-        "description2": "{pos} {user} — `{rr}` points"
+        "description1": "**{pos} {user} — `{rr}` pontos**",
+        "description2": "{pos} {user} — `{rr}` pontos"
       }
     },
     "admin": {
@@ -146,32 +146,32 @@
       "container": {
         "title": "### Seu Elenco",
         "desc": "Nome da equipe: **{name}**\nValor do elenco: `{value}`\nOverall do elenco: `{ovr}`",
-        "active_players": "### Active Players ({total})",
-        "reserve_players": "### Reserve Players ({total})",
+        "active_players": "### Jogadores Titulares ({total})",
+        "reserve_players": "### Jogadores Substitutos ({total})",
         "button": {
           "promote": "Promover",
           "remove": "Remover",
-          "promote_arena": "Promote to Arena"
+          "promote_arena": "Promover à Arena"
         },
-        "card_content": "> {card}\n> Level: `{level}`\n> XP: `{xp}` {progress}"
+        "card_content": "> {card}\n> Nível: `{level}`\n> XP: `{xp}` {progress}"
       },
       "change_team": "Alterar nome ou tag da equipe",
-      "practice": "Practice (0.5 fates per XP)",
-      "upgrade": "Upgrade ({cost} poisons)",
+      "practice": "Praticar (0,5 fates por XP)",
+      "upgrade": "Melhorar ({cost} toxinas)",
       "modal": {
         "title": "Insira o novo nome e tag",
         "team_name": "Novo nome",
         "team_tag": "Nova tag",
         "practice": {
-          "title": "Improve your team",
-          "description": "Insert the amount of XP",
-          "max": "Maximum XP accepted: {max}"
+          "title": "Melhore a sua equipe",
+          "description": "Informe a quantia de XP",
+          "max": "XP máximo aceito: {max}"
         }
       },
       "team_info_changed": "Você alterou o nome do seu time para **{name}** e a tag para **{tag}** com sucesso!",
-      "invalid_value": "Please, provide a value less than or equal to {value}.",
-      "value_too_short": "You need at least **{required_fates} fates** to do this and you have **{fates}**.",
-      "max_xp_reached": "This card has reached the maximum XP. Consider upgrade the level using the `Upgrade` button.",
+      "invalid_value": "Por favor, informe um valor maior ou igual a {value}.",
+      "value_too_short": "Você precisa de pelo menos **{required_fates} destinos** para fazer isso, e você tem **{fates}**.",
+      "max_xp_reached": "Esta carta alcançou o XP máximo. Considere melhorar o nível usando o botão `Melhorar`.",
       "practiced": "You practiced with **{card}** for **{cost} fates**, and now it has {xp} XP!",
       "max_level_reached": "This card has reached the maximum level. Congratulations! 🎉",
       "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade this card and you have **{poisons}**.",
