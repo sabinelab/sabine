@@ -135,7 +135,7 @@ export default createCommand({
                 id,
                 COUNT(*) OVER () as total
               FROM "Card"
-              WHERE "profileId" = ${ctx.db.profile.id}
+              WHERE "profile_id" = ${ctx.db.profile.id}
                 AND active_roster = true
               ORDER BY id DESC
             ) sub
