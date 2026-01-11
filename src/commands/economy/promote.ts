@@ -30,7 +30,7 @@ export default createCommand({
   ],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
-    const card = await prisma.card.findUnique({
+    const card = await prisma.card.findFirst({
       where: {
         id: BigInt(ctx.args[0]),
         profileId: ctx.db.profile.id,

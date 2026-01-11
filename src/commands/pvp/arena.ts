@@ -233,7 +233,7 @@ export default createCommand({
   },
   async createMessageComponentInteraction({ ctx, t }) {
     if (ctx.args[2] === 'promote') {
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
@@ -330,7 +330,7 @@ export default createCommand({
     } else if (ctx.args[2] === 'remove') {
       ctx.setFlags(64)
 
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id,
@@ -421,7 +421,7 @@ export default createCommand({
 
       const value = ctx.interaction.values[0]
       const agent = valorant_agents.find(a => a.name === value)
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           arena_roster: true,
           profileId: ctx.db.profile.id,

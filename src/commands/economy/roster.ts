@@ -329,7 +329,7 @@ export default createCommand({
 
       await ctx.reply(menu.build(t('commands.promote.select_player')))
     } else if (ctx.args[2] === 'remove') {
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           profileId: ctx.db.profile.id,
           id: BigInt(ctx.args[3])
@@ -385,7 +385,7 @@ export default createCommand({
 
       await ctx.edit('commands.promote.player_promoted', { p: p?.name })
     } else if (ctx.args[2] === 'practice') {
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
@@ -505,7 +505,7 @@ export default createCommand({
 
       await ctx.edit('commands.promote.player_promoted', { p: p?.name })
     } else if (ctx.args[2] === 'upgrade') {
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
@@ -798,7 +798,7 @@ export default createCommand({
       })
       await ctx.reply('commands.roster.team_info_changed', { name, tag })
     } else if (ctx.args[2] === 'practice') {
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id

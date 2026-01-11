@@ -29,7 +29,7 @@ export default createCommand({
   ],
   cooldown: true,
   async run({ ctx, app }) {
-    const card = await prisma.card.findUnique({
+    const card = await prisma.card.findFirst({
       where: {
         id: BigInt(ctx.args[0]),
         profileId: ctx.db.profile.id,

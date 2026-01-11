@@ -57,7 +57,7 @@ export default createCommand({
       return await ctx.reply('commands.activatekey.limit_reached')
     }
 
-    const guildKey = await app.prisma.guildKey.findUnique({
+    const guildKey = await app.prisma.guildKey.findFirst({
       where: {
         guildId: ctx.guild.id,
         keyId: key.id

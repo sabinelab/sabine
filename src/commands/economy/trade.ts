@@ -57,7 +57,7 @@ export default createCommand({
   cooldown: true,
   async run({ ctx, app }) {
     const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.guild.id)
-    const card = await prisma.card.findUnique({
+    const card = await prisma.card.findFirst({
       where: {
         id: BigInt(ctx.args[1]),
         profileId: ctx.db.profile.id
@@ -155,7 +155,7 @@ export default createCommand({
     if (!i.guildId) return
     if (ctx.args[2] === 'buy') {
       const profile = await ProfileSchema.fetch(ctx.args[3], i.guildId)
-      const card = await prisma.card.findUnique({
+      const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[4]),
           profileId: profile?.id ?? ''
