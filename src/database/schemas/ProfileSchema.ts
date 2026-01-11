@@ -469,6 +469,14 @@ export class ProfileSchema implements Profile {
             }
           }
         }
+      }),
+      prisma.user.update({
+        where: {
+          id: this.userId
+        },
+        data: {
+          collectedVoteReward: true
+        }
       })
     ])
 
