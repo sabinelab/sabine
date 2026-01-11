@@ -110,53 +110,46 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx }) {
     ctx.setFlags(64)
 
-    if (!ctx.db.profile.reserve_players.includes(ctx.args[3])) {
+    const card = await prisma.card.findFirst({
+      where: {
+        playerId: ctx.args[3],
+        profileId: ctx.db.profile.id,
+        level: {
+          lte: 1
+        }
+      }
+    })
+
+    if (!card) {
       return await ctx.reply('commands.sell.player_not_found')
     }
 
     if (ctx.args[2] === 'promote') {
       await prisma.$transaction(async tx => {
-        const user = await tx.profile.findUnique({
+        await tx.$executeRaw`
+          UPDATE "Card"
+          SET active_roster = false
+          WHERE id = (
+            SELECT id FROM (
+              SELECT
+                id,
+                COUNT(*) OVER () as total
+              FROM "Card"
+              WHERE "profileId" = ${ctx.db.profile.id}
+                AND active_roster = true
+              ORDER BY id DESC
+            ) sub
+            WHERE total >= 5
+            LIMIT 1
+          )
+        `
+
+        await tx.card.update({
           where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
-          },
-          select: {
-            active_players: true,
-            reserve_players: true
-          }
-        })
-
-        if (!user) {
-          throw new Error('Not found')
-        }
-
-        if (user.active_players.length >= 5) {
-          user.reserve_players.push(user.active_players.at(-1)!)
-          user.active_players.splice(-1, 1)
-        }
-
-        const i = user.reserve_players.indexOf(ctx.args[3])
-
-        if (i === -1) {
-          throw new Error('Not found')
-        }
-
-        user.active_players.push(ctx.args[3])
-        user.reserve_players.splice(i, 1)
-
-        await tx.profile.update({
-          where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
+            id: card.id
           },
           data: {
-            active_players: user.active_players,
-            reserve_players: user.reserve_players
+            active_roster: true
           }
         })
       })
@@ -164,16 +157,21 @@ export default createCommand({
       await ctx.reply('commands.promote.player_promoted', { p: app.players.get(ctx.args[3])?.name })
     } else if (ctx.args[2] === 'sell') {
       const player = app.players.get(ctx.args[3])
+      const card = await prisma.card.findFirst({
+        where: {
+          playerId: ctx.args[3],
+          profileId: ctx.db.profile.id,
+          active_roster: false
+        }
+      })
 
-      if (!player) {
+      if (!player || !card) {
         return await ctx.reply('commands.sell.player_not_found')
       }
 
       const price = BigInt(calcPlayerPrice(player, true))
 
-      const i = ctx.db.profile.reserve_players.indexOf(ctx.args[3])
-      await ctx.db.profile.sellPlayer(player.id.toString(), price, i)
-
+      await ctx.db.profile.sellPlayer(card.id, price)
       await ctx.reply('commands.sell.sold', { p: player.name, price: price.toLocaleString() })
     }
   }
