@@ -150,7 +150,8 @@
         "reserve_players": "### Reserve Players ({total})",
         "button": {
           "promote": "Promote",
-          "remove": "Remove"
+          "remove": "Remove",
+          "promote_arena": "Promote to Arena"
         },
         "card_content": "> {card}\n> Level: `{level}`\n> XP: `{xp}` {progress}"
       },
@@ -175,7 +176,8 @@
       "max_level_reached": "This card has reached the maximum level. Congratulations! 🎉",
       "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade this card and you have **{poisons}**.",
       "xp_needed": "This card doesn't have enough XP for this.",
-      "upgraded": "You upgraded **{card}** for **{poisons} poisons**, and now it's now level {level}!"
+      "upgraded": "You upgraded **{card}** for **{poisons} poisons**, and now it's now level {level}!",
+      "already_promoted": "This player doens't exists or has already been promoted."
     },
     "promote": {
       "player_not_found": "Player not found!",
@@ -320,18 +322,19 @@
       "joined": "You joined the queue successfully!",
       "left": "You left the queue succesfully!",
       "is_not_in_queue": "You are not in the Arena queue.",
-      "invalid_lineup": "You need to set the **{map}** map lineup. Use `/arena lineup` to get started!",
+      "invalid_lineup": "You need to set the **{map}** map lineup. Use {cmd} to get started!",
       "no_players": "You do not have any Arena players. Use {cmd} to get started!",
       "your_players": "### Your Players",
-      "promote": "Promote",
+      "promote": "Set Agent",
       "remove": "Remove",
       "select_agent": "Select an agent for **{player}**.",
       "agent_selected": "**{p}** will play as **{agent}**.",
-      "map": "Current Map: `{map}`",
+      "map": "Current Map: `{map}`\nRun {cmd} to promote a player",
       "embed": {
         "title": "Arena Information",
         "desc": "People in queue now: `{queueLength}`\nCurrent Map: `{map}`\nThe map will change {when}"
-      }
+      },
+      "null_map": "The Arena map hasn't been defined yet due to an unknown issue, so you cannot join the queue. If the issue persists, report it to our team on [our official Discord](https://discord.com/invite/FaqYcpA84r) server!"
     },
     "summary": {
       "match_not_found": "This match could not be found. Check the seed and try again.",

@@ -326,14 +326,14 @@
       "joined": "Você entrou na fila com sucesso!",
       "left": "Você saiu da fila com sucesso!",
       "is_not_in_queue": "Você não está em uma fila.",
-      "invalid_lineup": "Você precisa definir a formação do mapa **{map}**. Use `/arena lineup` para começar!",
+      "invalid_lineup": "Você precisa definir a formação do mapa **{map}**. Use {cmd} para começar!",
       "no_players": "Você não possui nenhum jogador de Arena. Use {cmd} para começar!",
       "your_players": "### Seus Jogadores",
       "promote": "Promover",
       "remove": "Remover",
       "select_agent": "Selecione um agent para **{player}**.",
       "agent_selected": "**{p}** jogará de **{agent}**.",
-      "map": "Mapa Atual: `{map}`",
+      "map": "Mapa Atual: `{map}`\nRun {cmd} to promote a player",
       "embed": {
         "title": "Informações da Arena",
         "desc": "Pessoas na fila agora: `{queueLength}`\nMapa Atual: `{map}`\nO mapa mudará {when}"

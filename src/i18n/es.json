@@ -326,14 +326,14 @@
       "joined": "¡Te uniste a la cola con éxito!",
       "left": "¡Saliste de la cola con éxito!",
       "is_not_in_queue": "No estás en la cola de la Arena.",
-      "invalid_lineup": "Necesitas establecer la alineación del mapa **{map}**. ¡Usa `/arena lineup` para comenzar!",
+      "invalid_lineup": "Necesitas establecer la alineación del mapa **{map}**. ¡Usa {cmd} para comenzar!",
       "no_players": "No tienes jugadores de Arena. ¡Usa {cmd} para comenzar!",
       "your_players": "### Tus Jugadores",
       "promote": "Promover",
       "remove": "Eliminar",
       "select_agent": "Selecciona un agente para **{player}**.",
       "agent_selected": "**{p}** jugará como **{agent}**.",
-      "map": "Mapa Actual: `{map}`",
+      "map": "Mapa Actual: `{map}`\nRun {cmd} to promote a player",
       "embed": {
         "title": "Información de la Arena",
         "desc": "Personas en cola ahora: `{queueLength}`\nMapa Actual: `{map}`\nEl mapa cambiará {when}"
