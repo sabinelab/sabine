@@ -1,7 +1,7 @@
-import ButtonBuilder from '@/structures/builders/ButtonBuilder'
-import createCommand from '@/structures/command/createCommand'
 import { prisma } from '@db'
 import { ApplicationCommandOptionType, ButtonStyle } from 'discord.js'
+import ButtonBuilder from '@/structures/builders/ButtonBuilder'
+import createCommand from '@/structures/command/createCommand'
 
 export default createCommand({
   name: 'modclean',
@@ -72,7 +72,8 @@ export default createCommand({
       },
       description: "Reset server users' wins/defeats and correct/incorrect predictions",
       descriptionLocalizations: {
-        'pt-BR': 'Redefine as vitórias/derrotas e palpites corretos/incorretos dos usuários do servidor'
+        'pt-BR':
+          'Redefine as vitórias/derrotas e palpites corretos/incorretos dos usuários do servidor'
       }
     }
   ],
@@ -230,66 +231,67 @@ export default createCommand({
           }
         }
         break
-      case 'simulator': {
-        try {
-          await prisma.$transaction([
-            prisma.profile.updateMany({
-              where: {
-                guildId: ctx.db.guild.id
-              },
-              data: {
-                arenaDefeats: 0,
-                rankedDefeats: 0,
-                unrankedDefeats: 0,
-                swiftplayDefeats: 0,
-                rankedSwiftplayDefeats: 0,
-                arenaWins: 0,
-                rankedWins: 0,
-                unrankedWins: 0,
-                swiftplayWins: 0,
-                rankedSwiftplayWins: 0,
-                pity: 0,
-                claims: 0,
-                fates: 0,
-                rankRating: 0,
-                goldPacks: 0,
-                ironPacks: 0,
-                bronzePacks: 0,
-                silverPacks: 0,
-                diamondPacks: 0,
-                radiantPacks: 0,
-                immortalPacks: 0,
-                ascendantPacks: 0,
-                platinumPacks: 0,
-                poisons: 0,
-                dailyTime: null,
-                claimTime: null
-              }
-            }),
-            prisma.match.deleteMany({
-              where: {
-                profile: {
+      case 'simulator':
+        {
+          try {
+            await prisma.$transaction([
+              prisma.profile.updateMany({
+                where: {
                   guildId: ctx.db.guild.id
+                },
+                data: {
+                  arenaDefeats: 0,
+                  rankedDefeats: 0,
+                  unrankedDefeats: 0,
+                  swiftplayDefeats: 0,
+                  rankedSwiftplayDefeats: 0,
+                  arenaWins: 0,
+                  rankedWins: 0,
+                  unrankedWins: 0,
+                  swiftplayWins: 0,
+                  rankedSwiftplayWins: 0,
+                  pity: 0,
+                  claims: 0,
+                  fates: 0,
+                  rankRating: 0,
+                  goldPacks: 0,
+                  ironPacks: 0,
+                  bronzePacks: 0,
+                  silverPacks: 0,
+                  diamondPacks: 0,
+                  radiantPacks: 0,
+                  immortalPacks: 0,
+                  ascendantPacks: 0,
+                  platinumPacks: 0,
+                  poisons: 0,
+                  dailyTime: null,
+                  claimTime: null
                 }
-              }
-            }),
-            prisma.transaction.deleteMany({
-              where: {
-                profile: {
-                  guildId: ctx.db.guild.id
+              }),
+              prisma.match.deleteMany({
+                where: {
+                  profile: {
+                    guildId: ctx.db.guild.id
+                  }
                 }
-              }
-            })
-          ])
+              }),
+              prisma.transaction.deleteMany({
+                where: {
+                  profile: {
+                    guildId: ctx.db.guild.id
+                  }
+                }
+              })
+            ])
 
-          await ctx.edit('commands.modclean.reseted', {
-            type: ctx.t(`commands.modclean.type.${ctx.args[2]}`)
-          })
-        } catch (e) {
-          await ctx.edit('helper.error', { e: e as Error })
+            await ctx.edit('commands.modclean.reseted', {
+              type: ctx.t(`commands.modclean.type.${ctx.args[2]}`)
+            })
+          } catch (e) {
+            await ctx.edit('helper.error', { e: e as Error })
+          }
         }
-      }
-      break
+        break
       case 'stats': {
         try {
           await prisma.$transaction([

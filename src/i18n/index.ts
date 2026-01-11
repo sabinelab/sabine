@@ -40,7 +40,7 @@ export default function t<T extends Content>(lang: string, content: T, args?: Ar
 
     if (!json) return content
   }
-  
+
   if (Array.isArray(json)) {
     json = json.map(c => c).join('\n')
   }
