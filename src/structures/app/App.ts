@@ -29,7 +29,7 @@ const queue = new Queue<Reminder>('reminder', {
 const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
 export default class App extends Discord.Client {
-  public commands: Map<string, Command> = new Map()
+  public commands: Map<string, Command & { id: string }> = new Map()
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
   public queue: typeof queue
@@ -65,7 +65,10 @@ export default class App extends Discord.Client {
           Logger.warn(`There is already a command named '${command.name}'`)
         }
 
-        this.commands.set(command.name, command)
+        this.commands.set(command.name, {
+          ...command,
+          id: ''
+        })
       }
     }
 
@@ -145,9 +148,22 @@ export default class App extends Discord.Client {
       return transformed
     }
 
-    await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
+    const res = await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
       body: transformKeys(commands)
-    })
+    }) as {
+      name: string
+      id: string
+    }[]
+
+    for (const command of res) {
+      const cmd = this.commands.get(command.name)
+      if (!cmd) continue
+
+      this.commands.set(command.name, {
+        ...cmd,
+        id: command.id
+      })
+    }
   }
 
   public async getUser(id: string) {
