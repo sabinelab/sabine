@@ -371,6 +371,51 @@
       "field": "Rewards",
       "value": "Radiant Pack (`95+`): `0.5%`\nImmortal Pack (`91-94`): `1.5%`\nAscendant Pack (`87-90`): `3%`\nDiamond Pack (`83-86`): `15%`\nPlatinum Pack (`78-82`): `30%`\nGold Pack (`73-77`): `20%`\nSilver Pack (`67-72`): `15%`\nBronze Pack (`60-66`): `10%`\nIron Pack (`59-`): `5%`\n\nFor every 20 votes without breaking the streak, a Radiant Pack is guaranteed.",
       "vote": "Vote now!"
+    },
+    "modclean": {
+      "button": "Reset",
+      "content": [
+        "Are you sure you want to proceed?",
+        "You're about to reset: \n{type}",
+        "This action is **irreversible**.",
+        "-# Please confirm within 30 seconds"
+      ],
+      "type": {
+        "all": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions",
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "balance": [
+          "- Poisons and fates"
+        ],
+        "predictions": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions"
+        ],
+        "simulator": [
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "stats": [
+          "- Wins and defeats",
+          "- Incorrect/correct predictions"
+        ]
+      },
+      "reseted": ["You have successfully reset: \n{type}"]
     }
   },
   "simulator": {
@@ -454,45 +499,44 @@
     "new_game_mode": "A new game mode is available. Try the Arena game mode using `/arena join`."
   },
   "permissions": {
-    "CREATE_INSTANT_INVITE": "Create Instant Invite",
-    "KICK_MEMBERS": "Kick Members",
-    "BAN_MEMBERS": "Ban Members",
-    "ADMINISTRATOR": "Administrator",
-    "MANAGE_CHANNELS": "Manage Channels",
-    "MANAGE_GUILD": "Manage Guild",
-    "ADD_REACTIONS": "Add Reactions",
-    "SEND_MESSAGES": "Send Messages",
-    "SEND_TTS_MESSAGES": "Send TTS Messages",
-    "MANAGE_MESSAGES": "Manage Messages",
-    "EMBED_LINKS": "Embed Links",
-    "ATTACH_FILES": "Attach Files",
-    "READ_MESSAGE_HISTORY": "Read Message History",
-    "MENTION_EVERYONE": "Mention Everyone",
-    "VOICE_USE_VAD": "Use VAD",
-    "CHANGE_NICKNAME": "Change Nickname",
-    "MANAGE_NICKNAMES": "Manage Nicknames",
-    "MANAGE_ROLES": "Manage Roles",
-    "MANAGE_EMOJIS_AND_STICKERS": "Manage Emojis And Stickers",
-    "USE_EXTERNAL_EMOJIS": "Use External Emojis",
-    "VIEW_AUDIT_LOG": "View Audit Log",
-    "VOICE_PRIORITY_SPEAKER": "Priority Speaker",
-    "VOICE_STREAM": "Stream",
-    "VIEW_CHANNEL": "View Channel",
-    "VIEW_GUILD_INSIGHTS": "View Guild Insights",
-    "VOICE_CONNECT": "Connect",
-    "VOICE_SPEAK": "Speak",
-    "VOICE_MUTE_MEMBERS": "Mute Members",
-    "VOICE_REQUEST_TO_SPEAK": "Request to Speak",
-    "VOICE_DEAFEN_MEMBERS": "Deafen Members",
-    "VOICE_MOVE_MEMBERS": "Move Members",
-    "MANAGE_WEBHOOKS": "Manage Webhooks",
-    "USE_APPLICATION_COMMANDS": "Use Application Commands",
-    "CREATE_PRIVATE_THREADS": "Create Private Threads",
-    "CREATE_PUBLIC_THREADS": "Create Public Threads",
-    "USE_EXTERNAL_STICKERS": "Use External Stickers",
-    "MANAGE_THREADS": "Manage Threads",
-    "SEND_MESSAGES_IN_THREADS": "Send Messages In Threads",
-    "START_EMBEDDED_ACTIVITIES": "Start Activities",
-    "MODERATE_MEMBERS": "Timeout Members"
+    "CreateInstantInvite": "Create Instant Invite",
+    "KickMembers": "Kick Members",
+    "BanMembers": "Ban Members",
+    "Administrator": "Administrator",
+    "ManageChannels": "Manage Channels",
+    "ManageGuild": "Manage Guild",
+    "AddReactions": "Add Reactions",
+    "SendMessages": "Send Messages",
+    "SendTTSMessages": "Send TTS Messages",
+    "ManageMessages": "Manage Messages",
+    "EmbedLinks": "Embed Links",
+    "AttachFiles": "Attach Files",
+    "ReadMessageHistory": "Read Message History",
+    "MentionEveryone": "Mention Everyone",
+    "UseVAD": "Use VAD",
+    "ChangeNickname": "Change Nickname",
+    "ManageNicknames": "Manage Nicknames",
+    "ManageRoles": "Manage Roles",
+    "ManageEmojisAndStickers": "Manage Emojis And Stickers",
+    "UseExternalEmojis": "Use External Emojis",
+    "ViewAuditLog": "View Audit Log",
+    "PrioritySpeaker": "Priority Speaker",
+    "Stream": "Stream",
+    "ViewChannel": "View Channel",
+    "ViewGuildInsights": "View Guild Insights",
+    "Connect": "Connect",
+    "Speak": "Speak",
+    "MuteMembers": "Mute Members",
+    "DeafenMembers": "Deafen Members",
+    "MoveMembers": "Move Members",
+    "ManageWebhooks": "Manage Webhooks",
+    "UseApplicationCommands": "Use Application Commands",
+    "CreatePrivateThreads": "Create Private Threads",
+    "CreatePublicThreads": "Create Public Threads",
+    "UseExternalStickers": "Use External Stickers",
+    "ManageThreads": "Manage Threads",
+    "SendMessagesInThreads": "Send Messages In Threads",
+    "StartEmbeddedActivities": "Start Activities",
+    "ModerateMembers": "Timeout Members"
   }
 }
