@@ -354,7 +354,8 @@ export class ProfileSchema implements Profile {
                   movement: player.movement,
                   acs: player.ACS,
                   gamesense: player.gamesense,
-                  aggression: player.aggression
+                  aggression: player.aggression,
+                  overall: player.ovr
                 }
               })
             }
@@ -399,7 +400,7 @@ export class ProfileSchema implements Profile {
           profileId: card.profile.id
         }
       })
-      
+
       await tx.profile.update({
         where: {
           userId_guildId: {
