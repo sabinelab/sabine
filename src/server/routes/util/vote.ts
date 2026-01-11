@@ -2,46 +2,34 @@ import { prisma } from '@db'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
 
-export type Pack =
-  | 'IRON' // 59-
-  | 'BRONZE' // 60-66
-  | 'SILVER' // 67-72
-  | 'GOLD' // 73-77
-  | 'PLATINUM' // 78-82
-  | 'DIAMOND' // 83-86
-  | 'ASCENDANT' // 87-90
-  | 'IMMORTAL' // 91-94
-  | 'RADIANT' // 95+
-
 export const vote = new Elysia().post(
   '/vote',
   async ({ body, set }) => {
-    // const random = Math.random() * 100
-    // const pack: Pack =
-    //   random < 0.5
-    //     ? 'RADIANT'
-    //     : random < 2.0
-    //       ? 'IMMORTAL'
-    //       : random < 5.0
-    //         ? 'ASCENDANT'
-    //         : random < 20.0
-    //           ? 'DIAMOND'
-    //           : random < 50.0
-    //             ? 'PLATINUM'
-    //             : random < 70.0
-    //               ? 'GOLD'
-    //               : random < 85.0
-    //                 ? 'SILVER'
-    //                 : random < 95.0
-    //                   ? 'BRONZE'
-    //                   : 'IRON'
+    const checkDate = (date1: Date, date2: Date | null | undefined) => {
+      if (!date2) return false
+      return Math.abs(date1.getTime() - date2.getTime()) <= 24 * 60 * 60 * 1000
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: body.user
+      }
+    })
 
     await prisma.user.update({
       where: {
         id: body.user
       },
       data: {
-        collectedVoteReward: false
+        collectedVoteReward: false,
+        votes: {
+          increment: 1
+        },
+        voteStreak: checkDate(new Date(), user?.lastVote)
+          ? {
+            increment: 1
+          }
+          : undefined
       }
     })
 
