@@ -1,7 +1,5 @@
 import { ProfileSchema } from '@db'
-import { calcPlayerOvr } from '@sabinelab/players'
 import { ComponentType, type InteractionCallbackResponse } from 'discord.js'
-import { getBuff } from '@/util/getBuff'
 import { type valorant_agents, valorant_maps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
@@ -12,6 +10,24 @@ export default createComponentInteraction({
   time: 60 * 1000,
   async run({ ctx, app, t }) {
     const profile = await ProfileSchema.fetch(ctx.args[2], ctx.db.guild.id)
+    if (!profile) {
+      return await ctx.reply('commands.duel.team_not_completed_2')
+    }
+
+    const [userCards, authorCards] = await Promise.all([
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: profile.id,
+          active_roster: true
+        }
+      }),
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id,
+          active_roster: true
+        }
+      })
+    ])
 
     const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
@@ -19,11 +35,11 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if (ctx.db.profile.active_players.length < 5) {
+    if (authorCards.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
-    if (!profile || profile.active_players.length < 5) {
+    if (userCards.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
@@ -63,10 +79,10 @@ export default createComponentInteraction({
       .setFields(
         {
           name: profile.team_name,
-          value: profile.active_players
-            .map(id => {
-              const player = app.players.get(id)!
-              const ovr = Math.floor(player.ovr)
+          value: userCards
+            .map(card => {
+              const player = app.players.get(card.playerId)!
+              const ovr = Math.floor(card.overall)
               return `<a:loading:809221866434199634> ${player.name} (${ovr})`
             })
             .join('\n'),
@@ -74,10 +90,10 @@ export default createComponentInteraction({
         },
         {
           name: ctx.db.profile.team_name,
-          value: ctx.db.profile.active_players
-            .map(id => {
-              const player = app.players.get(id)!
-              const ovr = Math.floor(player.ovr)
+          value: authorCards
+            .map(card => {
+              const player = app.players.get(card.playerId)!
+              const ovr = Math.floor(card.overall)
               return `<a:loading:809221866434199634> ${player.name} (${ovr})`
             })
             .join('\n'),
@@ -90,11 +106,11 @@ export default createComponentInteraction({
     const menu1 = new SelectMenuBuilder()
       .setPlaceholder(profile.team_name)
       .setOptions(
-        ...profile.active_players.map(id => {
-          const player = app.players.get(id)!
+        ...userCards.map(card => {
+          const player = app.players.get(card.playerId)!
           return {
             label: `${player.name}`,
-            value: player.id.toString()
+            value: card.id.toString()
           }
         })
       )
@@ -103,11 +119,11 @@ export default createComponentInteraction({
     const menu2 = new SelectMenuBuilder()
       .setPlaceholder(ctx.db.profile.team_name!)
       .setOptions(
-        ...ctx.db.profile.active_players.map(id => {
-          const player = app.players.get(id)!
+        ...authorCards.map(card => {
+          const player = app.players.get(card.playerId)!
           return {
             label: `${player.name}`,
-            value: player.id.toString()
+            value: card.id.toString()
           }
         })
       )
@@ -147,40 +163,34 @@ export default createComponentInteraction({
       }[]
     } = {}
 
-    data[ctx.db.profile.userId] = ctx.db.profile.active_players.map(id => {
-      const p = app.players.get(id)!
-      const buff = 1 + getBuff(ctx.db.profile.team_level)
+    data[ctx.db.profile.userId] = authorCards.map(card => {
+      const p = app.players.get(card.playerId)!
 
-      p.ACS *= buff
-      p.HS *= buff
-      p.aggression *= buff
-      p.aim *= buff
-      p.gamesense *= buff
-      p.movement *= buff
-
-      const ovr = calcPlayerOvr(p)
       return {
         ...p,
-        ovr,
+        aim: card.aim,
+        ACS: card.acs,
+        aggression: card.aggression,
+        gamesense: card.gamesense,
+        HS: card.hs,
+        movement: card.movement,
+        ovr: card.overall,
         agent: null
       }
     })
 
-    data[profile.userId] = profile.active_players.map(id => {
-      const p = app.players.get(id)!
-      const buff = 1 + getBuff(profile.team_level)
+    data[profile.userId] = userCards.map(card => {
+      const p = app.players.get(card.playerId)!
 
-      p.ACS *= buff
-      p.HS *= buff
-      p.aggression *= buff
-      p.aim *= buff
-      p.gamesense *= buff
-      p.movement *= buff
-
-      const ovr = calcPlayerOvr(p)
       return {
         ...p,
-        ovr,
+        aim: card.aim,
+        ACS: card.acs,
+        aggression: card.aggression,
+        gamesense: card.gamesense,
+        HS: card.hs,
+        movement: card.movement,
+        ovr: card.overall,
         agent: null
       }
     })

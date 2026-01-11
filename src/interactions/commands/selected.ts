@@ -1,10 +1,59 @@
 import { ProfileSchema } from '@db'
+import type { Card } from '@generated'
 import { ChannelType } from 'discord.js'
-import { valorant_agents, valorant_maps } from '../../config'
-import Match from '../../simulator/vanilla/Match'
-import EmbedBuilder from '../../structures/builders/EmbedBuilder'
-import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
-import Logger from '../../util/Logger'
+import { valorant_agents, valorant_maps } from '@/config'
+import Match from '@/simulator/vanilla/Match'
+import type App from '@/structures/app/App'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
+import createComponentInteraction from '@/structures/interaction/createComponentInteraction'
+import Logger from '@/util/Logger'
+
+type Data = {
+  [key: string]: {
+    name: string
+    id: number
+    role: string
+    aim: number
+    HS: number
+    movement: number
+    aggression: number
+    ACS: number
+    gamesense: number
+    ovr: number
+    agent: {
+      name: string
+      role: (typeof valorant_agents)[number]['role']
+    } | null
+  }[]
+}
+type Options = {
+  cards: Card[]
+  ownerId: string
+  data: Data
+  app: App
+}
+
+const renderTeam = (options: Options) => {
+  return options.cards
+    .map(card => {
+      const player = options.app.players.get(card.playerId)!
+
+      let emoji: string | undefined = '<a:loading:809221866434199634>'
+
+      const foundData = options.data[options.ownerId].find(
+        (p: any) => p.id.toString() === card.playerId
+      )
+
+      if (foundData?.agent) {
+        emoji = valorant_agents.find(agent => agent.name === foundData.agent?.name)?.emoji
+      }
+
+      const ovr = Math.floor(card.overall)
+
+      return `${emoji} ${player.name} (${ovr})`
+    })
+    .join('\n')
+}
 
 export default createComponentInteraction({
   name: 'selected',
@@ -38,7 +87,15 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.duplicated_agent')
     }
 
-    const i = data[ctx.interaction.user.id].findIndex((p: any) => p.id.toString() === ctx.args[2])
+    const card = await ctx.app.prisma.card.findUnique({
+      where: {
+        id: BigInt(ctx.args[2]),
+        profileId: ctx.db.profile.id
+      }
+    })
+    const i = data[ctx.interaction.user.id].findIndex(
+      (p: any) => p.id.toString() === card?.playerId
+    )
 
     data[ctx.interaction.user.id][i] = {
       ...data[ctx.interaction.user.id][i],
@@ -56,119 +113,60 @@ export default createComponentInteraction({
 
     if (!profile) return
 
+    const [userCards, authorCards] = await Promise.all([
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: profile.id,
+          active_roster: true
+        }
+      }),
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id,
+          active_roster: true
+        }
+      })
+    ])
+
+    const isAuthor = key.split(':')[2] === ctx.interaction.user.id
+
     const embed = new EmbedBuilder()
       .setTitle(t('commands.duel.embed.title'))
       .setDesc(t('commands.duel.embed.desc'))
       .setImage(data.image)
       .setFields(
         {
-          name:
-            key.split(':')[1] === ctx.interaction.user.id
-              ? ctx.db.profile.team_name!
-              : profile.team_name!,
-          value:
-            key.split(':')[1] === ctx.interaction.user.id
-              ? ctx.db.profile.active_players
-                  .map(id => {
-                    const player = app.players.get(id)!
-
-                    let emoji: string | undefined = '<a:loading:809221866434199634>'
-
-                    const i = data[ctx.interaction.user.id].findIndex(
-                      (p: any) => p.id.toString() === id
-                    )
-
-                    if (
-                      data[ctx.interaction.user.id][i].id.toString() === id &&
-                      data[ctx.interaction.user.id][i].agent
-                    ) {
-                      emoji = valorant_agents.find(
-                        agent => agent.name === data[ctx.interaction.user.id][i].agent!.name
-                      )?.emoji
-                    }
-
-                    const ovr = Math.floor(player.ovr)
-
-                    return `${emoji} ${player.name} (${ovr})`
-                  })
-                  .join('\n')
-              : profile.active_players
-                  .map(id => {
-                    const player = app.players.get(id)!
-
-                    let emoji: string | undefined = '<a:loading:809221866434199634>'
-
-                    const i = data[profile.userId].findIndex((p: any) => p.id.toString() === id)
-
-                    if (
-                      data[profile.userId][i].id.toString() === id &&
-                      data[profile.userId][i].agent
-                    ) {
-                      emoji = valorant_agents.find(
-                        agent => agent.name === data[profile.userId][i].agent!.name
-                      )?.emoji
-                    }
-
-                    const ovr = Math.floor(player.ovr)
-
-                    return `${emoji} ${player.name} (${ovr})`
-                  })
-                  .join('\n'),
+          name: isAuthor ? ctx.db.profile.team_name! : profile.team_name!,
+          value: isAuthor
+            ? renderTeam({
+                app: ctx.app,
+                cards: authorCards,
+                ownerId: ctx.interaction.user.id,
+                data
+              })
+            : renderTeam({
+                app: ctx.app,
+                cards: userCards,
+                ownerId: profile.userId,
+                data
+              }),
           inline: true
         },
         {
-          name:
-            key.split(':')[1] !== ctx.interaction.user.id
-              ? ctx.db.profile.team_name!
-              : profile.team_name!,
-          value:
-            key.split(':')[1] !== ctx.interaction.user.id
-              ? ctx.db.profile.active_players
-                  .map(id => {
-                    const player = app.players.get(id)!
-
-                    let emoji: string | undefined = '<a:loading:809221866434199634>'
-
-                    const i = data[ctx.interaction.user.id].findIndex(
-                      (p: any) => p.id.toString() === id
-                    )
-
-                    if (
-                      data[ctx.interaction.user.id][i].id.toString() === id &&
-                      data[ctx.interaction.user.id][i].agent
-                    ) {
-                      emoji = valorant_agents.find(
-                        agent => agent.name === data[ctx.interaction.user.id][i].agent!.name
-                      )?.emoji
-                    }
-
-                    const ovr = Math.floor(player.ovr)
-
-                    return `${emoji} ${player.name} (${ovr})`
-                  })
-                  .join('\n')
-              : profile.active_players
-                  .map(id => {
-                    const player = app.players.get(id)!
-
-                    let emoji: string | undefined = '<a:loading:809221866434199634>'
-
-                    const i = data[profile.userId].findIndex((p: any) => p.id.toString() === id)
-
-                    if (
-                      data[profile.userId][i].id.toString() === id &&
-                      data[profile.userId][i].agent
-                    ) {
-                      emoji = valorant_agents.find(
-                        agent => agent.name === data[profile.userId][i].agent!.name
-                      )?.emoji
-                    }
-
-                    const ovr = Math.floor(player.ovr)
-
-                    return `${emoji} ${player.name} (${ovr})`
-                  })
-                  .join('\n'),
+          name: !isAuthor ? ctx.db.profile.team_name! : profile.team_name!,
+          value: !isAuthor
+            ? renderTeam({
+                app: ctx.app,
+                cards: authorCards,
+                ownerId: ctx.interaction.user.id,
+                data
+              })
+            : renderTeam({
+                app: ctx.app,
+                cards: userCards,
+                ownerId: profile.userId,
+                data
+              }),
           inline: true
         }
       )
@@ -183,7 +181,7 @@ export default createComponentInteraction({
     if (!message) return
 
     await ctx.edit('commands.duel.agent_selected', {
-      p: app.players.get(ctx.args[2])!.name,
+      p: app.players.get(card?.playerId ?? '')!.name,
       agent: agentName
     })
 

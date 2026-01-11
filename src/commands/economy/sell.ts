@@ -1,4 +1,4 @@
-import { ProfileSchema } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import { calcPlayerPrice } from '@sabinelab/players'
 import createCommand from '../../structures/command/createCommand'
 
@@ -29,18 +29,26 @@ export default createCommand({
   ],
   cooldown: true,
   async run({ ctx, app }) {
-    const player = app.players.get(ctx.args[0].toString())
-    const i = ctx.db.profile.reserve_players.indexOf(ctx.args[0].toString())
+    const card = await prisma.card.findUnique({
+      where: {
+        id: BigInt(ctx.args[0]),
+        profileId: ctx.db.profile.id,
+        active_roster: false
+      }
+    })
+    const player = app.players.get(card?.playerId ?? '')
 
-    if (!player || i === -1) {
+    if (!player || !card) {
       return await ctx.reply('commands.sell.player_not_found')
     }
 
-    await ctx.db.profile.sellPlayer(player.id.toString(), BigInt(calcPlayerPrice(player, true)), i)
+    const price = BigInt(calcPlayerPrice(player, true))
+
+    await ctx.db.profile.sellPlayer(card.id, price)
 
     await ctx.reply('commands.sell.sold', {
       p: player.name,
-      price: calcPlayerPrice(player, true).toLocaleString()
+      price: price.toLocaleString()
     })
   },
   async createAutocompleteInteraction({ i, app }) {
@@ -49,21 +57,28 @@ export default createCommand({
 
     if (!profile) return
 
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: profile.id,
+        active_roster: false
+      }
+    })
+
     const value = i.options.getString('player', true)
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of profile.reserve_players) {
-      const p = app.players.get(p_id)
+    for (const c of cards) {
+      const p = app.players.get(c.playerId)
 
       if (!p) break
 
-      const ovr = Math.floor(p.ovr)
+      const ovr = Math.floor(c.overall)
 
       players.push({
         name: `${p.name} (${ovr})`,
         ovr,
-        id: p_id
+        id: c.id.toString()
       })
     }
 

@@ -30,60 +30,43 @@ export default createCommand({
   ],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
-    const p = app.players.get(ctx.args[0].toString())
+    const card = await prisma.card.findUnique({
+      where: {
+        id: BigInt(ctx.args[0]),
+        profileId: ctx.db.profile.id,
+        active_roster: false
+      }
+    })
+    const p = app.players.get(card?.playerId ?? '')
 
-    if (!p) {
+    if (!p || !card) {
       return await ctx.reply('commands.promote.player_not_found')
     }
 
     const options: APISelectMenuOption[] = []
 
-    const players = ctx.db.profile.active_players
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: ctx.db.profile.id,
+        active_roster: true
+      }
+    })
 
-    if (players.length < 5) {
-      await prisma.$transaction(async tx => {
-        const user = await tx.profile.findUnique({
-          where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
-          },
-          select: {
-            active_players: true,
-            reserve_players: true
-          }
-        })
-
-        if (!user) throw new Error('Not found')
-
-        const i = user.reserve_players.indexOf(p.id.toString())
-
-        user.active_players.push(p.id.toString())
-        user.reserve_players.splice(i, 1)
-
-        await tx.profile.update({
-          where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
-          },
-          data: {
-            active_players: user.active_players,
-            reserve_players: user.reserve_players
-          }
-        })
+    if (cards.length < 5) {
+      await prisma.card.update({
+        where: {
+          id: card.id
+        },
+        data: {
+          active_roster: true
+        }
       })
 
       return await ctx.reply('commands.promote.player_promoted', { p: p.name })
     }
-    let i = 0
 
-    for (const p_id of players) {
-      i++
-
-      const p = app.players.get(p_id)
+    for (const c of cards) {
+      const p = app.players.get(c.playerId)
 
       if (!p) break
 
@@ -92,7 +75,7 @@ export default createCommand({
       options.push({
         label: `${p.name} (${ovr})`,
         description: p.role,
-        value: `${i}_${p_id}`
+        value: c.id.toString()
       })
     }
 
@@ -110,20 +93,26 @@ export default createCommand({
     if (!profile) return
 
     const value = i.options.getString('player', true)
-
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of profile.reserve_players) {
-      const p = app.players.get(p_id)
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: profile.id,
+        active_roster: false
+      }
+    })
+
+    for (const c of cards) {
+      const p = app.players.get(c.playerId)
 
       if (!p) break
 
-      const ovr = Math.floor(p.ovr)
+      const ovr = Math.floor(c.overall)
 
       players.push({
         name: `${p.name} (${ovr}) — ${p.collection}`,
         ovr,
-        id: p_id
+        id: c.id.toString()
       })
     }
     await i.respond(
@@ -137,49 +126,29 @@ export default createCommand({
   async createMessageComponentInteraction({ ctx, i, app }) {
     if (!i.isStringSelectMenu()) return
 
-    await prisma.$transaction(async tx => {
-      const user = await tx.profile.findUnique({
+    const idActive = i.values[0].split(';')[0]
+    const idSub = ctx.args[2]
+
+    const [card] = await prisma.$transaction([
+      prisma.card.update({
         where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
-        },
-        select: {
-          active_players: true,
-          reserve_players: true
-        }
-      })
-
-      if (!user) throw new Error('Not found')
-
-      const id = i.values[0].split('_')[1]
-
-      let index = user.active_players.indexOf(id)
-
-      user.active_players.splice(index, 1)
-      user.reserve_players.push(id)
-
-      index = user.reserve_players.indexOf(ctx.args[2])
-
-      user.reserve_players.splice(index, 1)
-      user.active_players.push(ctx.args[2])
-
-      await tx.profile.update({
-        where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
+          id: BigInt(idSub)
         },
         data: {
-          reserve_players: user.reserve_players,
-          active_players: user.active_players
+          active_roster: true
+        }
+      }),
+      prisma.card.update({
+        where: {
+          id: BigInt(idActive)
+        },
+        data: {
+          active_roster: false
         }
       })
-    })
+    ])
 
-    const p = app.players.get(ctx.args[2])!
+    const p = app.players.get(card.playerId)!
 
     await ctx.edit('commands.promote.player_promoted', { p: p.name })
   }

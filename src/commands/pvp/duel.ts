@@ -182,23 +182,40 @@ export default createCommand({
     } else id = ctx.args[2].toString()
 
     const profile = await ProfileSchema.fetch(id, ctx.db.guild.id)
+    if (!profile) {
+      return await ctx.reply('commands.duel.team_not_completed_2')
+    }
+
+    const [userCards, authorCards] = await Promise.all([
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: profile.id,
+          active_roster: true
+        }
+      }),
+      ctx.app.prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id,
+          active_roster: true
+        }
+      })
+    ])
+
+    const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
     const authorCounts: { [key: string]: number } = {}
     const userCounts: { [key: string]: number } = {}
-
-    for (const p of ctx.db.profile.active_players) {
-      authorCounts[p] = (authorCounts[p] || 0) + 1
-    }
-
     const authorDuplicates = Object.values(authorCounts).filter(count => count > 1).length
 
-    const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
+    for (const c of authorCards) {
+      authorCounts[c.playerId] = (authorCounts[c.playerId] || 0) + 1
+    }
 
     if (!ctx.db.profile.team_name || !ctx.db.profile.team_tag) {
       return await ctx.reply('commands.duel.needed_team_name')
     }
 
-    if (ctx.db.profile.active_players.length < 5) {
+    if (authorCards.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_1')
     }
 
@@ -206,7 +223,7 @@ export default createCommand({
       return await ctx.reply('commands.duel.duplicated_cards')
     }
 
-    if (!profile || profile.active_players.length < 5) {
+    if (userCards.length < 5) {
       return await ctx.reply('commands.duel.team_not_completed_2')
     }
 
@@ -232,8 +249,8 @@ export default createCommand({
       return await ctx.reply('commands.duel.cannot_duel')
     }
 
-    for (const p of profile.active_players) {
-      userCounts[p] = (userCounts[p] || 0) + 1
+    for (const c of userCards) {
+      userCounts[c.playerId] = (userCounts[c.playerId] || 0) + 1
     }
 
     const userDuplicates = Object.values(userCounts).filter(count => count > 1).length

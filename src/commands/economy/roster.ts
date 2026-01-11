@@ -1,4 +1,5 @@
 import { prisma } from '@db'
+import { calcPlayerOvr } from '@sabinelab/players'
 import {
   ActionRowBuilder,
   type APISelectMenuOption,
@@ -12,7 +13,6 @@ import createCommand from '@/structures/command/createCommand'
 import { createProgressBar } from '@/util/createProgressBar'
 import { formatNumber } from '@/util/formatNumber'
 import { getBuff } from '@/util/getBuff'
-import { calcPlayerOvr } from '@sabinelab/players'
 
 const getUpgradeCost = (level: number) => {
   const base = 25_000
@@ -136,6 +136,11 @@ export default createCommand({
                   .setLabel(ctx.t('commands.roster.container.button.remove'))
                   .setCustomId(`roster;${ctx.db.profile.userId};remove;${c.id}`),
                 new ButtonBuilder()
+                  .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                  .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
+                  .setStyle(ButtonStyle.Primary)
+                  .setDisabled(c.arena_roster),
+                new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                   .setStyle(ButtonStyle.Secondary)
@@ -189,6 +194,11 @@ export default createCommand({
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
                   .setCustomId(`roster;${ctx.db.profile.userId};promote;${c.id}`),
+                new ButtonBuilder()
+                  .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                  .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
+                  .setStyle(ButtonStyle.Primary)
+                  .setDisabled(c.arena_roster),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
@@ -272,12 +282,13 @@ export default createCommand({
     } else if (ctx.args[2] === 'promote') {
       const cards = await prisma.card.findMany({
         where: {
-          profileId: ctx.db.profile.id
+          profileId: ctx.db.profile.id,
+          active_roster: false
         }
       })
       const card = cards.find(c => c.id === BigInt(ctx.args[3]))
       if (!card || card.active_roster) {
-        return await ctx.reply('commands.promote.player_not_found')
+        return await ctx.reply('commands.roster.already_promoted')
       }
 
       const player = ctx.app.players.get(card.playerId)
@@ -410,6 +421,89 @@ export default createCommand({
           }
         ]
       })
+    } else if (ctx.args[2] === 'promote-arena') {
+      const cards = await prisma.card.findMany({
+        where: {
+          profileId: ctx.db.profile.id
+        }
+      })
+      const card = cards.find(c => c.id === BigInt(ctx.args[3]))
+
+      if (!card || card.arena_roster) {
+        return await ctx.reply('commands.roster.already_promoted')
+      }
+
+      const player = ctx.app.players.get(card.playerId)
+      if (!player) {
+        return await ctx.reply('commands.promote.player_not_found')
+      }
+
+      if (cards.filter(c => c.arena_roster).length < 5) {
+        await prisma.card.update({
+          where: {
+            id: BigInt(ctx.args[3])
+          },
+          data: {
+            arena_roster: true
+          }
+        })
+
+        return await ctx.reply('commands.promote.player_promoted', {
+          p: player.name
+        })
+      }
+
+      const options: APISelectMenuOption[] = []
+
+      for (const c of cards.filter(c => c.arena_roster)) {
+        const player = ctx.app.players.get(c.playerId)
+
+        if (!player) break
+
+        options.push({
+          label: `${player.name} (${Math.floor(c.overall)})`,
+          description: player.role,
+          value: c.id.toString()
+        })
+      }
+
+      const menu = new SelectMenuBuilder()
+        .setCustomId(`roster;${ctx.db.profile.userId};promote-arena2;${card.id}`)
+        .setOptions(options)
+
+      await ctx.reply(menu.build(t('commands.promote.select_player')))
+    } else if (ctx.args[2] === 'promote-arena2') {
+      if (!ctx.interaction.isStringSelectMenu()) return
+
+      const idActive = ctx.interaction.values[0].split(';')[0]
+      const idSub = ctx.args[3]
+
+      const [card] = await prisma.$transaction([
+        prisma.card.update({
+          where: {
+            id: BigInt(idSub)
+          },
+          data: {
+            arena_roster: true,
+            arena_agent_name: null,
+            arena_agent_role: null
+          }
+        }),
+        prisma.card.update({
+          where: {
+            id: BigInt(idActive)
+          },
+          data: {
+            arena_roster: false,
+            arena_agent_name: null,
+            arena_agent_role: null
+          }
+        })
+      ])
+
+      const p = ctx.app.players.get(card.playerId)
+
+      await ctx.edit('commands.promote.player_promoted', { p: p?.name })
     } else if (ctx.args[2] === 'upgrade') {
       const card = await prisma.card.findUnique({
         where: {
@@ -577,6 +671,11 @@ export default createCommand({
                     .setLabel(ctx.t('commands.roster.container.button.remove'))
                     .setCustomId(`roster;${ctx.db.profile.userId};remove;${c.id}`),
                   new ButtonBuilder()
+                    .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                    .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(c.arena_roster),
+                  new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
                     .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)
                     .setStyle(ButtonStyle.Secondary)
@@ -630,6 +729,11 @@ export default createCommand({
                     .setStyle(ButtonStyle.Success)
                     .setLabel(ctx.t('commands.roster.container.button.promote'))
                     .setCustomId(`roster;${ctx.db.profile.userId};promote;${c.id}`),
+                  new ButtonBuilder()
+                    .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                    .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${c.id}`)
+                    .setStyle(ButtonStyle.Primary)
+                    .setDisabled(c.arena_roster),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
                     .setCustomId(`roster;${ctx.interaction.user.id};practice;${c.id}`)

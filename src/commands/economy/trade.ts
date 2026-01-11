@@ -1,4 +1,4 @@
-import { type ArenaMetadata, ProfileSchema, prisma } from '@db'
+import { ProfileSchema, prisma } from '@db'
 import { calcPlayerPrice } from '@sabinelab/players'
 import { ApplicationCommandOptionType } from 'discord.js'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
@@ -57,10 +57,15 @@ export default createCommand({
   cooldown: true,
   async run({ ctx, app }) {
     const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.guild.id)
+    const card = await prisma.card.findUnique({
+      where: {
+        id: BigInt(ctx.args[1]),
+        profileId: ctx.db.profile.id
+      }
+    })
+    const player = app.players.get(card?.playerId ?? '')
 
-    const player = app.players.get(ctx.args[1].toString())
-
-    if (!player) {
+    if (!player || !card) {
       return await ctx.reply('commands.trade.player_not_found')
     }
 
@@ -83,7 +88,7 @@ export default createCommand({
 
     await ctx.reply({
       content: ctx.t('commands.trade.request', {
-        player: `${player.name} (${player.ovr})`,
+        player: `${player.name} (${Math.floor(card.overall)})`,
         collection: player.collection,
         user: `<@${ctx.args[0]}>`,
         author: ctx.interaction.user.toString(),
@@ -97,7 +102,7 @@ export default createCommand({
               .defineStyle('green')
               .setLabel(ctx.t('commands.trade.make_purchase'))
               .setCustomId(
-                `trade;${ctx.args[0]};buy;${ctx.interaction.user.id};${player.id};${ctx.args[2]}`
+                `trade;${ctx.args[0]};buy;${ctx.interaction.user.id};${card.id};${ctx.args[2]}`
               ),
             new ButtonBuilder()
               .defineStyle('red')
@@ -113,21 +118,28 @@ export default createCommand({
     const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
     if (!profile) return
 
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: profile.id,
+        active_roster: false
+      }
+    })
+
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
     const value = i.options.getString('player', true)
 
-    for (const p_id of profile.reserve_players) {
-      const p = app.players.get(p_id)
+    for (const c of cards) {
+      const p = app.players.get(c.playerId)
 
       if (!p) continue
 
-      const ovr = Math.floor(p.ovr)
+      const ovr = Math.floor(c.overall)
 
       players.push({
         name: `${p.name} (${ovr})`,
         ovr,
-        id: p_id
+        id: c.id.toString()
       })
     }
 
@@ -143,14 +155,15 @@ export default createCommand({
     if (!i.guildId) return
     if (ctx.args[2] === 'buy') {
       const profile = await ProfileSchema.fetch(ctx.args[3], i.guildId)
+      const card = await prisma.card.findUnique({
+        where: {
+          id: BigInt(ctx.args[4]),
+          profileId: profile?.id ?? ''
+        }
+      })
+      const player = app.players.get(card?.playerId ?? '')
 
-      const player = app.players.get(ctx.args[4])
-
-      if (!profile || !player) return
-
-      const index = profile.reserve_players.indexOf(ctx.args[4])
-
-      if (index === -1 || index === undefined) return
+      if (!profile || !player || !card) return
 
       if (ctx.db.profile.poisons < BigInt(ctx.args[5])) {
         return await ctx.edit('commands.trade.missing_poisons', {
@@ -159,50 +172,20 @@ export default createCommand({
         })
       }
 
-      await prisma.$transaction(async tx => {
-        const sellerProfile = await tx.profile.findUnique({
+      await prisma.$transaction([
+        prisma.card.update({
           where: {
-            userId_guildId: {
-              userId: ctx.args[3],
-              guildId: ctx.db.guild.id
-            }
+            id: card.id
+          },
+          data: {
+            profileId: ctx.db.profile.id,
+            arena_agent_name: null,
+            arena_agent_role: null,
+            arena_roster: false,
+            active_roster: false
           }
-        })
-
-        const buyerProfile = await tx.profile.findUnique({
-          where: {
-            userId_guildId: {
-              userId: ctx.db.profile.userId,
-              guildId: ctx.db.guild.id
-            }
-          }
-        })
-
-        if (!sellerProfile || !buyerProfile) return
-
-        const sellerReservePlayers = [...sellerProfile.reserve_players]
-        const sellerPlayerIndex = sellerReservePlayers.indexOf(ctx.args[4])
-        if (sellerPlayerIndex === -1) return
-        sellerReservePlayers.splice(sellerPlayerIndex, 1)
-
-        const sellerArenaMetadata = sellerProfile.arena_metadata
-          ? JSON.parse(JSON.stringify(sellerProfile.arena_metadata))
-          : null
-
-        if (
-          (sellerArenaMetadata as ArenaMetadata | null)?.lineup.some(
-            line => line.player === player.id.toString()
-          )
-        ) {
-          const lineupIndex = (sellerArenaMetadata as ArenaMetadata)?.lineup.findIndex(
-            line => line.player === player.id.toString()
-          )
-          if (lineupIndex !== -1) {
-            ;(sellerArenaMetadata as ArenaMetadata).lineup.splice(lineupIndex, 1)
-          }
-        }
-
-        const updatedSeller = await tx.profile.update({
+        }),
+        prisma.profile.update({
           where: {
             userId_guildId: {
               userId: ctx.args[3],
@@ -210,17 +193,12 @@ export default createCommand({
             }
           },
           data: {
-            reserve_players: {
-              set: sellerReservePlayers
-            },
-            arena_metadata: sellerArenaMetadata ? sellerArenaMetadata : undefined,
             poisons: {
               increment: BigInt(ctx.args[5])
             }
           }
-        })
-
-        await tx.profile.update({
+        }),
+        prisma.profile.update({
           where: {
             userId_guildId: {
               userId: ctx.db.profile.userId,
@@ -230,35 +208,31 @@ export default createCommand({
           data: {
             poisons: {
               decrement: BigInt(ctx.args[5])
-            },
-            reserve_players: {
-              push: ctx.args[4]
             }
           }
-        })
-
-        await tx.transaction.createMany({
+        }),
+        prisma.transaction.createMany({
           data: [
             {
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              profileId: updatedSeller.id,
-              to: buyerProfile.userId
+              profileId: profile.id,
+              to: profile.userId
             },
             {
               type: 'TRADE_PLAYER',
               player: player.id,
               price: BigInt(ctx.args[5]),
-              profileId: buyerProfile.id,
-              to: sellerProfile.userId
+              profileId: ctx.db.profile.id,
+              to: profile.userId
             }
           ]
         })
-      })
+      ])
 
       await ctx.edit('commands.trade.res', {
-        player: `${player.name} (${player.ovr})`,
+        player: `${player.name} (${Math.floor(card.overall)})`,
         collection: player.collection,
         user: ctx.interaction.user.toString(),
         poisons: BigInt(ctx.args[5]).toLocaleString()

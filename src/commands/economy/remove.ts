@@ -27,75 +27,58 @@ export default createCommand({
     }
   ],
   async run({ ctx, app }) {
-    const p = app.players.get(ctx.args[0].toString())
+    const card = await prisma.card.findUnique({
+      where: {
+        id: BigInt(ctx.args[0]),
+        profileId: ctx.db.profile.id,
+        active_roster: true
+      }
+    })
+    const p = app.players.get(card?.playerId ?? '')
 
-    if (!ctx.db.profile.active_players.includes(ctx.args[0].toString()) || !p) {
+    if (!card || !p) {
       return await ctx.reply('commands.remove.player_not_found')
     }
 
-    await prisma.$transaction(async tx => {
-      const user = await tx.profile.findUnique({
-        where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
-        },
-        select: {
-          active_players: true,
-          reserve_players: true
-        }
-      })
-
-      if (!user) {
-        throw new Error('Not found')
+    await prisma.card.update({
+      where: {
+        id: card.id
+      },
+      data: {
+        active_roster: false
       }
-
-      const i = user.active_players.indexOf(p.id.toString())
-      if (i === -1) {
-        throw new Error('Not found')
-      }
-
-      user.active_players.splice(i, 1)
-
-      await tx.profile.update({
-        where: {
-          userId_guildId: {
-            userId: ctx.db.profile.userId,
-            guildId: ctx.db.guild.id
-          }
-        },
-        data: {
-          reserve_players: {
-            push: p.id.toString()
-          },
-          active_players: user.active_players
-        }
-      })
     })
 
     return await ctx.reply('commands.remove.player_removed', { p: p.name })
   },
   async createAutocompleteInteraction({ i, app }) {
     if (!i.guildId) return
+
     const profile = await ProfileSchema.fetch(i.user.id, i.guildId)
     if (!profile) return
+
+    const cards = await prisma.card.findMany({
+      where: {
+        profileId: profile.id,
+        active_roster: true
+      }
+    })
 
     const value = i.options.getString('player', true)
 
     const players: Array<{ name: string; ovr: number; id: string }> = []
 
-    for (const p_id of profile.active_players) {
-      const p = app.players.get(p_id)
+    for (const c of cards) {
+      const p = app.players.get(c.playerId)
 
       if (!p) break
 
-      const ovr = Math.floor(p.ovr)
+      const ovr = Math.floor(c.overall)
 
       players.push({
         name: `${p.name} (${ovr}) — ${p.collection}`,
         ovr,
-        id: p_id
+        id: c.id.toString()
       })
     }
 
