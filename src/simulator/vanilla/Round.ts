@@ -1680,7 +1680,6 @@ export default class Round extends Match {
         })
       }
     } else if (this.mode === 'tournament' && !this.overtime) {
-      console.log('torneio com ot')
       const max = Math.max(score1, score2)
 
       if (max === 13 && score1 === max) {
@@ -1922,8 +1921,6 @@ export default class Round extends Match {
       }
     } else {
       const max = Math.max(score1, score2)
-
-      console.log('torneio sem ot')
 
       if (max === 13 && score1 === max) {
         const stats = {
