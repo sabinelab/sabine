@@ -722,9 +722,9 @@ export default createListener({
       })
     }
 
-    if (!app.shard || !app.shard.ids[0]) {
-      await app.postCommands()
+    await app.postCommands()
 
+    if (!app.shard || !app.shard.ids[0]) {
       arenaMatchQueue.process('arena', async job => {
         // const player1 = await ProfileSchema.fetch(
         //   job.data.parsedData1.userId,
