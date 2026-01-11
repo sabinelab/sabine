@@ -9,6 +9,7 @@ model Card {
   acs              Float   @db.DoublePrecision
   gamesense        Float   @db.DoublePrecision
   aggression       Float   @db.DoublePrecision
+  overall          Float   @db.DoublePrecision
   active_roster    Boolean @default(false)
   arena_roster     Boolean @default(false)
   arena_agent_name String?
