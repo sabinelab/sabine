@@ -261,6 +261,7 @@ export class ProfileSchema implements Profile {
           gamesense: player.gamesense,
           movement: player.movement,
           aggression: player.aggression,
+          overall: player.ovr,
           playerId: player.id.toString()
         }
       }
