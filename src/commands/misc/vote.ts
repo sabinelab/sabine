@@ -64,6 +64,8 @@ export default createCommand({
     )
   },
   async createMessageComponentInteraction({ ctx }) {
+    ctx.setFlags(64)
+
     const user = await UserSchema.fetch(ctx.db.profile.userId)
 
     if (!user || user.collectedVoteReward) {
