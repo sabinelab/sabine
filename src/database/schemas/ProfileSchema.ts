@@ -244,15 +244,26 @@ export class ProfileSchema implements Profile {
   }
 
   public async addPlayerToRoster(
-    player: string,
+    playerId: string,
     method:
       | 'CLAIM_PLAYER_BY_CLAIM_COMMAND'
       | 'CLAIM_PLAYER_BY_COMMAND' = 'CLAIM_PLAYER_BY_CLAIM_COMMAND',
     channel?: string
   ) {
+    const player = app.players.get(playerId)
+    if (!player) return this
+
     const updates: any = {
-      reserve_players: {
-        push: player
+      cards: {
+        create: {
+          acs: player.ACS,
+          aim: player.aim,
+          hs: player.HS,
+          gamesense: player.gamesense,
+          movement: player.movement,
+          aggression: player.aggression,
+          playerId: player.id.toString()
+        }
       }
     }
 
@@ -287,7 +298,7 @@ export class ProfileSchema implements Profile {
         }
       }
 
-      if (app.players.get(player)!.ovr >= 85) {
+      if (app.players.get(playerId)!.ovr >= 85) {
         updates.pity = 0
       }
     }
@@ -296,7 +307,7 @@ export class ProfileSchema implements Profile {
       prisma.transaction.create({
         data: {
           type: method,
-          player: Number(player),
+          player: Number(playerId),
           profile: {
             connect: {
               userId_guildId: {
@@ -342,7 +353,8 @@ export class ProfileSchema implements Profile {
                   hs: player.HS,
                   movement: player.movement,
                   acs: player.ACS,
-                  gamesense: player.gamesense
+                  gamesense: player.gamesense,
+                  aggression: player.aggression
                 }
               })
             }
@@ -385,6 +397,20 @@ export class ProfileSchema implements Profile {
           player: Number(card.playerId),
           price,
           profileId: card.profile.id
+        }
+      })
+      
+      await tx.profile.update({
+        where: {
+          userId_guildId: {
+            userId: this.userId,
+            guildId: this.guildId
+          }
+        },
+        data: {
+          poisons: {
+            increment: price
+          }
         }
       })
     })
