@@ -19,4 +19,5 @@ model Card {
   required_xp      Int     @default(100)
 
   @@index([profileId, active_roster, id(sort: Desc)])
+  @@index([profileId, arena_roster, id])
 }

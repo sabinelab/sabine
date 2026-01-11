@@ -10,9 +10,9 @@ model Prediction {
   odd        Int?             @db.SmallInt
   created_at DateTime         @default(now())
 
-  @@index([profileId, id])
-  @@index([game])
-  @@index([match])
+  @@index([profileId, game])
+  @@index([profileId, game, match])
+  @@index([game, match, status])
 }
 
 model Team {

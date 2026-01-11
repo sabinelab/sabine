@@ -17,8 +17,6 @@ model Premium {
   userId     String      @unique
   type       PremiumType
   expires_at DateTime
-
-  @@index([userId])
 }
 
 enum PremiumType {

@@ -45,8 +45,8 @@ model Profile {
   guildId                  String
 
   @@unique([userId, guildId])
-  @@index([poisons])
-  @@index([correct_predictions])
-  @@index([rank_rating])
-  @@index([arena_wins])
+  @@index([guildId, poisons(sort: Desc)])
+  @@index([guildId, correct_predictions(sort: Desc)])
+  @@index([guildId, rank_rating(sort: Desc)])
+  @@index([guildId, arena_wins(sort: Desc)])
 }

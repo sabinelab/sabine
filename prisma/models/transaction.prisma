@@ -9,7 +9,7 @@ model Transaction {
   to         String?
   created_at DateTime        @default(now())
 
-  @@index([profileId, type])
+  @@index([profileId, created_at(sort: Desc)])
 }
 
 enum Pack {
