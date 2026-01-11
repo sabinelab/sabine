@@ -13,10 +13,14 @@ type Stats = {
   name: string
 }
 
+type MetadataTeam = {
+  name: string
+  user: string
+}
 type Metadata = {
   map: string
   stats: Stats[]
-  teams: string[]
+  teams: MetadataTeam[]
 }
 
 export default createCommand({
@@ -76,11 +80,15 @@ export default createCommand({
         })
       )
       .setDesc(
-        `### <@${match.teams[0].user}> ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} <@${match.teams[1].user}>\n`
+        `### <@${match.teams[0].user}> ${
+          summary.teams.find(t => t.user === match.teams[0].user)?.name
+        } ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} ${
+          summary.teams.find(t => t.user === match.teams[0].user)?.name
+        } <@${match.teams[1].user}>\n`
       )
       .setFields(
         {
-          name: summary.teams[0],
+          name: summary.teams[0].name,
           value: summary.stats
             .slice(0, 5)
             .map(p => {
@@ -90,7 +98,7 @@ export default createCommand({
           inline: true
         },
         {
-          name: summary.teams[1],
+          name: summary.teams[1].name,
           value: summary.stats
             .slice(-5)
             .map(p => {

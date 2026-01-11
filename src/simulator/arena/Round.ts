@@ -125,7 +125,16 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [this.teams[0].name, this.teams[1].name]
+          teams: [
+            {
+              name: this.teams[0].name,
+              user: this.teams[0].user
+            },
+            {
+              name: this.teams[1].name,
+              user: this.teams[1].user
+            }
+          ]
         }
 
         await prisma.$transaction([
@@ -236,7 +245,16 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [this.teams[0].name, this.teams[1].name]
+          teams: [
+            {
+              name: this.teams[0].name,
+              user: this.teams[0].user
+            },
+            {
+              name: this.teams[1].name,
+              user: this.teams[1].user
+            }
+          ]
         }
 
         await prisma.$transaction([
@@ -347,7 +365,16 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [this.teams[0].name, this.teams[1].name]
+          teams: [
+            {
+              name: this.teams[0].name,
+              user: this.teams[0].user
+            },
+            {
+              name: this.teams[1].name,
+              user: this.teams[1].user
+            }
+          ]
         }
 
         await prisma.$transaction([
@@ -458,7 +485,16 @@ export default class Round extends Match {
             }))
           ],
           map: this.mapImage,
-          teams: [this.teams[0].name, this.teams[1].name]
+          teams: [
+            {
+              name: this.teams[0].name,
+              user: this.teams[0].user
+            },
+            {
+              name: this.teams[1].name,
+              user: this.teams[1].user
+            }
+          ]
         }
 
         await prisma.$transaction([
