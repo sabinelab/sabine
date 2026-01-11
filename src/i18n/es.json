@@ -327,7 +327,7 @@
       "left": "¡Saliste de la cola con éxito!",
       "is_not_in_queue": "No estás en la cola de la Arena.",
       "invalid_lineup": "Necesitas establecer la alineación del mapa **{map}**. ¡Usa `/arena lineup` para comenzar!",
-      "no_players": "No tienes jugadores. ¡Usa `/claim` para comenzar!",
+      "no_players": "No tienes jugadores de Arena. ¡Usa {cmd} para comenzar!",
       "your_players": "### Tus Jugadores",
       "promote": "Promover",
       "remove": "Eliminar",

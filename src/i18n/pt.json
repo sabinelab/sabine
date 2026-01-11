@@ -327,7 +327,7 @@
       "left": "Você saiu da fila com sucesso!",
       "is_not_in_queue": "Você não está em uma fila.",
       "invalid_lineup": "Você precisa definir a formação do mapa **{map}**. Use `/arena lineup` para começar!",
-      "no_players": "Você não possui nenhum jogador. Use `/claim` para começar!",
+      "no_players": "Você não possui nenhum jogador de Arena. Use {cmd} para começar!",
       "your_players": "### Seus Jogadores",
       "promote": "Promover",
       "remove": "Remover",

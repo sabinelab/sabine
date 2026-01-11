@@ -321,7 +321,7 @@
       "left": "You left the queue succesfully!",
       "is_not_in_queue": "You are not in the Arena queue.",
       "invalid_lineup": "You need to set the **{map}** map lineup. Use `/arena lineup` to get started!",
-      "no_players": "You do not have any players. Use `/claim` to get started!",
+      "no_players": "You do not have any Arena players. Use {cmd} to get started!",
       "your_players": "### Your Players",
       "promote": "Promote",
       "remove": "Remove",
