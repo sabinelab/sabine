@@ -10,20 +10,6 @@
       "no_predictions": "Você não possui palpites.",
       "no_pages": "Nada para mostrar nesta página."
     },
-    "player": {
-      "insert_player": "Informe o nome de um jogador.",
-      "player_not_found": "Nenhum jogador foi encontrado com esse nome.",
-      "embed": {
-        "desc": "Nome: `{name}`\nEquipe atual: {team}\nEquipes passadas: {pt}\nÚltima partida: {lt}"
-      }
-    },
-    "team": {
-      "insert_team": "Informe o nome de uma equipe.",
-      "team_not_found": "Nenhuma equipe foi encontrada com esse nome.",
-      "embed": {
-        "desc": "Jogadores: {p}\nStaff: {s}\nÚltima partida: {lt}\nPróxima partida: {n}"
-      }
-    },
     "help": {
       "command_not_found": "Comando não encontrado.",
       "name": "Nome",
@@ -51,21 +37,23 @@
         "title": "Top 100 - Tabela de Palpites",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "field": "`{t}` palpites certos"
+        "description1": "**{pos} {user} — `{predictions}` correct predictions**",
+        "description2": "{pos} {user} — `{predictions}` correct predictions"
       },
       "poisons": {
         "title": "Top 100 - Tabela de Toxinas",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "field": "`{t}` toxinas"
+        "description1": "**{pos} {user} — `{poisons}` poisons**",
+        "description2": "{pos} {user} — `{poisons}` poisons"
       },
       "rating": {
         "title": "Top 100 - Tabela de Classificação",
         "author": "Página {page}/{pages}",
         "footer": "Sua posição: #{pos}",
-        "field": "Classificação: `{rr}RR`"
-      },
-      "desc": "A tabela é atualizada a cada 10 minutos\nÚltima atualização: {last}"
+        "description1": "**{pos} {user} — `{rr}` points**",
+        "description2": "{pos} {user} — `{rr}` points"
+      }
     },
     "admin": {
       "tournament_has_been_added": "Este campeonato já foi adicionado.",
@@ -162,17 +150,34 @@
         "reserve_players": "### Reserve Players ({total})",
         "button": {
           "promote": "Promover",
-          "remove": "Remover"
-        }
+          "remove": "Remover",
+          "promote_arena": "Promote to Arena"
+        },
+        "card_content": "> {card}\n> Level: `{level}`\n> XP: `{xp}` {progress}"
       },
-      "generate_file": "Gerar arquivo .txt do elenco completo",
       "change_team": "Alterar nome ou tag da equipe",
+      "practice": "Practice (0.5 fates per XP)",
+      "upgrade": "Upgrade ({cost} poisons)",
       "modal": {
         "title": "Insira o novo nome e tag",
         "team_name": "Novo nome",
-        "team_tag": "Nova tag"
+        "team_tag": "Nova tag",
+        "practice": {
+          "title": "Improve your team",
+          "description": "Insert the amount of XP",
+          "max": "Maximum XP accepted: {max}"
+        }
       },
-      "team_info_changed": "Você alterou o nome do seu time para **{name}** e a tag para **{tag}** com sucesso!"
+      "team_info_changed": "Você alterou o nome do seu time para **{name}** e a tag para **{tag}** com sucesso!",
+      "invalid_value": "Please, provide a value less than or equal to {value}.",
+      "value_too_short": "You need at least **{required_fates} fates** to do this and you have **{fates}**.",
+      "max_xp_reached": "This card has reached the maximum XP. Consider upgrade the level using the `Upgrade` button.",
+      "practiced": "You practiced with **{card}** for **{cost} fates**, and now it has {xp} XP!",
+      "max_level_reached": "This card has reached the maximum level. Congratulations! 🎉",
+      "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade this card and you have **{poisons}**.",
+      "xp_needed": "This card doesn't have enough XP for this.",
+      "upgraded": "You upgraded **{card}** for **{poisons} poisons**, and now it's now level {level}!",
+      "already_promoted": "This player doens't exists or has already been promoted."
     },
     "promote": {
       "player_not_found": "Jogador não encontrado!",
@@ -251,15 +256,6 @@
       "bonus3": "- Você recebeu **{poisons}** toxinas de bônus por este ser um servidor Premium.",
       "bonus4": "- Você recebeu **{poisons}** toxinas de bônus por este ser um servidor Premium Booster."
     },
-    "sign": {
-      "player_not_found": "Jogador não encontrado!",
-      "embed": {
-        "desc": "Contrate este jogador por **{price}** toxinas"
-      },
-      "buy": "Contratar",
-      "poisons_needed": "Você não tem toxinas suficientes para realizar esta compra",
-      "signed": "Você contratou **{player}** por **{price}** toxinas com sucesso!"
-    },
     "claims": {
       "res": "Seus claims: `{claims}`\nSeu pity: `{pity}`\nAo chegar ao pity **50**, uma carta Tier S (85+) é garantida!"
     },
@@ -337,7 +333,8 @@
       "embed": {
         "title": "Informações da Arena",
         "desc": "Pessoas na fila agora: `{queueLength}`\nMapa Atual: `{map}`\nO mapa mudará {when}"
-      }
+      },
+      "null_map": "The Arena map hasn't been defined yet due to an unknown issue, so you cannot join the queue. If the issue persists, report it to our team on [our official Discord](https://discord.com/invite/FaqYcpA84r) server!"
     },
     "summary": {
       "match_not_found": "Esta partida não pôde ser encontrada. Verifique a semente e tente novamente.",
@@ -373,7 +370,47 @@
       "description": "Vote no bot agora e ganhe recompensas incríveis!\n\nÚltimo voto: {last_vote}\nSequência atual: `{current_streak}`\nVotos totais: `{total}`",
       "field": "Recompensas",
       "value": "Pacote Radiante (`95+`): `0.5%`\nPacote Imortal (`91-94`): `1.5%`\nPacote Ascendente (`87-90`): `3%`\nPacote Diamante (`83-86`): `15%`\nPacote Platina (`78-82`): `30%`\nPacote Ouro (`73-77`): `20%`\nPacote Prata (`67-72`): `15%`\nPacote Bronze (`60-66`): `10%`\nPacote Ferro (`59-`): `5%`\n\nA cada 20 votos sem quebrar a sequência, um Pacote Radiante é garantido.",
-      "vote": "Vote agora!"
+      "vote": "Vote agora!",
+      "claim_reward": "Claim reward",
+      "already_claimed": "You need to vote for the bot to claim your reward.",
+      "claimed": "You claimed one **{pack}** pack by voting for the bot!"
+    },
+    "modclean": {
+      "button": "Reset",
+      "content": [
+        "Are you sure you want to proceed?",
+        "You're about to reset: \n{type}",
+        "This action is **irreversible**.",
+        "-# Please confirm within 30 seconds"
+      ],
+      "type": {
+        "all": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions",
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "balance": ["- Poisons and fates"],
+        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "simulator": [
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+      },
+      "reseted": ["You have successfully reset: \n{type}"]
     }
   },
   "simulator": {
@@ -485,7 +522,6 @@
     "Connect": "Conectar",
     "Speak": "Falar",
     "MuteMembers": "Silenciar membros",
-    "RequestToSpeak": "Pedir para falar",
     "DeafenMembers": "Ensurdecer membros",
     "MoveMembers": "Mover membros",
     "ManageWebhooks": "Gerenciar webhooks",
