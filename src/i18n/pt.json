@@ -34,22 +34,22 @@
     "leaderboard": {
       "no_users": "Sem usuários para mostrar nesta página.",
       "predictions": {
-        "title": "Predictions Leaderboard",
-        "author": "Page {page}",
+        "title": "Tabela de Palpites",
+        "author": "Página {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{predictions}` palpites corretos**",
         "description2": "{pos} {user} — `{predictions}` palpites corretos"
       },
       "poisons": {
-        "title": "Poisons Leaderboard",
-        "author": "Page {page}",
+        "title": "Tabela de Toxinas",
+        "author": "Página {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{poisons}` toxinas**",
         "description2": "{pos} {user} — `{poisons}` toxinas"
       },
       "rating": {
-        "title": "Rating Leaderboard",
-        "author": "Page {page}",
+        "title": "Tabela de Classificação",
+        "author": "Página {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{rr}` pontos**",
         "description2": "{pos} {user} — `{rr}` pontos"
@@ -172,12 +172,12 @@
       "invalid_value": "Por favor, informe um valor maior ou igual a {value}.",
       "value_too_short": "Você precisa de pelo menos **{required_fates} destinos** para fazer isso, e você tem **{fates}**.",
       "max_xp_reached": "Esta carta alcançou o XP máximo. Considere melhorar o nível usando o botão `Melhorar`.",
-      "practiced": "You practiced with **{card}** for **{cost} fates**, and now it has {xp} XP!",
-      "max_level_reached": "This card has reached the maximum level. Congratulations! 🎉",
-      "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade this card and you have **{poisons}**.",
-      "xp_needed": "This card doesn't have enough XP for this.",
-      "upgraded": "You upgraded **{card}** for **{poisons} poisons**, and now it's now level {level}!",
-      "already_promoted": "This player doens't exists or has already been promoted."
+      "practiced": "Você praticou com **{card}** por **{cost} destinos**, e agora a carta tem {xp} XP!",
+      "max_level_reached": "Esta carta alcançou o nível máximo. Parabéns! 🎉",
+      "poisons_needed": "Você precisa de pelo menos **{required_poisons} toxinas** para melhorar esta carta, e você tem **{poisons}**.",
+      "xp_needed": "Esta carta não tem XP suficiente para isto.",
+      "upgraded": "Você melhorou **{card}** por **{poisons} destinos**, e agora a carta está nível {level}!",
+      "already_promoted": "Este jogador não existe ou já foi promovido."
     },
     "promote": {
       "player_not_found": "Jogador não encontrado!",
@@ -206,7 +206,7 @@
       "request": "{opponent}, {author} quer duelar contra você em uma partida no modo **{mode}**. Vai aceitar ou vai amarelar? 🐔\n-# {opponent} tem 1 minuto para aceitar",
       "button": "Aceitar",
       "duplicated_cards": "Você não pode ter cards duplicados no seu elenco.",
-      "duplicated_cards2": "Your opponent cannot have duplicated cards in roster.",
+      "duplicated_cards2": "Seu oponente não pode ter cartas duplicadas no elenco.",
       "cannot_duel": "Você não pode duelar contra você mesmo.",
       "mode": {
         "ranked": "Ranqueado",
@@ -230,7 +230,7 @@
       "embed": {
         "author": "Sua Carreira",
         "desc": "**Pontos:** `{rr}RR`\n**Vitórias/Derrotas** (arena): `{arena_wins}/{arena_defeats}`\n**Vitórias/Derrotas** (ranqueado): `{ranked_wins}/{ranked_defeats}`\n**Vitórias/Derrotas** (sem classificação): `{unranked_wins}/{unranked_defeats}`\n**Vitórias/Derrotas** (frenético ranqueado): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Vitórias/Derrotas** (frenético): `{swiftplay_wins}/{swiftplay_defeats}`\n**Vitórias Totais:** `{total_wins}`\n**Derrotas Totais:** `{total_defeats}`\n**Partidas Jogadas:** `{total}`",
-        "footer": "Page {page}"
+        "footer": "Página {page}"
       },
       "type": {
         "ranked_win": "Venceu {user} por `{score}` **[{points}RR]**",
@@ -289,7 +289,7 @@
       },
       "embed": {
         "title": "Suas Transações",
-        "footer": "Page {page}"
+        "footer": "Página {page}"
       },
       "none_yet": "Você não tem nenhuma transação para mostrar."
     },
@@ -334,7 +334,7 @@
         "title": "Informações da Arena",
         "desc": "Pessoas na fila agora: `{queueLength}`\nMapa Atual: `{map}`\nO mapa mudará {when}"
       },
-      "null_map": "The Arena map hasn't been defined yet due to an unknown issue, so you cannot join the queue. If the issue persists, report it to our team on [our official Discord](https://discord.com/invite/FaqYcpA84r) server!"
+      "null_map": "O mapa da Arena ainda não foi definido devido a um problema desconhecido, portanto, você não pode entrar na fila. Se o problema persistir, reporte para nossa equipe no nosso [servidor Discord](https://discord.com/invite/FaqYcpA84r) oficial!"
     },
     "summary": {
       "match_not_found": "Esta partida não pôde ser encontrada. Verifique a semente e tente novamente.",
@@ -351,14 +351,14 @@
           "diamond": "(`{price}` destinos) Pacote Diamante — 83-86 overall",
           "ascendant": "(`{price}` destinos) Pacote Ascendente — 87-90 overall"
         },
-        "button": "Buy"
+        "button": "Comprar"
       },
-      "not_enough": "You do not have enough fates.",
+      "not_enough": "Você não tem destinos suficientes.",
       "success": {
-        "gold": "You bought a **Gold** pack for **{fates} fates** succesfully!",
-        "platinum": "You bought a **Platinum** pack for **{fates} fates** succesfully!",
-        "diamond": "You bought a **Diamond** pack for **{fates} fates** succesfully!",
-        "ascendant": "You bought a **Ascendant** pack for **{fates} fates** succesfully!"
+        "gold": "Você comprou um pacote **Ouro** por  **{fates} destinos** com sucesso!",
+        "platinum": "Você comprou um pacote **Platina** por  **{fates} destinos** com sucesso!",
+        "diamond": "Você comprou um pacote **Diamante** por  **{fates} destinos** com sucesso!",
+        "ascendant": "Você comprou um pacote **Ascendente** por  **{fates} destinos** com sucesso!"
       }
     },
     "register": {
@@ -371,46 +371,46 @@
       "field": "Recompensas",
       "value": "Pacote Radiante (`95+`): `0.5%`\nPacote Imortal (`91-94`): `1.5%`\nPacote Ascendente (`87-90`): `3%`\nPacote Diamante (`83-86`): `15%`\nPacote Platina (`78-82`): `30%`\nPacote Ouro (`73-77`): `20%`\nPacote Prata (`67-72`): `15%`\nPacote Bronze (`60-66`): `10%`\nPacote Ferro (`59-`): `5%`\n\nA cada 20 votos sem quebrar a sequência, um Pacote Radiante é garantido.",
       "vote": "Vote agora!",
-      "claim_reward": "Claim reward",
-      "already_claimed": "You need to vote for the bot to claim your reward.",
-      "claimed": "You claimed one **{pack}** pack by voting for the bot!"
+      "claim_reward": "Coletar recompensa",
+      "already_claimed": "Você precisa votar no bot para coletar sua recompensa.",
+      "claimed": "Você coletou um pacote **{pack}** por votar no bot!"
     },
     "modclean": {
-      "button": "Reset",
+      "button": "Redefinir",
       "content": [
-        "Are you sure you want to proceed?",
-        "You're about to reset: \n{type}",
-        "This action is **irreversible**.",
-        "-# Please confirm within 30 seconds"
+        "Você tem certeza que deseja prosseguir?",
+        "Você está prestes a redefinir: \n{type}",
+        "Esta ação é **irreversível**.",
+        "-# Por favor, confirme em até 30 segundos"
       ],
       "type": {
         "all": [
-          "- Incorrect/correct predictions",
-          "- Submitted predictions",
-          "- Matches",
-          "- Career",
-          "- Poisons and fates",
-          "- Packs",
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados",
+          "- Partidas",
+          "-  Carreira",
+          "- Toxinas e destinos",
+          "- Pacotes",
           "- Claims",
-          "- Wins and defeats",
-          "- Rosters",
+          "- Vitórias e derrotas",
+          "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Poisons and fates"],
-        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "balance": ["- Toxinas e destinos"],
+        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
         "simulator": [
-          "- Matches",
-          "- Career",
-          "- Poisons and fates",
-          "- Packs",
+          "- Partidas",
+          "- Carreira",
+          "- Toxinas e destinos",
+          "- Pacotes",
           "- Claims",
-          "- Wins and defeats",
-          "- Rosters",
+          "- Vitórias e derrotas",
+          "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
       },
-      "reseted": ["You have successfully reset: \n{type}"]
+      "reseted": ["Você redefiniu com sucesso: \n{type}"]
     }
   },
   "simulator": {
