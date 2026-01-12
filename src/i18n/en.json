@@ -34,22 +34,22 @@
     "leaderboard": {
       "no_users": "No users to show in this page.",
       "predictions": {
-        "title": "Top 100 - Predictions Leaderboard",
-        "author": "Page {page}/{pages}",
+        "title": "Predictions Leaderboard",
+        "author": "Page {page}",
         "footer": "Your position: #{pos}",
         "description1": "**{pos} {user} — `{predictions}` correct predictions**",
         "description2": "{pos} {user} — `{predictions}` correct predictions"
       },
       "poisons": {
-        "title": "Top 100 - Poisons Leaderboard",
-        "author": "Page {page}/{pages}",
+        "title": "Poisons Leaderboard",
+        "author": "Page {page}",
         "footer": "Your position: #{pos}",
         "description1": "**{pos} {user} — `{poisons}` poisons**",
         "description2": "{pos} {user} — `{poisons}` poisons"
       },
       "rating": {
-        "title": "Top 100 - Rating Leaderboard",
-        "author": "Page {page}/{pages}",
+        "title": "Rating Leaderboard",
+        "author": "Page {page}",
         "footer": "Your position: #{pos}",
         "description1": "**{pos} {user} — `{rr}` points**",
         "description2": "{pos} {user} — `{rr}` points"
@@ -230,7 +230,7 @@
       "embed": {
         "author": "Your Career",
         "desc": "**Points:** `{rr}RR`\n**Wins/Defeats** (arena): `{arena_wins}/{arena_defeats}`\n**Wins/Defeats** (ranked): `{ranked_wins}/{ranked_defeats}`\n**Wins/Defeats** (unranked): `{unranked_wins}/{unranked_defeats}`\n**Wins/Defeats** (ranked swiftplay): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Wins/Defeats** (swiftplay): `{swiftplay_wins}/{swiftplay_defeats}`\n**Total Wins:** `{total_wins}`\n**Total Defeats:** `{total_defeats}`\n**Matches Played:** `{total}`",
-        "footer": "Page {page}/{pages}"
+        "footer": "Page {page}"
       },
       "type": {
         "ranked_win": "Beat {user} for `{score}` **[{points}RR]**",
@@ -289,7 +289,7 @@
       },
       "embed": {
         "title": "Your Transactions",
-        "footer": "Page {page}/{pages}"
+        "footer": "Page {page}"
       },
       "none_yet": "You don't have any transaction to show."
     },
@@ -396,8 +396,13 @@
           "- Rosters",
           "- Pity"
         ],
-        "balance": ["- Poisons and fates"],
-        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "balance": [
+          "- Poisons and fates"
+        ],
+        "predictions": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions"
+        ],
         "simulator": [
           "- Matches",
           "- Career",
@@ -408,9 +413,14 @@
           "- Rosters",
           "- Pity"
         ],
-        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+        "stats": [
+          "- Wins and defeats",
+          "- Incorrect/correct predictions"
+        ]
       },
-      "reseted": ["You have successfully reset: \n{type}"]
+      "reseted": [
+        "You have successfully reset: \n{type}"
+      ]
     }
   },
   "simulator": {
