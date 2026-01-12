@@ -8,7 +8,7 @@ model Update {
 
 model Content {
   id       String @id @default(uuid())
-  update   Update @relation(fields: [updateId], references: [id])
+  update   Update @relation(fields: [updateId], references: [id], onDelete: Cascade)
   updateId String @map("update_id")
   lang     String
   text     String

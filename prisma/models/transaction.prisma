@@ -1,6 +1,6 @@
 model Transaction {
   id        String  @id @default(uuid())
-  profile   Profile @relation(fields: [profileId], references: [id])
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId String  @map("profile_id")
 
   type   TransactionType
