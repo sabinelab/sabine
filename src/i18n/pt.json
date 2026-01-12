@@ -34,22 +34,22 @@
     "leaderboard": {
       "no_users": "Sem usuários para mostrar nesta página.",
       "predictions": {
-        "title": "Tabela de Palpites",
-        "author": "Página {page}",
+        "title": "Predictions Leaderboard",
+        "author": "Page {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{predictions}` palpites corretos**",
         "description2": "{pos} {user} — `{predictions}` palpites corretos"
       },
       "poisons": {
-        "title": "Tabela de Toxinas",
-        "author": "Página {page}",
+        "title": "Poisons Leaderboard",
+        "author": "Page {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{poisons}` toxinas**",
         "description2": "{pos} {user} — `{poisons}` toxinas"
       },
       "rating": {
-        "title": "Tabela de Classificação",
-        "author": "Página {page}",
+        "title": "Rating Leaderboard",
+        "author": "Page {page}",
         "footer": "Sua posição: #{pos}",
         "description1": "**{pos} {user} — `{rr}` pontos**",
         "description2": "{pos} {user} — `{rr}` pontos"
@@ -230,7 +230,7 @@
       "embed": {
         "author": "Sua Carreira",
         "desc": "**Pontos:** `{rr}RR`\n**Vitórias/Derrotas** (arena): `{arena_wins}/{arena_defeats}`\n**Vitórias/Derrotas** (ranqueado): `{ranked_wins}/{ranked_defeats}`\n**Vitórias/Derrotas** (sem classificação): `{unranked_wins}/{unranked_defeats}`\n**Vitórias/Derrotas** (frenético ranqueado): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Vitórias/Derrotas** (frenético): `{swiftplay_wins}/{swiftplay_defeats}`\n**Vitórias Totais:** `{total_wins}`\n**Derrotas Totais:** `{total_defeats}`\n**Partidas Jogadas:** `{total}`",
-        "footer": "Página {page}"
+        "footer": "Page {page}"
       },
       "type": {
         "ranked_win": "Venceu {user} por `{score}` **[{points}RR]**",
@@ -289,7 +289,7 @@
       },
       "embed": {
         "title": "Suas Transações",
-        "footer": "Página {page}"
+        "footer": "Page {page}"
       },
       "none_yet": "Você não tem nenhuma transação para mostrar."
     },
