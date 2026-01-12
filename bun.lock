@@ -9,7 +9,7 @@
         "@iamtraction/google-translate": "2.0.1",
         "@prisma/adapter-pg": "7.2.0",
         "@prisma/client": "7.2.0",
-        "@sabinelab/players": "1.5.4",
+        "@sabinelab/players": "1.6.0",
         "bull": "4.16.5",
         "discord.js": "14.25.1",
         "elysia": "1.4.21",
@@ -128,7 +128,7 @@
 
     "@prisma/studio-core": ["@prisma/studio-core@0.9.0", "", { "peerDependencies": { "@types/react": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" } }, "sha512-xA2zoR/ADu/NCSQuriBKTh6Ps4XjU0bErkEcgMfnSGh346K1VI7iWKnoq1l2DoxUqiddPHIEWwtxJ6xCHG6W7g=="],
 
-    "@sabinelab/players": ["@sabinelab/players@1.5.4", "https://npm.pkg.github.com/download/@sabinelab/players/1.5.4/67300433e15b96eb184e5b139b37e34f0dcc4049", {}, "sha512-3RaiSJgdkqi1uj+qg01+OzKT9vkL7ZTScxBWZ++jGQhk6sr6LD1/7ITQ2kEXd87EfTM0qWIlz0T8JWeRiBNHWQ=="],
+    "@sabinelab/players": ["@sabinelab/players@1.6.0", "https://npm.pkg.github.com/download/@sabinelab/players/1.6.0/6b1bfb080245e2e7b059f516a7e03cf1cdd6716a", {}, "sha512-k9/+oXQYHD0Wasg8mRhQzKVsPWz+BTkqX+viHrzlDZ9VW7Zl0vVMt2Ghp8BlcgI7LqySa9KXJhTTKZBOT1iKzg=="],
 
     "@sapphire/async-queue": ["@sapphire/async-queue@1.5.5", "", {}, "sha512-cvGzxbba6sav2zZkH8GPf2oGk9yYoD5qrNWdu9fRehifgnFZJMV+nuy2nON2roRO4yQQ+v7MK/Pktl/HgfsUXg=="],
 

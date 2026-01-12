@@ -36,9 +36,9 @@ export const rebalanceCards = async (playersIds) => {
 
     const newStats = {
       aim: base.aim * buff,
-      hs: base.HS * buff,
+      hs: base.hs * buff,
       movement: base.movement * buff,
-      acs: base.ACS * buff,
+      acs: base.acs * buff,
       gamesense: base.gamesense * buff,
       aggression: base.aggression * buff
     }
@@ -50,9 +50,9 @@ export const rebalanceCards = async (playersIds) => {
         overall: calcPlayerOvr({
           ...base,
           aim: newStats.aim,
-          HS: newStats.hs,
+          hs: newStats.hs,
           movement: newStats.movement,
-          ACS: newStats.acs,
+          acs: newStats.acs,
           gamesense: newStats.gamesense,
           aggression: newStats.aggression
         })
@@ -70,5 +70,5 @@ export const rebalanceCards = async (playersIds) => {
 
   console.log(`Cards updated in ${((Date.now() - started) / 1000).toFixed(1)}s`)
 
-  return { count: playersIds.length }
+  return { count: cards.length }
 }

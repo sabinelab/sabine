@@ -557,17 +557,17 @@ export default createCommand({
             requiredXp: Math.floor(card.requiredXp * 1.3),
             xp: 0,
             aim: p.aim * buff,
-            hs: p.HS * buff,
+            hs: p.hs * buff,
             movement: p.movement * buff,
-            acs: p.ACS * buff,
+            acs: p.acs * buff,
             gamesense: p.gamesense * buff,
             aggression: p.aggression * buff,
             overall: calcPlayerOvr({
               ...p,
               aim: p.aim * buff,
-              HS: p.HS * buff,
+              hs: p.hs * buff,
               movement: p.movement * buff,
-              ACS: p.ACS * buff,
+              acs: p.acs * buff,
               gamesense: p.gamesense * buff,
               aggression: p.aggression * buff
             })

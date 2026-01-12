@@ -255,9 +255,9 @@ export class ProfileSchema implements Profile {
     const updates: any = {
       cards: {
         create: {
-          acs: player.ACS,
+          acs: player.acs,
           aim: player.aim,
-          hs: player.HS,
+          hs: player.hs,
           gamesense: player.gamesense,
           movement: player.movement,
           aggression: player.aggression,
@@ -350,9 +350,9 @@ export class ProfileSchema implements Profile {
                 return {
                   playerId: p,
                   aim: player.aim,
-                  hs: player.HS,
+                  hs: player.hs,
                   movement: player.movement,
-                  acs: player.ACS,
+                  acs: player.acs,
                   gamesense: player.gamesense,
                   aggression: player.aggression,
                   overall: player.ovr
