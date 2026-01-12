@@ -6,16 +6,15 @@ services:
     image: sabine
     container_name: sabine
     restart: unless-stopped
-    ports:
-      - '5000:3001'
     depends_on:
       redis:
         condition: service_healthy
     env_file:
       - .env
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://localhost:6379
       - NODE_ENV=production
+    network_mode: host
 
   redis:
     image: redis:latest
