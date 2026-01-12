@@ -97,7 +97,8 @@ export default createCommand({
   messageComponentInteractionTime: 10 * 60 * 1000,
   async run({ ctx, app }) {
     if (ctx.args[0] === 'poisons') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[1]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           poisons: {
@@ -107,18 +108,13 @@ export default createCommand({
         orderBy: {
           poisons: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           poisons: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[1]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -127,14 +123,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.poisons.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.poisons.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -161,7 +157,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.poisons) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              poisons: {
+                gt: ctx.db.profile.poisons
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -181,7 +190,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
@@ -192,7 +201,8 @@ export default createCommand({
         components: [row]
       })
     } else if (ctx.args[0] === 'rating') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[1]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           rankRating: {
@@ -202,18 +212,13 @@ export default createCommand({
         orderBy: {
           rankRating: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           rankRating: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[1]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -222,14 +227,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.rating.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.rating.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -256,7 +261,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.rankRating) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              rankRating: {
+                gt: ctx.db.profile.rankRating
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -276,7 +294,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
@@ -287,7 +305,8 @@ export default createCommand({
         components: [row]
       })
     } else if (ctx.args[0] === 'predictions') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[1]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           correctPredictions: {
@@ -297,18 +316,13 @@ export default createCommand({
         orderBy: {
           correctPredictions: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           correctPredictions: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[1]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -317,14 +331,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.predictions.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.predictions.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -351,7 +365,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.rankRating) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              rankRating: {
+                gt: ctx.db.profile.rankRating
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -371,7 +398,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
@@ -385,7 +412,8 @@ export default createCommand({
   },
   async createMessageComponentInteraction({ ctx, app }) {
     if (ctx.args[2] === 'poisons') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[4]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           poisons: {
@@ -395,18 +423,13 @@ export default createCommand({
         orderBy: {
           poisons: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           poisons: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[4]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -415,14 +438,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.poisons.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.poisons.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -449,7 +472,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.poisons) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              poisons: {
+                gt: ctx.db.profile.poisons
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -469,7 +505,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
@@ -480,7 +516,8 @@ export default createCommand({
         components: [row]
       })
     } else if (ctx.args[2] === 'rating') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[4]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           rankRating: {
@@ -490,18 +527,13 @@ export default createCommand({
         orderBy: {
           rankRating: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           rankRating: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[4]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -510,14 +542,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.rating.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.rating.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -544,7 +576,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.rankRating) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              rankRating: {
+                gt: ctx.db.profile.rankRating
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -564,7 +609,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
@@ -575,7 +620,8 @@ export default createCommand({
         components: [row]
       })
     } else if (ctx.args[2] === 'predictions') {
-      let profiles = await app.prisma.profile.findMany({
+      const page = Number(ctx.args[4]) || 1
+      const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
           correctPredictions: {
@@ -585,18 +631,13 @@ export default createCommand({
         orderBy: {
           correctPredictions: 'desc'
         },
-        take: 100,
+        skip: (page - 1) * 10,
+        take: 11,
         select: {
           userId: true,
           correctPredictions: true
         }
       })
-
-      const array = profiles
-      const page = Number(ctx.args[4]) || 1
-      const pages = Math.ceil(array.length / 10)
-
-      profiles = profiles.slice(page * 10 - 10, page * 10)
 
       if (!profiles.length) {
         return await ctx.reply('commands.leaderboard.no_users')
@@ -605,14 +646,14 @@ export default createCommand({
       const embed = new EmbedBuilder()
         .setAuthor({
           name: ctx.t('commands.leaderboard.predictions.author', {
-            page,
-            pages
+            page
           })
         })
         .setTitle(ctx.t('commands.leaderboard.predictions.title'))
-        .setThumb((await app.getUser(array[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
         .setDesc(
           profiles
+            .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
               const pos =
@@ -639,7 +680,20 @@ export default createCommand({
             .join('\n')
         )
 
-      const pos = array.findIndex(p => p.userId === ctx.db.profile.userId) + 1
+      let pos: number | null = null
+
+      if (ctx.db.profile.rankRating) {
+        pos =
+          (await app.prisma.profile.count({
+            where: {
+              guildId: ctx.db.guild.id,
+              rankRating: {
+                gt: ctx.db.profile.rankRating
+              }
+            }
+          })) + 1
+      }
+
       if (pos) {
         embed.setFooter({
           text: ctx.t('commands.leaderboard.predictions.footer', { pos })
@@ -659,7 +713,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (page >= pages) {
+      if (profiles.length <= 10) {
         next.setDisabled()
       }
 
