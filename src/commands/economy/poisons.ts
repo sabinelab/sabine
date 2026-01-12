@@ -11,24 +11,19 @@ export default createCommand({
   },
   category: 'economy',
   async run({ ctx, app }) {
-    const profiles = await app.prisma.profile.findMany({
+    const profilesAheadCount = await app.prisma.profile.count({
       where: {
-        guildId: ctx.db.guild.id
-      },
-      orderBy: {
-        poisons: 'desc'
-      },
-      take: 100,
-      select: {
-        userId: true
+        guildId: ctx.db.guild.id,
+        poisons: {
+          gt: ctx.db.profile.poisons
+        }
       }
     })
-    const p = profiles.findIndex(p => p.userId === ctx.db.profile.userId) + 1
 
     await ctx.reply('commands.poisons.res', {
       c: ctx.db.profile.poisons.toLocaleString(),
       f: ctx.db.profile.fates.toLocaleString(),
-      p
+      p: profilesAheadCount + 1
     })
   }
 })
