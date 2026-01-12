@@ -462,7 +462,7 @@ export default createCommand({
         } else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
       }
 
-      for (const e of guild.events) {
+      for (const e of guild.events.filter(e => e.type === 'valorant')) {
         const channel = await app.channels.fetch(e.channel1)
         if (!channel || channel.type !== ChannelType.GuildText) continue
 
@@ -685,7 +685,7 @@ export default createCommand({
         )
       } else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
 
-      for (const e of guild.events) {
+      for (const e of guild.events.filter(e => e.type === 'lol')) {
         const channel = await app.channels.fetch(e.channel1)
         if (!channel || channel.type !== ChannelType.GuildText) continue
 
