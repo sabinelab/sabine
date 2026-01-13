@@ -178,6 +178,7 @@ export const valorantWeapons = [
   },
   {
     name: 'Bandit',
+    price: 600,
     damage: {
       head: 152,
       chest: 39
