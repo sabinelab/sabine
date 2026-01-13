@@ -19,14 +19,14 @@ const tier = (() => {
   } as const
 
   for (const p of app.players.values()) {
-    if (p.ovr >= 95) tier.radiant.push(p)
-    else if (p.ovr >= 91) tier.immortal.push(p)
-    else if (p.ovr >= 87) tier.ascendant.push(p)
+    if (p.ovr >= 101) tier.radiant.push(p)
+    else if (p.ovr >= 95) tier.immortal.push(p)
+    else if (p.ovr >= 89) tier.ascendant.push(p)
     else if (p.ovr >= 83) tier.diamond.push(p)
-    else if (p.ovr >= 78) tier.platinum.push(p)
-    else if (p.ovr >= 73) tier.gold.push(p)
-    else if (p.ovr >= 67) tier.silver.push(p)
-    else if (p.ovr >= 60) tier.bronze.push(p)
+    else if (p.ovr >= 77) tier.platinum.push(p)
+    else if (p.ovr >= 71) tier.gold.push(p)
+    else if (p.ovr >= 65) tier.silver.push(p)
+    else if (p.ovr >= 59) tier.bronze.push(p)
     else tier.iron.push(p)
   }
 
