@@ -325,7 +325,7 @@
       "invalid_lineup": "Você precisa definir a formação do mapa **{map}**. Use {cmd} para começar!",
       "no_players": "Você não possui nenhum jogador de Arena. Use {cmd} para começar!",
       "your_players": "### Seus Jogadores",
-      "promote": "Promover",
+      "promote": "Definir Agente",
       "remove": "Remover",
       "select_agent": "Selecione um agent para **{player}**.",
       "agent_selected": "**{p}** jogará de **{agent}**.",
@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     }
   },
   "simulator": {
