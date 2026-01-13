@@ -27,7 +27,7 @@ if (!currentMapInit && mapInit) await Bun.redis.set('arena:map', mapInit)
 const arenaMatchQueue = new Bull<ArenaQueue>('arena', { redis: env.REDIS_URL })
 const changeMapQueue = new Bull('arena:map', { redis: env.REDIS_URL })
 
-changeMapQueue.process('arena:map', async () => {
+changeMapQueue.process('change-arena-map', async () => {
   const currentMap = await Bun.redis.get('arena:map')
   let maps = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
 
@@ -154,22 +154,22 @@ manager.on('shardCreate', async shard => {
 
     const oldJobs = await changeMapQueue.getRepeatableJobs()
 
+    const promises: Promise<unknown>[] = []
     for (const job of oldJobs) {
-      if (job.id === 'change:map') {
-        await changeMapQueue.removeRepeatableByKey(job.key)
-      }
+      promises.push(changeMapQueue.removeRepeatableByKey(job.key))
     }
+    await Promise.all(promises)
 
     await changeMapQueue.add(
-      'arena:map',
+      'change-arena-map',
       {},
       {
         jobId: 'change:map',
         repeat: {
           cron: '0 0 * * 0' // midnight every sunday
         },
-        removeOnComplete: true,
-        removeOnFail: true
+        removeOnComplete: false,
+        removeOnFail: false
       }
     )
   }
