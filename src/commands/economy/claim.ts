@@ -6,20 +6,42 @@ import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
+type Tier =
+  | 'iron'
+  | 'bronze'
+  | 'silver'
+  | 'gold'
+  | 'platinum'
+  | 'diamond'
+  | 'ascendant'
+  | 'immortal'
+  | 'radiant'
+
 const tier = (() => {
-  const tier: { [key: string]: Player[] } = {
-    s: [] as Player[], // ovr 85+ (0.1%)
-    a: [] as Player[], // ovr 80-84 (0.9%)
-    b: [] as Player[], // ovr 70-79 (14%)
-    c: [] as Player[] // ovr 69- (85%)
+  const tier: Record<Tier, Player[]> = {
+    radiant: [], // 0.5%
+    immortal: [], // 1.5%
+    ascendant: [], // 3.0%
+    diamond: [], // 15.0%
+    platinum: [], // 30.0%
+    gold: [], // 20.0%
+    silver: [], // 15.0%
+    bronze: [], // 10.0%
+    iron: [] // 5.0%
   }
 
   for (const p of app.players.values()) {
     if (!p.ovr) continue
-    if (p.ovr >= 85) tier.s.push(p)
-    else if (p.ovr >= 80) tier.a.push(p)
-    else if (p.ovr >= 70) tier.b.push(p)
-    else tier.c.push(p)
+
+    if (p.ovr >= 101) tier.radiant.push(p)
+    else if (p.ovr >= 95) tier.immortal.push(p)
+    else if (p.ovr >= 89) tier.ascendant.push(p)
+    else if (p.ovr >= 83) tier.diamond.push(p)
+    else if (p.ovr >= 77) tier.platinum.push(p)
+    else if (p.ovr >= 71) tier.gold.push(p)
+    else if (p.ovr >= 65) tier.silver.push(p)
+    else if (p.ovr >= 59) tier.bronze.push(p)
+    else tier.iron.push(p)
   }
 
   return tier
@@ -28,12 +50,29 @@ const tier = (() => {
 const getRandomPlayer = () => {
   const random = Math.random() * 100
 
-  const pool = random < 0.1 ? tier.s : random < 1 ? tier.a : random < 15 ? tier.b : tier.c
+  const pool =
+    random < 0.5
+      ? tier.radiant
+      : random < 2.0
+        ? tier.immortal
+        : random < 5.0
+          ? tier.ascendant
+          : random < 20.0
+            ? tier.diamond
+            : random < 50.0
+              ? tier.platinum
+              : random < 70.0
+                ? tier.gold
+                : random < 85.0
+                  ? tier.silver
+                  : random < 95.0
+                    ? tier.bronze
+                    : tier.iron
 
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
-const getRandomPlayerByTier = (t: string) => {
+const getRandomPlayerByTier = (t: Tier) => {
   return tier[t][Math.floor(Math.random() * tier[t].length)]
 }
 
@@ -61,9 +100,11 @@ export default createCommand({
 
     let player: Player
 
-    if (ctx.db.profile.pity >= 49) {
-      player = getRandomPlayerByTier('s')
-    } else player = getRandomPlayer()
+    if (ctx.db.profile.pity >= 74) {
+      player = getRandomPlayerByTier('radiant')
+    } else {
+      player = getRandomPlayer()
+    }
 
     let channel: string | undefined
 

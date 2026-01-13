@@ -298,7 +298,7 @@ export class ProfileSchema implements Profile {
         }
       }
 
-      if (app.players.get(playerId)!.ovr >= 85) {
+      if (app.players.get(playerId)!.ovr >= 101) {
         updates.pity = 0
       }
     }
