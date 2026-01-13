@@ -1,4 +1,4 @@
-export const valorant_agents = [
+export const valorantAgents = [
   {
     name: 'Brimstone',
     role: 'controller',
@@ -135,7 +135,7 @@ export const valorant_agents = [
     emoji: '<:waylay:1404834635531161811>'
   }
 ] as const
-export const valorant_weapons = [
+export const valorantWeapons = [
   {
     name: 'Classic',
     price: 0,
@@ -175,6 +175,15 @@ export const valorant_weapons = [
     },
     magazine: 52,
     rate_fire: 148.15 / 10
+  },
+  {
+    name: 'Bandit',
+    damage: {
+      head: 152,
+      chest: 39
+    },
+    magazine: 32,
+    rate_fire: 240 / 10
   },
   {
     name: 'Sheriff',
@@ -327,9 +336,9 @@ export const valorant_weapons = [
     rate_fire: 750 / 10
   }
 ] as const
-export const valorant_maps: {
+export const valorantMaps: {
   name: string
-  meta_agents: (typeof valorant_agents)[number]['name'][]
+  meta_agents: (typeof valorantAgents)[number]['name'][]
   image: string
   current_map_pool?: boolean
   sides: ('A' | 'B' | 'C')[]

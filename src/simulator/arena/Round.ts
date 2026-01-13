@@ -1,5 +1,5 @@
 import { ProfileSchema, prisma } from '@db'
-import { valorant_maps, valorant_weapons } from '../../config'
+import { valorantMaps, valorantWeapons } from '../../config'
 import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'
 
@@ -37,7 +37,7 @@ export default class Round extends Match {
               },
               rate_fire: 750
             },
-            secondary: valorant_weapons.filter(w => w.name === 'Classic')[0]
+            secondary: valorantWeapons.filter(w => w.name === 'Classic')[0]
           }
         }
         p.life = 100
@@ -59,13 +59,13 @@ export default class Round extends Match {
         p.weapon = player.weapon
 
         if (p.weapon.primary) {
-          const weapon = valorant_weapons.filter(w => w.name === p.weapon?.primary?.name)[0]
+          const weapon = valorantWeapons.filter(w => w.name === p.weapon?.primary?.name)[0]
 
           p.weapon.primary.magazine = weapon.magazine
         }
 
         if (p.weapon.secondary) {
-          const weapon = valorant_weapons.filter(w => w.name === p.weapon?.secondary?.name)[0]
+          const weapon = valorantWeapons.filter(w => w.name === p.weapon?.secondary?.name)[0]
 
           p.weapon.secondary.magazine = weapon.magazine
         }
@@ -598,7 +598,7 @@ export default class Round extends Match {
           id: victim.id.toString()
         },
         victimIndex: loserTeamIndex,
-        weapon: weapon as (typeof valorant_weapons)[number]['name']
+        weapon: weapon as (typeof valorantWeapons)[number]['name']
       })
     }
 
@@ -636,7 +636,7 @@ export default class Round extends Match {
       const bombPlanted = Math.random() < chance
 
       if (bombPlanted) {
-        const bombSites = valorant_maps.find(m => m.name === this.map)!.sides
+        const bombSites = valorantMaps.find(m => m.name === this.map)!.sides
         const bombSite = bombSites[Math.floor(Math.random() * bombSites.length)]
 
         return await this.secondStep(true, bombSite)
@@ -709,7 +709,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as (typeof valorant_weapons)[number]['name']
+          weapon: weapon as (typeof valorantWeapons)[number]['name']
         })
 
         alivePlayers--
@@ -772,7 +772,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as (typeof valorant_weapons)[number]['name']
+          weapon: weapon as (typeof valorantWeapons)[number]['name']
         })
 
         alivePlayers--
@@ -836,7 +836,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as (typeof valorant_weapons)[number]['name']
+          weapon: weapon as (typeof valorantWeapons)[number]['name']
         })
 
         alivePlayers--
@@ -901,7 +901,7 @@ export default class Round extends Match {
             id: victim.id.toString()
           },
           victimIndex: loserTeamIndex,
-          weapon: weapon as (typeof valorant_weapons)[number]['name']
+          weapon: weapon as (typeof valorantWeapons)[number]['name']
         })
 
         alivePlayers--
@@ -1035,11 +1035,11 @@ export default class Round extends Match {
     }
 
     if (!player1.weapon.secondary) {
-      player1.weapon.secondary = valorant_weapons.find(w => w.name === 'Classic')!
+      player1.weapon.secondary = valorantWeapons.find(w => w.name === 'Classic')!
     }
 
     if (!player2.weapon.secondary) {
-      player2.weapon.secondary = valorant_weapons.find(w => w.name === 'Classic')!
+      player2.weapon.secondary = valorantWeapons.find(w => w.name === 'Classic')!
     }
 
     if (player1?.weapon.primary?.magazine && player1.weapon.primary.magazine > 0) {

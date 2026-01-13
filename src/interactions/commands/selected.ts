@@ -1,7 +1,7 @@
 import { ProfileSchema } from '@db'
 import type { Card } from '@generated'
 import { ChannelType } from 'discord.js'
-import { valorant_agents, valorant_maps } from '@/config'
+import { valorantAgents, valorantMaps } from '@/config'
 import Match from '@/simulator/vanilla/Match'
 import type App from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
@@ -22,7 +22,7 @@ type Data = {
     ovr: number
     agent: {
       name: string
-      role: (typeof valorant_agents)[number]['role']
+      role: (typeof valorantAgents)[number]['role']
     } | null
   }[]
 }
@@ -45,7 +45,7 @@ const renderTeam = (options: Options) => {
       )
 
       if (foundData?.agent) {
-        emoji = valorant_agents.find(agent => agent.name === foundData.agent?.name)?.emoji
+        emoji = valorantAgents.find(agent => agent.name === foundData.agent?.name)?.emoji
       }
 
       const ovr = Math.floor(card.overall)
@@ -101,7 +101,7 @@ export default createComponentInteraction({
       ...data[ctx.interaction.user.id][i],
       agent: {
         name: agentName,
-        role: valorant_agents.find(a => a.name === agentName)!.role
+        role: valorantAgents.find(a => a.name === agentName)!.role
       }
     }
 
@@ -234,7 +234,7 @@ export default createComponentInteraction({
               '\n' +
               t('simulator.match_started')
           )
-          .setImage(valorant_maps.filter(map => map.name === match.map)[0].image)
+          .setImage(valorantMaps.filter(map => map.name === match.map)[0].image)
 
         await message.edit({ embeds: [embed] })
 

@@ -1,7 +1,7 @@
 import type { Args } from '@i18n'
 import { calcPlayerOvr, type Player } from '@sabinelab/players'
 import type { Message, MessageEditOptions } from 'discord.js'
-import { valorant_agents, valorant_maps, valorant_weapons } from '../../config'
+import { valorantAgents, valorantMaps, valorantWeapons } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import type { PlayerWeapon } from './Player'
 
@@ -24,12 +24,12 @@ export type TeamPlayer = {
   name: string
   stats: PlayerStats
   role: 'initiator' | 'controller' | 'duelist' | 'sentinel' | 'flex'
-  agent?: (typeof valorant_agents)[number]
+  agent?: (typeof valorantAgents)[number]
   shield_type?: number
   alive: boolean
   match_stats?: PlayerMatchStats
   credits: number
-  weapon?: (typeof valorant_weapons)[number]['name']
+  weapon?: (typeof valorantWeapons)[number]['name']
 }
 
 export type TeamRoster = {
@@ -45,7 +45,7 @@ export type TeamRoster = {
   ovr: number
   agent: {
     name: string
-    role: (typeof valorant_agents)[number]['role']
+    role: (typeof valorantAgents)[number]['role']
   }
   credits: number
   collection: string
@@ -71,7 +71,7 @@ export type KillEvent = {
   killerIndex: number
   victim: Pick<TeamPlayer, 'id' | 'name'>
   victimIndex: number
-  weapon: (typeof valorant_weapons)[number]['name']
+  weapon: (typeof valorantWeapons)[number]['name']
 }
 
 type RoundResult = {
@@ -122,7 +122,7 @@ export default class Match {
     this.mode = options.mode
     this.options = options
     this.map = options.map
-    this.mapImage = valorant_maps.filter(m => m.name === this.map)[0].image
+    this.mapImage = valorantMaps.filter(m => m.name === this.map)[0].image
     this.mentions = `<@${this.teams[0].user}> <@${this.teams[1].user}>`
     this.overtime = options.overtime
     this.guildId = options.guildId
@@ -227,10 +227,10 @@ export default class Match {
         }
 
         if (
-          !valorant_maps
+          !valorantMaps
             .filter(m => m.name === this.map)[0]
             .meta_agents.includes(
-              p.agent.name as (typeof valorant_maps)[number]['meta_agents'][number]
+              p.agent.name as (typeof valorantMaps)[number]['meta_agents'][number]
             )
         ) {
           p.aim *= 0.95
@@ -254,7 +254,7 @@ export default class Match {
             },
             rate_fire: 750
           },
-          secondary: valorant_weapons.filter(w => w.name === 'Classic')[0]
+          secondary: valorantWeapons.filter(w => w.name === 'Classic')[0]
         }
       }
     }
@@ -294,7 +294,7 @@ export default class Match {
             },
             rate_fire: 750
           },
-          secondary: valorant_weapons.filter(w => w.name === 'Classic')[0]
+          secondary: valorantWeapons.filter(w => w.name === 'Classic')[0]
         }
       }
     }
@@ -316,7 +316,7 @@ export default class Match {
           value: this.teams[0].roster
             .map(
               player =>
-                `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
+                `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
             )
             .join('\n'),
           inline: true
@@ -326,7 +326,7 @@ export default class Match {
           value: this.teams[1].roster
             .map(
               player =>
-                `${valorant_agents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
+                `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
             )
             .join('\n'),
           inline: true

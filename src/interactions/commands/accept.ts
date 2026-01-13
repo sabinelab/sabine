@@ -1,6 +1,6 @@
 import { ProfileSchema } from '@db'
 import { ComponentType, type InteractionCallbackResponse } from 'discord.js'
-import { type valorant_agents, valorant_maps } from '../../config'
+import { type valorantAgents, valorantMaps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
@@ -61,7 +61,7 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
-    let maps = valorant_maps
+    let maps = valorantMaps
 
     if (ctx.args.includes('ranked')) {
       maps = maps.filter(map => map.current_map_pool)
@@ -70,7 +70,7 @@ export default createComponentInteraction({
     let map = maps[Math.floor(Math.random() * maps.length)]
 
     if (ctx.args.includes('tournament')) {
-      map = valorant_maps.filter(m => m.name === ctx.args[4])[0]
+      map = valorantMaps.filter(m => m.name === ctx.args[4])[0]
     }
 
     const embed = new EmbedBuilder()
@@ -158,7 +158,7 @@ export default createComponentInteraction({
         ovr: number
         agent: {
           name: string
-          role: (typeof valorant_agents)[number]['role']
+          role: (typeof valorantAgents)[number]['role']
         } | null
       }[]
     } = {}

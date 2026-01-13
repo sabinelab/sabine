@@ -1,5 +1,5 @@
 import { ComponentType } from 'discord.js'
-import { valorant_agents } from '../../config'
+import { valorantAgents } from '../../config'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 
@@ -18,7 +18,7 @@ export default createComponentInteraction({
       .setCustomId(`selected;${ctx.interaction.user.id};${player.id};controller;${ctx.args[2]}`)
       .setPlaceholder(t('helper.controllers'))
       .setOptions(
-        ...valorant_agents
+        ...valorantAgents
           .filter(a => a.role === 'controller')
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
@@ -33,7 +33,7 @@ export default createComponentInteraction({
       .setCustomId(`selected;${ctx.interaction.user.id};${player.id};duelist;${ctx.args[2]}`)
       .setPlaceholder(t('helper.duelists'))
       .setOptions(
-        ...valorant_agents
+        ...valorantAgents
           .filter(a => a.role === 'duelist')
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
@@ -48,7 +48,7 @@ export default createComponentInteraction({
       .setCustomId(`selected;${ctx.interaction.user.id};${player.id};initiator;${ctx.args[2]}`)
       .setPlaceholder(t('helper.initiators'))
       .setOptions(
-        ...valorant_agents
+        ...valorantAgents
           .filter(a => a.role === 'initiator')
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {
@@ -63,7 +63,7 @@ export default createComponentInteraction({
       .setCustomId(`selected;${ctx.interaction.user.id};${player.id};sentinel;${ctx.args[2]}`)
       .setPlaceholder(t('helper.sentinels'))
       .setOptions(
-        ...valorant_agents
+        ...valorantAgents
           .filter(a => a.role === 'sentinel')
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(agent => {

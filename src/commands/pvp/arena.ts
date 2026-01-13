@@ -6,7 +6,7 @@ import {
   ButtonStyle,
   ContainerBuilder
 } from 'discord.js'
-import { valorant_agents } from '../../config'
+import { valorantAgents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
@@ -179,7 +179,7 @@ export default createCommand({
               let content: string
 
               if (c.arenaAgentName && c.arenaAgentRole) {
-                const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
+                const emoji = valorantAgents.find(a => a.name === c.arenaAgentName)?.emoji
 
                 content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
               } else {
@@ -251,7 +251,7 @@ export default createCommand({
         .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};controller`)
         .setPlaceholder(t('helper.controllers'))
         .setOptions(
-          ...valorant_agents
+          ...valorantAgents
             .filter(a => a.role === 'controller')
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(agent => {
@@ -266,7 +266,7 @@ export default createCommand({
         .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};duelist`)
         .setPlaceholder(t('helper.duelists'))
         .setOptions(
-          ...valorant_agents
+          ...valorantAgents
             .filter(a => a.role === 'duelist')
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(agent => {
@@ -281,7 +281,7 @@ export default createCommand({
         .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};initiators`)
         .setPlaceholder(t('helper.initiators'))
         .setOptions(
-          ...valorant_agents
+          ...valorantAgents
             .filter(a => a.role === 'initiator')
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(agent => {
@@ -296,7 +296,7 @@ export default createCommand({
         .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};sentinels`)
         .setPlaceholder(t('helper.sentinels'))
         .setOptions(
-          ...valorant_agents
+          ...valorantAgents
             .filter(a => a.role === 'sentinel')
             .sort((a, b) => a.name.localeCompare(b.name))
             .map(agent => {
@@ -380,7 +380,7 @@ export default createCommand({
             let content: string
 
             if (c.arenaAgentName && c.arenaAgentRole) {
-              const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
+              const emoji = valorantAgents.find(a => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {
@@ -423,7 +423,7 @@ export default createCommand({
       })
 
       const value = ctx.interaction.values[0]
-      const agent = valorant_agents.find(a => a.name === value)
+      const agent = valorantAgents.find(a => a.name === value)
       const card = await prisma.card.findFirst({
         where: {
           arenaRoster: true,
@@ -477,7 +477,7 @@ export default createCommand({
             let content: string
 
             if (c.arenaAgentName && c.arenaAgentRole) {
-              const emoji = valorant_agents.find(a => a.name === c.arenaAgentName)?.emoji
+              const emoji = valorantAgents.find(a => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {

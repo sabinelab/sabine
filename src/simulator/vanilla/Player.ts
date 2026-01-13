@@ -1,4 +1,4 @@
-import { valorant_weapons } from '../../config'
+import { valorantWeapons } from '../../config'
 
 type WeaponDamage = {
   head: number
@@ -62,23 +62,23 @@ export default class Player {
 
   public buy() {
     if (this.teamCredits >= 2500 && !this.weapon.primary) {
-      let primary = valorant_weapons.filter(w => w.price > 800 && w.price + 1000 <= this.credits)
+      let primary = valorantWeapons.filter(w => w.price > 800 && w.price + 1000 <= this.credits)
 
-      let secondary = valorant_weapons.filter(
+      let secondary = valorantWeapons.filter(
         w => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits
       )
 
       if (!primary.length) {
-        primary = valorant_weapons.filter(w => w.price > 800 && w.price + 400 <= this.credits)
+        primary = valorantWeapons.filter(w => w.price > 800 && w.price + 400 <= this.credits)
       }
 
       if (!secondary.length) {
-        secondary = valorant_weapons.filter(
+        secondary = valorantWeapons.filter(
           w => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits
         )
       }
 
-      let weapon: (typeof valorant_weapons)[number]
+      let weapon: (typeof valorantWeapons)[number]
 
       if (this.rounds >= 24) {
         weapon = this.chooseWeapon(
@@ -113,7 +113,7 @@ export default class Player {
         this.life = 125
       }
     } else if (this.teamCredits === 800) {
-      const secondary = valorant_weapons.filter(w => w.price <= 800 && w.name !== 'Melee')
+      const secondary = valorantWeapons.filter(w => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, w => w.price * 5)
 
@@ -128,7 +128,7 @@ export default class Player {
         this.credits -= 400
       }
     } else {
-      const secondary = valorant_weapons.filter(w => w.price <= 800 && w.name !== 'Melee')
+      const secondary = valorantWeapons.filter(w => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, w => w.price * 5)
 

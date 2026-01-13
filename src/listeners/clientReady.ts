@@ -14,7 +14,7 @@ import {
   Routes
 } from 'discord.js'
 import Service from '@/api'
-import type { valorant_agents } from '@/config'
+import type { valorantAgents } from '@/config'
 import { env } from '@/env'
 import Match from '@/simulator/arena/Match'
 import type App from '@/structures/app/App'
@@ -895,7 +895,7 @@ export default createListener({
                   ovr: card.overall,
                   agent: {
                     name: card.arenaAgentName!,
-                    role: card.arenaAgentRole as (typeof valorant_agents)[number]['role']
+                    role: card.arenaAgentRole as (typeof valorantAgents)[number]['role']
                   },
                   credits: 800,
                   life: 100
@@ -921,7 +921,7 @@ export default createListener({
                   ovr: card.overall,
                   agent: {
                     name: card.arenaAgentName!,
-                    role: card.arenaAgentRole as (typeof valorant_agents)[number]['role']
+                    role: card.arenaAgentRole as (typeof valorantAgents)[number]['role']
                   },
                   credits: 800,
                   life: 100

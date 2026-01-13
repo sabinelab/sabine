@@ -1,6 +1,6 @@
 import { Prisma } from '@generated'
 import { ApplicationCommandOptionType } from 'discord.js'
-import { valorant_agents } from '../../config'
+import { valorantAgents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -92,7 +92,7 @@ export default createCommand({
           value: summary.stats
             .slice(0, 5)
             .map(p => {
-              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
+              return `${valorantAgents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),
           inline: true
@@ -102,7 +102,7 @@ export default createCommand({
           value: summary.stats
             .slice(-5)
             .map(p => {
-              return `${valorant_agents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
+              return `${valorantAgents.find(a => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
             .join('\n'),
           inline: true

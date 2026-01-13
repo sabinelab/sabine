@@ -1,6 +1,6 @@
 import { ProfileSchema } from '@db'
 import { ApplicationCommandOptionType } from 'discord.js'
-import { valorant_maps } from '../../config'
+import { valorantMaps } from '../../config'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -161,7 +161,7 @@ export default createCommand({
           descriptionLocalizations: {
             'pt-BR': 'Selecione o mapa'
           },
-          choices: valorant_maps
+          choices: valorantMaps
             .filter(m => m.current_map_pool)
             .map(m => ({
               name: m.name,

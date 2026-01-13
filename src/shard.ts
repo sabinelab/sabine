@@ -2,14 +2,14 @@ import { prisma } from '@db'
 import Bull from 'bull'
 import { REST, Routes, ShardingManager } from 'discord.js'
 import { env } from '@/env'
-import { valorant_maps } from './config'
+import { valorantMaps } from './config'
 import type { ArenaQueue } from './listeners/clientReady'
 import EmbedBuilder from './structures/builders/EmbedBuilder'
 import Logger from './util/Logger'
 import './server'
 
 const currentMapInit = await Bun.redis.get('arena:map')
-let mapsInit = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+let mapsInit = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
 const mapIndexInit = mapsInit.indexOf(currentMapInit || '')
 
 if (mapIndexInit !== -1) {
@@ -17,7 +17,7 @@ if (mapIndexInit !== -1) {
 }
 
 if (mapsInit.length === 0) {
-  mapsInit = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+  mapsInit = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
 }
 
 const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)]
@@ -29,7 +29,7 @@ const changeMapQueue = new Bull('arena:map', { redis: env.REDIS_URL })
 
 changeMapQueue.process('arena:map', async () => {
   const currentMap = await Bun.redis.get('arena:map')
-  let maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+  let maps = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
 
   const currentMapIndex = maps.indexOf(currentMap || '')
 
@@ -38,7 +38,7 @@ changeMapQueue.process('arena:map', async () => {
   }
 
   if (maps.length === 0) {
-    maps = valorant_maps.filter(m => m.current_map_pool).map(m => m.name)
+    maps = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
   }
 
   const map = maps[Math.floor(Math.random() * maps.length)]
