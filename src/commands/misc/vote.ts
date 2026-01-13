@@ -4,15 +4,15 @@ import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
 
 export type Pack =
-  | 'IRON'       // -58
-  | 'BRONZE'     // 59-64
-  | 'SILVER'     // 65-70
-  | 'GOLD'       // 71-76
-  | 'PLATINUM'   // 77-82
-  | 'DIAMOND'    // 83-88
-  | 'ASCENDANT'  // 89-94
-  | 'IMMORTAL'   // 95-100
-  | 'RADIANT'    // 101+
+  | 'IRON' // -58
+  | 'BRONZE' // 59-64
+  | 'SILVER' // 65-70
+  | 'GOLD' // 71-76
+  | 'PLATINUM' // 77-82
+  | 'DIAMOND' // 83-88
+  | 'ASCENDANT' // 89-94
+  | 'IMMORTAL' // 95-100
+  | 'RADIANT' // 101+
 
 export default createCommand({
   name: 'vote',
