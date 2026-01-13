@@ -325,7 +325,7 @@
       "invalid_lineup": "Necesitas establecer la alineación del mapa **{map}**. ¡Usa {cmd} para comenzar!",
       "no_players": "No tienes jugadores de Arena. ¡Usa {cmd} para comenzar!",
       "your_players": "### Tus Jugadores",
-      "promote": "Promover",
+      "promote": "Set Agent",
       "remove": "Eliminar",
       "select_agent": "Selecciona un agente para **{player}**.",
       "agent_selected": "**{p}** jugará como **{agent}**.",
