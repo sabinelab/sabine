@@ -329,7 +329,7 @@
       "remove": "Remover",
       "select_agent": "Selecione um agent para **{player}**.",
       "agent_selected": "**{p}** jogará de **{agent}**.",
-      "map": "Mapa Atual: `{map}`\nRun {cmd} to promote a player",
+      "map": "Mapa Atual: `{map}`\nUse {cmd} para promover um jogador",
       "embed": {
         "title": "Informações da Arena",
         "desc": "Pessoas na fila agora: `{queueLength}`\nMapa Atual: `{map}`\nO mapa mudará {when}"
