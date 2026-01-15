@@ -49,22 +49,33 @@ export default createCommand({
     const page = Number(ctx.args[0]) || 1
 
     if (page <= 1) {
-      const cards = await prisma.card.findMany({
-        where: {
-          profileId: ctx.db.profile.id
-        },
-        orderBy: {
-          activeRoster: 'desc'
-        },
-        skip: (page - 1) * 5,
-        take: 6
-      })
-      const activeCards = cards.slice(0, 5)
+      const [cards, hasNextPage] = await Promise.all([
+        prisma.card.findMany({
+          where: {
+            profileId: ctx.db.profile.id,
+            activeRoster: true
+          },
+          orderBy: {
+            id: 'desc'
+          },
+          skip: Math.max(0, (page - 1) * 5),
+          take: 5
+        }),
+        prisma.card.findFirst({
+          where: {
+            profileId: ctx.db.profile.id,
+            activeRoster: false
+          },
+          select: {
+            id: true
+          }
+        })
+      ])
 
       let value = 0
       let ovr = 0
 
-      for (const card of activeCards) {
+      for (const card of cards) {
         const player = ctx.app.players.get(card.playerId)
 
         if (!player) continue
@@ -89,7 +100,7 @@ export default createCommand({
               '\n' +
               ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
-                ovr: Math.floor(ovr / activeCards.length),
+                ovr: Math.floor(ovr / cards.length),
                 name: ctx.db.profile.teamName
                   ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
                   : '`undefined`'
@@ -109,11 +120,11 @@ export default createCommand({
       if (cards.length) {
         container.addTextDisplayComponents(text =>
           text.setContent(
-            ctx.t('commands.roster.container.active_players', { total: activeCards.length })
+            ctx.t('commands.roster.container.active_players', { total: cards.length })
           )
         )
 
-        for (const card of activeCards) {
+        for (const card of cards) {
           container
             .addTextDisplayComponents(text => {
               const player = ctx.app.players.get(card.playerId)
@@ -174,7 +185,7 @@ export default createCommand({
       if (page <= 1) {
         previous.setDisabled()
       }
-      if (cards.length <= 5) {
+      if (!hasNextPage) {
         next.setDisabled()
       }
 
@@ -191,7 +202,10 @@ export default createCommand({
             profileId: ctx.db.profile.id,
             activeRoster: false
           },
-          skip: (page - 2) * 5,
+          orderBy: {
+            id: 'desc'
+          },
+          skip: Math.max(0, (page - 2) * 5),
           take: 6
         }),
         prisma.card.count({
@@ -438,6 +452,9 @@ export default createCommand({
       if (!ctx.app.players.get(card.playerId)) {
         return await ctx.reply('commands.promote.player_not_found')
       }
+      if (card.level >= 15) {
+        return await ctx.reply('commands.roster.max_level_reached')
+      }
 
       await i.showModal({
         customId: `roster;${ctx.db.profile.userId};practice;${card.id}`,
@@ -625,22 +642,33 @@ export default createCommand({
       const page = Number(ctx.args[3]) || 1
 
       if (page <= 1) {
-        const cards = await prisma.card.findMany({
-          where: {
-            profileId: ctx.db.profile.id
-          },
-          orderBy: {
-            activeRoster: 'desc'
-          },
-          skip: (page - 1) * 5,
-          take: 6
-        })
-        const activeCards = cards.slice(0, 5)
+        const [cards, hasNextPage] = await Promise.all([
+          prisma.card.findMany({
+            where: {
+              profileId: ctx.db.profile.id,
+              activeRoster: true
+            },
+            orderBy: {
+              id: 'desc'
+            },
+            skip: Math.max(0, (page - 1) * 5),
+            take: 5
+          }),
+          prisma.card.findFirst({
+            where: {
+              profileId: ctx.db.profile.id,
+              activeRoster: false
+            },
+            select: {
+              id: true
+            }
+          })
+        ])
 
         let value = 0
         let ovr = 0
 
-        for (const card of activeCards) {
+        for (const card of cards) {
           const player = ctx.app.players.get(card.playerId)
 
           if (!player) continue
@@ -665,7 +693,7 @@ export default createCommand({
                 '\n' +
                 ctx.t('commands.roster.container.desc', {
                   value: Math.floor(value).toLocaleString(),
-                  ovr: Math.floor(ovr / activeCards.length),
+                  ovr: Math.floor(ovr / cards.length),
                   name: ctx.db.profile.teamName
                     ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
                     : '`undefined`'
@@ -685,11 +713,11 @@ export default createCommand({
         if (cards.length) {
           container.addTextDisplayComponents(text =>
             text.setContent(
-              ctx.t('commands.roster.container.active_players', { total: activeCards.length })
+              ctx.t('commands.roster.container.active_players', { total: cards.length })
             )
           )
 
-          for (const card of activeCards) {
+          for (const card of cards) {
             container
               .addTextDisplayComponents(text => {
                 const player = ctx.app.players.get(card.playerId)
@@ -750,7 +778,7 @@ export default createCommand({
         if (page <= 1) {
           previous.setDisabled()
         }
-        if (cards.length <= 5) {
+        if (!hasNextPage) {
           next.setDisabled()
         }
 
@@ -767,7 +795,10 @@ export default createCommand({
               profileId: ctx.db.profile.id,
               activeRoster: false
             },
-            skip: (page - 2) * 5,
+            orderBy: {
+              id: 'desc'
+            },
+            skip: Math.max(0, (page - 2) * 5),
             take: 6
           }),
           prisma.card.count({
