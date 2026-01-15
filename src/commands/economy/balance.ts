@@ -1,22 +1,32 @@
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: 'poisons',
+  name: 'balance',
   nameLocalizations: {
-    'pt-BR': 'toxinas'
+    'pt-BR': 'saldo'
   },
-  description: 'Check your poisons',
+  description: 'Check your balance',
   descriptionLocalizations: {
-    'pt-BR': 'Veja suas toxinas'
+    'pt-BR': 'Veja seu saldo'
   },
   category: 'economy',
   async run({ ctx, app }) {
     const profilesAheadCount = await app.prisma.profile.count({
       where: {
         guildId: ctx.db.guild.id,
-        poisons: {
-          gt: ctx.db.profile.poisons
-        }
+        OR: [
+          {
+            poisons: {
+              gt: ctx.db.profile.poisons
+            }
+          },
+          {
+            poisons: ctx.db.profile.poisons,
+            userId: {
+              lt: ctx.db.profile.userId
+            }
+          }
+        ]
       }
     })
 
