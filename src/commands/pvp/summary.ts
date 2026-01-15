@@ -83,7 +83,7 @@ export default createCommand({
         `### <@${match.teams[0].user}> ${
           summary.teams.find(t => t.user === match.teams[0].user)?.name
         } ${match.teams[0].score} <:versus:1349105624180330516> ${match.teams[1].score} ${
-          summary.teams.find(t => t.user === match.teams[0].user)?.name
+          summary.teams.find(t => t.user === match.teams[1].user)?.name
         } <@${match.teams[1].user}>\n`
       )
       .setFields(
