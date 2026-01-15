@@ -106,8 +106,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          poisons: 'desc'
-        },
+            poisons: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -164,9 +164,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              poisons: {
-                gt: ctx.db.profile.poisons
-              }
+              OR: [
+                {
+                  poisons: {
+                    gt: ctx.db.profile.poisons
+                  }
+                },
+                {
+                  poisons: ctx.db.profile.poisons,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
@@ -210,8 +220,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          rankRating: 'desc'
-        },
+            rankRating: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -268,9 +278,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              rankRating: {
-                gt: ctx.db.profile.rankRating
-              }
+              OR: [
+                {
+                  rankRating: {
+                    gt: ctx.db.profile.rankRating
+                  }
+                },
+                {
+                  rankRating: ctx.db.profile.rankRating,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
@@ -314,8 +334,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          correctPredictions: 'desc'
-        },
+            correctPredictions: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -372,9 +392,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              rankRating: {
-                gt: ctx.db.profile.rankRating
-              }
+              OR: [
+                {
+                  rankRating: {
+                    gt: ctx.db.profile.rankRating
+                  }
+                },
+                {
+                  rankRating: ctx.db.profile.rankRating,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
@@ -421,8 +451,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          poisons: 'desc'
-        },
+            poisons: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -479,9 +509,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              poisons: {
-                gt: ctx.db.profile.poisons
-              }
+              OR: [
+                {
+                  poisons: {
+                    gt: ctx.db.profile.poisons
+                  }
+                },
+                {
+                  poisons: ctx.db.profile.poisons,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
@@ -525,8 +565,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          rankRating: 'desc'
-        },
+            rankRating: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -583,9 +623,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              rankRating: {
-                gt: ctx.db.profile.rankRating
-              }
+              OR: [
+                {
+                  rankRating: {
+                    gt: ctx.db.profile.rankRating
+                  }
+                },
+                {
+                  rankRating: ctx.db.profile.rankRating,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
@@ -629,8 +679,8 @@ export default createCommand({
           }
         },
         orderBy: {
-          correctPredictions: 'desc'
-        },
+            correctPredictions: 'desc'
+          },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -687,9 +737,19 @@ export default createCommand({
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
-              rankRating: {
-                gt: ctx.db.profile.rankRating
-              }
+              OR: [
+                {
+                  rankRating: {
+                    gt: ctx.db.profile.rankRating
+                  }
+                },
+                {
+                  rankRating: ctx.db.profile.rankRating,
+                  userId: {
+                    lt: ctx.db.profile.userId
+                  }
+                }
+              ]
             }
           })) + 1
       }
