@@ -35,12 +35,15 @@ export default createCommand({
           guildId: ctx.db.guild.id
         }
       },
+      orderBy: {
+        when: 'desc'
+      },
       include: {
         teams: true
       }
     })
 
-    let career = matches.sort((a, b) => b.when.getTime() - a.when.getTime())
+    let career = matches
 
     const page = Number(ctx.args[0] ?? '1')
 
@@ -186,12 +189,15 @@ export default createCommand({
           guildId: ctx.db.guild.id
         }
       },
+      orderBy: {
+        when: 'desc'
+      },
       include: {
         teams: true
       }
     })
 
-    let career = matches.sort((a, b) => b.when.getTime() - a.when.getTime())
+    let career = matches
 
     const page = Number(ctx.args[2])
 
