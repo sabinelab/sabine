@@ -20,10 +20,10 @@ export type PlayerWeapon = {
 
 type PlayerStats = {
   aim: number
-  HS: number
+  hs: number
   movement: number
   aggression: number
-  ACS: number
+  acs: number
   gamesense: number
   ovr: number
 }
@@ -175,7 +175,7 @@ export default class Player {
     if (random <= prob) {
       steepness = 0.02
       midpoint = 75
-      prob = 1 / (1 + Math.exp(-steepness * (this.stats.HS - midpoint)))
+      prob = 1 / (1 + Math.exp(-steepness * (this.stats.hs - midpoint)))
       random = Math.random()
 
       if (random <= prob) {

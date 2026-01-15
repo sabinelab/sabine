@@ -726,58 +726,60 @@ export default createListener({
 
     if (!app.shard || !app.shard.ids[0]) {
       arenaMatchQueue.process('arena', async job => {
-        const player1 = await prisma.profile.findUnique({
-          where: {
-            userId_guildId: {
-              userId: job.data.parsedData1.userId,
-              guildId: job.data.parsedData1.guildId
-            }
-          },
-          include: {
-            cards: {
-              where: {
-                arenaRoster: true,
-                arenaAgentName: {
-                  not: null
-                },
-                arenaAgentRole: {
-                  not: null
-                }
+        const [player1, player2] = await Promise.all([
+          prisma.profile.findUnique({
+            where: {
+              userId_guildId: {
+                userId: job.data.parsedData1.userId,
+                guildId: job.data.parsedData1.guildId
               }
             },
-            user: {
-              select: {
-                lang: true
-              }
-            }
-          }
-        })
-        const player2 = await prisma.profile.findUnique({
-          where: {
-            userId_guildId: {
-              userId: job.data.parsedData2.userId,
-              guildId: job.data.parsedData2.guildId
-            }
-          },
-          include: {
-            cards: {
-              where: {
-                arenaRoster: true,
-                arenaAgentName: {
-                  not: null
-                },
-                arenaAgentRole: {
-                  not: null
+            include: {
+              cards: {
+                where: {
+                  arenaRoster: true,
+                  arenaAgentName: {
+                    not: null
+                  },
+                  arenaAgentRole: {
+                    not: null
+                  }
+                }
+              },
+              user: {
+                select: {
+                  lang: true
                 }
               }
+            }
+          }),
+          prisma.profile.findUnique({
+            where: {
+              userId_guildId: {
+                userId: job.data.parsedData2.userId,
+                guildId: job.data.parsedData2.guildId
+              }
             },
-            user: {
-              select: {
-                lang: true
+            include: {
+              cards: {
+                where: {
+                  arenaRoster: true,
+                  arenaAgentName: {
+                    not: null
+                  },
+                  arenaAgentRole: {
+                    not: null
+                  }
+                }
+              },
+              user: {
+                select: {
+                  lang: true
+                }
               }
             }
-          }
-        })
+          })
+        ])
 
         if (!player1 || !player2 || !player1.cards.length || !player2.cards.length) return
 
@@ -887,10 +889,10 @@ export default createListener({
                 return {
                   ...player,
                   aim: card.aim,
-                  ACS: card.acs,
+                  acs: card.acs,
                   aggression: card.aggression,
                   gamesense: card.gamesense,
-                  HS: card.hs,
+                  hs: card.hs,
                   movement: card.movement,
                   ovr: card.overall,
                   agent: {
@@ -913,10 +915,10 @@ export default createListener({
                 return {
                   ...player,
                   aim: card.aim,
-                  ACS: card.acs,
+                  acs: card.acs,
                   aggression: card.aggression,
                   gamesense: card.gamesense,
-                  HS: card.hs,
+                  hs: card.hs,
                   movement: card.movement,
                   ovr: card.overall,
                   agent: {

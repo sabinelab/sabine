@@ -7,10 +7,10 @@ import type { PlayerWeapon } from './Player'
 
 export type PlayerStats = {
   aim: number
-  HS: number
+  hs: number
   movement: number
   aggression: number
-  ACS: number
+  acs: number
   gamesense: number
 }
 
@@ -37,10 +37,10 @@ export type TeamRoster = {
   id: number
   role: string
   aim: number
-  HS: number
+  hs: number
   movement: number
   aggression: number
-  ACS: number
+  acs: number
   gamesense: number
   ovr: number
   agent: {
@@ -160,10 +160,10 @@ export default class Match {
           p.agent.name === 'Chamber'
         ) {
           p.aim *= 0.85
-          p.HS *= 0.85
+          p.hs *= 0.85
           p.movement *= 0.85
           p.aggression *= 0.85
-          p.ACS *= 0.85
+          p.acs *= 0.85
           p.gamesense *= 0.85
         }
 
@@ -173,10 +173,10 @@ export default class Match {
           const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
-          p.HS *= debuff
+          p.hs *= debuff
           p.movement *= debuff
           p.aggression *= debuff
-          p.ACS *= debuff
+          p.acs *= debuff
           p.gamesense *= debuff
         }
 
@@ -186,10 +186,10 @@ export default class Match {
           const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
-          p.HS *= debuff
+          p.hs *= debuff
           p.movement *= debuff
           p.aggression *= debuff
-          p.ACS *= debuff
+          p.acs *= debuff
           p.gamesense *= debuff
         }
 
@@ -199,10 +199,10 @@ export default class Match {
           const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
-          p.HS *= debuff
+          p.hs *= debuff
           p.movement *= debuff
           p.aggression *= debuff
-          p.ACS *= debuff
+          p.acs *= debuff
           p.gamesense *= debuff
         }
         if (roles.controller >= 3) {
@@ -211,18 +211,18 @@ export default class Match {
           const debuff = 1 - Math.min(min + (count - 3) * increment, 0.1)
 
           p.aim *= debuff
-          p.HS *= debuff
+          p.hs *= debuff
           p.movement *= debuff
           p.aggression *= debuff
-          p.ACS *= debuff
+          p.acs *= debuff
           p.gamesense *= debuff
         }
         if (!roles.controller) {
           p.aim *= 0.95
-          p.HS *= 0.95
+          p.hs *= 0.95
           p.movement *= 0.95
           p.aggression *= 0.95
-          p.ACS *= 0.95
+          p.acs *= 0.95
           p.gamesense *= 0.95
         }
 
@@ -234,10 +234,10 @@ export default class Match {
             )
         ) {
           p.aim *= 0.95
-          p.HS *= 0.95
+          p.hs *= 0.95
           p.movement *= 0.95
           p.aggression *= 0.95
-          p.ACS *= 0.95
+          p.acs *= 0.95
           p.gamesense *= 0.95
         }
 

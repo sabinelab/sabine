@@ -150,10 +150,10 @@ export default createComponentInteraction({
         id: number
         role: string
         aim: number
-        HS: number
+        hs: number
         movement: number
         aggression: number
-        ACS: number
+        acs: number
         gamesense: number
         ovr: number
         agent: {
@@ -169,10 +169,10 @@ export default createComponentInteraction({
       return {
         ...p,
         aim: card.aim,
-        ACS: card.acs,
+        acs: card.acs,
         aggression: card.aggression,
         gamesense: card.gamesense,
-        HS: card.hs,
+        hs: card.hs,
         movement: card.movement,
         ovr: card.overall,
         agent: null
@@ -185,10 +185,10 @@ export default createComponentInteraction({
       return {
         ...p,
         aim: card.aim,
-        ACS: card.acs,
+        acs: card.acs,
         aggression: card.aggression,
         gamesense: card.gamesense,
-        HS: card.hs,
+        hs: card.hs,
         movement: card.movement,
         ovr: card.overall,
         agent: null
