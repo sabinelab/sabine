@@ -106,8 +106,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            poisons: 'desc'
-          },
+          poisons: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -220,8 +220,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            rankRating: 'desc'
-          },
+          rankRating: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -334,8 +334,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            correctPredictions: 'desc'
-          },
+          correctPredictions: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -451,8 +451,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            poisons: 'desc'
-          },
+          poisons: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -565,8 +565,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            rankRating: 'desc'
-          },
+          rankRating: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {
@@ -679,8 +679,8 @@ export default createCommand({
           }
         },
         orderBy: {
-            correctPredictions: 'desc'
-          },
+          correctPredictions: 'desc'
+        },
         skip: (page - 1) * 10,
         take: 11,
         select: {

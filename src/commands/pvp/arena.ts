@@ -333,7 +333,7 @@ export default createCommand({
       const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
-          profileId: ctx.db.profile.id,
+          profileId: ctx.db.profile.id
         }
       })
       const player = ctx.app.players.get(card?.playerId ?? '')
