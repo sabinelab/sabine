@@ -49,11 +49,6 @@ export default createCommand({
           inline: true
         },
         {
-          name: t('commands.card.purchaseable'),
-          value: player.purchasable ? t('helper.yes') : t('helper.no'),
-          inline: true
-        },
-        {
           name: t('commands.card.price'),
           value: calcPlayerPrice(player).toLocaleString('en') + ' poisons',
           inline: true
