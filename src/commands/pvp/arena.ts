@@ -334,7 +334,6 @@ export default createCommand({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id,
-          activeRoster: true
         }
       })
       const player = ctx.app.players.get(card?.playerId ?? '')
