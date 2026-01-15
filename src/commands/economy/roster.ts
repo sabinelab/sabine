@@ -310,11 +310,12 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-1`,
-                label: t('commands.roster.modal.teamName'),
+                label: t('commands.roster.modal.team_name'),
                 style: 1,
                 minLength: 2,
                 maxLength: 20,
-                required: true
+                required: true,
+                value: ctx.db.profile.teamName ?? undefined
               }
             ]
           },
@@ -324,11 +325,12 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-2`,
-                label: t('commands.roster.modal.teamTag'),
+                label: t('commands.roster.modal.team_tag'),
                 style: 1,
                 minLength: 2,
                 maxLength: 4,
-                required: true
+                required: true,
+                value: ctx.db.profile.teamTag ?? undefined
               }
             ]
           }
@@ -895,9 +897,9 @@ export default createCommand({
   async createModalSubmitInteraction({ ctx, i }) {
     ctx.setFlags(64)
 
-    if (ctx.args[2] === 'modal') {
-      const name = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-1`)
-      const tag = i.fields.getTextInputValue(`roster;${i.user.id};modal;response-2`)
+    if (ctx.args[2] === 'team') {
+      const name = i.fields.getTextInputValue(`roster;${i.user.id};team;response-1`)
+      const tag = i.fields.getTextInputValue(`roster;${i.user.id};team;response-2`)
 
       await prisma.profile.update({
         where: {
