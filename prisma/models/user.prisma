@@ -8,8 +8,9 @@ model User {
   voteStreak Int       @default(0) @map("vote_streak")
   votes      Int       @default(0)
 
-  collectedVoteReward Boolean @default(true) @map("collected_vote_reward")
-  warn                Boolean @default(false)
+  collectedVoteReward Boolean  @default(true) @map("collected_vote_reward")
+  warn                Boolean  @default(false)
+  warned              Boolean?
 
   profiles Profile[]
 }

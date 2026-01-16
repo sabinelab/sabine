@@ -13,6 +13,7 @@ export class UserSchema implements User {
   public votes: number = 0
   public collectedVoteReward: boolean = true
   public warn: boolean = false
+  public warned: boolean | null = null
 
   public constructor(id: string) {
     this.id = id

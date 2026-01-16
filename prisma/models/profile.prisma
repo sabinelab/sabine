@@ -40,8 +40,6 @@ model Profile {
   transactions Transaction[]
   career       Match[]
 
-  warned Boolean?
-
   ironPacks      Int @default(0) @map("iron_packs")
   bronzePacks    Int @default(0) @map("bronze_packs")
   silverPacks    Int @default(0) @map("silver_packs")
