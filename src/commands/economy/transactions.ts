@@ -32,10 +32,7 @@ export default createCommand({
 
     const transactions = await app.prisma.transaction.findMany({
       where: {
-        profile: {
-          userId: ctx.db.profile.userId,
-          guildId: ctx.db.guild.id
-        }
+        profileId: ctx.db.profile.id
       },
       orderBy: {
         createdAt: 'desc'
@@ -120,10 +117,7 @@ export default createCommand({
 
     const transactions = await app.prisma.transaction.findMany({
       where: {
-        profile: {
-          userId: ctx.db.profile.userId,
-          guildId: ctx.db.guild.id
-        }
+        profileId: ctx.db.profile.id
       },
       orderBy: {
         createdAt: 'desc'
