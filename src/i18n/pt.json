@@ -4,7 +4,7 @@
       "embed": {
         "author": "Seus palpites",
         "field": "Palpite: `{score1}-{score2}`\nEstatísticas: [clique aqui]({link})\nStatus: {status}",
-        "footer": "Page {page}",
+        "footer": "Página {page}",
         "desc": "Palpites certos: `{correct}`\nPalpites errados: `{wrong}`\nPalpites totais: `{t}`"
       },
       "no_predictions": "Você não possui palpites.",
@@ -192,7 +192,7 @@
       "sold": "Você vendeu **{p}** por **{price}** toxinas com sucesso!"
     },
     "balance": {
-      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
+      "res": "- Você tem **{c} toxinas** e **{f} destinos**! Você está em **#{p} place** na tabela.\n- Veja outros ostentadores de toxinas usando {cmd}.\n- Colete **toxinas** e **destinos** usando {cmd2}."
     },
     "duel": {
       "started": "### Partida iniciada",
@@ -279,7 +279,7 @@
     },
     "transactions": {
       "type": {
-        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by {cmd} command",
+        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Coletou **{player}** pelo comando {cmd}",
         "CLAIM_PLAYER_BY_COMMAND": "Recebeu **{player}** do sistema (comando `.giveplayer`)",
         "SELL_PLAYER": "Vendeu **{player}** por **{price}** toxinas",
         "TRADE_PLAYER": "Negociou **{player}** com {user} por **{price}** toxinas",
@@ -293,8 +293,8 @@
       "none_yet": "Você não tem nenhuma transação para mostrar."
     },
     "remind": {
-      "enabled": "Now I'll notify you when your {cmd} is ready!",
-      "disabled": "Now I won't notify you when your {cmd} is ready!"
+      "enabled": "Agora eu irei te notificar quando o seu {cmd} estiver pronto!",
+      "disabled": "Agora eu não irei te notificar quando o seu {cmd} estiver pronto!"
     },
     "packs": {
       "container": {
@@ -395,8 +395,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -407,9 +412,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     }
   },
   "simulator": {
@@ -483,13 +493,13 @@
     "no": "Não",
     "unknown_interaction": "Hum... parece que os dados dessa interação sumiram porque você demorou demais para usá-la... por favor, use o comando novamente!",
     "this_isnt_for_you": "Essa interação não é para você! Rode esse comando você mesmo!",
-    "reminder": "{user} Your {cmd} is ready!",
+    "reminder": "{user} Seu {cmd} está pronto!",
     "controllers": "Controladores",
     "duelists": "Duelistas",
     "initiators": "Iniciadores",
     "sentinels": "Sentinelas",
     "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
+    "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Use {cmd} para iniciar."
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
