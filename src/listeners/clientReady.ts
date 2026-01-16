@@ -287,16 +287,9 @@ const sendValorantMatches = async (app: App) => {
 
         const thunk = async () => {
           if (container.components.length) {
-            const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-              new ButtonBuilder()
-                .setLabel(t(guild.lang, 'helper.pickem.label'))
-                .setStyle(ButtonStyle.Primary)
-                .setCustomId('pickem')
-            )
-
             await rest.post(Routes.channelMessages(channelId), {
               body: {
-                components: [container.toJSON(), row.toJSON()],
+                components: [container.toJSON()],
                 flags: MessageFlags.IsComponentsV2
               }
             })
@@ -455,16 +448,9 @@ const sendValorantTBDMatches = async (app: App) => {
 
         const thunk = async () => {
           if (container.components.length) {
-            const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-              new ButtonBuilder()
-                .setLabel(t(guild.lang, 'helper.pickem.label'))
-                .setStyle(ButtonStyle.Primary)
-                .setCustomId('pickem')
-            )
-
             await rest.post(Routes.channelMessages(channelId), {
               body: {
-                components: [container.toJSON(), row.toJSON()],
+                components: [container.toJSON()],
                 flags: MessageFlags.IsComponentsV2
               }
             })
@@ -642,11 +628,7 @@ const sendLolMatches = async (app: App) => {
                 new ButtonBuilder()
                   .setLabel(t(guild.lang, 'helper.bet'))
                   .setCustomId(`bet;lol;${d.id}`)
-                  .setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder()
-                  .setLabel(t(guild.lang, 'helper.pickem.label'))
-                  .setStyle(ButtonStyle.Primary)
-                  .setCustomId('pickem')
+                  .setStyle(ButtonStyle.Secondary)
               )
             )
             .addSeparatorComponents(separator => separator)

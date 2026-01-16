@@ -98,18 +98,7 @@ export const lolResults = new Elysia().post(
         messages.push(
           rest.post(Routes.channelMessages(event.channel2), {
             body: {
-              embeds: [embed.toJSON()],
-              components: [
-                {
-                  type: 1,
-                  components: [
-                    new ButtonBuilder()
-                      .setLabel(locales(guild.lang, 'helper.pickem.label'))
-                      .defineStyle('blue')
-                      .setCustomId('pickem')
-                  ]
-                }
-              ]
+              embeds: [embed.toJSON()]
             }
           })
         )

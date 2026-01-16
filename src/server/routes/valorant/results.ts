@@ -126,11 +126,7 @@ export const valorantResults = new Elysia().post(
                     new ButtonBuilder()
                       .setLabel(locales(guild.lang, 'helper.stats'))
                       .defineStyle('link')
-                      .setURL(`https://vlr.gg/${data.id}`),
-                    new ButtonBuilder()
-                      .setLabel(locales(guild.lang, 'helper.pickem.label'))
-                      .defineStyle('blue')
-                      .setCustomId('pickem')
+                      .setURL(`https://vlr.gg/${data.id}`)
                   ]
                 }
               ]

@@ -583,16 +583,9 @@ export default createCommand({
           if (!channel) continue
 
           if (container.components.length) {
-            const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-              new ButtonBuilder()
-                .setLabel(t('helper.pickem.label'))
-                .setStyle(ButtonStyle.Primary)
-                .setCustomId('pickem')
-            )
-
             await channel
               .send({
-                components: [container.toJSON(), row.toJSON()],
+                components: [container.toJSON()],
                 flags: MessageFlags.IsComponentsV2
               })
               .catch(() => {})
@@ -786,9 +779,6 @@ export default createCommand({
                     .setCustomId(`bet;lol;${d.id}`)
                     .setStyle(ButtonStyle.Secondary),
                   new ButtonBuilder()
-                    .setLabel(t('helper.pickem.label'))
-                    .setStyle(ButtonStyle.Primary)
-                    .setCustomId('pickem')
                 )
               )
               .addSeparatorComponents(separator => separator)
