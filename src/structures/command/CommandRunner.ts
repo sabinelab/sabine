@@ -48,9 +48,11 @@ export default class CommandRunner {
       command.name !== 'register' &&
       ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)
     ) {
-      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
-        cmd: `</register:${app.commands.get('register')?.id}>`
-      }))
+      return await interaction.reply(
+        locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+          cmd: `</register:${app.commands.get('register')?.id}>`
+        })
+      )
     }
     if (!profile) {
       profile = new ProfileSchema(interaction.user.id, interaction.guildId)
