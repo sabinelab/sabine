@@ -4,7 +4,7 @@
       "embed": {
         "author": "Your predictions",
         "field": "Prediction: `{score1}-{score2}`\nStats: [click here]({link})\nStatus: {status}",
-        "footer": "Page {p1}/{p2}",
+        "footer": "Page {page}",
         "desc": "Correct predictions: `{correct}`\nIncorrect predictions: `{wrong}`\nTotal predictions: `{t}`"
       },
       "no_predictions": "You do not have predictions.",
