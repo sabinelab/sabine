@@ -25,7 +25,9 @@ export default createCommand({
         }
       })
 
-      return await ctx.reply('commands.remind.enabled')
+      return await ctx.reply('commands.remind.enabled', {
+        cmd: `</claim:${ctx.app.commands.get('claim')?.id}>`
+      })
     }
 
     await prisma.profile.update({
@@ -40,6 +42,8 @@ export default createCommand({
       }
     })
 
-    return await ctx.reply('commands.remind.disabled')
+    return await ctx.reply('commands.remind.disabled', {
+      cmd: `</claim:${ctx.app.commands.get('claim')?.id}>`
+    })
   }
 })

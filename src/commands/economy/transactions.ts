@@ -72,7 +72,8 @@ export default createCommand({
           {
             player: `${player.name} (${player.collection})`,
             price: transaction.price?.toLocaleString(),
-            user: `<@${transaction.to}>`
+            user: `<@${transaction.to}>`,
+            cmd: `</claim:${app.commands.get('claim')?.id}>`
           }
         )}\n`
       } else if (transaction.pack) {
@@ -161,7 +162,8 @@ export default createCommand({
           {
             player: `${player.name} (${player.collection})`,
             price: transaction.price?.toLocaleString(),
-            user: `<@${transaction.to}>`
+            user: `<@${transaction.to}>`,
+            cmd: `</claim:${app.commands.get('claim')?.id}>`
           }
         )}\n`
       } else if (transaction.pack) {

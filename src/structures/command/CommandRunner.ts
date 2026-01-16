@@ -48,7 +48,9 @@ export default class CommandRunner {
       command.name !== 'register' &&
       ['economy', 'simulator', 'pvp', 'esports'].includes(command.category)
     ) {
-      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
+      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+        cmd: `</register:${app.commands.get('register')?.id}>`
+      }))
     }
     if (!profile) {
       profile = new ProfileSchema(interaction.user.id, interaction.guildId)
@@ -204,41 +206,21 @@ export default class CommandRunner {
         if (group) cmd.push(group)
         if (sub) cmd.push(sub)
 
+        const owner = await app.getUser(ctx.guild.ownerId)
         const embed = new EmbedBuilder()
-
-        if (ctx.guild) {
-          const owner = await app.getUser(ctx.guild.ownerId)
-
-          embed
-            .setAuthor({
-              name: ctx.interaction.user.username,
-              iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
-            })
-            .setTitle('New slash command executed')
-            .setDesc(`The command \`${cmd.join(' ')}\` has been executed in \`${ctx.guild?.name}\``)
-            .addField('Server ID', `\`${ctx.guild?.id}\``)
-            .addField('Owner', `\`${owner?.username}\` (\`${owner?.id}\`)`)
-            .addField(
-              'Command author',
-              `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`
-            )
-        } else {
-          embed
-            .setAuthor({
-              name: ctx.interaction.user.username,
-              iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
-            })
-            .setTitle('New slash command executed')
-            .setDesc(`The command \`${cmd.join(' ')}\` has been executed in DM`)
-            .addField(
-              'Command author',
-              `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`
-            )
-        }
-
-        if (ctx.guild) {
-          embed.setThumb(ctx.guild.iconURL()!)
-        }
+          .setAuthor({
+            name: ctx.interaction.user.username,
+            iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
+          })
+          .setTitle('New slash command executed')
+          .setDesc(`The command \`${cmd.join(' ')}\` has been executed in \`${ctx.guild?.name}\``)
+          .addField('Server ID', `\`${ctx.guild?.id}\``)
+          .addField('Owner', `\`${owner?.username}\` (\`${owner?.id}\`)`)
+          .addField(
+            'Command author',
+            `\`${ctx.interaction.user.username}\` (\`${ctx.interaction.user.id}\`)`
+          )
+          .setThumb(ctx.guild.iconURL() || '')
 
         const webhooks = (await rest.get(Routes.channelWebhooks(env.COMMAND_LOG))) as any[]
         const webhook = webhooks.find(w => w.token)

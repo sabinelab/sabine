@@ -30,10 +30,12 @@ export default createCommand({
       }
     })
 
-    await ctx.reply('commands.poisons.res', {
+    await ctx.reply('commands.balance.res', {
       c: ctx.db.profile.poisons.toLocaleString(),
       f: ctx.db.profile.fates.toLocaleString(),
-      p: profilesAheadCount + 1
+      p: profilesAheadCount + 1,
+      cmd: `</leaderboard poisons:${app.commands.get('leaderboard')?.id}>`,
+      cmd2: `</daily:${app.commands.get('daily')?.id}>`
     })
   }
 })

@@ -139,8 +139,7 @@
       "claimed": "**{player}** joined your roster for free\nMarket value: `{price}`",
       "has_been_claimed": "You have already used this command recently. Try again {t}",
       "sell": "Sell",
-      "promote": "Promote",
-      "no_fates": "You don't have any fates to spend!\nGet more using `/daily`, predicting and playing ranked matches."
+      "promote": "Promote"
     },
     "roster": {
       "container": {
@@ -192,8 +191,8 @@
       "player_not_found": "Player not found!",
       "sold": "You sold **{p}** for **{price}** poisons successfully"
     },
-    "poisons": {
-      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using `/leaderboard poisons`.\n- Claim **poisons** and **fates** by using `/daily`."
+    "balance": {
+      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
     },
     "duel": {
       "started": "### Match started",
@@ -280,7 +279,7 @@
     },
     "transactions": {
       "type": {
-        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by `/claim` command",
+        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by {cmd} command",
         "CLAIM_PLAYER_BY_COMMAND": "Received **{player}** from the system (`.giveplayer` command)",
         "SELL_PLAYER": "Sold **{player}** for **{price}** poisons",
         "TRADE_PLAYER": "Traded **{player}** with {user} for **{price}** poisons",
@@ -294,8 +293,8 @@
       "none_yet": "You don't have any transaction to show."
     },
     "remind": {
-      "enabled": "Now I'll notify you when your `/claim` is ready!",
-      "disabled": "Now I won't notify you when your `/claim` is ready!"
+      "enabled": "Now I'll notify you when your {cmd} is ready!",
+      "disabled": "Now I won't notify you when your {cmd} is ready!"
     },
     "packs": {
       "container": {
@@ -396,8 +395,13 @@
           "- Rosters",
           "- Pity"
         ],
-        "balance": ["- Poisons and fates"],
-        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "balance": [
+          "- Poisons and fates"
+        ],
+        "predictions": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions"
+        ],
         "simulator": [
           "- Matches",
           "- Career",
@@ -408,9 +412,14 @@
           "- Rosters",
           "- Pity"
         ],
-        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+        "stats": [
+          "- Wins and defeats",
+          "- Incorrect/correct predictions"
+        ]
       },
-      "reseted": ["You have successfully reset: \n{type}"]
+      "reseted": [
+        "You have successfully reset: \n{type}"
+      ]
     }
   },
   "simulator": {
@@ -484,14 +493,13 @@
     "no": "No",
     "unknown_interaction": "Hmm... looks like the data from this interaction is gone because you took too long to use it... please use the command again!",
     "this_isnt_for_you": "This interaction is not for you! Run this command yourself!",
-    "reminder": "{user} Your `/claim` is ready!",
+    "reminder": "{user} Your {cmd} is ready!",
     "controllers": "Controllers",
     "duelists": "Duelists",
     "initiators": "Initiators",
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run `/register` to start.",
-    "new_game_mode": "A new game mode is available. Try the Arena game mode using `/arena join`."
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
   },
   "permissions": {
     "CreateInstantInvite": "Create Instant Invite",

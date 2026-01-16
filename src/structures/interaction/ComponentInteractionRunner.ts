@@ -65,7 +65,11 @@ export default class ComponentInteractionRunner {
     if (command) {
       if (!command.createMessageComponentInteraction) return
       if (!profile) {
-        return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
+        return await interaction.reply(
+          locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+            cmd: `</register:${app.commands.get('register')?.id}>`
+          })
+        )
       }
 
       const ctx = new ComponentInteractionContext({
@@ -111,7 +115,9 @@ export default class ComponentInteractionRunner {
     if (!i) return
 
     if (!profile) {
-      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register'))
+      return await interaction.reply(locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+        cmd: `</register:${app.commands.get('register')?.id}>`
+      }))
     }
 
     const ctx = new ComponentInteractionContext({
