@@ -1,11 +1,9 @@
 import { prisma } from '@db'
-import locales from '@i18n'
 import { REST, Routes } from 'discord.js'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
 import { env } from '@/env'
 import { app } from '@/structures/app/App'
-import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import calcOdd from '@/util/calcOdd'
 

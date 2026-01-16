@@ -3,7 +3,6 @@ import type { $Enums } from '@generated'
 import t from '@i18n'
 import Bull from 'bull'
 import {
-  ActionRowBuilder,
   ButtonBuilder,
   ButtonStyle,
   type Collection,
