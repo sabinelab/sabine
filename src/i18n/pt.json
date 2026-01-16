@@ -226,7 +226,7 @@
       "error": "{users}\nOcorreu um erro inesperado...\n`{e}`"
     },
     "career": {
-      "no_pages": "Nada pra mostrar aqui.",
+      "no_pages": "Nada para mostrar aqui.",
       "embed": {
         "author": "Sua Carreira",
         "desc": "**Pontos:** `{rr}RR`\n**Vitórias/Derrotas** (arena): `{arena_wins}/{arena_defeats}`\n**Vitórias/Derrotas** (ranqueado): `{ranked_wins}/{ranked_defeats}`\n**Vitórias/Derrotas** (sem classificação): `{unranked_wins}/{unranked_defeats}`\n**Vitórias/Derrotas** (frenético ranqueado): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Vitórias/Derrotas** (frenético): `{swiftplay_wins}/{swiftplay_defeats}`\n**Vitórias Totais:** `{total_wins}`\n**Derrotas Totais:** `{total_defeats}`\n**Partidas Jogadas:** `{total}`",
@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     }
   },
   "simulator": {
