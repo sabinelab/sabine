@@ -133,8 +133,14 @@ export const valorantAgents = [
     name: 'Waylay',
     role: 'duelist',
     emoji: '<:waylay:1404834635531161811>'
+  },
+  {
+    name: 'Veto',
+    role: 'sentinel',
+    emoji: '<:veto:1461783040320737433>'
   }
 ] as const
+
 export const valorantWeapons = [
   {
     name: 'Classic',
@@ -337,13 +343,8 @@ export const valorantWeapons = [
     rate_fire: 750 / 10
   }
 ] as const
-export const valorantMaps: {
-  name: string
-  meta_agents: (typeof valorantAgents)[number]['name'][]
-  image: string
-  current_map_pool?: boolean
-  sides: ('A' | 'B' | 'C')[]
-}[] = [
+
+export const valorantMaps = [
   {
     name: 'Ascent',
     meta_agents: [
@@ -503,7 +504,8 @@ export const valorantMaps: {
       'Chamber',
       'Jett',
       'Yoru',
-      'Neon'
+      'Neon',
+      'Veto'
     ],
     current_map_pool: true,
     image: 'https://imgur.com/7b8pgQz.png',
