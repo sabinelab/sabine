@@ -344,7 +344,13 @@ export const valorantWeapons = [
   }
 ] as const
 
-export const valorantMaps = [
+export const valorantMaps: {
+  name: string
+  meta_agents: (typeof valorantAgents)[number]['name'][]
+  image: string
+  current_map_pool?: boolean
+  sides: ('A' | 'B' | 'C')[]
+}[] = [
   {
     name: 'Ascent',
     meta_agents: [
@@ -529,4 +535,4 @@ export const valorantMaps = [
     image: 'https://imgur.com/2rmdsWE.png',
     sides: ['A', 'B']
   }
-] as const
+]
