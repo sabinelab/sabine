@@ -4,7 +4,7 @@
       "embed": {
         "author": "Tus predicciones",
         "field": "Predicción: `{score1}-{score2}`\nEstadísticas: [clic aquí]({link})\nEstado: {status}",
-        "footer": "Página {p1}/{p2}",
+        "footer": "Page {page}",
         "desc": "Predicciones correctas: `{correct}`\nPredicciones incorrectas: `{wrong}`\nTotal de predicciones: `{t}`"
       },
       "no_predictions": "No tienes predicciones.",
@@ -139,8 +139,7 @@
       "claimed": "**{player}** se unió a tu plantilla gratis\nValor de mercado: `{price}`",
       "has_been_claimed": "Ya has usado este comando recientemente. Intenta de nuevo {t}",
       "sell": "Vender",
-      "promote": "Promover",
-      "no_fates": "¡No tienes destinos para gastar!\nConsigue más usando `/daily`, prediciendo y jugando partidas clasificatorias."
+      "promote": "Promover"
     },
     "roster": {
       "container": {
@@ -192,8 +191,8 @@
       "player_not_found": "¡Jugador no encontrado!",
       "sold": "Vendiste a **{p}** por **{price}** monedas con éxito"
     },
-    "poisons": {
-      "res": "- ¡Tienes **{c} toxinas** y **{f} destinos**! Estás en el **puesto #{p}** en la tabla de clasificación.\n- Echa un vistazo a otras personas ricas usando `/leaderboard poisons`.\n- Reclama **toxinas** y **destinos** usando `/daily`."
+    "balance": {
+      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
     },
     "duel": {
       "started": "### Partido comenzado",
@@ -280,7 +279,7 @@
     },
     "transactions": {
       "type": {
-        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Reclamó **{player}** mediante el comando `/claim`",
+        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by {cmd} command",
         "CLAIM_PLAYER_BY_COMMAND": "Recibió **{player}** del sistema (comando `.giveplayer`)",
         "SELL_PLAYER": "Vendió **{player}** por **{price}** toxinas",
         "TRADE_PLAYER": "Intercambió **{player}** con {user} por **{price}** toxinas",
@@ -294,8 +293,8 @@
       "none_yet": "No tienes ninguna transacción para mostrar."
     },
     "remind": {
-      "enabled": "¡Ahora te notificaré cuando tu `/claim` esté listo!",
-      "disabled": "¡Ahora no te notificaré cuando tu `/claim` esté listo!"
+      "enabled": "Now I'll notify you when your {cmd} is ready!",
+      "disabled": "Now I won't notify you when your {cmd} is ready!"
     },
     "packs": {
       "container": {
@@ -325,7 +324,7 @@
       "invalid_lineup": "Necesitas establecer la alineación del mapa **{map}**. ¡Usa {cmd} para comenzar!",
       "no_players": "No tienes jugadores de Arena. ¡Usa {cmd} para comenzar!",
       "your_players": "### Tus Jugadores",
-      "promote": "Set Agent",
+      "promote": "Promover",
       "remove": "Eliminar",
       "select_agent": "Selecciona un agente para **{player}**.",
       "agent_selected": "**{p}** jugará como **{agent}**.",
@@ -484,14 +483,13 @@
     "no": "No",
     "unknown_interaction": "Mmm... parece que los datos de esta interacción han desaparecido porque tardaste demasiado en usarla... ¡por favor usa el comando de nuevo!",
     "this_isnt_for_you": "¡Esta interacción no es para ti! ¡Ejecuta este comando tú mismo!",
-    "reminder": "{user} ¡Tu `/claim` está listo!",
+    "reminder": "{user} Your {cmd} is ready!",
     "controllers": "Controladores",
     "duelists": "Duelistas",
     "initiators": "Iniciadores",
     "sentinels": "Centinelas",
     "cooldown": "Estás usando este comando demasiado rápido. Intenta de nuevo {cooldown}",
-    "you_need_to_register": "Necesitas registrarte para usar esta función. Ejecuta `/register` para comenzar.",
-    "new_game_mode": "Un nuevo modo de juego está disponible. Prueba el modo de juego Arena usando `/arena join`."
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
   },
   "permissions": {
     "CreateInstantInvite": "Crear Invitación Instantánea",
