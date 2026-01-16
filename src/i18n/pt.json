@@ -395,13 +395,8 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": [
-          "- Toxinas e destinos"
-        ],
-        "predictions": [
-          "- Palpites corretos/incorretos",
-          "- Palpites enviados"
-        ],
+        "balance": ["- Toxinas e destinos"],
+        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -412,14 +407,9 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": [
-          "- Vitórias e derrotas",
-          "- Palpites corretos/incorretos"
-        ]
+        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
       },
-      "reseted": [
-        "Você redefiniu com sucesso: \n{type}"
-      ]
+      "reseted": ["Você redefiniu com sucesso: \n{type}"]
     }
   },
   "simulator": {
