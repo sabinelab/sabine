@@ -6,8 +6,11 @@ import { z } from 'zod'
 import { env } from '@/env'
 import ButtonBuilder from '../../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../../structures/builders/EmbedBuilder'
+import pLimit from 'p-limit'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
+
+const limit = pLimit(25)
 
 export const news = new Elysia().post(
   '/webhooks/news/valorant',
@@ -45,17 +48,19 @@ export const news = new Elysia().post(
             .setURL(data.url)
 
           messages.push(
-            rest.post(Routes.channelMessages(guild.valorantNewsChannel!), {
-              body: {
-                embeds: [embed.toJSON()],
-                components: [
-                  {
-                    type: 1,
-                    components: [button]
-                  }
-                ]
-              }
-            })
+            limit(() =>
+              rest.post(Routes.channelMessages(guild.valorantNewsChannel!), {
+                body: {
+                  embeds: [embed.toJSON()],
+                  components: [
+                    {
+                      type: 1,
+                      components: [button]
+                    }
+                  ]
+                }
+              })
+            )
           )
         }
       }

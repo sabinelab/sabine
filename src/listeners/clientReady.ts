@@ -20,6 +20,7 @@ import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import type { MatchesData } from '@/types'
 import Logger from '@/util/Logger'
+import pLimit from 'p-limit'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service(env.AUTH)
@@ -43,6 +44,10 @@ const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Challengers League': [/challengers \d{4}/],
   'Valorant Game Changers': [/game changers \d{4}/]
 }
+
+const sendLimit = pLimit(25)
+const delLimit = pLimit(10)
+const dbLimit = pLimit(50)
 
 const sendValorantMatches = async (app: App) => {
   const [res, res2] = await Promise.all([
@@ -335,9 +340,11 @@ const sendValorantMatches = async (app: App) => {
       updateGuildThunks.push(thunk)
     }
 
-    await Promise.allSettled(bulkDeleteThunks.map(task => task()))
-    await Promise.allSettled(updateGuildThunks.map(task => task()))
-    await Promise.allSettled(sendMessageThunks.map(task => task()))
+    await Promise.allSettled([
+      ...bulkDeleteThunks.map(task => delLimit(task)),
+      ...updateGuildThunks.map(task => dbLimit(task)),
+      ...sendMessageThunks.map(task => sendLimit(task))
+    ])
 
     cursor = guilds[guilds.length - 1].id
   }
@@ -478,8 +485,10 @@ const sendValorantTBDMatches = async (app: App) => {
       }
     }
 
-    await Promise.allSettled(updateGuildThunks.map(task => task()))
-    await Promise.allSettled(sendMessageThunks.map(task => task()))
+    await Promise.allSettled([
+      ...updateGuildThunks.map(task => dbLimit(task)),
+      ...sendMessageThunks.map(task => sendLimit(task))
+    ])
 
     cursor = guilds[guilds.length - 1].id
   }
@@ -702,9 +711,11 @@ const sendLolMatches = async (app: App) => {
       updateGuildThunks.push(thunk)
     }
 
-    await Promise.allSettled(bulkDeleteThunks.map(task => task()))
-    await Promise.allSettled(updateGuildThunks.map(task => task()))
-    await Promise.allSettled(sendMessageThunks.map(task => task()))
+    await Promise.allSettled([
+      ...bulkDeleteThunks.map(task => delLimit(task)),
+      ...updateGuildThunks.map(task => dbLimit(task)),
+      ...sendMessageThunks.map(task => sendLimit(task))
+    ])
 
     cursor = guilds[guilds.length - 1].id
   }

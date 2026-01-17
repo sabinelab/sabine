@@ -6,9 +6,11 @@ import { env } from '@/env'
 import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import calcOdd from '@/util/calcOdd'
+import pLimit from 'p-limit'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
+const limit = pLimit(25)
 const chunk = <T>(arr: T[], size: number) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
     arr.slice(i * size, i * size + size)
@@ -102,11 +104,13 @@ export const lolResults = new Elysia().post(
             .setFooter({ text: data.stage })
 
           messages.push(
-            rest.post(Routes.channelMessages(event.channel2), {
-              body: {
-                embeds: [embed.toJSON()]
-              }
-            })
+            limit(() =>
+              rest.post(Routes.channelMessages(event.channel2), {
+                body: {
+                  embeds: [embed.toJSON()]
+                }
+              })
+            )
           )
         }
       }

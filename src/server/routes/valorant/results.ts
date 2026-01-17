@@ -8,6 +8,7 @@ import { app } from '@/structures/app/App'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import calcOdd from '@/util/calcOdd'
+import pLimit from 'p-limit'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [/valorant champions/, /valorant masters/, /vct \d{4}/],
@@ -16,6 +17,8 @@ const tournaments: { [key: string]: RegExp[] } = {
 }
 
 const rest = new Discord.REST().setToken(env.BOT_TOKEN)
+
+const limit = pLimit(25)
 
 const chunk = <T>(arr: T[], size: number) =>
   Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
@@ -124,22 +127,24 @@ export const valorantResults = new Elysia().post(
             .setFooter({ text: data.stage })
 
           messages.push(
-            rest.post(Discord.Routes.channelMessages(event.channel2), {
-              body: {
-                embeds: [embed.toJSON()],
-                components: [
-                  {
-                    type: 1,
-                    components: [
-                      new ButtonBuilder()
-                        .setLabel(locales(guild.lang, 'helper.stats'))
-                        .defineStyle('link')
-                        .setURL(`https://vlr.gg/${data.id}`)
-                    ]
-                  }
-                ]
-              }
-            })
+            limit(() =>
+              rest.post(Discord.Routes.channelMessages(event.channel2), {
+                body: {
+                  embeds: [embed.toJSON()],
+                  components: [
+                    {
+                      type: 1,
+                      components: [
+                        new ButtonBuilder()
+                          .setLabel(locales(guild.lang, 'helper.stats'))
+                          .defineStyle('link')
+                          .setURL(`https://vlr.gg/${data.id}`)
+                      ]
+                    }
+                  ]
+                }
+              })
+            )
           )
         }
       }

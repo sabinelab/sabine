@@ -7,6 +7,7 @@ import { env } from '@/env'
 import { app } from '@/structures/app/App'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
+import pLimit from 'p-limit'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [/valorant champions/, /valorant masters/, /vct \d{4}/],
@@ -15,6 +16,8 @@ const tournaments: { [key: string]: RegExp[] } = {
 }
 
 const rest = new REST().setToken(env.BOT_TOKEN)
+
+const limit = pLimit(25)
 
 export const valorantLive = new Elysia().post(
   '/webhooks/live/valorant',
@@ -88,17 +91,19 @@ export const valorantLive = new Elysia().post(
             .setURL(data.url)
 
           messages.push(
-            rest.post(Routes.channelMessages(guild.valorantLiveFeedChannel!), {
-              body: {
-                embeds: [embed.toJSON()],
-                components: [
-                  {
-                    type: 1,
-                    components: [button]
-                  }
-                ]
-              }
-            })
+            limit(() =>
+              rest.post(Routes.channelMessages(guild.valorantLiveFeedChannel!), {
+                body: {
+                  embeds: [embed.toJSON()],
+                  components: [
+                    {
+                      type: 1,
+                      components: [button]
+                    }
+                  ]
+                }
+              })
+            )
           )
         }
       }
