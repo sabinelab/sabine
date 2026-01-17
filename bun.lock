@@ -128,7 +128,7 @@
 
     "@prisma/studio-core": ["@prisma/studio-core@0.9.0", "", { "peerDependencies": { "@types/react": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0", "react-dom": "^18.0.0 || ^19.0.0" } }, "sha512-xA2zoR/ADu/NCSQuriBKTh6Ps4XjU0bErkEcgMfnSGh346K1VI7iWKnoq1l2DoxUqiddPHIEWwtxJ6xCHG6W7g=="],
 
-    "@sabinelab/players": ["@sabinelab/players@1.7.0", "https://npm.pkg.github.com/download/@sabinelab/players/1.7.0/144c734295d2f52a501ed6ed362cb30726760ad9", {}, "sha512-W0H8PaRep8MI73iHz/FMhLH0wu5w8b84xMQcIv/8NRGHNINPPgFVX9m1q0FMKrBfvUPdAULwtn+JSoLv16rb4g=="],
+    "@sabinelab/players": ["@sabinelab/players@1.7.0", "https://npm.pkg.github.com/download/@sabinelab/players/1.7.0/f67cd2c3cf4417134938019c67f4d903de98a66d", {}, "sha512-7B1KRfidrIy9tsbTYSiBjdhpqqCUE3GvaM2F7CFWhUIFlbzMf+VvxYnxD9AXqs0ZBsvQ39MQFLwtZNHGmvYLJw=="],
 
     "@sapphire/async-queue": ["@sapphire/async-queue@1.5.5", "", {}, "sha512-cvGzxbba6sav2zZkH8GPf2oGk9yYoD5qrNWdu9fRehifgnFZJMV+nuy2nON2roRO4yQQ+v7MK/Pktl/HgfsUXg=="],
 
