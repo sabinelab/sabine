@@ -15,15 +15,14 @@ export default class ComponentInteractionRunner {
     const command = app.commands.get(args[0])
 
     const rawBlacklist = await app.redis.get('blacklist')
-    const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
-    const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
+    const blacklist: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
 
     const guild =
       (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
-    if (blacklist.get(interaction.user.id)) return
-    if (blacklist.get(interaction.guildId)) return
+    if (blacklist.find(b => b.id === interaction.user.id)) return
+    if (blacklist.find(b => b.id === interaction.guildId)) return await interaction.guild.leave()
 
     if (i?.global && !command) {
       if (!interaction.guild || !interaction.guildId) return

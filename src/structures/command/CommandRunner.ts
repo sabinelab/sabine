@@ -38,8 +38,7 @@ export default class CommandRunner {
       (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
 
     const rawBlacklist = await app.redis.get('blacklist')
-    const value: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
-    const blacklist = new Map<string | null, Blacklist>(value.map(b => [b.id, b]))
+    const blacklist: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
 
     let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
@@ -58,9 +57,9 @@ export default class CommandRunner {
       profile = new ProfileSchema(interaction.user.id, interaction.guildId)
     }
 
-    const ban = blacklist.get(interaction.user.id)
+    const ban = blacklist.find(b => b.id === interaction.user.id)
 
-    if (blacklist.get(interaction.guildId)) {
+    if (blacklist.find(b => b.id === interaction.guildId)) {
       return await interaction.guild?.leave()
     }
 
