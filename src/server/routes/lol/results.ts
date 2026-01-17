@@ -1,12 +1,12 @@
 import { prisma } from '@db'
 import { REST, Routes } from 'discord.js'
 import { Elysia } from 'elysia'
+import pLimit from 'p-limit'
 import { z } from 'zod'
 import { env } from '@/env'
 import { app } from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import calcOdd from '@/util/calcOdd'
-import pLimit from 'p-limit'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 

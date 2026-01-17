@@ -12,6 +12,7 @@ import {
   REST,
   Routes
 } from 'discord.js'
+import pLimit from 'p-limit'
 import Service from '@/api'
 import type { valorantAgents } from '@/config'
 import { env } from '@/env'
@@ -20,7 +21,6 @@ import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import type { MatchesData } from '@/types'
 import Logger from '@/util/Logger'
-import pLimit from 'p-limit'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service(env.AUTH)
