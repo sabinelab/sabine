@@ -1,5 +1,5 @@
 services:
-  app:
+  sabine:
     build: 
       context: .
       dockerfile: Dockerfile
