@@ -22,6 +22,10 @@ model Guild {
   guildKeyId        String?       @map("guild_key_id")
 
   users Profile[]
+
+  @@index([valorantLiveFeedChannel])
+  @@index([lolLiveFeedChannel])
+  @@index([valorantNewsChannel])
 }
 
 model LiveMessage {
