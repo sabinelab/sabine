@@ -9,6 +9,11 @@ import calcOdd from '@/util/calcOdd'
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
+const chunk = <T>(arr: T[], size: number) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+    arr.slice(i * size, i * size + size)
+  )
+
 export const lolResults = new Elysia().post(
   '/webhooks/results/lol',
   async req => {
@@ -103,13 +108,36 @@ export const lolResults = new Elysia().post(
       }
     }
 
-    const transactions: Promise<unknown>[] = []
+    await Promise.allSettled(messages)
 
     for (const data of req.body) {
-      for (const pred of preds) {
-        if (data.id !== pred.match) continue
+      const matchPreds = preds.filter(p => p.match === data.id)
+      if (!matchPreds.length) continue
 
-        const transaction = async () => {
+      let oddA = 0
+      let oddB = 0
+      let winnerIndex = -1
+
+      const hasBets = matchPreds.some(m => m.bet)
+
+      if (hasBets) {
+        winnerIndex = data.teams.findIndex(t => t.winner)
+
+        for (const pred of matchPreds) {
+          if (pred.bet) {
+            if (pred.teams[0].winner) {
+              oddA++
+            } else if (pred.teams[1].winner) {
+              oddB++
+            }
+          }
+        }
+      }
+
+      const batches = chunk(matchPreds, 50)
+
+      for (const batch of batches) {
+        const transactions = batch.flatMap(pred => {
           if (
             pred.teams[0].score === data.teams[0].score &&
             pred.teams[1].score === data.teams[1].score
@@ -117,26 +145,9 @@ export const lolResults = new Elysia().post(
             let odd: number | null = null
             let bonus = 0
 
-            if (pred.bet) {
-              const winnerIndex = data.teams.findIndex(t => t.winner)
-
+            if (pred.bet && winnerIndex >= 0) {
               if (pred.teams[winnerIndex].winner) {
-                let oddA = 0
-                let oddB = 0
-
-                for (const p of preds) {
-                  if (p.teams[0].winner && p.bet) {
-                    oddA += 1
-                  } else if (p.teams[1].winner && p.bet) {
-                    oddB += 1
-                  }
-                }
-
-                if (pred.teams[0].winner) {
-                  odd = calcOdd(oddA)
-                } else {
-                  odd = calcOdd(oddB)
-                }
+                odd = pred.teams[0].winner ? calcOdd(oddA) : calcOdd(oddB)
 
                 if (pred.profile.user.premium) {
                   bonus = Number(pred.bet) / 2
@@ -144,16 +155,17 @@ export const lolResults = new Elysia().post(
               }
             }
 
-            const poisons = BigInt(Number(pred.bet) * (odd ?? 1)) + BigInt(bonus)
+            const poisons =
+              BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
             const fates = 35
 
-            await prisma.$transaction([
+            return [
               prisma.prediction.update({
                 where: {
                   id: pred.id
                 },
                 data: {
-                  odd: odd,
+                  odd: odd ? Math.floor(odd) : undefined,
                   status: 'correct'
                 }
               }),
@@ -167,9 +179,9 @@ export const lolResults = new Elysia().post(
                   fates: { increment: fates }
                 }
               })
-            ])
+            ]
           } else {
-            await prisma.$transaction([
+            return [
               prisma.prediction.update({
                 where: {
                   id: pred.id
@@ -188,18 +200,15 @@ export const lolResults = new Elysia().post(
                   }
                 }
               })
-            ])
+            ]
           }
-        }
+        })
 
-        transactions.push(transaction())
+        await prisma.$transaction(transactions)
       }
     }
 
-    await Promise.allSettled([...messages, ...transactions])
-
     req.set.status = 'OK'
-
     return { ok: true }
   },
   {

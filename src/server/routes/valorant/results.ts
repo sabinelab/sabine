@@ -17,6 +17,11 @@ const tournaments: { [key: string]: RegExp[] } = {
 
 const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
+const chunk = <T>(arr: T[], size: number) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+    arr.slice(i * size, i * size + size)
+  )
+
 export const valorantResults = new Elysia().post(
   '/webhooks/results/valorant',
   async req => {
@@ -136,13 +141,34 @@ export const valorantResults = new Elysia().post(
       }
     }
 
-    const transactions: Promise<unknown>[] = []
-
     for (const data of req.body) {
       const matchPreds = preds.filter(p => p.match === data.id)
+      if (!matchPreds.length) continue
 
-      for (const pred of matchPreds) {
-        const transaction = async () => {
+      let oddA = 0
+      let oddB = 0
+      let winnerIndex = -1
+
+      const hasbets = matchPreds.some(m => m.bet)
+
+      if (hasbets) {
+        winnerIndex = data.teams.findIndex(t => t.winner)
+
+        for (const pred of matchPreds) {
+          if (pred.bet) {
+            if (pred.teams[0].winner) {
+              oddA++
+            } else if (pred.teams[1].winner) {
+              oddB++
+            }
+          }
+        }
+      }
+
+      const batches = chunk(matchPreds, 50)
+
+      for (const batch of batches) {
+        const transactions = batch.flatMap(pred => {
           if (
             pred.teams[0].score === data.teams[0].score &&
             pred.teams[1].score === data.teams[1].score
@@ -150,26 +176,9 @@ export const valorantResults = new Elysia().post(
             let odd: number | null = null
             let bonus = 0
 
-            if (pred.bet) {
-              const winnerIndex = data.teams.findIndex(t => t.winner)
-
+            if (pred.bet && winnerIndex >= 0) {
               if (pred.teams[winnerIndex].winner) {
-                let oddA = 0
-                let oddB = 0
-
-                for (const p of matchPreds) {
-                  if (p.teams[0].winner && p.bet) {
-                    oddA += 1
-                  } else if (p.teams[1].winner && p.bet) {
-                    oddB += 1
-                  }
-                }
-
-                if (pred.teams[0].winner) {
-                  odd = calcOdd(oddA)
-                } else {
-                  odd = calcOdd(oddB)
-                }
+                odd = pred.teams[0].winner ? calcOdd(oddA) : calcOdd(oddB)
 
                 if (pred.profile.user.premium) {
                   bonus = Math.floor(Number(pred.bet) / 2)
@@ -180,11 +189,9 @@ export const valorantResults = new Elysia().post(
             const poisons = BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
             const fates = 35
 
-            await prisma.$transaction([
+            return [
               prisma.prediction.update({
-                where: {
-                  id: pred.id
-                },
+                where: { id: pred.id },
                 data: {
                   odd: odd ? Math.floor(odd) : undefined,
                   status: 'correct'
@@ -193,46 +200,35 @@ export const valorantResults = new Elysia().post(
               prisma.profile.update({
                 where: { id: pred.profile.id },
                 data: {
-                  correctPredictions: {
-                    increment: 1
-                  },
+                  correctPredictions: { increment: 1 },
                   poisons: { increment: poisons },
                   fates: { increment: fates }
                 }
               })
-            ])
+            ]
           } else {
-            await prisma.$transaction([
+            return [
               prisma.prediction.update({
-                where: {
-                  id: pred.id
-                },
-                data: {
-                  status: 'incorrect'
-                }
+                where: { id: pred.id },
+                data: { status: 'incorrect' }
               }),
               prisma.profile.update({
-                where: {
-                  id: pred.profile.id
-                },
+                where: { id: pred.profile.id },
                 data: {
-                  incorrectPredictions: {
-                    increment: 1
-                  }
+                  incorrectPredictions: { increment: 1 }
                 }
               })
-            ])
+            ]
           }
-        }
+        })
 
-        transactions.push(transaction())
+        await prisma.$transaction(transactions)
       }
     }
 
-    await Promise.allSettled([...messages, ...transactions])
+    await Promise.allSettled(messages)
 
     req.set.status = 'OK'
-
     return { ok: true }
   },
   {
