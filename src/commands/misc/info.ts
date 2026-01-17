@@ -11,8 +11,18 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Mostra as informações do bot'
   },
+  isThinking: true,
   async run({ ctx, app, t }) {
-    const creator = await app.getUser('441932495693414410')
+    const [creator, guildsCount, usersCount] = await Promise.all([
+      app.getUser('441932495693414410'),
+      (await app.shard?.fetchClientValues('guilds.cache.size')) as number[] | undefined,
+      (await app.shard?.broadcastEval(a => a.users.cache.filter(u => !u.bot).size)) as
+        | number[]
+        | undefined
+    ])
+
+    const totalUsers = usersCount?.reduce((sum, count) => sum + count, 0) ?? 0
+    const totalGuilds = guildsCount?.reduce((sum, count) => sum + count, 0) ?? 0
 
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -39,12 +49,12 @@ export default createCommand({
         },
         {
           name: t('commands.info.guilds'),
-          value: app.guilds.cache.size.toString(),
+          value: totalGuilds.toLocaleString(),
           inline: true
         },
         {
           name: t('commands.info.users'),
-          value: app.users.cache.filter(user => !user.bot).size.toString(),
+          value: totalUsers.toLocaleString(),
           inline: true
         },
         {
