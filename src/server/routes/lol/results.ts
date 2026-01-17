@@ -155,8 +155,7 @@ export const lolResults = new Elysia().post(
               }
             }
 
-            const poisons =
-              BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
+            const poisons = BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
             const fates = 35
 
             return [
