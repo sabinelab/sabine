@@ -9,9 +9,11 @@ const rest = new REST().setToken(env.BOT_TOKEN)
 export default createListener({
   name: 'guildCreate',
   async run(client, guild) {
-    const blacklist = await prisma.blacklist.findMany()
-    const ban = blacklist.find(g => g.id === guild.id)
-
+    const ban = await prisma.blacklist.findUnique({
+      where: {
+        id: guild.id
+      }
+    })
     if (ban) return await guild.leave()
 
     const owner = await client.getUser(guild.ownerId)
