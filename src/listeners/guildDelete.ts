@@ -17,7 +17,7 @@ export default createListener({
       .addField('Member count', guild.memberCount.toString(), true)
       .setThumb(guild.iconURL() ?? '')
 
-    const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
+    const webhooks = (await rest.get(Routes.channelWebhooks(env.GUILDS_LOG))) as APIWebhook[]
     let webhook = webhooks.find(w => w.name === `${client.user?.username} Logger`)
 
     if (!webhook) {
