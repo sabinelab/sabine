@@ -15,10 +15,10 @@ export default createCommand({
   async run({ ctx, app, t }) {
     const [creator, guildsCount, usersCount] = await Promise.all([
       app.getUser('441932495693414410'),
-      (await app.shard?.fetchClientValues('guilds.cache.size')) as number[] | undefined,
-      (await app.shard?.broadcastEval(a => a.users.cache.filter(u => !u.bot).size)) as
-        | number[]
-        | undefined
+      app.shard?.fetchClientValues('guilds.cache.size') as Promise<number[] | undefined>,
+      app.shard?.broadcastEval(a => a.users.cache.filter(u => !u.bot).size) as Promise<
+        number[] | undefined
+      >
     ])
 
     const totalUsers = usersCount?.reduce((sum, count) => sum + count, 0) ?? 0
