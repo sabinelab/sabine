@@ -17,24 +17,6 @@ const chunk = <T>(arr: T[], size: number) =>
 export const lolResults = new Elysia().post(
   '/webhooks/results/lol',
   async req => {
-    const guilds = await prisma.guild.findMany({
-      where: {
-        events: {
-          some: {
-            type: 'lol'
-          }
-        }
-      },
-      include: {
-        events: {
-          where: {
-            type: 'lol'
-          }
-        },
-        key: true
-      }
-    })
-
     const preds = await prisma.prediction.findMany({
       where: {
         game: 'lol',
@@ -58,57 +40,81 @@ export const lolResults = new Elysia().post(
       }
     })
 
-    if (!guilds.length) {
-      req.set.status = 'OK'
+    let cursor: string | undefined
 
-      return { ok: true }
-    }
-
-    const messages: Promise<unknown>[] = []
-
-    for (const data of req.body.map(body => ({
-      ...body,
-      when: new Date(body.when)
-    }))) {
-      for (const guild of guilds) {
-        const event = guild.events.find(e => e.name === data.tournament.name)
-
-        if (!event) continue
-
-        if (!guild.events.some(e => e.name === data.tournament.name)) continue
-
-        const emoji1 =
-          app.emoji.get(data.teams[0].name.toLowerCase()) ??
-          app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
-          app.emoji.get('default')
-        const emoji2 =
-          app.emoji.get(data.teams[1].name.toLowerCase()) ??
-          app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
-          app.emoji.get('default')
-
-        const embed = new EmbedBuilder()
-          .setAuthor({
-            name: data.tournament.name,
-            iconURL: data.tournament.image
-          })
-          .setField(
-            `${emoji1} ${data.teams[0].name} \`${data.teams[0].score}\` <:versus:1349105624180330516> \`${data.teams[1].score}\` ${data.teams[1].name} ${emoji2}`,
-            `<t:${data.when.getTime() / 1000}:F> | <t:${data.when.getTime() / 1000}:R>`,
-            true
-          )
-          .setFooter({ text: data.stage })
-
-        messages.push(
-          rest.post(Routes.channelMessages(event.channel2), {
-            body: {
-              embeds: [embed.toJSON()]
+    while (true) {
+      const guilds = await prisma.guild.findMany({
+        take: 1000,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { id: 'asc' },
+        where: {
+          events: {
+            some: {
+              type: 'lol'
             }
-          })
-        )
-      }
-    }
+          }
+        },
+        include: {
+          events: {
+            where: {
+              type: 'lol'
+            }
+          },
+          key: true
+        }
+      })
 
-    await Promise.allSettled(messages)
+      if (!guilds.length) break
+
+      const messages: Promise<unknown>[] = []
+
+      for (const data of req.body.map(body => ({
+        ...body,
+        when: new Date(body.when)
+      }))) {
+        for (const guild of guilds) {
+          const event = guild.events.find(e => e.name === data.tournament.name)
+
+          if (!event) continue
+
+          if (!guild.events.some(e => e.name === data.tournament.name)) continue
+
+          const emoji1 =
+            app.emoji.get(data.teams[0].name.toLowerCase()) ??
+            app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
+            app.emoji.get('default')
+          const emoji2 =
+            app.emoji.get(data.teams[1].name.toLowerCase()) ??
+            app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
+            app.emoji.get('default')
+
+          const embed = new EmbedBuilder()
+            .setAuthor({
+              name: data.tournament.name,
+              iconURL: data.tournament.image
+            })
+            .setField(
+              `${emoji1} ${data.teams[0].name} \`${data.teams[0].score}\` <:versus:1349105624180330516> \`${data.teams[1].score}\` ${data.teams[1].name} ${emoji2}`,
+              `<t:${data.when.getTime() / 1000}:F> | <t:${data.when.getTime() / 1000}:R>`,
+              true
+            )
+            .setFooter({ text: data.stage })
+
+          messages.push(
+            rest.post(Routes.channelMessages(event.channel2), {
+              body: {
+                embeds: [embed.toJSON()]
+              }
+            })
+          )
+        }
+      }
+
+      await Promise.allSettled(messages)
+
+      cursor = guilds[guilds.length - 1].id
+    }
 
     for (const data of req.body) {
       const matchPreds = preds.filter(p => p.match === data.id)

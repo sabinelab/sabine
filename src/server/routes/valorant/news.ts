@@ -12,48 +12,58 @@ const rest = new REST().setToken(env.BOT_TOKEN)
 export const news = new Elysia().post(
   '/webhooks/news/valorant',
   async req => {
-    const guilds = await prisma.guild.findMany({
-      where: {
-        valorantNewsChannel: {
-          not: null
+    let cursor: string | undefined
+
+    while (true) {
+      const guilds = await prisma.guild.findMany({
+        take: 1000,
+        skip: cursor ? 1 : 0,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: { id: 'asc' },
+        where: {
+          valorantNewsChannel: {
+            not: null
+          }
+        }
+      })
+
+      if (!guilds.length) break
+
+      const messages: Promise<unknown>[] = []
+
+      for (const guild of guilds) {
+        for (const data of req.body) {
+          const embed = new EmbedBuilder().setTitle(data.title)
+
+          if (data.description) {
+            embed.setDesc(data.description)
+          }
+
+          const button = new ButtonBuilder()
+            .defineStyle('link')
+            .setLabel(locales(guild.lang ?? 'en', 'helper.source'))
+            .setURL(data.url)
+
+          messages.push(
+            rest.post(Routes.channelMessages(guild.valorantNewsChannel!), {
+              body: {
+                embeds: [embed.toJSON()],
+                components: [
+                  {
+                    type: 1,
+                    components: [button]
+                  }
+                ]
+              }
+            })
+          )
         }
       }
-    })
 
-    if (!guilds.length) return
+      await Promise.allSettled(messages)
 
-    const messages: Promise<unknown>[] = []
-
-    for (const guild of guilds) {
-      for (const data of req.body) {
-        const embed = new EmbedBuilder().setTitle(data.title)
-
-        if (data.description) {
-          embed.setDesc(data.description)
-        }
-
-        const button = new ButtonBuilder()
-          .defineStyle('link')
-          .setLabel(locales(guild.lang ?? 'en', 'helper.source'))
-          .setURL(data.url)
-
-        messages.push(
-          rest.post(Routes.channelMessages(guild.valorantNewsChannel!), {
-            body: {
-              embeds: [embed.toJSON()],
-              components: [
-                {
-                  type: 1,
-                  components: [button]
-                }
-              ]
-            }
-          })
-        )
-      }
+      cursor = guilds[guilds.length - 1].id
     }
-
-    await Promise.allSettled(messages)
 
     req.set.status = 'OK'
 
