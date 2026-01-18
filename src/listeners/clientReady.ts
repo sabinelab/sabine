@@ -257,7 +257,7 @@ const sendValorantMatches = async (app: App) => {
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 10
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
           const chunk = matches.slice(i, i + chunkSize)
@@ -430,7 +430,7 @@ const sendValorantTBDMatches = async (app: App) => {
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 10
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
           const chunk = matches.slice(i, i + chunkSize)
@@ -634,7 +634,7 @@ const sendLolMatches = async (app: App) => {
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 10
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
           const chunk = matches.slice(i, i + chunkSize)

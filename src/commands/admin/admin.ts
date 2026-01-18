@@ -14,6 +14,7 @@ import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 import type { MatchesData } from '../../types'
 import Logger from '../../util/Logger'
+import { voidCatch } from '@/database/update-cache'
 
 const service = new Service(env.AUTH)
 
@@ -97,9 +98,6 @@ export default createCommand({
       const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
-        },
-        include: {
-          events: true
         },
         select: {
           events: true
@@ -554,7 +552,7 @@ export default createCommand({
       }
 
       for (const [channelId, matchesChunk] of channelBatches.entries()) {
-        const chunkSize = 10
+        const chunkSize = 5
 
         for (let i = 0; i < matchesChunk.length; i += chunkSize) {
           const chunk = matchesChunk.slice(i, i + chunkSize)
@@ -603,7 +601,7 @@ export default createCommand({
                 components: [container.toJSON()],
                 flags: MessageFlags.IsComponentsV2
               })
-              .catch(() => {})
+              .catch(voidCatch)
           }
         }
       }
@@ -765,7 +763,7 @@ export default createCommand({
       }
 
       for (const [channelId, matchesChunk] of channelBatches.entries()) {
-        const chunkSize = 10
+        const chunkSize = 5
 
         for (let i = 0; i < matchesChunk.length; i += chunkSize) {
           const chunk = matchesChunk.slice(i, i + chunkSize)
@@ -810,7 +808,7 @@ export default createCommand({
                 components: [container.toJSON()],
                 flags: MessageFlags.IsComponentsV2
               })
-              .catch(() => {})
+              .catch(voidCatch)
           }
         }
       }
