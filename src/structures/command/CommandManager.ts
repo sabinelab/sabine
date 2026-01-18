@@ -158,17 +158,21 @@ export class CommandManager {
     const args: string[] = []
     let user: User
 
+    const guild = (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
+
     if (data instanceof ChatInputCommandInteraction) {
       commandName = data.commandName
       user = data.user
     } else {
+      if (!data.content.startsWith(guild.prefix ?? env.PREFIX)) return
+
       const messageArray = data.content.split(' ')
       const command = messageArray.shift()!.toLowerCase()
       const messageArgs = messageArray.slice(0)
 
       args.push(...messageArgs)
       user = data.author
-      commandName = command.slice(env.PREFIX.length)
+      commandName = command.slice((guild.prefix ?? env.PREFIX).length)
     }
 
     const command = app.commands.get(commandName)
@@ -178,7 +182,6 @@ export class CommandManager {
     const rawBlacklist = await app.redis.get('blacklist')
     const blacklist: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
 
-    const guild = (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
     let profile = await ProfileSchema.fetch(user.id, data.guildId)
 
     const ban = blacklist.find(b => b.id === user.id)
@@ -344,7 +347,8 @@ export class CommandManager {
         profile,
         guild
       },
-      author: user
+      author: user,
+      prefix: guild.prefix ?? env.PREFIX
     })
 
     const { permissions } = raw[ctx.locale]
