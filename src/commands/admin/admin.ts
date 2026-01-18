@@ -8,13 +8,13 @@ import {
   MessageFlags,
   type TextChannel
 } from 'discord.js'
+import { voidCatch } from '@/database/update-cache'
 import { env } from '@/env'
 import Service from '../../api'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 import type { MatchesData } from '../../types'
 import Logger from '../../util/Logger'
-import { voidCatch } from '@/database/update-cache'
 
 const service = new Service(env.AUTH)
 
