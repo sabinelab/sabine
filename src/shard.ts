@@ -141,7 +141,10 @@ const manager = new ShardingManager('src/index.ts', {
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
-const res = (await rest.get(Routes.channelWebhooks(env.SHARD_LOG))) as any[]
+const res = (await rest.get(Routes.channelWebhooks(env.SHARD_LOG))) as {
+  id: string
+  token?: string
+}[]
 const webhook = res.filter(w => w.token)[0]
 
 if (!webhook) {
