@@ -93,38 +93,39 @@ export default createCommand({
   examples: ['admin dashboard', 'admin language pt-BR', 'admin language en-US'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, id, app }) {
-    if (!ctx.db.guild) return
-
     if (ctx.args[0] === 'dashboard') {
-      const guild = (await app.prisma.guild.findUnique({
+      const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
         },
         include: {
           events: true
+        },
+        select: {
+          events: true
         }
-      }))!
+      })
 
       const embed = new EmbedBuilder().setTitle(t('commands.admin.dashboard')).setDesc(
         t('commands.admin.desc', {
-          lang: ctx.db.guild!.lang.replace('en', 'English').replace('pt', 'Português'),
+          lang: ctx.db.guild.lang.replace('en', 'English').replace('pt', 'Português'),
           limit:
-            ctx.db.guild!.tournamentsLength === Infinity
+            ctx.db.guild.tournamentsLength === Infinity
               ? '`Infinity`'
-              : `${guild.events.length}/${ctx.db.guild!.tournamentsLength}`,
+              : `${guild?.events.length ?? 0}/${ctx.db.guild.tournamentsLength}`,
           id,
-          vlr_news: !ctx.db.guild!.valorantNewsChannel
+          vlr_news: !ctx.db.guild.valorantNewsChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.valorantNewsChannel}>`,
-          vlr_live: !ctx.db.guild!.valorantLiveFeedChannel
+            : `<#${ctx.db.guild.valorantNewsChannel}>`,
+          vlr_live: !ctx.db.guild.valorantLiveFeedChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.valorantLiveFeedChannel}>`,
-          lol_news: !ctx.db.guild!.lolNewsChannel
+            : `<#${ctx.db.guild.valorantLiveFeedChannel}>`,
+          lol_news: !ctx.db.guild.lolNewsChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.lolNewsChannel}>`,
-          lol_live: !ctx.db.guild!.lolLiveFeedChannel
+            : `<#${ctx.db.guild.lolNewsChannel}>`,
+          lol_live: !ctx.db.guild.lolLiveFeedChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild!.lolLiveFeedChannel}>`
+            : `<#${ctx.db.guild.lolLiveFeedChannel}>`
         })
       )
 
@@ -163,11 +164,14 @@ export default createCommand({
     } else if (ctx.args[0] === 'language') {
       const options = {
         en: async () => {
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
-              id: ctx.db.guild?.id
+              id: ctx.db.guild.id
             },
-            data: {
+            create: {
+              id: ctx.guild.id
+            },
+            update: {
               lang: 'en'
             }
           })
@@ -175,11 +179,15 @@ export default createCommand({
           await ctx.reply('Now I will interact in English on this server!')
         },
         pt: async () => {
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
-              id: ctx.db.guild?.id
+              id: ctx.db.guild.id
             },
-            data: {
+            create: {
+              id: ctx.guild.id,
+              lang: 'pt'
+            },
+            update: {
               lang: 'pt'
             }
           })
@@ -187,11 +195,15 @@ export default createCommand({
           await ctx.reply('Agora eu irei interagir em português neste servidor!')
         },
         es: async () => {
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
-              id: ctx.db.guild?.id
+              id: ctx.db.guild.id
             },
-            data: {
+            create: {
+              id: ctx.guild.id,
+              lang: 'es'
+            },
+            update: {
               lang: 'es'
             }
           })
@@ -230,12 +242,10 @@ export default createCommand({
     }
   },
   async createMessageComponentInteraction({ ctx, t, app }) {
-    if (!ctx.db.guild) return
-
     if (ctx.args[2] === 'vlr') {
       ctx.setFlags(64)
 
-      const guild = (await app.prisma.guild.findUnique({
+      const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
         },
@@ -246,7 +256,9 @@ export default createCommand({
             }
           }
         }
-      }))!
+      })
+
+      if (!guild) return
 
       const embed = new EmbedBuilder().setDesc(
         t('commands.admin.tournaments', { game: 'VALORANT' })
@@ -267,7 +279,7 @@ export default createCommand({
     } else if (ctx.args[2] === 'lol') {
       ctx.setFlags(64)
 
-      const guild = (await app.prisma.guild.findUnique({
+      const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
         },
@@ -278,7 +290,9 @@ export default createCommand({
             }
           }
         }
-      }))!
+      })
+
+      if (!guild) return
 
       const embed = new EmbedBuilder().setDesc(
         t('commands.admin.tournaments', { game: 'League of Legends' })
@@ -349,7 +363,7 @@ export default createCommand({
         })
       }
 
-      const guild = (await app.prisma.guild.findUnique({
+      const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
         },
@@ -366,7 +380,9 @@ export default createCommand({
           },
           key: true
         }
-      }))!
+      })
+
+      if (!guild) return
 
       guild.valorantMatches = []
       guild.valorantResendTime = new Date(Date.now() + 3600000)
@@ -622,7 +638,7 @@ export default createCommand({
         })
       }
 
-      const guild = (await app.prisma.guild.findUnique({
+      const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
         },
@@ -639,7 +655,9 @@ export default createCommand({
           },
           key: true
         }
-      }))!
+      })
+
+      if (!guild) return
 
       guild.lolMatches = []
       guild.tbdMatches = []
