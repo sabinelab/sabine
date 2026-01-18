@@ -14,7 +14,8 @@ const schema = z.object({
   CDN_URL: z.string(),
   DEVS: z.string(),
   REDIS_URL: z.optional(z.string()),
-  NODE_ENV: z.optional(z.enum(['production', 'development']))
+  NODE_ENV: z.optional(z.enum(['production', 'development'])),
+  PREFIX: z.string()
 })
 
 export const env = schema.parse({
