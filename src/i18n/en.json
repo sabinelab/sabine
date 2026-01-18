@@ -263,7 +263,8 @@
       "collection": "Collection",
       "purchaseable": "Purchaseable?",
       "price": "Price",
-      "devalued_price": "Sells for"
+      "devalued_price": "Sells for",
+      "missing_card": "Please, provide a valid player."
     },
     "trade": {
       "missing_poisons": "{user} needs **{poisons}** more poisons to purchase your player.",
@@ -489,7 +490,8 @@
     "initiators": "Initiators",
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
+    "missing_argument": "Missing argument: `{arg}`\nCommand usage: `{usage}`"
   },
   "permissions": {
     "CreateInstantInvite": "Create Instant Invite",
