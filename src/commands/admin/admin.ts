@@ -792,8 +792,7 @@ export default createCommand({
                   new ButtonBuilder()
                     .setLabel(t('helper.bet'))
                     .setCustomId(`bet;lol;${d.id}`)
-                    .setStyle(ButtonStyle.Secondary),
-                  new ButtonBuilder()
+                    .setStyle(ButtonStyle.Secondary)
                 )
               )
               .addSeparatorComponents(separator => separator)
