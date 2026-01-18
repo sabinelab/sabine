@@ -1,6 +1,7 @@
 model Guild {
   id     String   @id
   lang   Language @default(en)
+  prefix String?
   events Event[]
 
   valorantResendTime      DateTime? @map("valorant_resend_time")

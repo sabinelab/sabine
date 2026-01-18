@@ -21,6 +21,7 @@ export class GuildSchema implements Guild {
   public tournamentsLength: number = 5
   public partner: boolean | null = null
   public invite: string | null = null
+  public prefix: string | null = null
 
   public constructor(id: string) {
     this.id = id
