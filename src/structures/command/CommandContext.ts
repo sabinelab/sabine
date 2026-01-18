@@ -16,6 +16,7 @@ type CommandContextOptions<T> = {
   db: Database
   args: T
   author: Discord.User
+  prefix: string
 }
 
 export default class CommandContext<T> {
@@ -26,6 +27,7 @@ export default class CommandContext<T> {
   public db: Database
   public args: T
   public author: Discord.User
+  public prefix: string
 
   public constructor(options: CommandContextOptions<T>) {
     this.app = options.app
@@ -35,6 +37,7 @@ export default class CommandContext<T> {
     this.db = options.db
     this.args = options.args
     this.author = options.author
+    this.prefix = options.prefix
   }
 
   public t<T extends Content>(content: T, args?: Args) {
