@@ -81,7 +81,8 @@
       "premium": "This server has the {key} key activated.\nThe key expires {expiresAt}",
       "lol_esports_coverage": "League of Legends e-sports coverage",
       "vlr_esports_coverage": "VALORANT e-sports coverage",
-      "tournaments": "## {game} tournaments added"
+      "tournaments": "## {game} tournaments added",
+      "invalid_prefix": "Please, provide a prefix."
     },
     "info": {
       "embed": {
