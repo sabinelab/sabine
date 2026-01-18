@@ -35,7 +35,11 @@ export default class Logger {
   }
 
   public async error(error: Error | string, shardId?: number) {
-    const ignoredErrors = ['Missing Permissions', 'AbortError: This operation was aborted']
+    const ignoredErrors = [
+      'Missing Permissions',
+      'AbortError: This operation was aborted',
+      'Missing Access'
+    ]
 
     if (ignoredErrors.some(e => error.toString().includes(e))) return
 
