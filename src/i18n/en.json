@@ -81,8 +81,7 @@
       "premium": "This server has the {key} key activated.\nThe key expires {expiresAt}",
       "lol_esports_coverage": "League of Legends e-sports coverage",
       "vlr_esports_coverage": "VALORANT e-sports coverage",
-      "tournaments": "## {game} tournaments added",
-      "invalid_prefix": "Please, provide a prefix."
+      "tournaments": "## {game} tournaments added"
     },
     "info": {
       "embed": {
@@ -412,6 +411,10 @@
         "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
       },
       "reseted": ["You have successfully reset: \n{type}"]
+    },
+    "prefix": {
+      "invalid_prefix": "Please, provide a prefix.",
+      "updated": "Changed server prefix to `{prefix}`"
     }
   },
   "simulator": {
