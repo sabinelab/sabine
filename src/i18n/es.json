@@ -263,7 +263,8 @@
       "collection": "Colección",
       "purchaseable": "¿Comprable?",
       "price": "Precio",
-      "devalued_price": "Se vende por"
+      "devalued_price": "Se vende por",
+      "missing_card": "Please, provide a valid player."
     },
     "trade": {
       "missing_poisons": "{user} necesita **{poisons}** toxinas más para comprar tu jugador.",
@@ -395,8 +396,13 @@
           "- Rosters",
           "- Pity"
         ],
-        "balance": ["- Poisons and fates"],
-        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "balance": [
+          "- Poisons and fates"
+        ],
+        "predictions": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions"
+        ],
         "simulator": [
           "- Matches",
           "- Career",
@@ -407,9 +413,14 @@
           "- Rosters",
           "- Pity"
         ],
-        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+        "stats": [
+          "- Wins and defeats",
+          "- Incorrect/correct predictions"
+        ]
       },
-      "reseted": ["You have successfully reset: \n{type}"]
+      "reseted": [
+        "You have successfully reset: \n{type}"
+      ]
     }
   },
   "simulator": {
@@ -489,7 +500,8 @@
     "initiators": "Iniciadores",
     "sentinels": "Centinelas",
     "cooldown": "Estás usando este comando demasiado rápido. Intenta de nuevo {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
+    "missing_argument": "Missing argument: `{arg}`\nCommand usage: `{usage}`"
   },
   "permissions": {
     "CreateInstantInvite": "Crear Invitación Instantánea",
