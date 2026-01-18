@@ -14,8 +14,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Inicia um confronto com alguém'
   },
-  options: [
-    {
+  args: {
+    unranked: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'unranked',
       nameLocalizations: {
@@ -25,8 +25,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto sem classificação'
       },
-      options: [
-        {
+      args: {
+        user: {
           type: ApplicationCommandOptionType.User,
           name: 'user',
           nameLocalizations: {
@@ -38,9 +38,9 @@ export default createCommand({
           },
           required: true
         }
-      ]
+      }
     },
-    {
+    ranked: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'ranked',
       nameLocalizations: {
@@ -50,8 +50,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto ranqueado'
       },
-      options: [
-        {
+      args: {
+        user: {
           type: ApplicationCommandOptionType.User,
           name: 'user',
           nameLocalizations: {
@@ -63,9 +63,9 @@ export default createCommand({
           },
           required: true
         }
-      ]
+      }
     },
-    {
+    swiftplay: {
       type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'swiftplay',
       nameLocalizations: {
@@ -75,8 +75,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto frenético'
       },
-      options: [
-        {
+      args: {
+        unranked: {
           type: ApplicationCommandOptionType.Subcommand,
           name: 'unranked',
           nameLocalizations: {
@@ -86,8 +86,8 @@ export default createCommand({
           descriptionLocalizations: {
             'pt-BR': 'Inicia um confronto frenético sem classificação'
           },
-          options: [
-            {
+          args: {
+            user: {
               type: ApplicationCommandOptionType.User,
               name: 'user',
               nameLocalizations: {
@@ -99,9 +99,9 @@ export default createCommand({
               },
               required: true
             }
-          ]
+          }
         },
-        {
+        ranked: {
           type: ApplicationCommandOptionType.Subcommand,
           name: 'ranked',
           nameLocalizations: {
@@ -111,8 +111,8 @@ export default createCommand({
           descriptionLocalizations: {
             'pt-BR': 'Inicia um confronto frenético ranqueado'
           },
-          options: [
-            {
+          args: {
+            user: {
               type: ApplicationCommandOptionType.User,
               name: 'user',
               nameLocalizations: {
@@ -124,11 +124,11 @@ export default createCommand({
               },
               required: true
             }
-          ]
+          }
         }
-      ]
+      }
     },
-    {
+    tournament: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'tournament',
       nameLocalizations: {
@@ -138,8 +138,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Inicia um confronto em torneio'
       },
-      options: [
-        {
+      args: {
+        user: {
           type: ApplicationCommandOptionType.User,
           name: 'user',
           nameLocalizations: {
@@ -151,7 +151,7 @@ export default createCommand({
           },
           required: true
         },
-        {
+        map: {
           type: ApplicationCommandOptionType.String,
           name: 'map',
           nameLocalizations: {
@@ -169,17 +169,31 @@ export default createCommand({
             })),
           required: true
         }
-      ]
+      }
     }
-  ],
+  },
   async run({ ctx, t, app }) {
     let id: string
+    let mode: string
+    let map = ''
 
-    if (ctx.args.length === 2) {
-      id = ctx.args[1].toString()
-    } else if (ctx.args.length === 3 && ctx.args[0] === 'tournament') {
-      id = ctx.args[1].toString()
-    } else id = ctx.args[2].toString()
+    if (ctx.args.unranked) {
+      mode = 'unranked'
+      id = ctx.args.unranked.user.id
+    } else if (ctx.args.ranked) {
+      mode = 'ranked'
+      id = ctx.args.ranked.user.id
+    } else if (ctx.args.swiftplay?.unranked) {
+      mode = 'swiftplay;unranked'
+      id = ctx.args.swiftplay.unranked.user.id
+    } else if (ctx.args.swiftplay?.ranked) {
+      mode = 'swiftplay;ranked'
+      id = ctx.args.swiftplay.ranked.user.id
+    } else if (ctx.args.tournament) {
+      mode = 'tournament'
+      id = ctx.args.tournament.user.id
+      map = `;${ctx.args.tournament.map}`
+    } else return
 
     const profile = await ProfileSchema.fetch(id, ctx.db.guild.id)
     if (!profile) {
@@ -232,8 +246,8 @@ export default createCommand({
     }
 
     if (
-      (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.interaction.user.id}`)) ||
-      keys.some(key => key.includes(ctx.interaction.user.id))
+      (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.author.id}`)) ||
+      keys.some(key => key.includes(ctx.author.id))
     ) {
       return await ctx.reply('commands.duel.already_in_match')
     }
@@ -245,7 +259,7 @@ export default createCommand({
       return await ctx.reply('commands.duel.already_in_match_2')
     }
 
-    if (ctx.args.at(-1) === ctx.interaction.user.id) {
+    if (id === ctx.author.id) {
       return await ctx.reply('commands.duel.cannot_duel')
     }
 
@@ -259,30 +273,15 @@ export default createCommand({
       return await ctx.reply('commands.duel.duplicated_cards2')
     }
 
-    let mode: string
-    let map = ''
-
-    if (ctx.args.length === 2) {
-      mode = ctx.args.slice(0, 1).join(';')
-      id = ctx.args[1].toString()
-    } else if (ctx.args.length === 3 && ctx.args[0] === 'tournament') {
-      mode = ctx.args.slice(0, 1).join(';')
-      id = ctx.args[1].toString()
-      map = `;${ctx.args[2].toString()}`
-    } else {
-      mode = ctx.args.slice(0, 2).join(';')
-      id = ctx.args[2].toString()
-    }
-
     const button = new ButtonBuilder()
       .defineStyle('green')
       .setLabel(t('commands.duel.button'))
-      .setCustomId(`accept;${id};${ctx.interaction.user.id};${mode}${map}`)
+      .setCustomId(`accept;${id};${ctx.author.id};${mode}${map}`)
 
     await ctx.reply(
       button.build(
         t('commands.duel.request', {
-          author: ctx.interaction.user.toString(),
+          author: ctx.author.toString(),
           opponent: `<@${id}>`,
           mode: t(`commands.duel.mode.${mode}`)
         })

@@ -22,9 +22,7 @@ export default createCommand({
 
     let fates = Math.floor(Math.random() * (210 - 140 + 1)) + 140
 
-    const member = app.guilds.cache
-      .get('1233965003850125433')
-      ?.members.cache.get(ctx.interaction.user.id)
+    const member = app.guilds.cache.get('1233965003850125433')?.members.cache.get(ctx.author.id)
 
     let content =
       t('commands.daily.res', {

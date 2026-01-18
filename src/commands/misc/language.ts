@@ -11,8 +11,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Altera o idioma que eu interajo com você'
   },
-  options: [
-    {
+  args: {
+    lang: {
       type: 3,
       name: 'lang',
       nameLocalizations: {
@@ -38,11 +38,11 @@ export default createCommand({
       ],
       required: true
     }
-  ],
+  },
   syntax: 'language [lang]',
   examples: ['language en-US', 'language pt-BR'],
   async run({ ctx }) {
-    switch (ctx.args[0]) {
+    switch (ctx.args.lang) {
       case 'pt':
         {
           await prisma.user.update({

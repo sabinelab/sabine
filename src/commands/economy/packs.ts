@@ -84,7 +84,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};iron`)
+              .setCustomId(`packs;${ctx.author.id};iron`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.ironPacks)
@@ -101,7 +101,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
+              .setCustomId(`packs;${ctx.author.id};bronze`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.bronzePacks)
@@ -118,7 +118,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};silver`)
+              .setCustomId(`packs;${ctx.author.id};silver`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.silverPacks)
@@ -135,7 +135,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};gold`)
+              .setCustomId(`packs;${ctx.author.id};gold`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.goldPacks)
@@ -152,7 +152,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
+              .setCustomId(`packs;${ctx.author.id};platinum`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.platinumPacks)
@@ -169,7 +169,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
+              .setCustomId(`packs;${ctx.author.id};diamond`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.diamondPacks)
@@ -186,7 +186,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
+              .setCustomId(`packs;${ctx.author.id};ascendant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.ascendantPacks)
@@ -203,7 +203,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
+              .setCustomId(`packs;${ctx.author.id};immortal`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.immortalPacks)
@@ -220,7 +220,7 @@ export default createCommand({
           )
           .setButtonAccessory(button =>
             button
-              .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
+              .setCustomId(`packs;${ctx.author.id};radiant`)
               .setLabel(ctx.t('commands.packs.container.button'))
               .setStyle(ButtonStyle.Primary)
               .setDisabled(!ctx.db.profile.radiantPacks)
@@ -248,7 +248,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};iron`)
+                .setCustomId(`packs;${ctx.author.id};iron`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.ironPacks)
@@ -265,7 +265,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};bronze`)
+                .setCustomId(`packs;${ctx.author.id};bronze`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.bronzePacks)
@@ -282,7 +282,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};silver`)
+                .setCustomId(`packs;${ctx.author.id};silver`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.silverPacks)
@@ -299,7 +299,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};gold`)
+                .setCustomId(`packs;${ctx.author.id};gold`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.goldPacks)
@@ -316,7 +316,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};platinum`)
+                .setCustomId(`packs;${ctx.author.id};platinum`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.platinumPacks)
@@ -333,7 +333,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};diamond`)
+                .setCustomId(`packs;${ctx.author.id};diamond`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.diamondPacks)
@@ -350,7 +350,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};ascendant`)
+                .setCustomId(`packs;${ctx.author.id};ascendant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.ascendantPacks)
@@ -367,7 +367,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};immortal`)
+                .setCustomId(`packs;${ctx.author.id};immortal`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.immortalPacks)
@@ -384,7 +384,7 @@ export default createCommand({
             )
             .setButtonAccessory(button =>
               button
-                .setCustomId(`packs;${ctx.interaction.user.id};radiant`)
+                .setCustomId(`packs;${ctx.author.id};radiant`)
                 .setLabel(t('commands.packs.container.button'))
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(!ctx.db.profile.radiantPacks)
@@ -421,7 +421,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -464,7 +464,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -507,7 +507,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -550,7 +550,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -593,7 +593,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -636,7 +636,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -679,7 +679,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -722,7 +722,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
@@ -765,7 +765,7 @@ export default createCommand({
           const button = new ButtonBuilder()
             .defineStyle('blue')
             .setLabel(t('commands.packs.back'))
-            .setCustomId(`packs;${ctx.interaction.user.id};back`)
+            .setCustomId(`packs;${ctx.author.id};back`)
 
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {

@@ -21,7 +21,7 @@ export default createCommand({
     const button = new ButtonBuilder()
       .setLabel(t('commands.premium.button.label'))
       .defineStyle('blue')
-      .setCustomId(`premium;${ctx.interaction.user.id}`)
+      .setCustomId(`premium;${ctx.author.id}`)
 
     const embed = new EmbedBuilder().setTitle('Premium').setDesc(
       t('commands.premium.embed.description', {

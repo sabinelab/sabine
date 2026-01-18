@@ -65,7 +65,7 @@ export default createComponentInteraction({
     const agentName = ctx.interaction.values[0]
 
     const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
-    const key = keys.find(key => key.includes(ctx.interaction.user.id))
+    const key = keys.find(key => key.includes(ctx.author.id))
 
     if (!key) return
 
@@ -77,7 +77,7 @@ export default createComponentInteraction({
 
     let duplicatedAgent = false
 
-    for (const p of data[ctx.interaction.user.id]) {
+    for (const p of data[ctx.author.id]) {
       if (!p.agent) continue
 
       if (p.agent.name === agentName) duplicatedAgent = true
@@ -93,12 +93,10 @@ export default createComponentInteraction({
         profileId: ctx.db.profile.id
       }
     })
-    const i = data[ctx.interaction.user.id].findIndex(
-      (p: any) => p.id.toString() === card?.playerId
-    )
+    const i = data[ctx.author.id].findIndex((p: any) => p.id.toString() === card?.playerId)
 
-    data[ctx.interaction.user.id][i] = {
-      ...data[ctx.interaction.user.id][i],
+    data[ctx.author.id][i] = {
+      ...data[ctx.author.id][i],
       agent: {
         name: agentName,
         role: valorantAgents.find(a => a.name === agentName)!.role
@@ -128,7 +126,7 @@ export default createComponentInteraction({
       })
     ])
 
-    const isAuthor = key.split(':')[2] === ctx.interaction.user.id
+    const isAuthor = key.split(':')[2] === ctx.author.id
 
     const embed = new EmbedBuilder()
       .setTitle(t('commands.duel.embed.title'))
@@ -141,7 +139,7 @@ export default createComponentInteraction({
             ? renderTeam({
                 app: ctx.app,
                 cards: authorCards,
-                ownerId: ctx.interaction.user.id,
+                ownerId: ctx.author.id,
                 data
               })
             : renderTeam({
@@ -158,7 +156,7 @@ export default createComponentInteraction({
             ? renderTeam({
                 app: ctx.app,
                 cards: authorCards,
-                ownerId: ctx.interaction.user.id,
+                ownerId: ctx.author.id,
                 data
               })
             : renderTeam({
@@ -186,7 +184,7 @@ export default createComponentInteraction({
     })
 
     if (
-      data[ctx.interaction.user.id].filter((p: any) => p.agent).length === 5 &&
+      data[ctx.author.id].filter((p: any) => p.agent).length === 5 &&
       data[profile.userId].filter((p: any) => p.agent).length === 5
     ) {
       const timeout = 10000
@@ -239,7 +237,7 @@ export default createComponentInteraction({
         await message.edit({ embeds: [embed] })
 
         const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
-        const key = keys.filter(k => k.includes(ctx.interaction.user.id))[0]
+        const key = keys.filter(k => k.includes(ctx.author.id))[0]
 
         await app.redis.unlink(key)
 

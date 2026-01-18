@@ -18,8 +18,8 @@ export default createCommand({
     'pt-BR': 'Entre na fila da Arena, veja a tabela, e mais'
   },
   category: 'pvp',
-  options: [
-    {
+  args: {
+    join: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'join',
       nameLocalizations: {
@@ -29,8 +29,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Entre na fila da Arena'
       },
-      options: [
-        {
+      args: {
+        notify: {
           type: ApplicationCommandOptionType.Boolean,
           name: 'notify',
           nameLocalizations: {
@@ -42,9 +42,9 @@ export default createCommand({
           },
           required: true
         }
-      ]
+      }
     },
-    {
+    leave: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'leave',
       nameLocalizations: {
@@ -55,7 +55,7 @@ export default createCommand({
         'pt-BR': 'Saia da fila da Arena'
       }
     },
-    {
+    lineup: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'lineup',
       description: 'Change your lineup for Arena',
@@ -63,7 +63,7 @@ export default createCommand({
         'pt-BR': 'Altere sua lineup para a Arena'
       }
     },
-    {
+    info: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'info',
       description: 'View information about the Arena',
@@ -71,7 +71,7 @@ export default createCommand({
         'pt-BR': 'Veja informações sobre a Arena'
       }
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
     const cards = await prisma.card.findMany({
@@ -127,8 +127,8 @@ export default createCommand({
           guildId: ctx.db.guild.id
         }
 
-        if (ctx.args[1]) {
-          payload.channelId = ctx.interaction.channelId
+        if (ctx.args.join?.notify) {
+          payload.channelId = ctx.data.channelId
         }
 
         await Promise.all([
@@ -227,9 +227,10 @@ export default createCommand({
       }
     }
 
-    if (!actions[ctx.args[0].toString()]) return
+    const command = Object.keys(ctx.args)[0]
+    if (!actions[command]) return
 
-    await actions[ctx.args[0].toString()]()
+    await actions[command]()
   },
   async createMessageComponentInteraction({ ctx, t }) {
     if (ctx.args[2] === 'promote') {
@@ -248,7 +249,7 @@ export default createCommand({
       }
 
       const controllers = new SelectMenuBuilder()
-        .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};controller`)
+        .setCustomId(`arena;${ctx.author.id};agent;${card.id};controller`)
         .setPlaceholder(t('helper.controllers'))
         .setOptions(
           ...valorantAgents
@@ -263,7 +264,7 @@ export default createCommand({
         )
 
       const duelists = new SelectMenuBuilder()
-        .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};duelist`)
+        .setCustomId(`arena;${ctx.author.id};agent;${card.id};duelist`)
         .setPlaceholder(t('helper.duelists'))
         .setOptions(
           ...valorantAgents
@@ -278,7 +279,7 @@ export default createCommand({
         )
 
       const initiators = new SelectMenuBuilder()
-        .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};initiators`)
+        .setCustomId(`arena;${ctx.author.id};agent;${card.id};initiators`)
         .setPlaceholder(t('helper.initiators'))
         .setOptions(
           ...valorantAgents
@@ -293,7 +294,7 @@ export default createCommand({
         )
 
       const sentinels = new SelectMenuBuilder()
-        .setCustomId(`arena;${ctx.interaction.user.id};agent;${card.id};sentinels`)
+        .setCustomId(`arena;${ctx.author.id};agent;${card.id};sentinels`)
         .setPlaceholder(t('helper.sentinels'))
         .setOptions(
           ...valorantAgents

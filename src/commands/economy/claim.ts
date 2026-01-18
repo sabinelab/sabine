@@ -108,8 +108,8 @@ export default createCommand({
 
     let channel: string | undefined
 
-    if (ctx.interaction.channel && ctx.db.profile.remind) {
-      channel = ctx.interaction.channel?.id
+    if (ctx.data.channel && ctx.db.profile.remind) {
+      channel = ctx.data.channel.id
     }
 
     await ctx.db.profile.addPlayerToRoster(
@@ -137,11 +137,11 @@ export default createCommand({
               new ButtonBuilder()
                 .defineStyle('green')
                 .setLabel(t('commands.claim.promote'))
-                .setCustomId(`claim;${ctx.interaction.user.id};promote;${player.id}`),
+                .setCustomId(`claim;${ctx.author.id};promote;${player.id}`),
               new ButtonBuilder()
                 .defineStyle('red')
                 .setLabel(t('commands.claim.sell'))
-                .setCustomId(`claim;${ctx.interaction.user.id};sell;${player.id}`)
+                .setCustomId(`claim;${ctx.author.id};sell;${player.id}`)
             ]
           }
         ]

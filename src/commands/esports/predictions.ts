@@ -1,4 +1,5 @@
 import type { $Enums } from '@generated'
+import { ApplicationCommandOptionType } from 'discord.js'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
@@ -19,17 +20,17 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Mostra seus palpites'
   },
-  options: [
-    {
-      type: 1,
+  args: {
+    valorant: {
+      type: ApplicationCommandOptionType.Subcommand,
       name: 'valorant',
       description: 'Shows your VALORANT predictions',
       descriptionLocalizations: {
         'pt-BR': 'Mostra seus palpites de VALORANT'
       },
-      options: [
-        {
-          type: 4,
+      args: {
+        page: {
+          type: ApplicationCommandOptionType.Integer,
           name: 'page',
           nameLocalizations: {
             'pt-BR': 'página'
@@ -39,18 +40,18 @@ export default createCommand({
             'pt-BR': 'Insira a página'
           }
         }
-      ]
+      }
     },
-    {
-      type: 1,
+    lol: {
+      type: ApplicationCommandOptionType.Subcommand,
       name: 'lol',
       description: 'Shows your League of Legends predictions',
       descriptionLocalizations: {
         'pt-BR': 'Mostra seus palpites de League of Legends'
       },
-      options: [
-        {
-          type: 4,
+      args: {
+        page: {
+          type: ApplicationCommandOptionType.Integer,
           name: 'page',
           nameLocalizations: {
             'pt-BR': 'página'
@@ -60,9 +61,9 @@ export default createCommand({
             'pt-BR': 'Insira a página'
           }
         }
-      ]
+      }
     }
-  ],
+  },
   syntax: 'predictions <page>',
   examples: [
     'predictions valorant',
@@ -72,12 +73,13 @@ export default createCommand({
     'predictions valorant 5'
   ],
   async run({ ctx, t, app }) {
-    const page = Number(ctx.args[1]) || 1
+    const game = ctx.args.valorant ? 'valorant' : 'lol'
+    const page = Number(ctx.args.valorant?.page || ctx.args.lol?.page) || 1
 
     const [predictions, count] = await Promise.all([
       app.prisma.prediction.findMany({
         where: {
-          game: ctx.args[0] as $Enums.Game,
+          game: game as $Enums.Game,
           profileId: ctx.db.profile.id
         },
         include: {
@@ -91,7 +93,7 @@ export default createCommand({
       }),
       app.prisma.prediction.count({
         where: {
-          game: ctx.args[0] as $Enums.Game,
+          game: game as $Enums.Game,
           profileId: ctx.db.profile.id
         }
       })
@@ -104,7 +106,7 @@ export default createCommand({
     const embed = new EmbedBuilder()
       .setAuthor({
         name: t('commands.predictions.embed.author'),
-        iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
+        iconURL: ctx.author.displayAvatarURL({ size: 2048 })
       })
       .setDesc(
         t('commands.predictions.embed.desc', {
@@ -140,12 +142,12 @@ export default createCommand({
 
     const previous = new ButtonBuilder()
       .setEmoji('1404176223621611572')
-      .setCustomId(`predictions;${ctx.interaction.user.id};${page - 1};previous;${ctx.args[0]}`)
+      .setCustomId(`predictions;${ctx.author.id};${page - 1};previous;${game}`)
       .defineStyle('blue')
 
     const next = new ButtonBuilder()
       .setEmoji('1404176291829121028')
-      .setCustomId(`predictions;${ctx.interaction.user.id};${page + 1};next;${ctx.args[0]}`)
+      .setCustomId(`predictions;${ctx.author.id};${page + 1};next;${game}`)
       .defineStyle('blue')
 
     if (page <= 1) {
@@ -198,7 +200,7 @@ export default createCommand({
     const embed = new EmbedBuilder()
       .setAuthor({
         name: t('commands.predictions.embed.author'),
-        iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
+        iconURL: ctx.author.displayAvatarURL({ size: 2048 })
       })
       .setDesc(
         t('commands.predictions.embed.desc', {
@@ -234,12 +236,12 @@ export default createCommand({
 
     const previous = new ButtonBuilder()
       .setEmoji('1404176223621611572')
-      .setCustomId(`predictions;${ctx.interaction.user.id};${page - 1};previous;${ctx.args[4]}`)
+      .setCustomId(`predictions;${ctx.author.id};${page - 1};previous;${ctx.args[4]}`)
       .defineStyle('blue')
 
     const next = new ButtonBuilder()
       .setEmoji('1404176291829121028')
-      .setCustomId(`predictions;${ctx.interaction.user.id};${page + 1};next;${ctx.args[4]}`)
+      .setCustomId(`predictions;${ctx.author.id};${page + 1};next;${ctx.args[4]}`)
       .defineStyle('blue')
 
     if (page <= 1) {

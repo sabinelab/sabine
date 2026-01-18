@@ -17,8 +17,8 @@ export default createCommand({
     'modclean predictions',
     'modclean stats'
   ],
-  options: [
-    {
+  args: {
+    all: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'all',
       nameLocalizations: {
@@ -30,7 +30,7 @@ export default createCommand({
         'pt-BR': 'Redefine palpites, partidas, carreira, toxinas, cartas, pacotes, claims e mais'
       }
     },
-    {
+    balance: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'balance',
       nameLocalizations: {
@@ -41,7 +41,7 @@ export default createCommand({
         'pt-BR': 'Redefine as toxinas e destinos dos usuários do servidor'
       }
     },
-    {
+    simulator: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'simulator',
       nameLocalizations: {
@@ -53,7 +53,7 @@ export default createCommand({
         'pt-BR': 'Redefine o elenco, carreira, claims, vitórias/derrotas, toxinas, destinos e mais'
       }
     },
-    {
+    predictions: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'predictions',
       nameLocalizations: {
@@ -64,7 +64,7 @@ export default createCommand({
         'pt-BR': 'Redefine os palpites dos usuários do servidor'
       }
     },
-    {
+    stats: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'stats',
       nameLocalizations: {
@@ -76,17 +76,18 @@ export default createCommand({
           'Redefine as vitórias/derrotas e palpites corretos/incorretos dos usuários do servidor'
       }
     }
-  ],
+  },
   permissions: ['Administrator'],
   messageComponentInteractionTime: 30_000,
   async run({ ctx }) {
+    const sub = Object.keys(ctx.args)[0]
     const button = new ButtonBuilder()
       .setStyle(ButtonStyle.Danger)
       .setLabel(ctx.t('commands.modclean.button'))
-      .setCustomId(`modclean;${ctx.db.profile.userId};${ctx.args[0]}`)
+      .setCustomId(`modclean;${ctx.db.profile.userId};${sub}`)
       .build(
         ctx.t('commands.modclean.content', {
-          type: ctx.t(`commands.modclean.type.${ctx.args[0]}`),
+          type: ctx.t(`commands.modclean.type.${sub}`),
           time: `<t:${Math.floor((Date.now() + 60_000) / 1000)}:R>`
         })
       )

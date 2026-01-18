@@ -31,9 +31,9 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Veja o painel de controle e mude o idioma do bot'
   },
-  options: [
-    {
-      type: 1,
+  args: {
+    dashboard: {
+      type: 1, // Subcommand
       name: 'dashboard',
       nameLocalizations: {
         'pt-BR': 'painel'
@@ -43,8 +43,8 @@ export default createCommand({
         'pt-BR': 'Mostra o painel de controle'
       }
     },
-    {
-      type: 1,
+    language: {
+      type: 1, // Subcommand
       name: 'language',
       nameLocalizations: {
         'pt-BR': 'idioma'
@@ -53,9 +53,9 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Altera o idioma que eu interajo neste servidor'
       },
-      options: [
-        {
-          type: 3,
+      args: {
+        lang: {
+          type: 3, // String
           name: 'lang',
           description: 'Choose the language',
           descriptionLocalizations: {
@@ -77,24 +77,24 @@ export default createCommand({
           ],
           required: true
         }
-      ]
+      }
     },
-    {
-      type: 1,
+    premium: {
+      type: 1, // Subcommand
       name: 'premium',
       description: 'Shows information about server premium',
       descriptionLocalizations: {
         'pt-BR': 'Mostra informações sobre o premium do servidor'
       }
     }
-  ],
+  },
   permissions: ['ManageGuild', 'ManageChannels'],
   botPermissions: ['ManageMessages', 'SendMessages'],
   syntaxes: ['admin dashboard', 'adming language [lang]'],
   examples: ['admin dashboard', 'admin language pt-BR', 'admin language en-US'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, id, app }) {
-    if (ctx.args[0] === 'dashboard') {
+    if (ctx.args.dashboard) {
       const guild = await app.prisma.guild.findUnique({
         where: {
           id: ctx.db.guild.id
@@ -136,11 +136,11 @@ export default createCommand({
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Primary)
                   .setLabel(t('commands.admin.vlr_esports_coverage'))
-                  .setCustomId(`admin;${ctx.interaction.user.id};vlr`),
+                  .setCustomId(`admin;${ctx.author.id};vlr`),
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Primary)
                   .setLabel(t('commands.admin.lol_esports_coverage'))
-                  .setCustomId(`admin;${ctx.interaction.user.id};lol`)
+                  .setCustomId(`admin;${ctx.author.id};lol`)
               ]
             },
             {
@@ -149,17 +149,17 @@ export default createCommand({
                 new ButtonBuilder()
                   .setLabel(t('commands.admin.resend', { game: 'VALORANT' }))
                   .setStyle(ButtonStyle.Danger)
-                  .setCustomId(`admin;${ctx.interaction.user.id};resend;vlr`),
+                  .setCustomId(`admin;${ctx.author.id};resend;vlr`),
                 new ButtonBuilder()
                   .setLabel(t('commands.admin.resend', { game: 'League of Legends' }))
                   .setStyle(ButtonStyle.Danger)
-                  .setCustomId(`admin;${ctx.interaction.user.id};resend;lol`)
+                  .setCustomId(`admin;${ctx.author.id};resend;lol`)
               ]
             }
           ]
         })
       )
-    } else if (ctx.args[0] === 'language') {
+    } else if (ctx.args.language) {
       const options = {
         en: async () => {
           await prisma.guild.upsert({
@@ -210,12 +210,8 @@ export default createCommand({
         }
       }
 
-      await options[ctx.args[1] as 'pt' | 'en']()
-    } else if (ctx.args[0] === 'premium') {
-      if (!ctx.db.guild) {
-        return await ctx.reply('commands.admin.no_premium')
-      }
-
+      await options[ctx.args.language.lang as 'pt' | 'en' | 'es']()
+    } else if (ctx.args.premium) {
       const key = await app.prisma.guildKey.findUnique({
         where: {
           guildId: ctx.db.guild.id
@@ -320,7 +316,7 @@ export default createCommand({
       const button = new ButtonBuilder()
         .setLabel(t('commands.admin.continue'))
         .setStyle(ButtonStyle.Danger)
-        .setCustomId(`admin;${ctx.interaction.user.id};continue;vlr`)
+        .setCustomId(`admin;${ctx.author.id};continue;vlr`)
 
       await ctx.reply({
         content: t('commands.admin.confirm'),
@@ -343,7 +339,7 @@ export default createCommand({
       const button = new ButtonBuilder()
         .setLabel(t('commands.admin.continue'))
         .setStyle(ButtonStyle.Danger)
-        .setCustomId(`admin;${ctx.interaction.user.id};continue;lol`)
+        .setCustomId(`admin;${ctx.author.id};continue;lol`)
 
       await ctx.reply({
         content: t('commands.admin.confirm'),

@@ -17,8 +17,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Tabela de usuários com mais palpites corretos, classificação e toxinas'
   },
-  options: [
-    {
+  args: {
+    predictions: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'predictions',
       nameLocalizations: {
@@ -28,8 +28,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Tabela de palpites'
       },
-      options: [
-        {
+      args: {
+        page: {
           type: ApplicationCommandOptionType.String,
           name: 'page',
           nameLocalizations: {
@@ -40,9 +40,9 @@ export default createCommand({
             'pt-BR': 'Informe a página'
           }
         }
-      ]
+      }
     },
-    {
+    poisons: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'poisons',
       nameLocalizations: {
@@ -52,8 +52,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Tabela de toxinas'
       },
-      options: [
-        {
+      args: {
+        page: {
           type: ApplicationCommandOptionType.String,
           name: 'page',
           nameLocalizations: {
@@ -64,9 +64,9 @@ export default createCommand({
             'pt-BR': 'Informe a página'
           }
         }
-      ]
+      }
     },
-    {
+    rating: {
       type: ApplicationCommandOptionType.Subcommand,
       name: 'rating',
       nameLocalizations: {
@@ -76,8 +76,8 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Tabela de classificação'
       },
-      options: [
-        {
+      args: {
+        page: {
           type: ApplicationCommandOptionType.String,
           name: 'page',
           nameLocalizations: {
@@ -88,16 +88,17 @@ export default createCommand({
             'pt-BR': 'Informe a página'
           }
         }
-      ]
+      }
     }
-  ],
+  },
   syntax: 'leaderboard predictions/poisons/rating <page>',
   examples: ['leaderboard predictions 1', 'leaderboard poisons 2', 'leaderboard rating 3'],
   isThinking: true,
   messageComponentInteractionTime: 10 * 60 * 1000,
   async run({ ctx, app }) {
-    if (ctx.args[0] === 'poisons') {
-      const page = Number(ctx.args[1]) || 1
+    console.log(ctx.args)
+    if (ctx.args.poisons) {
+      const page = Number(ctx.args.poisons.page) || 1
       const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
@@ -189,12 +190,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -210,8 +211,8 @@ export default createCommand({
         embeds: [embed],
         components: [row]
       })
-    } else if (ctx.args[0] === 'rating') {
-      const page = Number(ctx.args[1]) || 1
+    } else if (ctx.args.rating) {
+      const page = Number(ctx.args.rating.page) || 1
       const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
@@ -303,12 +304,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};rating;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};rating;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -324,8 +325,8 @@ export default createCommand({
         embeds: [embed],
         components: [row]
       })
-    } else if (ctx.args[0] === 'predictions') {
-      const page = Number(ctx.args[1]) || 1
+    } else if (ctx.args.predictions) {
+      const page = Number(ctx.args.predictions.page) || 1
       const profiles = await app.prisma.profile.findMany({
         where: {
           guildId: ctx.db.guild.id,
@@ -417,12 +418,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -534,12 +535,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};poisons;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -648,12 +649,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};rating;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};rating;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};rating;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -762,12 +763,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;previous;${page - 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(`leaderboard;${ctx.interaction.user.id};predictions;next;${page + 1}`)
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {

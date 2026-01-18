@@ -5,9 +5,12 @@ import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
-const raw: {
-  [key: string]: any
-} = {
+type LocaleData = {
+  permissions: Record<string, string>
+  [key: string]: unknown
+}
+
+const raw: Record<string, LocaleData> = {
   pt: JSON.parse(fs.readFileSync(path.resolve('src/i18n/pt.json'), 'utf-8')),
   en: JSON.parse(fs.readFileSync(path.resolve('src/i18n/en.json'), 'utf-8')),
   es: JSON.parse(fs.readFileSync(path.resolve('src/i18n/es.json'), 'utf-8'))
@@ -23,8 +26,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Lista de comandos'
   },
-  options: [
-    {
+  args: {
+    command: {
       type: 3,
       name: 'command',
       nameLocalizations: {
@@ -36,12 +39,12 @@ export default createCommand({
       },
       autocomplete: true
     }
-  ],
+  },
   syntax: 'help <command>',
   examples: ['help', 'help ping', 'help team', 'help player'],
   async run({ ctx, app, t }) {
-    if (ctx.args[0]?.toString()) {
-      const cmd = app.commands.get(ctx.args[0].toString())
+    if (ctx.args.command) {
+      const cmd = app.commands.get(ctx.args.command.toString())
 
       if (!cmd || cmd.onlyDev) {
         return await ctx.reply('commands.help.command_not_found')
@@ -50,7 +53,7 @@ export default createCommand({
       const { permissions } = raw[ctx.locale]
 
       const embed = new EmbedBuilder()
-        .setTitle(ctx.args[0].toString())
+        .setTitle(ctx.args.command.toString())
         .setDesc(
           (
             await translate(cmd.description, {

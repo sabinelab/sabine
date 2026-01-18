@@ -13,8 +13,8 @@ export default createCommand({
     'pt-BR': 'Promova um jogador para o elenco principal'
   },
   category: 'economy',
-  options: [
-    {
+  args: {
+    player: {
       type: 3,
       name: 'player',
       nameLocalizations: {
@@ -27,12 +27,12 @@ export default createCommand({
       required: true,
       autocomplete: true
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
     const card = await prisma.card.findFirst({
       where: {
-        id: BigInt(ctx.args[0]),
+        id: BigInt(ctx.args.player),
         profileId: ctx.db.profile.id,
         activeRoster: false
       }
@@ -80,7 +80,7 @@ export default createCommand({
     }
 
     const menu = new SelectMenuBuilder()
-      .setCustomId(`promote;${ctx.interaction.user.id};${ctx.args[0]}`)
+      .setCustomId(`promote;${ctx.author.id};${ctx.args.player}`)
       .setOptions(...options)
 
     await ctx.reply(menu.build(t('commands.promote.select_player')))

@@ -24,19 +24,21 @@ type Keys<T> = T extends object
     }[keyof T]
   : never
 
-const locale: {
-  [key: string]: any
-} = {
+const locale: Record<string, unknown> = {
   en,
   pt,
   es
 }
 
 export default function t<T extends Content>(lang: string, content: T, args?: Args): string {
-  let json = locale[lang]
+  let json: unknown = locale[lang]
 
   for (const param of content.split('.')) {
-    json = json[param]
+    if (json && typeof json === 'object') {
+      json = (json as Record<string, unknown>)[param]
+    } else {
+      return content
+    }
 
     if (!json) return content
   }
@@ -45,11 +47,17 @@ export default function t<T extends Content>(lang: string, content: T, args?: Ar
     json = json.map(c => c).join('\n')
   }
 
+  if (typeof json !== 'string') {
+    return content
+  }
+
+  let result = json
+
   if (args) {
     for (const arg of Object.keys(args)) {
-      json = json.replaceAll(`{${arg}}`, args[arg])
+      result = result.replaceAll(`{${arg}}`, args[arg] as string)
     }
   }
 
-  return json
+  return result
 }

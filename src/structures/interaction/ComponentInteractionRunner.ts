@@ -39,7 +39,8 @@ export default class ComponentInteractionRunner {
           profile,
           guild
         },
-        interaction
+        interaction,
+        author: interaction.user
       })
 
       const t = <T extends Content>(content: T, args?: Args) => {
@@ -80,7 +81,8 @@ export default class ComponentInteractionRunner {
           profile,
           guild
         },
-        interaction
+        interaction,
+        author: interaction.user
       })
 
       if (
@@ -130,7 +132,8 @@ export default class ComponentInteractionRunner {
         profile,
         guild
       },
-      interaction
+      interaction,
+      author: interaction.user
     })
 
     if (i.time && interaction.message.createdAt.getTime() + i.time < Date.now()) {

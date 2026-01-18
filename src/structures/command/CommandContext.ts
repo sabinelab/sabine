@@ -1,6 +1,6 @@
 import type { GuildSchema, ProfileSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
-import type * as Discord from 'discord.js'
+import * as Discord from 'discord.js'
 import type App from '../app/App'
 
 type Database = {
@@ -8,30 +8,33 @@ type Database = {
   profile: ProfileSchema
 }
 
-type CommandContextOptions = {
+type CommandContextOptions<T> = {
   app: App
   guild: Discord.Guild
-  interaction: Discord.ChatInputCommandInteraction
+  data: Discord.ChatInputCommandInteraction | Discord.Message<true>
   locale: string
   db: Database
-  args: (string | number | boolean)[]
+  args: T
+  author: Discord.User
 }
 
-export default class CommandContext {
+export default class CommandContext<T> {
   public app: App
   public guild: Discord.Guild
-  public interaction: Discord.ChatInputCommandInteraction
+  public data: Discord.ChatInputCommandInteraction | Discord.Message<true>
   public locale: string
   public db: Database
-  public args: (string | number | boolean)[]
+  public args: T
+  public author: Discord.User
 
-  public constructor(options: CommandContextOptions) {
+  public constructor(options: CommandContextOptions<T>) {
     this.app = options.app
     this.guild = options.guild
-    this.interaction = options.interaction
+    this.data = options.data
     this.locale = options.locale
     this.db = options.db
     this.args = options.args
+    this.author = options.author
   }
 
   public t<T extends Content>(content: T, args?: Args) {
@@ -39,61 +42,77 @@ export default class CommandContext {
   }
 
   public async reply<T extends Content>(
-    content: T | Discord.InteractionReplyOptions,
+    content: T | Discord.InteractionReplyOptions | Discord.MessageReplyOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
-    if (typeof content === 'string') {
-      content = {
-        content: locales(this.locale, content, options)
-      }
-    }
+    if (this.data instanceof Discord.BaseInteraction) {
+      const payload =
+        typeof content === 'string'
+          ? {
+              content: locales(this.locale, content, options)
+            }
+          : (content as Discord.InteractionReplyOptions)
 
-    if (options?.files) {
-      content = {
-        ...content,
-        files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
+      if (options?.files) {
+        payload.files = options.files as Discord.AttachmentPayload[]
       }
-    }
 
-    if (this.interaction.replied || this.interaction.deferred) {
-      return await this.interaction.followUp(content)
-    } else
-      return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
+      if (this.data.replied || this.data.deferred) {
+        return await this.data.followUp(payload)
+      } else {
+        return (
+          await this.data.reply({
+            ...payload,
+            withResponse: true
+          })
+        ).resource?.message
+      }
+    } else {
+      const payload =
+        typeof content === 'string'
+          ? {
+              content: locales(this.locale, content, options)
+            }
+          : (content as Discord.MessageReplyOptions)
+
+      if (options?.files) {
+        payload.files = options.files as Discord.AttachmentPayload[]
+      }
+
+      return await this.data.reply(payload)
+    }
   }
 
   public async edit<T extends Content>(
-    content: T | Discord.InteractionEditReplyOptions,
+    content: T | Discord.InteractionEditReplyOptions | Discord.MessageEditOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
-    if (typeof content === 'string') {
-      content = {
-        content: locales(this.locale, content, options)
-      }
-    }
+    if (this.data instanceof Discord.BaseInteraction) {
+      const payload =
+        typeof content === 'string'
+          ? {
+              content: locales(this.locale, content, options)
+            }
+          : (content as Discord.InteractionEditReplyOptions)
 
-    if (options?.files) {
-      content = {
-        ...content,
-        files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
+      if (options?.files) {
+        payload.files = options.files as Discord.AttachmentPayload[]
       }
-    }
 
-    if (!content.components) {
-      content = {
-        ...content,
-        components: []
+      return await this.data.editReply(payload)
+    } else {
+      const payload =
+        typeof content === 'string'
+          ? {
+              content: locales(this.locale, content, options)
+            }
+          : (content as Discord.MessageEditOptions)
+
+      if (options?.files) {
+        payload.files = options.files as Discord.AttachmentPayload[]
       }
-    }
 
-    if (this.interaction.replied || this.interaction.deferred) {
-      return await this.interaction.editReply(content)
-    } else
-      return (
-        await this.interaction.reply({
-          content: locales(this.locale, 'helper.interaction_failed'),
-          flags: 64,
-          withResponse: true
-        })
-      ).resource?.message
+      return await this.data.edit(payload)
+    }
   }
 }

@@ -15,6 +15,7 @@ type ComponentInteractionContextOptions = {
   locale: string
   db: Database
   args: string[]
+  author: Discord.User
 }
 
 export default class ComponentInteractionContext {
@@ -25,6 +26,7 @@ export default class ComponentInteractionContext {
   public db: Database
   public args: string[]
   public flags?: number
+  public author: Discord.User
 
   public constructor(options: ComponentInteractionContextOptions) {
     this.app = options.app
@@ -33,6 +35,7 @@ export default class ComponentInteractionContext {
     this.locale = options.locale
     this.db = options.db
     this.args = options.args
+    this.author = options.author
   }
 
   public setFlags(flags: number) {

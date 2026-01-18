@@ -14,8 +14,8 @@ export default createCommand({
     'pt-BR': 'Negocie um jogador'
   },
   category: 'economy',
-  options: [
-    {
+  args: {
+    user: {
       type: ApplicationCommandOptionType.User,
       name: 'user',
       nameLocalizations: {
@@ -27,7 +27,7 @@ export default createCommand({
       },
       required: true
     },
-    {
+    player: {
       type: ApplicationCommandOptionType.String,
       name: 'player',
       nameLocalizations: {
@@ -40,7 +40,7 @@ export default createCommand({
       autocomplete: true,
       required: true
     },
-    {
+    price: {
       type: ApplicationCommandOptionType.Integer,
       name: 'price',
       nameLocalizations: {
@@ -52,14 +52,14 @@ export default createCommand({
       },
       required: true
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   cooldown: true,
   async run({ ctx, app }) {
-    const profile = await ProfileSchema.fetch(ctx.args[0].toString(), ctx.db.guild.id)
+    const profile = await ProfileSchema.fetch(ctx.args.user.toString(), ctx.db.guild.id)
     const card = await prisma.card.findFirst({
       where: {
-        id: BigInt(ctx.args[1]),
+        id: BigInt(ctx.args.player),
         profileId: ctx.db.profile.id
       }
     })
@@ -71,18 +71,18 @@ export default createCommand({
 
     const price = calcPlayerPrice(player, true)
 
-    if (BigInt(ctx.args[2]) < price) {
+    if (BigInt(ctx.args.price) < price) {
       return await ctx.reply('commands.trade.invalid_value', { value: price.toLocaleString() })
     }
 
-    if (ctx.args[0] === ctx.interaction.user.id) {
+    if (ctx.args.user.id === ctx.author.id) {
       return await ctx.reply('commands.trade.cannot_trade')
     }
 
-    if (!profile || profile.poisons < BigInt(ctx.args[2])) {
+    if (!profile || profile.poisons < BigInt(ctx.args.price)) {
       return await ctx.reply('commands.trade.missing_poisons', {
-        poisons: (BigInt(ctx.args[2]) - (!profile ? 0n : profile.poisons)).toLocaleString(),
-        user: `<@${ctx.args[0]}>`
+        poisons: (BigInt(ctx.args.price) - (!profile ? 0n : profile.poisons)).toLocaleString(),
+        user: `<@${ctx.args.user}>`
       })
     }
 
@@ -90,9 +90,9 @@ export default createCommand({
       content: ctx.t('commands.trade.request', {
         player: `${player.name} (${Math.floor(card.overall)})`,
         collection: player.collection,
-        user: `<@${ctx.args[0]}>`,
-        author: ctx.interaction.user.toString(),
-        poisons: BigInt(ctx.args[2]).toLocaleString()
+        user: `<@${ctx.args.user}>`,
+        author: ctx.author.toString(),
+        poisons: BigInt(ctx.args.price).toLocaleString()
       }),
       components: [
         {
@@ -102,12 +102,12 @@ export default createCommand({
               .defineStyle('green')
               .setLabel(ctx.t('commands.trade.make_purchase'))
               .setCustomId(
-                `trade;${ctx.args[0]};buy;${ctx.interaction.user.id};${card.id};${ctx.args[2]}`
+                `trade;${ctx.args.user};buy;${ctx.author.id};${card.id};${ctx.args.price}`
               ),
             new ButtonBuilder()
               .defineStyle('red')
               .setLabel(ctx.t('commands.trade.cancel'))
-              .setCustomId(`trade;${ctx.interaction.user.id};cancel`)
+              .setCustomId(`trade;${ctx.author.id};cancel`)
           ]
         }
       ]
@@ -234,7 +234,7 @@ export default createCommand({
       await ctx.edit('commands.trade.res', {
         player: `${player.name} (${Math.floor(card.overall)})`,
         collection: player.collection,
-        user: ctx.interaction.user.toString(),
+        user: ctx.author.toString(),
         poisons: BigInt(ctx.args[5]).toLocaleString()
       })
     } else {

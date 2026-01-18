@@ -12,8 +12,8 @@ export default createCommand({
     'pt-BR': 'Venda um jogador'
   },
   category: 'economy',
-  options: [
-    {
+  args: {
+    player: {
       type: 3,
       name: 'player',
       nameLocalizations: {
@@ -26,12 +26,12 @@ export default createCommand({
       autocomplete: true,
       required: true
     }
-  ],
+  },
   cooldown: true,
   async run({ ctx, app }) {
     const card = await prisma.card.findFirst({
       where: {
-        id: BigInt(ctx.args[0]),
+        id: BigInt(ctx.args.player),
         profileId: ctx.db.profile.id,
         activeRoster: false
       }

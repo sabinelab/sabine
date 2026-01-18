@@ -8,7 +8,7 @@ import * as Discord from 'discord.js'
 import { env } from '@/env'
 import { emojis } from '@/util/emojis'
 import Logger from '../../util/Logger'
-import type { Command } from '../command/createCommand'
+import { type Command, parseArguments } from '../command/createCommand'
 import type { CreateInteractionOptions } from '../interaction/createComponentInteraction'
 import type { CreateModalSubmitInteractionOptions } from '../interaction/createModalSubmitInteraction'
 import type { Listener } from './createListener'
@@ -125,7 +125,7 @@ export default class App extends Discord.Client {
         nameLocalizations: cmd.nameLocalizations,
         description: cmd.description,
         descriptionLocalizations: cmd.descriptionLocalizations,
-        options: cmd.options,
+        options: parseArguments(cmd.args),
         type: 1
       })
     })
@@ -178,7 +178,7 @@ export default class App extends Discord.Client {
 }
 
 export const app = new App({
-  intents: ['GuildMessages', 'Guilds', 'GuildMembers'],
+  intents: ['GuildMessages', 'Guilds', 'GuildMembers', 'MessageContent'],
   allowedMentions: {
     repliedUser: true,
     parse: ['users', 'roles']

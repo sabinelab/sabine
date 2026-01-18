@@ -31,8 +31,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Veja seu elenco'
   },
-  options: [
-    {
+  args: {
+    page: {
       type: ApplicationCommandOptionType.Integer,
       name: 'page',
       nameLocalizations: {
@@ -43,10 +43,10 @@ export default createCommand({
         'pt-BR': 'Informe uma página'
       }
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
-    const page = Number(ctx.args[0]) || 1
+    const page = Number(ctx.args.page) || 1
 
     if (page <= 1) {
       const [cards, hasNextPage] = await Promise.all([
@@ -111,7 +111,7 @@ export default createCommand({
           row.setComponents(
             new ButtonBuilder()
               .setLabel(ctx.t('commands.roster.change_team'))
-              .setCustomId(`roster;${ctx.interaction.user.id};team`)
+              .setCustomId(`roster;${ctx.author.id};team`)
               .setStyle(ButtonStyle.Primary)
           )
         )
@@ -150,12 +150,12 @@ export default createCommand({
                   .setCustomId(`roster;${ctx.db.profile.userId};remove;${card.id}`),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
-                  .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
-                  .setCustomId(`roster;${ctx.interaction.user.id};practice;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                   .setStyle(ButtonStyle.Secondary)
                   .setDisabled(card.requiredXp <= card.xp),
                 new ButtonBuilder()
@@ -164,7 +164,7 @@ export default createCommand({
                       cost: formatNumber(getUpgradeCost(card.level))
                     })
                   )
-                  .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                   .setStyle(ButtonStyle.Success)
                   .setDisabled(card.requiredXp > card.xp)
               )
@@ -249,12 +249,12 @@ export default createCommand({
                   .setCustomId(`roster;${ctx.db.profile.userId};promote;${card.id}`),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
-                  .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
                   .setLabel(ctx.t('commands.roster.practice'))
-                  .setCustomId(`roster;${ctx.interaction.user.id};practice;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                   .setStyle(ButtonStyle.Secondary)
                   .setDisabled(card.requiredXp <= card.xp),
                 new ButtonBuilder()
@@ -263,7 +263,7 @@ export default createCommand({
                       cost: formatNumber(getUpgradeCost(card.level))
                     })
                   )
-                  .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${card.id}`)
+                  .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                   .setStyle(ButtonStyle.Success)
                   .setDisabled(card.requiredXp > card.xp)
               )
@@ -706,7 +706,7 @@ export default createCommand({
             row.setComponents(
               new ButtonBuilder()
                 .setLabel(ctx.t('commands.roster.change_team'))
-                .setCustomId(`roster;${ctx.interaction.user.id};team`)
+                .setCustomId(`roster;${ctx.author.id};team`)
                 .setStyle(ButtonStyle.Primary)
             )
           )
@@ -745,12 +745,12 @@ export default createCommand({
                     .setCustomId(`roster;${ctx.db.profile.userId};remove;${card.id}`),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
-                    .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(card.arenaRoster),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
-                    .setCustomId(`roster;${ctx.interaction.user.id};practice;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(card.requiredXp <= card.xp),
                   new ButtonBuilder()
@@ -759,7 +759,7 @@ export default createCommand({
                         cost: formatNumber(getUpgradeCost(card.level))
                       })
                     )
-                    .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                     .setStyle(ButtonStyle.Success)
                     .setDisabled(card.requiredXp > card.xp)
                 )
@@ -846,12 +846,12 @@ export default createCommand({
                     .setCustomId(`roster;${ctx.db.profile.userId};promote;${card.id}`),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
-                    .setCustomId(`roster;${ctx.interaction.user.id};promote-arena;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                     .setStyle(ButtonStyle.Primary)
                     .setDisabled(card.arenaRoster),
                   new ButtonBuilder()
                     .setLabel(ctx.t('commands.roster.practice'))
-                    .setCustomId(`roster;${ctx.interaction.user.id};practice;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                     .setStyle(ButtonStyle.Secondary)
                     .setDisabled(card.requiredXp <= card.xp),
                   new ButtonBuilder()
@@ -860,7 +860,7 @@ export default createCommand({
                         cost: formatNumber(getUpgradeCost(card.level))
                       })
                     )
-                    .setCustomId(`roster;${ctx.interaction.user.id};upgrade;${card.id}`)
+                    .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                     .setStyle(ButtonStyle.Success)
                     .setDisabled(card.requiredXp > card.xp)
                 )

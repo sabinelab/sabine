@@ -48,8 +48,8 @@ export default createComponentInteraction({
     }
 
     if (
-      (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.interaction.user.id}`)) ||
-      keys.some(key => key.includes(ctx.interaction.user.id))
+      (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.author.id}`)) ||
+      keys.some(key => key.includes(ctx.author.id))
     ) {
       return await ctx.reply('commands.duel.already_in_match')
     }
@@ -114,7 +114,7 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${profile.userId};${ctx.interaction.user.id}`)
+      .setCustomId(`select;${profile.userId};${ctx.author.id}`)
 
     const menu2 = new SelectMenuBuilder()
       .setPlaceholder(ctx.db.profile.teamName!)
@@ -127,7 +127,7 @@ export default createComponentInteraction({
           }
         })
       )
-      .setCustomId(`select;${ctx.interaction.user.id};${profile.userId}`)
+      .setCustomId(`select;${ctx.author.id};${profile.userId}`)
 
     const interaction = (await ctx.edit({
       embeds: [embed],
@@ -196,7 +196,7 @@ export default createComponentInteraction({
     })
 
     await app.redis.set(
-      `agent_selection:${ctx.db.guild.id}:${profile.userId}:${ctx.interaction.user.id}`,
+      `agent_selection:${ctx.db.guild.id}:${profile.userId}:${ctx.author.id}`,
       JSON.stringify({
         ...data,
         messageId: interaction.resource?.message?.id,

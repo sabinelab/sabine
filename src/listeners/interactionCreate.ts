@@ -1,9 +1,9 @@
 import { GuildSchema, UserSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
 import { type Interaction, InteractionType, ModalSubmitInteraction } from 'discord.js'
+import { CommandManager } from '@/structures/command/CommandManager'
 import type App from '../structures/app/App'
 import createListener from '../structures/app/createListener'
-import CommandRunner from '../structures/command/CommandRunner'
 import ComponentInteractionRunner from '../structures/interaction/ComponentInteractionRunner'
 import ModalSubmitInteractionRunner from '../structures/interaction/ModalSubmitInteractionRunner'
 
@@ -11,7 +11,7 @@ const interactionType: Record<number, (app: App, i: Interaction) => Promise<unkn
   [InteractionType.ApplicationCommand]: async (app, interaction) => {
     if (!interaction.isChatInputCommand()) return
 
-    return await new CommandRunner().run(app, interaction)
+    return await new CommandManager().exec(app, interaction)
   },
   [InteractionType.ApplicationCommandAutocomplete]: async (app, interaction) => {
     if (!interaction.isAutocomplete()) return

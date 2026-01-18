@@ -33,8 +33,8 @@ export default createCommand({
     'pt-BR': 'Veja o resumo de uma partida'
   },
   category: 'pvp',
-  options: [
-    {
+  args: {
+    seed: {
       type: ApplicationCommandOptionType.Integer,
       name: 'seed',
       nameLocalizations: {
@@ -46,11 +46,11 @@ export default createCommand({
       },
       required: true
     }
-  ],
+  },
   async run({ ctx }) {
     const match = await ctx.app.prisma.match.findFirst({
       where: {
-        id: BigInt(ctx.args[0]),
+        id: BigInt(ctx.args.seed),
         metadata: { not: Prisma.DbNull },
         profile: {
           userId: ctx.db.profile.userId,

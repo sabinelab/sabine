@@ -13,8 +13,8 @@ export default createCommand({
     'pt-BR': 'Veja sua carreira'
   },
   category: 'economy',
-  options: [
-    {
+  args: {
+    page: {
       type: ApplicationCommandOptionType.Integer,
       name: 'page',
       nameLocalizations: {
@@ -25,10 +25,10 @@ export default createCommand({
         'pt-BR': 'Insira o número de uma página'
       }
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
-    const page = Number(ctx.args[0]) || 1
+    const page = Number(ctx.args.page) || 1
     const matches = await app.prisma.match.findMany({
       where: {
         profile: {
@@ -90,7 +90,7 @@ export default createCommand({
     const embed = new EmbedBuilder()
       .setAuthor({
         name: t('commands.career.embed.author'),
-        iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
+        iconURL: ctx.author.displayAvatarURL({ size: 2048 })
       })
       .setFooter({
         text: t('commands.career.embed.footer', { page })
@@ -143,12 +143,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176223621611572')
-      .setCustomId(`career;${ctx.interaction.user.id};${page - 1};previous`)
+      .setCustomId(`career;${ctx.author.id};${page - 1};previous`)
 
     const next = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176291829121028')
-      .setCustomId(`career;${ctx.interaction.user.id};${page + 1};next`)
+      .setCustomId(`career;${ctx.author.id};${page + 1};next`)
 
     if (page <= 1) {
       previous.setDisabled()
@@ -232,7 +232,7 @@ export default createCommand({
     const embed = new EmbedBuilder()
       .setAuthor({
         name: t('commands.career.embed.author'),
-        iconURL: ctx.interaction.user.displayAvatarURL({ size: 2048 })
+        iconURL: ctx.author.displayAvatarURL({ size: 2048 })
       })
       .setFooter({
         text: t('commands.career.embed.footer', { page })
@@ -285,12 +285,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176223621611572')
-      .setCustomId(`career;${ctx.interaction.user.id};${page - 1};previous`)
+      .setCustomId(`career;${ctx.author.id};${page - 1};previous`)
 
     const next = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176291829121028')
-      .setCustomId(`career;${ctx.interaction.user.id};${page + 1};next`)
+      .setCustomId(`career;${ctx.author.id};${page + 1};next`)
 
     if (page <= 1) {
       previous.setDisabled()

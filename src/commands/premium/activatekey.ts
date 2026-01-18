@@ -11,8 +11,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Ative sua chave premium'
   },
-  options: [
-    {
+  args: {
+    key: {
       type: 3,
       name: 'key',
       nameLocalizations: {
@@ -24,7 +24,7 @@ export default createCommand({
       },
       required: true
     }
-  ],
+  },
   syntax: 'activatekey [key]',
   examples: ['activatekey ABCD-1234-AB12-abcdf'],
   permissions: ['Administrator'],
@@ -34,7 +34,7 @@ export default createCommand({
 
     const key = await app.prisma.key.findFirst({
       where: {
-        id: ctx.args[0].toString()
+        id: ctx.args.key.toString()
       },
       include: {
         guildKeys: true
@@ -68,7 +68,7 @@ export default createCommand({
       const button = new ButtonBuilder()
         .defineStyle('red')
         .setLabel(t('commands.activatekey.button'))
-        .setCustomId(`activatekey;${ctx.interaction.user.id};${key.type};${ctx.args[0]}`)
+        .setCustomId(`activatekey;${ctx.author.id};${key.type};${ctx.args.key}`)
 
       await ctx.reply(
         button.build(t('commands.activatekey.would_like_to_continue', { key: key.type }))

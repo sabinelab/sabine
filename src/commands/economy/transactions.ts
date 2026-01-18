@@ -13,22 +13,22 @@ export default createCommand({
     'pt-BR': 'Veja sua transação de jogadores'
   },
   category: 'economy',
-  options: [
-    {
+  args: {
+    page: {
       type: ApplicationCommandOptionType.Integer,
       name: 'page',
       nameLocalizations: {
         'pt-BR': 'página'
       },
-      description: 'Provide a page',
+      description: 'Provide the page',
       descriptionLocalizations: {
         'pt-BR': 'Informe a página'
       }
     }
-  ],
+  },
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t, app }) {
-    const page = Number(ctx.args[0]) || 1
+    const page = ctx.args.page || 1
 
     const transactions = await app.prisma.transaction.findMany({
       where: {
@@ -85,12 +85,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176223621611572')
-      .setCustomId(`transactions;${ctx.interaction.user.id};${page - 1};previous`)
+      .setCustomId(`transactions;${ctx.author.id};${page - 1};previous`)
 
     const next = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176291829121028')
-      .setCustomId(`transactions;${ctx.interaction.user.id};${page + 1};next`)
+      .setCustomId(`transactions;${ctx.author.id};${page + 1};next`)
 
     if (page <= 1) {
       previous.setDisabled()
@@ -170,12 +170,12 @@ export default createCommand({
     const previous = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176223621611572')
-      .setCustomId(`transactions;${ctx.interaction.user.id};${page - 1};previous`)
+      .setCustomId(`transactions;${ctx.author.id};${page - 1};previous`)
 
     const next = new ButtonBuilder()
       .defineStyle('blue')
       .setEmoji('1404176291829121028')
-      .setCustomId(`transactions;${ctx.interaction.user.id};${page + 1};next`)
+      .setCustomId(`transactions;${ctx.author.id};${page + 1};next`)
 
     if (page <= 1) {
       previous.setDisabled()

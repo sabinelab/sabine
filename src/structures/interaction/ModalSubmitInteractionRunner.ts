@@ -37,7 +37,8 @@ export default class ModalSubmitInteractionRunner {
           profile,
           guild
         },
-        interaction
+        interaction,
+        author: interaction.user
       })
 
       for (const component of interaction.fields.fields.values()) {
@@ -72,7 +73,8 @@ export default class ModalSubmitInteractionRunner {
         profile,
         guild
       },
-      interaction
+      interaction,
+      author: interaction.user
     })
 
     const t = <T extends Content>(content: T, args?: Args) => {

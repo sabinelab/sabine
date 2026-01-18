@@ -16,8 +16,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Pesquise uma carta'
   },
-  options: [
-    {
+  args: {
+    card: {
       type: ApplicationCommandOptionType.String,
       name: 'card',
       nameLocalizations: {
@@ -28,11 +28,11 @@ export default createCommand({
         'pt-BR': 'Informe a carta'
       },
       autocomplete: true,
-      required: true
+      required: 'commands.card.missing_card'
     }
-  ],
+  },
   async run({ ctx, t, app }) {
-    const player = app.players.get(ctx.args[0].toString())
+    const player = app.players.get(ctx.args.card.toString())
 
     if (!player) return await ctx.reply('commands.card.player_not_found')
 
