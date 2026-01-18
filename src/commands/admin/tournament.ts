@@ -461,11 +461,25 @@ export default createCommand({
       if (group === 'add') {
         const tournaments = await service.getEvents(game)
 
-        return tournaments
-          .filter(e => e.status !== 'completed')
-          .filter(e => e.name.toLowerCase().includes(focused.value.toLowerCase()))
-          .map(e => ({ name: e.name, value: e.name }))
-          .slice(0, 25)
+        tournaments.unshift({
+          name: 'Valorant Game Changers'
+        })
+
+        tournaments.unshift({
+          name: 'Valorant Challengers League'
+        })
+
+        tournaments.unshift({
+          name: 'Valorant Champions Tour'
+        })
+
+        return await i.respond(
+          tournaments
+            .filter(e => e.status !== 'completed')
+            .filter(e => e.name.toLowerCase().includes(focused.value.toLowerCase()))
+            .map(e => ({ name: e.name, value: e.name }))
+            .slice(0, 25)
+        )
       } else if (group === 'remove') {
         const guild = await app.prisma.guild.findUnique({
           where: {
@@ -485,7 +499,7 @@ export default createCommand({
 
         events.unshift(t('commands.tournament.remove_all'))
 
-        return events.map(e => ({ name: e, value: e })).slice(0, 25)
+        return await i.respond(events.map(e => ({ name: e, value: e })).slice(0, 25))
       }
     }
   }
