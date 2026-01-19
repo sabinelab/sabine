@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     },
     "prefix": {
       "invalid_prefix": "Please, provide a prefix.",
@@ -495,7 +505,7 @@
     "sentinels": "Sentinelas",
     "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
     "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Use {cmd} para iniciar.",
-    "missing_argument": "Missing argument: `{arg}`\nCommand usage: `{usage}`"
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
