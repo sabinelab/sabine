@@ -7,7 +7,8 @@ export const hydrateData = <T>(data: T) => {
     'claimTime',
     'lastVote',
     'valorantResendTime',
-    'lolResendTime'
+    'lolResendTime',
+    'expiresAt'
   ]
   const bigintFields = ['bet', 'poisons']
 
