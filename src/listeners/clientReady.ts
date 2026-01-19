@@ -28,12 +28,12 @@ const service = new Service(env.AUTH)
 export type ArenaQueue = {
   parsedData1: {
     userId: string
-    channelId?: string
+    channelId: string
     guildId: string
   }
   parsedData2: {
     userId: string
-    channelId?: string
+    channelId: string
     guildId: string
   }
 }
