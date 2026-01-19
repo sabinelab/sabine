@@ -495,7 +495,7 @@
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
     "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
-    "missing_argument": "Missing argument: `{arg}`\nCommand usage: `{usage}`"
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
   },
   "permissions": {
     "CreateInstantInvite": "Create Instant Invite",
