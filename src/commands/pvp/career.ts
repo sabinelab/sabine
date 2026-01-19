@@ -5,6 +5,7 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'career',
+  aliases: ['carreira'],
   nameLocalizations: {
     'pt-BR': 'carreira'
   },

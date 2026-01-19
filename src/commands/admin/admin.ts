@@ -160,7 +160,7 @@ export default createCommand({
         })
       )
     } else if (ctx.args.language) {
-      const options = {
+      const options: Record<string, () => Promise<unknown>> = {
         en: async () => {
           await prisma.guild.upsert({
             where: {
@@ -210,7 +210,10 @@ export default createCommand({
         }
       }
 
-      await options[ctx.args.language.lang as 'pt' | 'en' | 'es']()
+      const fn = options[ctx.args.language.lang]
+      if (!fn) return
+
+      await fn()
     } else if (ctx.args.premium) {
       const key = await app.prisma.guildKey.findUnique({
         where: {

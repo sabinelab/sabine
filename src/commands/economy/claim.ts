@@ -80,6 +80,7 @@ const date = Date.now()
 
 export default createCommand({
   name: 'claim',
+  aliases: ['c'],
   category: 'economy',
   nameLocalizations: {
     'pt-BR': 'obter'

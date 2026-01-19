@@ -5,6 +5,7 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'promote',
+  aliases: ['p'],
   nameLocalizations: {
     'pt-BR': 'promover'
   },

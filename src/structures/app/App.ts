@@ -29,7 +29,8 @@ const queue = new Queue<Reminder>('reminder', {
 const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
 export default class App extends Discord.Client {
-  public commands: Map<string, Command & { id: string }> = new Map()
+  public commands = new Map<string, Command & { id: string }>()
+  public aliases= new Map<string, string>()
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
   public queue: typeof queue
@@ -69,6 +70,12 @@ export default class App extends Discord.Client {
           ...command,
           id: ''
         })
+
+        if (command.aliases) {
+          for (const alias of command.aliases) {
+            this.aliases.set(alias, command.name)
+          }
+        }
       }
     }
 

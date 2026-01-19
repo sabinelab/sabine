@@ -3,6 +3,7 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'remove',
+  aliases: ['r'],
   nameLocalizations: {
     'pt-BR': 'remover'
   },

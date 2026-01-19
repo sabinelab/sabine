@@ -3,6 +3,7 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'language',
+  aliases: ['lang'],
   category: 'misc',
   nameLocalizations: {
     'pt-BR': 'idioma'

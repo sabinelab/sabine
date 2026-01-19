@@ -87,6 +87,7 @@ type CreateModalSubmitInteractionOptions = {
 
 export type Command<T extends CommandArguments = CommandArguments> = {
   name: string
+  aliases?: string[]
   nameLocalizations?: Discord.LocalizationMap
   description: string
   category: 'economy' | 'admin' | 'esports' | 'misc' | 'premium' | 'pvp'

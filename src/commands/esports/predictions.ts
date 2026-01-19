@@ -12,6 +12,7 @@ const status = {
 
 export default createCommand({
   name: 'predictions',
+  aliases: ['preds', 'palpites'],
   category: 'esports',
   nameLocalizations: {
     'pt-BR': 'palpites'

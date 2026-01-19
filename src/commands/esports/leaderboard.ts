@@ -9,6 +9,7 @@ import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
   name: 'leaderboard',
+  aliases: ['lb', 'tabela'],
   nameLocalizations: {
     'pt-BR': 'tabela'
   },
@@ -96,7 +97,6 @@ export default createCommand({
   isThinking: true,
   messageComponentInteractionTime: 10 * 60 * 1000,
   async run({ ctx, app }) {
-    console.log(ctx.args)
     if (ctx.args.poisons) {
       const page = Number(ctx.args.poisons.page) || 1
       const profiles = await app.prisma.profile.findMany({

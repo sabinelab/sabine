@@ -184,7 +184,8 @@ export class CommandManager {
       commandName = command.slice((guild.prefix ?? env.PREFIX).length)
     }
 
-    const command = app.commands.get(commandName)
+    const command =
+      app.commands.get(commandName) || app.commands.get(app.aliases.get(commandName) ?? '')
 
     if (!command) return
 
