@@ -28,20 +28,6 @@ export default createCommand({
       description: 'Join the Arena queue',
       descriptionLocalizations: {
         'pt-BR': 'Entre na fila da Arena'
-      },
-      args: {
-        notify: {
-          type: ApplicationCommandOptionType.Boolean,
-          name: 'notify',
-          nameLocalizations: {
-            'pt-BR': 'notificar'
-          },
-          description: 'Notify when finished',
-          descriptionLocalizations: {
-            'pt-BR': 'Notificar quando acabar'
-          },
-          required: true
-        }
       }
     },
     leave: {
@@ -72,6 +58,8 @@ export default createCommand({
       }
     }
   },
+  syntax: 'arena join/leave/info/lineup',
+  examples: [],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
     const cards = await prisma.card.findMany({
@@ -120,15 +108,12 @@ export default createCommand({
 
         const payload: {
           userId: string
-          channelId?: string
+          channelId: string
           guildId: string
         } = {
           userId: ctx.db.profile.userId,
-          guildId: ctx.db.guild.id
-        }
-
-        if (ctx.args.join?.notify) {
-          payload.channelId = ctx.data.channelId
+          guildId: ctx.db.guild.id,
+          channelId: ctx.data.channelId
         }
 
         await Promise.all([
