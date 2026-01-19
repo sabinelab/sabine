@@ -1,7 +1,6 @@
 import { prisma } from '@db'
 import type { $Enums, Event, Guild, LiveMessage, TBDMatch } from '@generated'
-import { hydrateData } from '@/database/hydrate-data'
-import { updateCache, voidCatch } from '@/database/update-cache'
+import { hydrateData, updateCache, voidCatch } from '@/database'
 
 export class GuildSchema implements Guild {
   public id: string

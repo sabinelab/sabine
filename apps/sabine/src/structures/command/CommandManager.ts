@@ -14,7 +14,7 @@ import {
   REST,
   type User
 } from 'discord.js'
-import { voidCatch } from '@/database/update-cache'
+import { voidCatch } from '@sabinelab/prisma'
 import { env } from '@/env'
 import type App from '@/structures/app/App'
 import CommandContext from '@/structures/command/CommandContext'

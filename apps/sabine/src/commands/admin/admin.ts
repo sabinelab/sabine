@@ -9,7 +9,7 @@ import {
   MessageFlags,
   type TextChannel
 } from 'discord.js'
-import { voidCatch } from '@/database/update-cache'
+import { voidCatch } from '@/database'
 import { env } from '@/env'
 import Service from '../../api'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
