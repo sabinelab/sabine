@@ -381,7 +381,8 @@ export const valorantMaps: {
       'Yoru',
       'Cypher',
       'Omen',
-      'KAY/O'
+      'KAY/O',
+      'Veto'
     ],
     current_map_pool: true,
     image: 'https://imgur.com/vSP4vQB.png',
@@ -405,7 +406,9 @@ export const valorantMaps: {
       'Cypher',
       'Fade',
       'Breach',
-      'Skye'
+      'Skye',
+      'Astra',
+      'Neon'
     ],
     image: 'https://imgur.com/Fsas50g.png',
     sides: ['A', 'B']
@@ -529,7 +532,8 @@ export const valorantMaps: {
       'Viper',
       'Vyse',
       'Chamber',
-      'Sage'
+      'Sage',
+      'Veto'
     ],
     current_map_pool: true,
     image: 'https://imgur.com/2rmdsWE.png',
