@@ -1,0 +1,17 @@
+model Status {
+  id          BigInt @id @default(autoincrement())
+  type        Type
+  title       String
+  description String
+  messageId   String
+  threadId    String
+}
+
+enum Type {
+  MAINTENANCE
+  MONITORING
+  SCHEDULED
+  MAJOR_OUTAGE
+  PARTIAL_OUTAGE
+  ONGOING
+}
