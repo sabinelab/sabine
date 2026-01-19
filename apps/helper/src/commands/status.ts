@@ -1,9 +1,9 @@
+import { prisma } from '@db'
 import { ApplicationCommandOptionType, ButtonStyle, ChannelType } from 'discord.js'
+import { env } from '@/env'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
-import { env } from '@/env'
-import { prisma } from '@db'
 
 export const emoji = {
   MAINTENANCE: '<:idle:1462875671637393530> ',

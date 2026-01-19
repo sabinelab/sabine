@@ -1,7 +1,7 @@
+import { prisma } from '@db'
 import { TextInputStyle } from 'discord.js'
 import { emoji } from '@/commands/status'
 import createComponentInteraction from '@/structures/interaction/createComponentInteraction'
-import { prisma } from '@db'
 
 export default createComponentInteraction({
   name: 'edit-status',
