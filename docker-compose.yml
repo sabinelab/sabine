@@ -13,10 +13,22 @@ services:
         condition: service_healthy
     env_file:
       - apps/sabine/.env
-      - .env
     environment:
       - REDIS_URL=redis://localhost:6379
       - NODE_ENV=production
+    network_mode: host
+
+  helper:
+    build: 
+      context: .
+      dockerfile: apps/helper/Dockerfile
+      secrets:
+        - env
+    image: sabine-helper
+    container_name: sabine-helper
+    restart: unless-stopped
+    env_file:
+      - apps/helper/.env
     network_mode: host
 
   redis:
