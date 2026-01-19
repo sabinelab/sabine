@@ -399,8 +399,6 @@ export class CommandManager {
     if (command.ephemeral) {
       if (data instanceof ChatInputCommandInteraction) {
         await data.deferReply({ flags: 64, withResponse: true }).catch(voidCatch)
-      } else if (data.deletable) {
-        await data.delete().catch(voidCatch)
       }
     } else if (command.isThinking) {
       if (data instanceof ChatInputCommandInteraction) {
@@ -431,7 +429,11 @@ export class CommandManager {
 
     command
       .run({ ctx, app, t, id: command.id })
-      .then(async () => {})
+      .then(async () => {
+        if ((data instanceof Message) && data.deletable && command.ephemeral) {
+          await data.delete().catch(voidCatch)
+        }
+      })
       .catch(async e => {
         await ctx.reply('helper.error', { e })
         await new Logger(app).error(e)
