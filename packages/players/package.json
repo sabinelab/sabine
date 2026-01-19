@@ -1,0 +1,32 @@
+{
+  "name": "@sabinelab/players",
+  "version": "1.7.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "test": "node test.ts",
+    "lint": "biome check",
+    "build": "biome check && rm -rf dist && tsgo",
+    "check": "tsgo --noEmit",
+    "prepublishOnly": "bun run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "2.3.11",
+    "@typescript/native-preview": "7.0.0-dev.20260116.1",
+    "typescript": "5.9.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  }
+}

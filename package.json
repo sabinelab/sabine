@@ -20,6 +20,9 @@
     "build:helper": "bun --filter '@sabinelab/helper' build",
     "lint:helper": "bun --filter '@sabinelab/helper' lint",
     "check:helper": "bun --filter '@sabinelab/helper' check",
+    "build:players": "bun --filter '@sabinelab/players' build",
+    "lint:players": "bun --filter '@sabinelab/players' lint",
+    "check:players": "bun --filter '@sabinelab/players' check",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate"
   },
