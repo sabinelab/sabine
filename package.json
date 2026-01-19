@@ -9,13 +9,18 @@
     "start:sabine": "bun --filter '@sabinelab/sabine' start",
     "dev:sabine": "bun --filter '@sabinelab/sabine' dev",
     "build:sabine": "bun --filter '@sabinelab/sabine' build",
-    "push": "bunx --bun prisma db push",
-    "gen": "bunx --bun prisma generate",
     "lint:sabine": "bun --filter '@sabinelab/sabine' lint",
-    "check:sabine": "bun --filter '@sabinelab/sabine' check"
+    "check:sabine": "bun --filter '@sabinelab/sabine' check",
+    "start:prisma": "bun --filter '@sabinelab/prisma' start",
+    "build:prisma": "bun --filter '@sabinelab/prisma' build",
+    "lint:prisma": "bun --filter '@sabinelab/prisma' lint",
+    "check:prisma": "bun --filter '@sabinelab/prisma' check",
+    "push": "bunx --bun prisma db push",
+    "gen": "bunx --bun prisma generate"
   },
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "keywords": [],
   "author": "levisantosp",
@@ -23,7 +28,8 @@
   "dependencies": {
     "@prisma/adapter-pg": "7.2.0",
     "@prisma/client": "7.2.0",
-    "@sabinelab/players": "1.7.0"
+    "@sabinelab/players": "1.7.0",
+    "zod": "4.3.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",

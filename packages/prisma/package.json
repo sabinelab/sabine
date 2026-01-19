@@ -1,0 +1,16 @@
+{
+  "name": "@sabinelab/prisma",
+  "version": "0.0.0",
+  "description": "your valorant simulator and esports coverage discord bot",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "bunx biome check",
+    "start": "bunx --bun prisma generate",
+    "build": "bunx biome check && tsgo",
+    "check": "tsgo"
+  },
+  "keywords": [],
+  "author": "levisantosp",
+  "license": "ISC"
+}
