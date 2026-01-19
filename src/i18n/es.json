@@ -263,7 +263,8 @@
       "collection": "Colección",
       "purchaseable": "¿Comprable?",
       "price": "Precio",
-      "devalued_price": "Se vende por"
+      "devalued_price": "Se vende por",
+      "missing_card": "Please, provide a valid player."
     },
     "trade": {
       "missing_poisons": "{user} necesita **{poisons}** toxinas más para comprar tu jugador.",
@@ -410,6 +411,10 @@
         "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
       },
       "reseted": ["You have successfully reset: \n{type}"]
+    },
+    "prefix": {
+      "invalid_prefix": "Please, provide a prefix.",
+      "updated": "Changed server prefix to `{prefix}`"
     }
   },
   "simulator": {
@@ -489,7 +494,8 @@
     "initiators": "Iniciadores",
     "sentinels": "Centinelas",
     "cooldown": "Estás usando este comando demasiado rápido. Intenta de nuevo {cooldown}",
-    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start."
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
   },
   "permissions": {
     "CreateInstantInvite": "Crear Invitación Instantánea",
