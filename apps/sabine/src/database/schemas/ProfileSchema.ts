@@ -1,8 +1,8 @@
 import { prisma } from '@db'
 import type { $Enums, Profile } from '@generated'
 import type { Pack } from '@/commands/misc/vote'
-import { UserSchema } from '@/database/schemas/UserSchema'
 import { hydrateData, updateCache, voidCatch } from '@/database'
+import { UserSchema } from '@/database/schemas/UserSchema'
 import { app } from '@/structures/app/App'
 
 type PredictionTeam = {

@@ -3,6 +3,7 @@ import path from 'node:path'
 import { GuildSchema, ProfileSchema } from '@db'
 import type { Blacklist } from '@generated'
 import locales from '@i18n'
+import { voidCatch } from '@sabinelab/prisma'
 import {
   ApplicationCommandOptionType,
   ButtonBuilder,
@@ -14,7 +15,6 @@ import {
   REST,
   type User
 } from 'discord.js'
-import { voidCatch } from '@sabinelab/prisma'
 import { env } from '@/env'
 import type App from '@/structures/app/App'
 import CommandContext from '@/structures/command/CommandContext'
