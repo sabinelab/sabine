@@ -2,6 +2,12 @@ name: Biome Format and Check
 on:
   push:
     branches: ["**"]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'README*'
+      - 'LICENSE'
+      - 'crowdin.yml'
   pull_request:
 
 jobs:
