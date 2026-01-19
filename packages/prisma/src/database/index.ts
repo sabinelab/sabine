@@ -1,7 +1,7 @@
-import { PrismaClient } from '@generated'
 import { PrismaPg } from '@prisma/adapter-pg'
-import { voidCatch } from '@/database/update-cache'
-import { env } from '@/env'
+import { PrismaClient } from '../../../../prisma/generated/client'
+import { env } from '../env'
+import { voidCatch } from './update-cache'
 
 const adapter = new PrismaPg({ connectionString: env.DATABASE_URL })
 
