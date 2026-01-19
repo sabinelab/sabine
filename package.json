@@ -15,6 +15,11 @@
     "build:prisma": "bun --filter '@sabinelab/prisma' build",
     "lint:prisma": "bun --filter '@sabinelab/prisma' lint",
     "check:prisma": "bun --filter '@sabinelab/prisma' check",
+    "start:helper": "bun --filter '@sabinelab/helper' start",
+    "dev:helper": "bun --filter '@sabinelab/helper' dev",
+    "build:helper": "bun --filter '@sabinelab/helper' build",
+    "lint:helper": "bun --filter '@sabinelab/helper' lint",
+    "check:helper": "bun --filter '@sabinelab/helper' check",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate"
   },
@@ -29,6 +34,7 @@
     "@prisma/adapter-pg": "7.2.0",
     "@prisma/client": "7.2.0",
     "@sabinelab/players": "1.7.0",
+    "pino": "10.2.1",
     "zod": "4.3.5"
   },
   "devDependencies": {
