@@ -1,19 +1,69 @@
-name: deploy
+name: Deploy Apps
 on:
   push:
     branches:
       - 'main'
+    paths:
+      - 'apps/**'
+      - 'package.json'
+      - 'bun.lock'
     paths-ignore:
       - '**.md'
       - '.gitignore'
       - 'README*'
       - 'LICENSE'
       - 'crowdin.yml'
+
 jobs:
-  deploy:
-    name: 'Deploy to Production'
+  detect-changes:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    outputs:
+      workspaces: ${{ steps.detect.outputs.workspaces }}
+      has_changes: ${{ steps.detect.outputs.has_changes }}
+      rebuild_all: ${{ steps.detect.outputs.rebuild_all }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          
+      - name: Detect changed workspaces
+        id: detect
+        run: |
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          
+          if echo "$CHANGED_FILES" | grep -qE '^(package\.json|bun\.lock)$'; then
+            echo "rebuild_all=true" >> $GITHUB_OUTPUT
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            
+            WORKSPACES=$(find apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT
+          else
+            echo "rebuild_all=false" >> $GITHUB_OUTPUT
+            
+            WORKSPACES=$(echo "$CHANGED_FILES" | \
+              grep -E '^apps/[^/]+/' | \
+              cut -d'/' -f2 | \
+              sort -u | \
+              jq -R -s -c 'split("\n") | map(select(length > 0))')
+            
+            echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT
+            
+            if [ "$WORKSPACES" = "[]" ] || [ -z "$WORKSPACES" ]; then
+              echo "has_changes=false" >> $GITHUB_OUTPUT
+            else
+              echo "has_changes=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+  deploy-selective:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true' && needs.detect-changes.outputs.rebuild_all == 'false'
+    name: 'Deploy ${{ matrix.workspace }}'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        workspace: ${{ fromJson(needs.detect-changes.outputs.workspaces) }}
     steps:
       - name: Setup SSH
         run: |
@@ -33,6 +83,47 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
           SSH_PORT: 22
-      - name: update sabine
+          
+      - name: Deploy ${{ matrix.workspace }}
         run: |
-          ssh prod 'cd sabine/sabine && git pull && docker compose up -d --build'
+          echo "Deploying ${{ matrix.workspace }}"
+          ssh prod 'cd sabine/sabine && git pull && docker compose up -d --build ${{ matrix.workspace }}'
+
+  deploy-full:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true' && needs.detect-changes.outputs.rebuild_all == 'true'
+    name: 'Deploy All Services (Dependencies Updated)'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
+          chmod 600 ~/.ssh/sabine
+          cat >>~/.ssh/config << END
+          Host prod
+            HostName $SSH_HOST
+            User $SSH_USERNAME
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/sabine
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USERNAME: ${{ secrets.USERNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.HOST }}
+          SSH_PORT: 22
+          
+      - name: Deploy all workspaces sequentially
+        run: |
+          echo "Dependencies updated - deploying all services sequentially"
+          WORKSPACES='${{ needs.detect-changes.outputs.workspaces }}'
+          
+          for workspace in $(echo $WORKSPACES | jq -r '.[]'); do
+            echo "==> Deploying $workspace..."
+            ssh prod "cd sabine/sabine && git pull && docker compose up -d --build $workspace"
+            echo "✓ $workspace deployed"
+            echo ""
+          done
+          
+          echo "All services deployed successfully!"
