@@ -100,7 +100,15 @@ export class CommandManager {
 
     if (isSubcommandLevel) {
       const subName = inputArgs[0]?.toLowerCase()
-      if (!subName) return true
+      if (!subName) {
+        await message.reply({
+          content: locales('en', 'helper.missing_argument', {
+            arg: keys.join('/'),
+            cmd: `</help:${app.commands.get('help')?.id}>`
+          })
+        })
+        return false
+      }
 
       const matchedKey = keys.find(k => argsDef[k].name === subName)
       if (matchedKey) {
@@ -139,7 +147,8 @@ export class CommandManager {
             'en',
             typeof def.required === 'string' ? def.required : 'helper.missing_argument',
             {
-              arg: def.name
+              arg: def.name,
+              cmd: `</help:${app.commands.get('help')?.id}>`
             }
           )
         })
@@ -316,7 +325,8 @@ export class CommandManager {
                 'en',
                 typeof argDef.required === 'string' ? argDef.required : 'helper.missing_argument',
                 {
-                  arg: argDef.name
+                  arg: argDef.name,
+                  cmd: `</help:${app.commands.get('help')?.id}>`
                 }
               )
             })
