@@ -238,6 +238,54 @@ export class CommandManager {
 
     const parsedArgs: Record<string, unknown> = {}
 
+    const ctx = new CommandContext({
+      app,
+      data,
+      locale: profile.lang,
+      guild: data.guild,
+      args: parsedArgs as ResolveArguments<CommandArguments>,
+      db: {
+        profile,
+        guild
+      },
+      author: user,
+      prefix: guild.prefix ?? env.PREFIX
+    })
+
+    const { permissions } = raw[ctx.locale]
+
+    if (command.permissions) {
+      const perms: PermissionResolvable[] = []
+
+      for (const perm of command.permissions) {
+        if (data instanceof ChatInputCommandInteraction && !data.memberPermissions?.has(perm)) {
+          perms.push(perm)
+        } else if (data instanceof Message && !data.member?.permissions.has(perm)) {
+          perms.push(perm)
+        }
+      }
+
+      if (perms[0])
+        return await ctx.reply('helper.permissions.user', {
+          permissions: perms.map(p => `\`${permissions[p.toString()]}\``).join(', ')
+        })
+    }
+
+    if (command.botPermissions) {
+      const perms: PermissionResolvable[] = []
+
+      const member = app.guilds.cache.get(guild.id)?.members.cache.get(app.user?.id ?? '')
+
+      for (const perm of command.botPermissions) {
+        if (!member?.permissions.has(perm)) perms.push(perm)
+      }
+
+      if (perms[0])
+        return await ctx.reply('helper.permissions.bot', {
+          permissions: perms.map(p => `\`${permissions[p.toString()]}\``).join(', ')
+        })
+    }
+
     if (command.args) {
       if (data instanceof ChatInputCommandInteraction) {
         const group = data.options.getSubcommandGroup(false)
@@ -346,54 +394,6 @@ export class CommandManager {
         )
         if (!success) return
       }
-    }
-
-    const ctx = new CommandContext({
-      app,
-      data,
-      locale: profile.lang,
-      guild: data.guild,
-      args: parsedArgs as ResolveArguments<CommandArguments>,
-      db: {
-        profile,
-        guild
-      },
-      author: user,
-      prefix: guild.prefix ?? env.PREFIX
-    })
-
-    const { permissions } = raw[ctx.locale]
-
-    if (command.permissions) {
-      const perms: PermissionResolvable[] = []
-
-      for (const perm of command.permissions) {
-        if (data instanceof ChatInputCommandInteraction && !data.memberPermissions?.has(perm)) {
-          perms.push(perm)
-        } else if (data instanceof Message && !data.member?.permissions.has(perm)) {
-          perms.push(perm)
-        }
-      }
-
-      if (perms[0])
-        return await ctx.reply('helper.permissions.user', {
-          permissions: perms.map(p => `\`${permissions[p.toString()]}\``).join(', ')
-        })
-    }
-
-    if (command.botPermissions) {
-      const perms: PermissionResolvable[] = []
-
-      const member = app.guilds.cache.get(guild.id)?.members.cache.get(app.user?.id ?? '')
-
-      for (const perm of command.botPermissions) {
-        if (!member?.permissions.has(perm)) perms.push(perm)
-      }
-
-      if (perms[0])
-        return await ctx.reply('helper.permissions.bot', {
-          permissions: perms.map(p => `\`${permissions[p.toString()]}\``).join(', ')
-        })
     }
 
     if (command.ephemeral) {
