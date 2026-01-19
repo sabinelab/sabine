@@ -63,6 +63,10 @@
         "@types/humanize-duration": "3.27.4",
       },
     },
+    "packages/players": {
+      "name": "@sabinelab/players",
+      "version": "1.7.0",
+    },
     "packages/prisma": {
       "name": "@sabinelab/prisma",
       "version": "0.0.0",
@@ -191,7 +195,7 @@
 
     "@sabinelab/helper": ["@sabinelab/helper@workspace:apps/helper"],
 
-    "@sabinelab/players": ["@sabinelab/players@1.7.0", "https://npm.pkg.github.com/download/@sabinelab/players/1.7.0/f67cd2c3cf4417134938019c67f4d903de98a66d", {}, "sha512-7B1KRfidrIy9tsbTYSiBjdhpqqCUE3GvaM2F7CFWhUIFlbzMf+VvxYnxD9AXqs0ZBsvQ39MQFLwtZNHGmvYLJw=="],
+    "@sabinelab/players": ["@sabinelab/players@workspace:packages/players"],
 
     "@sabinelab/prisma": ["@sabinelab/prisma@workspace:packages/prisma"],
 
