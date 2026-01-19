@@ -1,4 +1,5 @@
 import { prisma } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -13,7 +14,7 @@ export default createCommand({
   },
   args: {
     enable: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'enable',
       nameLocalizations: {
         'pt-BR': 'habilitar'
@@ -24,7 +25,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Enable VALORANT news feature',
           descriptionLocalizations: {
@@ -32,7 +33,7 @@ export default createCommand({
           },
           args: {
             channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'channel',
               nameLocalizations: {
                 'pt-BR': 'canal'
@@ -46,7 +47,7 @@ export default createCommand({
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Enable League of Legends news feature',
           descriptionLocalizations: {
@@ -54,7 +55,7 @@ export default createCommand({
           },
           args: {
             channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'channel',
               nameLocalizations: {
                 'pt-BR': 'canal'
@@ -70,7 +71,7 @@ export default createCommand({
       }
     },
     disable: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'disable',
       nameLocalizations: {
         'pt-BR': 'desabilitar'
@@ -81,7 +82,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Disable VALORANT news feature',
           descriptionLocalizations: {
@@ -89,7 +90,7 @@ export default createCommand({
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Disable League of Legends news feature',
           descriptionLocalizations: {

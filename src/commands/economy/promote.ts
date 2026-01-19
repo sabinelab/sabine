@@ -1,5 +1,6 @@
 import { ProfileSchema, prisma } from '@db'
 import type { APISelectMenuOption } from 'discord.js'
+import { ApplicationCommandOptionType } from 'discord.js'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -16,7 +17,7 @@ export default createCommand({
   category: 'economy',
   args: {
     player: {
-      type: 3,
+      type: ApplicationCommandOptionType.String,
       name: 'player',
       nameLocalizations: {
         'pt-BR': 'jogador'

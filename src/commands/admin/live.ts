@@ -11,7 +11,7 @@ export default createCommand({
   },
   args: {
     enable: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'enable',
       nameLocalizations: {
         'pt-BR': 'habilitar'
@@ -22,7 +22,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Enable VALORANT live feed feature',
           descriptionLocalizations: {
@@ -30,7 +30,7 @@ export default createCommand({
           },
           args: {
             channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'channel',
               nameLocalizations: {
                 'pt-BR': 'canal'
@@ -40,21 +40,11 @@ export default createCommand({
                 'pt-BR': 'Informe o canal'
               },
               required: true
-            },
-            spam: {
-              type: ApplicationCommandOptionType.Boolean,
-              name: 'spam',
-              description:
-                'Select whether you want the bot to spam messages from live matches or not',
-              descriptionLocalizations: {
-                'pt-BR':
-                  'Selecione se você deseja que bot envie mensagens de spam de partidas ao vivo ou não'
-              }
             }
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Enable League of Legends live feed feature',
           descriptionLocalizations: {
@@ -62,7 +52,7 @@ export default createCommand({
           },
           args: {
             channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'channel',
               nameLocalizations: {
                 'pt-BR': 'canal'
@@ -78,7 +68,7 @@ export default createCommand({
       }
     },
     disable: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'disable',
       nameLocalizations: {
         'pt-BR': 'desabilitar'
@@ -89,7 +79,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Disable VALORANT live feed feature',
           descriptionLocalizations: {
@@ -97,7 +87,7 @@ export default createCommand({
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Disable League of Legends live feed feature',
           descriptionLocalizations: {

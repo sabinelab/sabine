@@ -1,4 +1,5 @@
 import { prisma } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -14,7 +15,7 @@ export default createCommand({
   },
   args: {
     lang: {
-      type: 3,
+      type: ApplicationCommandOptionType.String,
       name: 'lang',
       nameLocalizations: {
         'pt-BR': 'idioma'

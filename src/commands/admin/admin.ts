@@ -1,6 +1,7 @@
 import { prisma } from '@db'
 import type { $Enums } from '@generated'
 import {
+  ApplicationCommandOptionType,
   ButtonBuilder,
   ButtonStyle,
   ChannelType,
@@ -33,7 +34,7 @@ export default createCommand({
   },
   args: {
     dashboard: {
-      type: 1, // Subcommand
+      type: ApplicationCommandOptionType.Subcommand,
       name: 'dashboard',
       nameLocalizations: {
         'pt-BR': 'painel'
@@ -44,7 +45,7 @@ export default createCommand({
       }
     },
     language: {
-      type: 1, // Subcommand
+      type: ApplicationCommandOptionType.Subcommand,
       name: 'language',
       nameLocalizations: {
         'pt-BR': 'idioma'
@@ -55,7 +56,7 @@ export default createCommand({
       },
       args: {
         lang: {
-          type: 3, // String
+          type: ApplicationCommandOptionType.String,
           name: 'lang',
           description: 'Choose the language',
           descriptionLocalizations: {
@@ -80,7 +81,7 @@ export default createCommand({
       }
     },
     premium: {
-      type: 1, // Subcommand
+      type: ApplicationCommandOptionType.Subcommand,
       name: 'premium',
       description: 'Shows information about server premium',
       descriptionLocalizations: {

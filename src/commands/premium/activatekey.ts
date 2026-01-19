@@ -1,3 +1,4 @@
+import { ApplicationCommandOptionType } from 'discord.js'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -13,7 +14,7 @@ export default createCommand({
   },
   args: {
     key: {
-      type: 3,
+      type: ApplicationCommandOptionType.String,
       name: 'key',
       nameLocalizations: {
         'pt-BR': 'chave'

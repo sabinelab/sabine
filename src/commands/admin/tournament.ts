@@ -1,4 +1,5 @@
 import { GuildSchema } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
 import { env } from '@/env'
 import Service from '../../api'
 import createCommand from '../../structures/command/createCommand'
@@ -17,7 +18,7 @@ export default createCommand({
   },
   args: {
     add: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'add',
       nameLocalizations: {
         'pt-BR': 'adicionar'
@@ -28,7 +29,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Add a VALORANT tournament',
           descriptionLocalizations: {
@@ -36,7 +37,7 @@ export default createCommand({
           },
           args: {
             tournament: {
-              type: 3,
+              type: ApplicationCommandOptionType.String,
               name: 'tournament',
               nameLocalizations: {
                 'pt-BR': 'torneio'
@@ -49,7 +50,7 @@ export default createCommand({
               required: true
             },
             matches_channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'matches_channel',
               nameLocalizations: {
                 'pt-BR': 'canal_de_partidas'
@@ -61,7 +62,7 @@ export default createCommand({
               required: true
             },
             results_channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'results_channel',
               nameLocalizations: {
                 'pt-BR': 'canal_de_resultados'
@@ -75,7 +76,7 @@ export default createCommand({
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Add a League of Legends tournament',
           descriptionLocalizations: {
@@ -83,7 +84,7 @@ export default createCommand({
           },
           args: {
             tournament: {
-              type: 3,
+              type: ApplicationCommandOptionType.String,
               name: 'tournament',
               nameLocalizations: {
                 'pt-BR': 'torneio'
@@ -96,7 +97,7 @@ export default createCommand({
               required: true
             },
             matches_channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'matches_channel',
               nameLocalizations: {
                 'pt-BR': 'canal_de_partidas'
@@ -108,7 +109,7 @@ export default createCommand({
               required: true
             },
             results_channel: {
-              type: 7,
+              type: ApplicationCommandOptionType.Channel,
               name: 'results_channel',
               nameLocalizations: {
                 'pt-BR': 'canal_de_resultados'
@@ -124,7 +125,7 @@ export default createCommand({
       }
     },
     remove: {
-      type: 2,
+      type: ApplicationCommandOptionType.SubcommandGroup,
       name: 'remove',
       nameLocalizations: {
         'pt-BR': 'remover'
@@ -135,7 +136,7 @@ export default createCommand({
       },
       args: {
         valorant: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'valorant',
           description: 'Remove a VALORANT tournament',
           descriptionLocalizations: {
@@ -143,7 +144,7 @@ export default createCommand({
           },
           args: {
             tournament: {
-              type: 3,
+              type: ApplicationCommandOptionType.String,
               name: 'tournament',
               nameLocalizations: {
                 'pt-BR': 'torneio'
@@ -158,7 +159,7 @@ export default createCommand({
           }
         },
         lol: {
-          type: 1,
+          type: ApplicationCommandOptionType.Subcommand,
           name: 'lol',
           description: 'Remove a League of Legends tournament',
           descriptionLocalizations: {
@@ -166,7 +167,7 @@ export default createCommand({
           },
           args: {
             tournament: {
-              type: 3,
+              type: ApplicationCommandOptionType.String,
               name: 'tournament',
               nameLocalizations: {
                 'pt-BR': 'torneio'

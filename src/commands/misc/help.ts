@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import translate from '@iamtraction/google-translate'
+import { ApplicationCommandOptionType } from 'discord.js'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
@@ -28,7 +29,7 @@ export default createCommand({
   },
   args: {
     command: {
-      type: 3,
+      type: ApplicationCommandOptionType.String,
       name: 'command',
       nameLocalizations: {
         'pt-BR': 'comando'

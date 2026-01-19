@@ -1,4 +1,5 @@
 import { ProfileSchema, prisma } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
@@ -14,7 +15,7 @@ export default createCommand({
   category: 'economy',
   args: {
     player: {
-      type: 3,
+      type: ApplicationCommandOptionType.String,
       name: 'player',
       nameLocalizations: {
         'pt-BR': 'jogador'
