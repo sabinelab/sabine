@@ -430,7 +430,7 @@ export class CommandManager {
     command
       .run({ ctx, app, t, id: command.id })
       .then(async () => {
-        if ((data instanceof Message) && data.deletable && command.ephemeral) {
+        if (data instanceof Message && data.deletable && command.ephemeral) {
           await data.delete().catch(voidCatch)
         }
       })
