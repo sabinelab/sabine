@@ -16,7 +16,8 @@ const schema = z.object({
   API_URL: z.url(),
   STRIPE_TOKEN: z.string(),
   STRIPE_SECRET_WEBHOOK: z.string(),
-  REDIS_URL: z.string()
+  REDIS_URL: z.string(),
+  STATUS_CHANNEL: z.string()
 })
 
 export const env = schema.parse(Bun.env)

@@ -32,8 +32,7 @@ export default createListener({
       return await new ComponentInteractionRunner().run(app, interaction)
     }
 
-    if (interaction.type === InteractionType.ModalSubmit) {
-      if (!interaction.isModalSubmit()) return
+    if (interaction.isModalSubmit()) {
       return await new ModalSubmitInteractionRunner().run(app, interaction)
     }
   }
