@@ -2,7 +2,9 @@ services:
   sabine:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/sabine/Dockerfile
+      secrets:
+        - env
     image: sabine
     container_name: sabine
     restart: unless-stopped
@@ -10,6 +12,7 @@ services:
       redis:
         condition: service_healthy
     env_file:
+      - apps/sabine/.env
       - .env
     environment:
       - REDIS_URL=redis://localhost:6379
@@ -32,3 +35,7 @@ services:
 
 volumes:
   redis_data:
+
+secrets:
+  env:
+    file: ./.env
