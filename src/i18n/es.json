@@ -396,8 +396,13 @@
           "- Rosters",
           "- Pity"
         ],
-        "balance": ["- Poisons and fates"],
-        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "balance": [
+          "- Poisons and fates"
+        ],
+        "predictions": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions"
+        ],
         "simulator": [
           "- Matches",
           "- Career",
@@ -408,9 +413,14 @@
           "- Rosters",
           "- Pity"
         ],
-        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+        "stats": [
+          "- Wins and defeats",
+          "- Incorrect/correct predictions"
+        ]
       },
-      "reseted": ["You have successfully reset: \n{type}"]
+      "reseted": [
+        "You have successfully reset: \n{type}"
+      ]
     },
     "prefix": {
       "invalid_prefix": "Please, provide a prefix.",
@@ -495,7 +505,7 @@
     "sentinels": "Centinelas",
     "cooldown": "Estás usando este comando demasiado rápido. Intenta de nuevo {cooldown}",
     "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
-    "missing_argument": "Missing argument: `{arg}`\nCommand usage: `{usage}`"
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
   },
   "permissions": {
     "CreateInstantInvite": "Crear Invitación Instantánea",
