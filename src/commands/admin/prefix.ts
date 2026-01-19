@@ -20,6 +20,7 @@ export default createCommand({
       required: 'commands.prefix.invalid_prefix'
     }
   },
+  permissions: ['ManageGuild'],
   async run({ ctx }) {
     await prisma.guild.update({
       where: {
