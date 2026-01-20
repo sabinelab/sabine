@@ -136,9 +136,10 @@ export default createCommand({
               return text.setContent(
                 ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                  level: card.level,
+                  level: card.level >= 15 ? '`MAX`' : card.level,
                   xp: `${card.xp}/${card.requiredXp}`,
-                  progress: createProgressBar(card.xp / card.requiredXp)
+                  progress: createProgressBar(card.xp / card.requiredXp),
+                  id: card.playerId
                 })
               )
             })
@@ -166,7 +167,7 @@ export default createCommand({
                   )
                   .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                   .setStyle(ButtonStyle.Success)
-                  .setDisabled(card.requiredXp > card.xp)
+                  .setDisabled(card.requiredXp > card.xp || card.level >= 15)
               )
             )
         }
@@ -235,9 +236,10 @@ export default createCommand({
               return text.setContent(
                 ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                  level: card.level,
+                  level: card.level >= 15 ? '`MAX`' : card.level,
                   xp: `${card.xp}/${card.requiredXp}`,
-                  progress: createProgressBar(card.xp / card.requiredXp)
+                  progress: createProgressBar(card.xp / card.requiredXp),
+                  id: card.playerId
                 })
               )
             })
@@ -265,7 +267,7 @@ export default createCommand({
                   )
                   .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                   .setStyle(ButtonStyle.Success)
-                  .setDisabled(card.requiredXp > card.xp)
+                  .setDisabled(card.requiredXp > card.xp || card.level >= 15)
               )
             )
         }
@@ -731,9 +733,10 @@ export default createCommand({
                 return text.setContent(
                   ctx.t('commands.roster.container.card_content', {
                     card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                    level: card.level,
+                    level: card.level >= 15 ? '`MAX`' : card.level,
                     xp: `${card.xp}/${card.requiredXp}`,
-                    progress: createProgressBar(card.xp / card.requiredXp)
+                    progress: createProgressBar(card.xp / card.requiredXp),
+                    id: card.playerId
                   })
                 )
               })
@@ -761,7 +764,7 @@ export default createCommand({
                     )
                     .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                     .setStyle(ButtonStyle.Success)
-                    .setDisabled(card.requiredXp > card.xp)
+                    .setDisabled(card.requiredXp > card.xp || card.level >= 15)
                 )
               )
           }
@@ -832,9 +835,10 @@ export default createCommand({
                 return text.setContent(
                   ctx.t('commands.roster.container.card_content', {
                     card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                    level: card.level,
+                    level: card.level >= 15 ? '`MAX`' : card.level,
                     xp: `${card.xp}/${card.requiredXp}`,
-                    progress: createProgressBar(card.xp / card.requiredXp)
+                    progress: createProgressBar(card.xp / card.requiredXp),
+                    id: card.playerId
                   })
                 )
               })
@@ -862,7 +866,7 @@ export default createCommand({
                     )
                     .setCustomId(`roster;${ctx.author.id};upgrade;${card.id}`)
                     .setStyle(ButtonStyle.Success)
-                    .setDisabled(card.requiredXp > card.xp)
+                    .setDisabled(card.requiredXp > card.xp || card.level >= 15)
                 )
               )
           }
