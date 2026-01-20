@@ -37,6 +37,7 @@ export default class App extends Discord.Client {
   public interactions: Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions> =
     new Map()
   public players = new Map<string, Player>()
+  public playerNameIndex = new Map<string, Set<string>>()
   public emoji = new Map<string, string>()
   public emojiAliases = new Map<string, string>()
 
@@ -93,11 +94,27 @@ export default class App extends Discord.Client {
   }
 
   public loadPlayers() {
-    for (const player of getPlayers()) {
+    const allPlayers = getPlayers()
+
+    for (const player of allPlayers) {
       this.players.set(player.id.toString(), {
         ...player,
         price: calcPlayerPrice(player)
       })
+    }
+
+    for (const player of allPlayers) {
+      const playerName = player.name.toLowerCase()
+      const similarIds = new Set<string>()
+
+      for (const otherPlayer of allPlayers) {
+        const otherPlayerName = otherPlayer.name.toLowerCase()
+        if (playerName.includes(otherPlayerName) || otherPlayerName.includes(playerName)) {
+          similarIds.add(otherPlayer.id.toString())
+        }
+      }
+
+      this.playerNameIndex.set(playerName, similarIds)
     }
 
     return this
