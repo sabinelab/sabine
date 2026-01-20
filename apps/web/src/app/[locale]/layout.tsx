@@ -1,6 +1,6 @@
 import '../globals.css'
 import type { Metadata } from 'next'
-import { Noto_Sans } from 'next/font/google'
+import { Geist } from 'next/font/google'
 import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
@@ -34,7 +34,7 @@ type Props = {
   }>
 }
 
-const noto = Noto_Sans({
+const geist = Geist({
   subsets: ['latin']
 })
 
@@ -44,7 +44,7 @@ export default async function RootLayout({ children, params }: Props) {
 
   return (
     <html lang={locale}>
-      <body className={`${noto.className} min-h-screen flex flex-col background`}>
+      <body className={`${geist.className} min-h-screen flex flex-col background`}>
         <Header />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <main className='grow'>
