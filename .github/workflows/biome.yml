@@ -8,7 +8,16 @@ on:
       - 'README*'
       - 'LICENSE'
       - 'crowdin.yml'
+      - '.github/**'
   pull_request:
+    branches: ["**"]
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'README*'
+      - 'LICENSE'
+      - 'crowdin.yml'
+      - '.github/**'
 
 jobs:
   detect-changes:
