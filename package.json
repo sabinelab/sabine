@@ -28,6 +28,11 @@
     "start:web": "bun --filter '@sabinelab/web' start",
     "lint:web": "bun --filter '@sabinelab/web' lint",
     "check:web": "bun --filter '@sabinelab/web' check",
+    "start:api": "bun --filter '@sabinelab/api' start",
+    "dev:api": "bun --filter '@sabinelab/api' dev",
+    "build:api": "bun --filter '@sabinelab/api' build",
+    "lint:api": "bun --filter '@sabinelab/api' lint",
+    "check:api": "bun --filter '@sabinelab/api' check",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate"
   },

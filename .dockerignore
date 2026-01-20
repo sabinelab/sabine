@@ -8,3 +8,5 @@ prisma/generated/
 **/.env
 **/.env.*
 .next/
+apps/api/prisma/generated
+apps/api/prisma/database.db

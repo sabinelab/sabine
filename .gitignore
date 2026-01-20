@@ -3,5 +3,8 @@ node_modules/
 *test*
 dist/
 prisma/generated/
+apps/api/prisma/generated
+apps/api/prisma/database.db
+.github/
 .next/
 tsconfig.tsbuildinfo

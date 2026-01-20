@@ -42,7 +42,20 @@ services:
     restart: always
     env_file:
       - apps/web/.env
-    network_mode: host  
+    network_mode: host
+
+  api:
+    build: 
+      context: .
+      dockerfile: apps/api/Dockerfile
+      secrets:
+        - env
+    image: sabine-api
+    container_name: sabine-api
+    restart: always
+    env_file:
+      - apps/api/.env
+    network_mode: host
 
   redis:
     image: redis:latest
