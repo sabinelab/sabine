@@ -4,6 +4,7 @@ import t from '@i18n'
 import type { valorantAgents } from '@sabinelab/utils'
 import Bull from 'bull'
 import {
+  ActivityType,
   ButtonBuilder,
   ButtonStyle,
   type Collection,
@@ -736,11 +737,14 @@ export default createListener({
 
     if (app.user?.id !== '1235576817683922954') {
       app.user?.setStatus('dnd')
+      app.user?.setActivity({
+        name: `sabinebot.xyz | ${env.PREFIX}claim`,
+        type: ActivityType.Playing
+      })
     } else {
       app.user.setActivity({
-        name: 'status',
-        state: `[Shard ${app.shard?.ids}] Join support server! Link on about me`,
-        type: 4
+        name: `sabinebot.xyz | ${env.PREFIX}claim`,
+        type: ActivityType.Playing
       })
     }
 
