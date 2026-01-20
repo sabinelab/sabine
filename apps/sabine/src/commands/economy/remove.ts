@@ -29,6 +29,10 @@ export default createCommand({
     }
   },
   async run({ ctx, app }) {
+    if (Number.isNaN(Number(ctx.args.player))) {
+      return await ctx.reply('commands.sell.player_not_found')
+    }
+    
     const card = await prisma.card.findFirst({
       where: {
         id: BigInt(ctx.args.player),
