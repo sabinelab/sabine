@@ -395,13 +395,8 @@
           "- Rosters",
           "- Pity"
         ],
-        "balance": [
-          "- Poisons and fates"
-        ],
-        "predictions": [
-          "- Incorrect/correct predictions",
-          "- Submitted predictions"
-        ],
+        "balance": ["- Poisons and fates"],
+        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
         "simulator": [
           "- Matches",
           "- Career",
@@ -412,14 +407,9 @@
           "- Rosters",
           "- Pity"
         ],
-        "stats": [
-          "- Wins and defeats",
-          "- Incorrect/correct predictions"
-        ]
+        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
       },
-      "reseted": [
-        "You have successfully reset: \n{type}"
-      ]
+      "reseted": ["You have successfully reset: \n{type}"]
     },
     "prefix": {
       "invalid_prefix": "Please, provide a prefix.",
