@@ -16,159 +16,170 @@ html {
 }
 
 .markdown {
-  @apply text-gray-200 leading-relaxed;
+  @apply text-gray-300 leading-relaxed;
 }
 
-/* Headings */
+/* Headings - Modern & Techy */
 .markdown h1 {
-  @apply text-4xl font-bold mb-6 mt-10 pb-3 border-b border-gray-700 text-white;
+  @apply text-4xl font-extrabold mb-8 mt-12 pb-4 border-b border-gray-800 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 tracking-tight;
 }
 
 .markdown h2 {
-  @apply text-3xl font-bold mb-5 mt-9 pb-2 border-b border-gray-800 text-white;
+  @apply text-2xl font-bold mb-6 mt-10 flex items-center text-white;
+}
+
+.markdown h2::before {
+  content: "";
+  @apply w-2 h-8 bg-green-500 mr-4 rounded-sm shadow-[0_0_10px_#22c55e80];
 }
 
 .markdown h3 {
-  @apply text-2xl font-semibold mb-4 mt-8 text-gray-100;
+  @apply text-xl font-bold mb-4 mt-8 text-green-400 flex items-center tracking-wide uppercase;
+}
+
+.markdown h3::before {
+  content: "#";
+  @apply mr-2 text-green-500/50;
 }
 
 .markdown h4 {
-  @apply text-xl font-semibold mb-3 mt-6 text-gray-100;
+  @apply text-lg font-semibold mb-3 mt-6 text-gray-100;
 }
 
-.markdown h5 {
-  @apply text-lg font-semibold mb-3 mt-5 text-gray-200;
-}
-
-.markdown h6 {
-  @apply text-base font-semibold mb-2 mt-4 text-gray-200;
-}
-
-/* First heading has no top margin */
-.markdown > h1:first-child,
-.markdown > h2:first-child,
-.markdown > h3:first-child {
+.markdown > *:first-child {
   @apply mt-0;
 }
 
-/* Paragraphs */
+/* Paragraphs & Text */
 .markdown p {
-  @apply mb-4 leading-7 text-gray-300;
+  @apply mb-4 leading-7 text-gray-300/90;
 }
 
-/* Lists */
+.markdown strong {
+  @apply font-bold text-white;
+}
+
+.markdown em {
+  @apply italic text-green-200/80;
+}
+
+/* Lists - Changelog Style */
 .markdown ul {
-  @apply list-disc pl-6 mb-4 space-y-2;
+  @apply space-y-3 mb-6 pl-2;
+}
+
+.markdown ul > li {
+  @apply relative pl-6 leading-7;
+}
+
+.markdown ul > li::before {
+  content: "";
+  @apply absolute left-0 top-2.5 w-1.5 h-1.5 bg-green-500 rotate-45 rounded-[1px];
 }
 
 .markdown ol {
-  @apply list-decimal pl-6 mb-4 space-y-2;
+  @apply list-decimal list-inside space-y-2 mb-6 font-mono text-gray-400;
 }
 
-.markdown li {
-  @apply leading-7 text-gray-300;
-}
-
-.markdown li > ul,
-.markdown li > ol {
-  @apply mt-2 mb-2;
+.markdown ol > li::marker {
+  @apply text-green-500 font-bold;
 }
 
 /* Links */
 .markdown a {
-  @apply text-blue-400 hover:text-blue-300 underline decoration-blue-400/30 hover:decoration-blue-300 transition-colors duration-200 font-medium;
+  @apply text-green-400 no-underline border-b border-green-500/30 hover:border-green-400 hover:text-green-300 transition-all duration-200;
 }
 
-/* Text formatting */
-.markdown strong {
-  @apply font-semibold text-white;
-}
-
-.markdown em {
-  @apply italic text-gray-200;
-}
-
-.markdown del {
-  @apply line-through text-gray-500;
-}
-
-/* Code */
+/* Code & Pre - Terminal Vibes */
 .markdown code {
-  @apply bg-[#2A2A2A] px-1.5 py-0.5 rounded text-sm font-mono text-pink-400 border border-gray-700;
+  @apply bg-black/40 px-1.5 py-0.5 rounded text-[0.9em] font-mono text-green-300 border border-white/10 shadow-sm;
 }
 
 .markdown pre {
-  @apply bg-[#1E1E1E] p-4 rounded-lg mb-4 overflow-x-auto border border-gray-800;
+  @apply bg-[#0D0D0D] p-5 rounded-xl mb-6 overflow-x-auto border border-white/5 shadow-2xl;
+}
+
+.markdown pre::-webkit-scrollbar {
+  @apply h-2;
+}
+
+.markdown pre::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.markdown pre::-webkit-scrollbar-thumb {
+  @apply bg-gray-800 rounded-full hover:bg-gray-700;
 }
 
 .markdown pre code {
-  @apply bg-transparent p-0 border-0 text-gray-200 text-sm leading-6;
+  @apply bg-transparent p-0 border-0 text-gray-300 text-sm leading-6 shadow-none;
 }
 
-/* Blockquotes */
+/* Blockquotes - Dev Notes */
 .markdown blockquote {
-  @apply border-l-4 border-blue-500 pl-4 py-2 mb-4 italic text-gray-400 bg-gray-900/30;
+  @apply relative pl-6 py-1 my-6 text-gray-400 border-l-2 border-green-500/50 bg-green-500/5 rounded-r-lg;
 }
 
 .markdown blockquote p {
-  @apply mb-2 last:mb-0;
+  @apply m-0;
 }
 
-/* Horizontal rule */
+/* Horizontal Rule */
 .markdown hr {
-  @apply border-gray-700 my-8;
+  @apply border-0 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent my-10;
 }
 
-/* Tables */
+/* Tables - Data View */
 .markdown table {
-  @apply w-full border-collapse mb-4 text-sm;
+  @apply w-full border-collapse mb-6 text-sm overflow-hidden rounded-lg shadow-lg;
 }
 
 .markdown thead {
-  @apply bg-gray-800;
+  @apply bg-white/5;
 }
 
 .markdown th {
-  @apply px-4 py-3 text-left font-semibold text-white border border-gray-700;
+  @apply px-4 py-3 text-left font-bold text-white uppercase tracking-wider text-xs border-b border-white/10;
 }
 
 .markdown td {
-  @apply px-4 py-3 border border-gray-700 text-gray-300;
+  @apply px-4 py-3 border-b border-white/5 text-gray-300;
+}
+
+.markdown tr:last-child td {
+  @apply border-0;
 }
 
 .markdown tbody tr:hover {
-  @apply bg-gray-900/50;
+  @apply bg-white/5 transition-colors;
 }
 
 /* Images */
 .markdown img {
-  @apply max-w-full h-auto rounded-lg my-6 shadow-lg border border-gray-800;
+  @apply w-full rounded-xl my-8 shadow-2xl border border-white/5 ring-1 ring-white/5;
 }
 
-/* Task lists */
-.markdown input[type="checkbox"] {
-  @apply mr-2 accent-blue-500;
-}
-
-/* Kbd (keyboard) */
+/* Keyboard Hints */
 .markdown kbd {
-  @apply bg-gray-800 px-2 py-1 rounded text-sm font-mono border border-gray-700 shadow-sm;
+  @apply bg-gray-900 border-b-2 border-gray-700 px-2 py-0.5 rounded text-xs font-mono text-gray-300 shadow-sm;
 }
 
-/* Mark (highlight) */
-.markdown mark {
-  @apply bg-yellow-500/20 text-yellow-300 px-1 rounded;
+/* Task Lists */
+.markdown ul.contains-task-list {
+  @apply list-none pl-0;
 }
 
-/* Nested elements spacing */
-.markdown > *:last-child {
-  @apply mb-0;
+.markdown li.task-list-item {
+  @apply pl-0 flex items-start;
 }
 
-/* Code block with language label */
-.markdown pre[class*="language-"]::before {
-  @apply absolute top-0 right-0 px-3 py-1 text-xs text-gray-500 bg-gray-800 rounded-bl;
-  content: attr(class);
+.markdown input[type="checkbox"] {
+  @apply mt-1.5 mr-3 appearance-none w-4 h-4 rounded border border-gray-600 bg-gray-800 checked:bg-green-500 checked:border-green-500 transition-colors cursor-not-allowed relative;
+}
+
+.markdown input[type="checkbox"]:checked::after {
+  content: "";
+  @apply absolute left-1 top-0.5 w-1.5 h-2 border-r-2 border-b-2 border-black rotate-45;
 }
 
 .background {
