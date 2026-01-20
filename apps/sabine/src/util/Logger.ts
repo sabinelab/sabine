@@ -31,7 +31,7 @@ export default class Logger {
   }
 
   public static error(error: Error) {
-    logger.error(error.stack ?? error)
+    logger.error(`${error.name}: ${error.message}\n${error.stack}`)
   }
 
   public async error(error: Error | string, shardId?: number) {
@@ -69,11 +69,11 @@ export default class Logger {
         }
       })
     } else {
-      logger.error(error.stack ?? error)
+      logger.error(`${error.name}: ${error.message}\n${error.stack}`)
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
-        .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack}\`\`\``)
+        .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.name}: ${error.message}\n${error.stack}\`\`\``)
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
       const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
