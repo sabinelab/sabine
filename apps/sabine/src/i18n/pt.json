@@ -152,7 +152,7 @@
           "remove": "Remover",
           "promote_arena": "Promover à Arena"
         },
-        "card_content": "> {card}\n> Nível: `{level}`\n> XP: `{xp}` {progress}"
+        "card_content": "> {card}\n> ID: `{id}`\n> Level: `{level}`\n> XP: `{xp}` {progress}"
       },
       "change_team": "Alterar nome ou tag da equipe",
       "practice": "Praticar (0,5 fates por XP)",
@@ -263,7 +263,8 @@
       "collection": "Coleção",
       "price": "Preço",
       "devalued_price": "Vende por",
-      "missing_card": "Por favor, informe um jogador válido."
+      "missing_card": "Por favor, informe um jogador válido.",
+      "player_not_found": "Player not found!"
     },
     "trade": {
       "missing_poisons": "{user} precisa de mais **{poisons}** toxinas para comprar seu jogador.",
