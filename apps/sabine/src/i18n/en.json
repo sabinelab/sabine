@@ -152,7 +152,7 @@
           "remove": "Remove",
           "promote_arena": "Promote to Arena"
         },
-        "card_content": "> {card}\n> Level: `{level}`\n> XP: `{xp}` {progress}"
+        "card_content": "> {card}\n> ID: `{id}`\n> Level: `{level}`\n> XP: `{xp}` {progress}"
       },
       "change_team": "Change team name or tag",
       "practice": "Practice (0.5 fates per XP)",
