@@ -152,7 +152,7 @@
           "remove": "Remover",
           "promote_arena": "Promover à Arena"
         },
-        "card_content": "> {card}\n> ID: `{id}`\n> Level: `{level}`\n> XP: `{xp}` {progress}"
+        "card_content": "> {card}\n> ID: `{id}`\n> Nível: `{level}`\n> XP: `{xp}` {progress}"
       },
       "change_team": "Alterar nome ou tag da equipe",
       "practice": "Praticar (0,5 fates por XP)",
@@ -264,7 +264,7 @@
       "price": "Preço",
       "devalued_price": "Vende por",
       "missing_card": "Por favor, informe um jogador válido.",
-      "player_not_found": "Player not found!"
+      "player_not_found": "Jogador não encontrado!"
     },
     "trade": {
       "missing_poisons": "{user} precisa de mais **{poisons}** toxinas para comprar seu jogador.",
@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     },
     "prefix": {
       "invalid_prefix": "Por favor, informe um prefixo.",
