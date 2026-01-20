@@ -8,3 +8,5 @@ apps/api/prisma/database.db
 .github/
 .next/
 tsconfig.tsbuildinfo
+.turbo/
+next-env.d.ts

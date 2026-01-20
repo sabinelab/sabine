@@ -17,6 +17,7 @@
         "@types/humanize-duration": "3.27.4",
         "@typescript/native-preview": "7.0.0-dev.20260116.1",
         "prisma": "7.2.0",
+        "turbo": "2.7.5",
         "typescript": "5.9.3",
       },
     },
@@ -1430,6 +1431,20 @@
     "ts-mixer": ["ts-mixer@6.0.4", "", {}, "sha512-ufKpbmrugz5Aou4wcr5Wc1UUFWOLhq+Fm6qa6P0w0K5Qw2yhaUoiWszhCVuNQyNwrlGiscHOmqYoAox1PtvgjA=="],
 
     "tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
+
+    "turbo": ["turbo@2.7.5", "", { "optionalDependencies": { "turbo-darwin-64": "2.7.5", "turbo-darwin-arm64": "2.7.5", "turbo-linux-64": "2.7.5", "turbo-linux-arm64": "2.7.5", "turbo-windows-64": "2.7.5", "turbo-windows-arm64": "2.7.5" }, "bin": { "turbo": "bin/turbo" } }, "sha512-7Imdmg37joOloTnj+DPrab9hIaQcDdJ5RwSzcauo/wMOSAgO+A/I/8b3hsGGs6PWQz70m/jkPgdqWsfNKtwwDQ=="],
+
+    "turbo-darwin-64": ["turbo-darwin-64@2.7.5", "", { "os": "darwin", "cpu": "x64" }, "sha512-nN3wfLLj4OES/7awYyyM7fkU8U8sAFxsXau2bYJwAWi6T09jd87DgHD8N31zXaJ7LcpyppHWPRI2Ov9MuZEwnQ=="],
+
+    "turbo-darwin-arm64": ["turbo-darwin-arm64@2.7.5", "", { "os": "darwin", "cpu": "arm64" }, "sha512-wCoDHMiTf3FgLAbZHDDx/unNNonSGhsF5AbbYODbxnpYyoKDpEYacUEPjZD895vDhNvYCH0Nnk24YsP4n/cD6g=="],
+
+    "turbo-linux-64": ["turbo-linux-64@2.7.5", "", { "os": "linux", "cpu": "x64" }, "sha512-KKPvhOmJMmzWj/yjeO4LywkQ85vOJyhru7AZk/+c4B6OUh/odQ++SiIJBSbTG2lm1CuV5gV5vXZnf/2AMlu3Zg=="],
+
+    "turbo-linux-arm64": ["turbo-linux-arm64@2.7.5", "", { "os": "linux", "cpu": "arm64" }, "sha512-8PIva4L6BQhiPikUTds9lSFSHXVDAsEvV6QUlgwPsXrtXVQMVi6Sv9p+IxtlWQFvGkdYJUgX9GnK2rC030Xcmw=="],
+
+    "turbo-windows-64": ["turbo-windows-64@2.7.5", "", { "os": "win32", "cpu": "x64" }, "sha512-rupskv/mkIUgQXzX/wUiK00mKMorQcK8yzhGFha/D5lm05FEnLx8dsip6rWzMcVpvh+4GUMA56PgtnOgpel2AA=="],
+
+    "turbo-windows-arm64": ["turbo-windows-arm64@2.7.5", "", { "os": "win32", "cpu": "arm64" }, "sha512-G377Gxn6P42RnCzfMyDvsqQV7j69kVHKlhz9J4RhtJOB5+DyY4yYh/w0oTIxZQ4JRMmhjwLu3w9zncMoQ6nNDw=="],
 
     "twemoji": ["twemoji@14.0.2", "", { "dependencies": { "fs-extra": "^8.0.1", "jsonfile": "^5.0.0", "twemoji-parser": "14.0.0", "universalify": "^0.1.2" } }, "sha512-BzOoXIe1QVdmsUmZ54xbEH+8AgtOKUiG53zO5vVP2iUu6h5u9lN15NcuS6te4OY96qx0H7JK9vjjl9WQbkTRuA=="],
 
