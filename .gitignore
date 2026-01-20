@@ -3,3 +3,5 @@ node_modules/
 *test*
 dist/
 prisma/generated/
+.next/
+tsconfig.tsbuildinfo

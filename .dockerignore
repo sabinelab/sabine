@@ -7,3 +7,4 @@ prisma/generated/
 .env.*
 **/.env
 **/.env.*
+.next/
