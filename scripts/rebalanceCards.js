@@ -1,6 +1,6 @@
 import { calcPlayerOvr, getPlayer } from '@sabinelab/players'
-import { prisma } from '../src/database'
-import { getBuff } from '../src/util/getBuff'
+import { prisma } from '../packages/prisma'
+import { getBuff } from '../apps/sabine/src/util/getBuff'
 
 /**
  *
