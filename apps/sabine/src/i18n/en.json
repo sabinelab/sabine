@@ -261,7 +261,6 @@
     "card": {
       "name": "Name",
       "collection": "Collection",
-      "purchaseable": "Purchaseable?",
       "price": "Price",
       "devalued_price": "Sells for",
       "missing_card": "Please, provide a valid player."
