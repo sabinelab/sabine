@@ -7,6 +7,7 @@ COPY .npmrc ./
 COPY apps/web/package.json ./apps/web/package.json
 COPY apps/sabine/package.json ./apps/sabine/package.json
 COPY apps/helper/package.json ./apps/helper/package.json
+COPY apps/api/package.json ./apps/api/package.json
 COPY packages/prisma/package.json ./packages/prisma/package.json
 COPY packages/utils/package.json ./packages/utils/package.json
 COPY packages/players/package.json ./packages/players/package.json
