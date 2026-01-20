@@ -1,0 +1,280 @@
+{
+  "header": {
+    "commands": "Comandos",
+    "changelog": "Atualizações",
+    "cards": "Cartas"
+  },
+  "home": {
+    "title": "Trazendo os eSports para o seu servidor no Discord!",
+    "add": "Adicionar ao Discord",
+    "build": {
+      "title": "Monte seu Dream Team e Dispute Partidas Ranqueada",
+      "desc": "Montar o seu Dream Team é muito fácil. Basta rodar o comando <strong>/claim</strong> para obter um jogador aleatório, <strong>/promote</strong> para promovê-lo ao time titular e <strong>/roster</strong> para ver seu elenco."
+    },
+    "cards": {
+      "title": "Diversidade Gigante de Cards",
+      "desc": "São {size} cards diferentes para você aproveitar e coletar com o comando <strong>/claim</strong> ou comprar com o comando <strong>/sign</strong>."
+    },
+    "realtime": {
+      "title": "Obtenha Informações de Partidas Ao Vivo em Tempo Real",
+      "desc": "Obtenha informações ao vivo em tempo real dos seus times favoritos."
+    }
+  },
+  "commands": {
+    "title": "Comandos do Bot",
+    "admin": {
+      "description": "Veja o painel de controle e altere o idioma do bot"
+    },
+    "activatekey": {
+      "description": "Ative sua chave premium em algum servidor"
+    },
+    "career": {
+      "description": "Veja sua carreira"
+    },
+    "claim": {
+      "description": "Obtenha um jogador aleatório"
+    },
+    "coins": {
+      "description": "Veja seus coins"
+    },
+    "daily": {
+      "description": "Pegue sua recompensa diária"
+    },
+    "duel": {
+      "description": "Inicie um duelo com alguém"
+    },
+    "help": {
+      "description": "Lista de comandos"
+    },
+    "info": {
+      "description": "Mostra algumas informações do bot"
+    },
+    "language": {
+      "description": "Altera o idioma que eu interajo com você, sobrepondo o idioma definido no servidor"
+    },
+    "live": {
+      "description": "Habilita e desabilita a funcionalidade de acompanhar partidas ao vivo"
+    },
+    "news": {
+      "description": "Habilita e desabilita a funcionalidade de notícias"
+    },
+    "ping": {
+      "description": "Veja o ping do bot"
+    },
+    "player": {
+      "description": "Veja informações sobre determinado jogador"
+    },
+    "predictions": {
+      "description": "Veja seus palpites"
+    },
+    "premium": {
+      "description": "Veja informações sobre o seu plano premium"
+    },
+    "promote": {
+      "description": "Promova um jogador para o time titular"
+    },
+    "leaderboard": {
+      "description": "Veja a tabela de palpites, classificação e coins"
+    },
+    "remove": {
+      "description": "Remova um jogador do time titular"
+    },
+    "roster": {
+      "description": "Veja informações do seu elenco"
+    },
+    "sell": {
+      "description": "Venda um jogador"
+    },
+    "sign": {
+      "description": "Contrate um jogador"
+    },
+    "team": {
+      "description": "Veja informações sobre determinada equipe"
+    },
+    "tournament": {
+      "description": "Adicione e remova torneios"
+    },
+    "card": {
+      "description": "Veja informações sobre determinada carta"
+    },
+    "claims": {
+      "description": "Veja sua quantidade de claims e o seu pity"
+    },
+    "remind": {
+      "description": "Ative/desative o lembrete de quando você poderá usar /claim novamente"
+    },
+    "transactions": {
+      "description": "Veja suas transações de jogadores"
+    },
+    "trade": {
+      "description": "Negocie jogadores com outros usuários"
+    },
+    "packs": {
+      "description": "Abra ou veja seus pacotes"
+    },
+    "arena": {
+      "description": "Veja informações sobre a Arena, mude seu elenco, e entre/saia da fila da Arena"
+    },
+    "summary": {
+      "description": "Veja o resumo de uma partida"
+    },
+    "shop": {
+      "description": "Loja de pacotes de cartas"
+    }
+  },
+  "footer": {
+    "contact": "Contato",
+    "legal": "Legal",
+    "learn": "Aprender",
+    "terms": "Termos",
+    "privacy": "Privacidade",
+    "commands": "Comandos",
+    "guidelines": "Diretrizes"
+  },
+  "metadata": {
+    "title": "Sabine | Seu simulador de VALORANT",
+    "desc": "Mergulhe em um bot de VALORANT/League of Legends com estatísticas, palpites, placares ao vivo, apostas a muito mais!"
+  },
+  "wiki": {
+    "title": "Selecione um Módulo",
+    "module": {
+      "predictions": {
+        "title": "Campeonatos, palpites e resultados",
+        "introduction": {
+          "title": "Introdução a Campeonatos, palpites e resultados",
+          "description": "Essa funcionalidade te permite acompanhar partidas de Valorant e League of Legends, fazer palpites, e ver os resultados."
+        },
+        "tournaments": {
+          "title": "Adicionando Campeonatos",
+          "description": "Para adicionar um campeonato de Valorant ou de League of Legends, você deve usar <strong>/tournament add</strong>, selecionar o jogo, selecionar o canal de partidas e selecionar o canal de resultados.\n\nÉ altamente recomendado que o canal de partidas seja um canal onde membros não possam enviar mensagens e que tenha somente o fluxo de mensagens da Sabine."
+        },
+        "predictions": {
+          "title": "Fazendo Palpites",
+          "description": "Para fazer um palpite, você deve ir ao canal de partidas e procurar pela mensagem da Sabine. Após isso, procure pelo botão <strong>Palpitar</strong> e faça seu palpite."
+        },
+        "bets": {
+          "title": "Fazendo Apostas",
+          "description": "Para fazer uma aposta, você deve ir ao canal de partidas e procurar pela mensagem da Sabine. Você deve ter ao menos 500 coins para fazer uma aposta. Após isso, procure pelo botão <strong>Apostar</strong> e faça sua aposta."
+        }
+      },
+      "simulator": {
+        "title": "Simulador",
+        "introduction": {
+          "title": "Introdução ao Simulador",
+          "description": "O simulador é uma experiência única. Monte seu elenco com jogadores de diferentes níveis e habilidades, duele contra outros jogadores, e prove que você tem o que é preciso para levar seu time ao topo. Toda decisão importa — a vitória depende do nível do seu time!"
+        },
+        "how_it_works": {
+          "title": "Como Funciona",
+          "description": "Cada partida no simulador é resolvida com base nas estatísticas dos seus jogadores e um pouco de sorte. Quanto mais forte for o seu time, maiores são as chances de vitória.\n\nPara duelar contra alguém, seu time deve ter 5 jogadores no elenco titular. Após isso, você pode usar <strong>/duel</strong> para duelar contra alguém."
+        },
+        "players": {
+          "title": "Jogadores",
+          "description": "Cada jogador tem um overall e <a>atributos</a> como mira, headshot, movimentação, agressividade, ACS, and noção de jogo. Você pode comprar e vender jogadores que não quer. Alguns jogadores são raros e performam melhor em situações de desvantagem.\n\nObtenha um jogador aleatório usando <strong>/claim</strong>."
+        },
+        "matches": {
+          "title": "Partidas",
+          "description": "As partidas são jogadas no formato MD1 e quem fizer 13 pontos primeiro vence. Você pode acompanhar seus resultados e partidas recentes usando <strong>/career</strong>."
+        },
+        "progress": {
+          "title": "Progresso e Classificação",
+          "description": "Vencer partidas rende pontos e ajuda seu time a subir na tabela de classificação. Quanto mais alto você vai, mais reconhecimento você ganha — e jogadores mais fortes devem entrar no seu elenco. As classificações são atualizadas regularmente e as melhores equipes são destacadas."
+        }
+      },
+      "cards": {
+        "title": "Cartinhas",
+        "introduction": {
+          "title": "Introdução às Cartinhas",
+          "description": "As estatísticas de todos os jogadores foram retiradas do site <a>thespike.gg</a>."
+        },
+        "calc": {
+          "title": "Cálculo de Atributos",
+          "description": "AIM: <strong>(KPR * 40) + (HS% * 1.8)</strong>\nHS: <strong>HS% * 2</strong>\nMOV: <strong>(1.5 - DPR) * 80</strong>\nAGG: <strong>(FBPR * 250) + (KPR * 15)</strong>\nACS: <strong>ACS / 3</strong>\nGMS: <strong>(APR * 150) + (FBSR * 0.6)</strong>\n\nApós o cálculo, a maioria dos jogadores recebem buffs e debuffs manuais de acordo com o tier que eles jogam."
+        },
+        "attributes": {
+          "title": "Atributos",
+          "description": "AIM: <strong>Mira</strong>\nHS: <strong>Autoexplicativo</strong>\nMOV: <strong>Movimentação</strong>\nAGG: <strong>Agressividade</strong>\nACS: <strong>Pontuação Média Combate</strong>\nGMS: <strong>Noção de Jogo</strong>"
+        }
+      },
+      "meta": {
+        "title": "Agentes do Meta",
+        "introduction": {
+          "title": "Introdução aos Agentes do Meta",
+          "description": "Assim como no Valorant, cada mapa tem seus agentes do meta, e no simulador não seria diferente. Aqui você pode ver os agentes meta de cada mapa para evitar debuffs em seus jogadores."
+        }
+      }
+    }
+  },
+  "changelog": {
+    "title": "Últimas Atualizações"
+  },
+  "privacy": {
+    "title": "Política de Privacidade",
+    "description": "Última Atualização: 8/7/2025\n\nEste site não coleta, armazena ou compartilha nenhuma informação pessoal.\nNão utilizamos cookies, ferramentas de rastreamento ou serviços de análise.\nSe você tiver alguma dúvida sobre esta Política de Privacidade, entre em contato conosco pelo Discord em nosso servidor oficial."
+  },
+  "cards": {
+    "title": "Cartas",
+    "search": "Pesquisar",
+    "more_information": "Mais informações",
+    "purchasable": {
+      "true": "Comprável",
+      "false": "Não comprável"
+    },
+    "collection": "Coleção: <strong>{collection}</strong>",
+    "role": {
+      "duelist": "Função: <strong>Duelista</strong>",
+      "initiator": "Função: <strong>Iniciador</strong>",
+      "controller": "Função: <strong>Controlador</strong>",
+      "flex": "Função: <strong>Flex</strong>",
+      "sentinel": "Função: <strong>Sentinela</strong>"
+    },
+    "stats": {
+      "aim": "Mira: <strong>{stats}</strong>",
+      "hs": "Headshot: <strong>{stats}</strong>",
+      "movement": "Movimentação: <strong>{stats}</strong>",
+      "aggression": "Agressividade: <strong>{stats}</strong>",
+      "acs": "ACS: <strong>{stats}</strong>",
+      "gamesense": "Noção de jogo: <strong>{stats}</strong>",
+      "title": "Estatísticas da Carta"
+    },
+    "price": "Preço: <strong>{price} coins</strong>"
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "description": "Última Atualização: 2 de setembro de 2025\n\nBem-vindo(a) a Sabine, um bot de Discord desenvolvido para acompanhar partidas, realizar palpites e oferecer recursos de entretenimento relacionados a Valorant e League of Legends. Ao usar nosso bot, você concorda com os seguintes termos.",
+    "acceptance": {
+      "title": "Aceitação",
+      "description": "Ao usar a Sabine, você concorda em cumprir estes Termos de Uso. Se não concordar com alguma parte, não utilize o bot.\n\nViolação destes termos resultará na suspensão da sua conta do Discord para uso do bot."
+    },
+    "usage": {
+      "title": "Uso do Bot",
+      "description": "<li>O bot é apenas para fins recreativos e de entretenimento.</li><li>Você concorda em não usar o bot para fins ilegais ou prejudiciais, ou em violação das regras do Discord.</li><li>Você é responsável por todas as ações de sua conta do Discord enquanto usa o bot.</li>"
+    },
+    "content": {
+      "title": "Conteúdo",
+      "description": "<li>A Sabine fornece informações, estatísticas e resultados de partidas.</li><li>O bot não se responsabiliza por perdas ou danos decorrentes de apostas com dinheiro real, previsões ou decisões baseadas nas informações do bot.</li>"
+    },
+    "restrictions": {
+      "title": "Restrições",
+      "description": "<li>Você concorda em não modificar, copiar ou redistribuir o bot.</li><li>Recursos Premium podem exigir pagamento.</li><li>Uso excessivo ou abusivo pode resultar em suspensão ou banimento do bot.</li>"
+    },
+    "privacy": {
+      "title": "Privacidade",
+      "description": "<li>O bot coleta dados básicos do Discord (nome de usuário, ID, mensagens necessárias para funcionalidades).</li><li>Os dados são usados apenas para fornecer as funcionalidades do bot e não são vendidos a terceiros.</li>"
+    },
+    "disclaimer": {
+      "title": "Isenção de Responsabilidade",
+      "description": "<li>O bot é fornecido “como está”.</li><li>Não garantimos disponibilidade ininterrupta ou funcionamento sem erros.</li><li>Qualquer decisão baseada nas informações do bot é de sua inteira responsabilidade.</li>"
+    },
+    "changes": {
+      "title": "Alterações",
+      "description": "<li>Podemos atualizar ou modificar estes termos a qualquer momento.</li><li>O uso contínuo do bot após alterações implica na aceitação dos novos termos.</li>"
+    }
+  },
+  "guidelines": {
+    "title": "Diretrizes",
+    "description": "O objetivo da Sabine é levar os eSports e entretenimento à você e ao seu servidor. Para isso, é necessário seguir algumas regras para evitar que sua conta seja suspensa de usar o bot.",
+    "subtitle": "As seguintes ações não serão toleradas",
+    "guidelines": "<li>Não seguir as diretrizes do Discord.</li><li>Explorar bugs ou falhas do sistema.</li><li>Usar contas secundárias/alternativas para ganho pessoal, como trocar jogadores consigo mesmo, jogar partidas contra si próprio para subir mais rápido na tabela de classificação, etc.</li><li>Vender, alugar ou trocar coins/cartas por dinheiro real ou qualquer item de valor monetário no mundo real. Se isso acontecer, reporte à nossa equipe.</li><li>Tentar evadir ou contornar punições. Evadir sua suspensão (criando ou usando outra conta para usar a Sabine) fará com que sua suspensão não seja removida.</li><li>Tentar atacar, prejudicar ou derrubar a Sabine.</li><li>Não nos responsabilizamos por contas que são vendidas, emprestadas, doadas, hackeadas, etc. A responsabilidade pelo que acontece com sua conta é sua. Se outra pessoa usar sua conta para quebrar as regras, você será banido, já que a conta pertence a você.</li>"
+  },
+  "close": "Fechar"
+}

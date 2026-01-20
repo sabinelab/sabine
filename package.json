@@ -23,6 +23,11 @@
     "build:players": "bun --filter '@sabinelab/players' build",
     "lint:players": "bun --filter '@sabinelab/players' lint",
     "check:players": "bun --filter '@sabinelab/players' check",
+    "dev:web": "bun --filter '@sabinelab/web' dev",
+    "build:web": "bun --filter '@sabinelab/web' build",
+    "start:web": "bun --filter '@sabinelab/web' start",
+    "lint:web": "bun --filter '@sabinelab/web' lint",
+    "check:web": "bun --filter '@sabinelab/web' check",
     "push": "bunx --bun prisma db push",
     "gen": "bunx --bun prisma generate"
   },

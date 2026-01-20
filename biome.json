@@ -6,7 +6,16 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!scripts/*", "!**/test.js", "!**/test.ts", "!prisma/generated"]
+    "includes": [
+      "**",
+      "!scripts/*",
+      "!**/test.js",
+      "!**/test.ts",
+      "!prisma/generated",
+      "!node_modules/",
+      "!.next",
+      "!next-env.d.ts"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -19,15 +28,27 @@
     "rules": {
       "recommended": true,
       "suspicious": {
-        "noExplicitAny": "off"
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noDocumentCookie": "off"
       },
       "complexity": {
         "noStaticOnlyClass": "off",
-        "useIndexOf": "off"
+        "useIndexOf": "off",
+        "noUselessFragments": "off"
       },
       "style": {
         "noNonNullAssertion": "off",
         "useTemplate": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "useButtonType": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noChildrenProp": "off"
       }
     }
   },
@@ -36,7 +57,13 @@
       "quoteStyle": "single",
       "semicolons": "asNeeded",
       "trailingCommas": "none",
-      "arrowParentheses": "asNeeded"
+      "arrowParentheses": "asNeeded",
+      "jsxQuoteStyle": "single"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   },
   "assist": {

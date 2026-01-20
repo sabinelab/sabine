@@ -24,6 +24,7 @@
     "@prisma/client": "7.2.0",
     "@sabinelab/players": "1.7.0",
     "@sabinelab/prisma": "workspace:*",
+    "@sabinelab/utils": "workspace:*",
     "bull": "4.16.5",
     "discord.js": "14.25.1",
     "elysia": "1.4.22",
