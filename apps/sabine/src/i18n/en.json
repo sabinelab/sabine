@@ -263,7 +263,8 @@
       "collection": "Collection",
       "price": "Price",
       "devalued_price": "Sells for",
-      "missing_card": "Please, provide a valid player."
+      "missing_card": "Please, provide a valid player.",
+      "player_not_found": "Player not found!"
     },
     "trade": {
       "missing_poisons": "{user} needs **{poisons}** more poisons to purchase your player.",
