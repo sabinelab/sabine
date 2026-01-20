@@ -32,12 +32,16 @@ export default createModalSubmitInteraction({
       .setLabel('Join thread')
       .setStyle(ButtonStyle.Secondary)
 
-    const message = await channel.send(embed.build(button.build({
-      content: '<@&1321226585290051717> @here',
-      allowedMentions: {
-        parse: ['everyone']
-      }
-    })) as any)
+    const message = await channel.send(
+      embed.build(
+        button.build({
+          content: '<@&1321226585290051717> @here',
+          allowedMentions: {
+            parse: ['everyone']
+          }
+        })
+      ) as any
+    )
     await message.crosspost()
 
     const thread = await message.startThread({
