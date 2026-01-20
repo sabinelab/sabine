@@ -1,0 +1,16 @@
+{
+  "name": "@sabinelab/utils",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "node test.ts",
+    "lint": "biome check",
+    "build": "biome check && rm -rf dist && tsgo",
+    "check": "tsgo"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
