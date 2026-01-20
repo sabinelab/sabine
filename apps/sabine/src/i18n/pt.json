@@ -264,7 +264,7 @@
       "purchaseable": "Comprável?",
       "price": "Preço",
       "devalued_price": "Vende por",
-      "missing_card": "Please, provide a valid player."
+      "missing_card": "Por favor, informe um jogador válido."
     },
     "trade": {
       "missing_poisons": "{user} precisa de mais **{poisons}** toxinas para comprar seu jogador.",
@@ -413,8 +413,8 @@
       "reseted": ["Você redefiniu com sucesso: \n{type}"]
     },
     "prefix": {
-      "invalid_prefix": "Please, provide a prefix.",
-      "updated": "Changed server prefix to `{prefix}`"
+      "invalid_prefix": "Por favor, informe um prefixo.",
+      "updated": "Prefixo do servidor alterado para `{prefix}`"
     }
   },
   "simulator": {
@@ -495,7 +495,7 @@
     "sentinels": "Sentinelas",
     "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
     "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Use {cmd} para iniciar.",
-    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
+    "missing_argument": "Argumento faltando: `{arg}`\nUse {cmd} para obter ajuda sobre este comando!"
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
