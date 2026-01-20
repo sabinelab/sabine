@@ -73,7 +73,9 @@ export default class Logger {
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
-        .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.name}: ${error.message}\n${error.stack}\`\`\``)
+        .setDesc(
+          `Shard ID: \`${shardId}\`\n\`\`\`js\n${error.name}: ${error.message}\n${error.stack}\`\`\``
+        )
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
       const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
