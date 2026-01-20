@@ -4,6 +4,7 @@ import url from 'node:url'
 import { prisma } from '@db'
 import type { Prisma } from '@generated'
 import fastify from 'fastify'
+import { env } from '@/env'
 import type { LiveFeed } from '../types/index.d'
 import lolEvents from './services/lol/events'
 import lolLiveFeed from './services/lol/livefeed'
@@ -17,7 +18,6 @@ import results from './services/valorant/results'
 import { auth } from './utils/auth'
 import { error, info } from './utils/logger'
 import sendWebhook from './utils/sendWebhook'
-import { env } from '@/env'
 
 const setData = async () => {
   const lol = {

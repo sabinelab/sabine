@@ -1,5 +1,5 @@
-import { env } from '@/env'
 import type { preHandlerMetaHookHandler } from 'fastify/types/hooks.js'
+import { env } from '@/env'
 
 export const auth: preHandlerMetaHookHandler = (req, res, done) => {
   if (env.NODE_ENV === 'dev') return done()
