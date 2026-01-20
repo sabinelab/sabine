@@ -1,6 +1,6 @@
 import { Prisma } from '@generated'
+import { valorantAgents } from '@sabinelab/utils'
 import { ApplicationCommandOptionType } from 'discord.js'
-import { valorantAgents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 

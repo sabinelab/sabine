@@ -1,6 +1,6 @@
 import { ProfileSchema } from '@db'
+import { valorantMaps } from '@sabinelab/utils'
 import { ApplicationCommandOptionType } from 'discord.js'
-import { valorantMaps } from '../../config'
 import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import createCommand from '../../structures/command/createCommand'
 

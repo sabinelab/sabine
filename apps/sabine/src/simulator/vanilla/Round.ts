@@ -1,6 +1,6 @@
 import { ProfileSchema, prisma } from '@db'
+import { valorantAgents, valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import type { MessageEditOptions, TextChannel } from 'discord.js'
-import { valorantAgents, valorantMaps, valorantWeapons } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'

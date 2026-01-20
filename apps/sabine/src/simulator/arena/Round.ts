@@ -1,5 +1,5 @@
 import { ProfileSchema, prisma } from '@db'
-import { valorantMaps, valorantWeapons } from '../../config'
+import { valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'
 

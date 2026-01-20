@@ -1,6 +1,6 @@
 import { ProfileSchema } from '@db'
+import { type valorantAgents, valorantMaps } from '@sabinelab/utils'
 import { ComponentType, type InteractionCallbackResponse } from 'discord.js'
-import { type valorantAgents, valorantMaps } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'

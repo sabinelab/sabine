@@ -1,7 +1,7 @@
 import { ProfileSchema } from '@db'
 import type { Card } from '@generated'
+import { valorantAgents, valorantMaps } from '@sabinelab/utils'
 import { ChannelType } from 'discord.js'
-import { valorantAgents, valorantMaps } from '@/config'
 import Match from '@/simulator/vanilla/Match'
 import type App from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'

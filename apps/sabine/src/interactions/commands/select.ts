@@ -1,5 +1,5 @@
+import { valorantAgents } from '@sabinelab/utils'
 import { ComponentType } from 'discord.js'
-import { valorantAgents } from '../../config'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 

@@ -1,7 +1,7 @@
 import type { Args } from '@i18n'
 import { calcPlayerOvr, type Player } from '@sabinelab/players'
+import { valorantAgents, valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import type { Message, MessageEditOptions } from 'discord.js'
-import { valorantAgents, valorantMaps, valorantWeapons } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import type { PlayerWeapon } from './Player'
 

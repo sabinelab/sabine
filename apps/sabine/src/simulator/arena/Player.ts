@@ -1,4 +1,4 @@
-import { valorantWeapons } from '../../config'
+import { valorantWeapons } from '@sabinelab/utils'
 
 type WeaponDamage = {
   head: number

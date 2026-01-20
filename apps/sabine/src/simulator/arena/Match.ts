@@ -1,5 +1,5 @@
 import { calcPlayerOvr, type Player } from '@sabinelab/players'
-import { type valorantAgents, valorantMaps, valorantWeapons } from '../../config'
+import { type valorantAgents, valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import type { PlayerWeapon } from './Player'
 
 export type PlayerStats = {

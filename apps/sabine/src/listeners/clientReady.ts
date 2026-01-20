@@ -1,6 +1,7 @@
 import { prisma } from '@db'
 import type { $Enums } from '@generated'
 import t from '@i18n'
+import type { valorantAgents } from '@sabinelab/utils'
 import Bull from 'bull'
 import {
   ButtonBuilder,
@@ -14,7 +15,6 @@ import {
 } from 'discord.js'
 import pLimit from 'p-limit'
 import Service from '@/api'
-import type { valorantAgents } from '@/config'
 import { env } from '@/env'
 import Match from '@/simulator/arena/Match'
 import type App from '@/structures/app/App'

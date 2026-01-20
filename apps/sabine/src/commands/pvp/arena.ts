@@ -1,4 +1,5 @@
 import { prisma } from '@db'
+import { valorantAgents } from '@sabinelab/utils'
 import {
   ActionRowBuilder,
   ApplicationCommandOptionType,
@@ -6,7 +7,6 @@ import {
   ButtonStyle,
   ContainerBuilder
 } from 'discord.js'
-import { valorantAgents } from '../../config'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import SelectMenuBuilder from '../../structures/builders/SelectMenuBuilder'
 import createCommand from '../../structures/command/createCommand'
