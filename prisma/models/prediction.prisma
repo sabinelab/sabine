@@ -13,6 +13,7 @@ model Prediction {
 
   createdAt DateTime @default(now()) @map("created_at")
 
+  @@unique([game, match])
   @@index([profileId, game, createdAt(sort: Desc)])
   @@index([profileId, match, game])
   @@index([game, match, status])
