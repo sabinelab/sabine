@@ -98,6 +98,9 @@ export default createCommand({
             userId_guildId: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
+            },
+            fates: {
+              gte: price.gold
             }
           },
           data: {
@@ -121,6 +124,9 @@ export default createCommand({
             userId_guildId: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
+            },
+            fates: {
+              gte: price.platinum
             }
           },
           data: {
@@ -144,6 +150,9 @@ export default createCommand({
             userId_guildId: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
+            },
+            fates: {
+              gte: price.diamond
             }
           },
           data: {
@@ -167,6 +176,9 @@ export default createCommand({
             userId_guildId: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
+            },
+            fates: {
+              gte: price.ascendant
             }
           },
           data: {
@@ -178,7 +190,7 @@ export default createCommand({
             }
           }
         })
-        await ctx.reply('commands.shop.success.gold', { fates: price.ascendant })
+        await ctx.reply('commands.shop.success.ascendant', { fates: price.ascendant })
       }
     }
 
