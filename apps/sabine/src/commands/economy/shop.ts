@@ -93,23 +93,21 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async tx => {
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              fates: {
-                decrement: price.gold
-              },
-              goldPacks: {
-                increment: 1
-              }
+        await prisma.profile.update({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.userId,
+              guildId: ctx.db.guild.id
             }
-          })
+          },
+          data: {
+            fates: {
+              decrement: price.gold
+            },
+            goldPacks: {
+              increment: 1
+            }
+          }
         })
         await ctx.reply('commands.shop.success.gold', { fates: price.gold })
       },
@@ -118,23 +116,21 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async tx => {
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              fates: {
-                decrement: price.platinum
-              },
-              platinumPacks: {
-                increment: 1
-              }
+        await prisma.profile.update({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.userId,
+              guildId: ctx.db.guild.id
             }
-          })
+          },
+          data: {
+            fates: {
+              decrement: price.platinum
+            },
+            platinumPacks: {
+              increment: 1
+            }
+          }
         })
         await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
       },
@@ -143,23 +139,21 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async tx => {
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              fates: {
-                decrement: price.diamond
-              },
-              diamondPacks: {
-                increment: 1
-              }
+        await prisma.profile.update({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.userId,
+              guildId: ctx.db.guild.id
             }
-          })
+          },
+          data: {
+            fates: {
+              decrement: price.diamond
+            },
+            diamondPacks: {
+              increment: 1
+            }
+          }
         })
         await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
       },
@@ -168,23 +162,21 @@ export default createCommand({
           return await ctx.reply('commands.shop.not_enough')
         }
 
-        await prisma.$transaction(async tx => {
-          await tx.profile.update({
-            where: {
-              userId_guildId: {
-                userId: ctx.db.profile.userId,
-                guildId: ctx.db.guild.id
-              }
-            },
-            data: {
-              fates: {
-                decrement: price.ascendant
-              },
-              ascendantPacks: {
-                increment: 1
-              }
+        await prisma.profile.update({
+          where: {
+            userId_guildId: {
+              userId: ctx.db.profile.userId,
+              guildId: ctx.db.guild.id
             }
-          })
+          },
+          data: {
+            fates: {
+              decrement: price.ascendant
+            },
+            ascendantPacks: {
+              increment: 1
+            }
+          }
         })
         await ctx.reply('commands.shop.success.gold', { fates: price.ascendant })
       }
