@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { GuildSchema, ProfileSchema } from '@db'
-import type { Blacklist } from '@generated'
 import locales from '@i18n'
 import { voidCatch } from '@sabinelab/prisma'
 import {
+  type APIWebhook,
   ApplicationCommandOptionType,
   ButtonBuilder,
   ButtonStyle,
@@ -13,6 +13,7 @@ import {
   Message,
   type PermissionResolvable,
   REST,
+  Routes,
   type User
 } from 'discord.js'
 import { env } from '@/env'
@@ -20,9 +21,10 @@ import type App from '@/structures/app/App'
 import CommandContext from '@/structures/command/CommandContext'
 import type { CommandArguments, ResolveArguments } from '@/structures/command/createCommand'
 import Logger from '@/util/Logger'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 
 const nullCatch = () => null
-const _rest = new REST().setToken(env.BOT_TOKEN)
+const rest = new REST().setToken(env.BOT_TOKEN)
 
 type Props = {
   app: App
@@ -189,12 +191,9 @@ export class CommandManager {
 
     if (!command) return
 
-    const rawBlacklist = await app.redis.get('blacklist')
-    const blacklist: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
-
     let profile = await ProfileSchema.fetch(user.id, data.guildId)
 
-    const ban = blacklist.find(b => b.id === user.id)
+    const ban = app.blacklist.get(user.id)
     if (ban) {
       return await data.reply({
         content: locales(guild?.lang ?? 'en', 'helper.banned', {
@@ -217,7 +216,7 @@ export class CommandManager {
         ]
       })
     }
-    if (blacklist.find(b => b.id === data.guildId)) {
+    if (app.blacklist.get(data.guildId)) {
       return await data.guild.leave()
     }
 
@@ -433,6 +432,56 @@ export class CommandManager {
         if (data instanceof Message && data.deletable && command.ephemeral) {
           await data.delete().catch(voidCatch)
         }
+
+        if (env.DEVS.includes(ctx.author.id)) return
+
+        const owner = await app.getUser(ctx.guild.ownerId)
+
+        const embed = new EmbedBuilder()
+          .setAuthor({
+            name: ctx.author.username,
+            iconURL: ctx.author.displayAvatarURL({ size: 2048 })
+          })
+          .setTitle('New command executed')
+          .setDesc(
+            (data instanceof Message
+              ? `The command \`${ctx.prefix}${command.name}\` has been executed in \`${ctx.guild.name}\``
+              : `The slash command \`/${command.name}\` has been executed in \`${ctx.guild.name}\``) +
+              `\n\`\`\`json\n${JSON.stringify(ctx.args, null, 2)}\`\`\``
+          )
+          .setFields(
+            {
+              name: 'Server ID',
+              value: `\`${ctx.guild.id}\``
+            },
+            {
+              name: 'Owner',
+              value: `\`${owner.username}\` (\`${owner.id}\`)`
+            },
+            {
+              name: 'Author',
+              value: `\`${ctx.author.username}\` (\`${ctx.author.id}\`)`
+            }
+          )
+          .setThumbnail(ctx.guild.iconURL())
+
+        const webhooks = (await rest.get(Routes.channelWebhooks(env.COMMAND_LOG))) as APIWebhook[]
+        let webhook = webhooks.find(w => w.name === `${app.user?.username} Logger`)
+
+        if (!webhook) {
+          webhook = (await rest.post(Routes.channelWebhooks(env.COMMAND_LOG), {
+            body: {
+              name: `${app.user?.username} Logger`
+            }
+          })) as APIWebhook
+        }
+
+        await rest.post(Routes.webhook(webhook.id, webhook.token), {
+          body: {
+            embeds: [embed.toJSON()],
+            avatar_url: app.user?.displayAvatarURL({ size: 2048 })
+          }
+        })
       })
       .catch(async e => {
         await ctx.reply('helper.error', { e })

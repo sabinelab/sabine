@@ -12,6 +12,7 @@ import { type Command, parseArguments } from '../command/createCommand'
 import type { CreateInteractionOptions } from '../interaction/createComponentInteraction'
 import type { CreateModalSubmitInteractionOptions } from '../interaction/createModalSubmitInteraction'
 import type { Listener } from './createListener'
+import type { Blacklist } from '@generated'
 
 type Reminder = {
   user: string
@@ -34,12 +35,15 @@ export default class App extends Discord.Client {
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
   public queue: typeof queue
-  public interactions: Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions> =
-    new Map()
+  public interactions = new Map<
+    string,
+    CreateInteractionOptions & CreateModalSubmitInteractionOptions
+  >()
   public players = new Map<string, Player>()
   public playerNameIndex = new Map<string, Set<string>>()
   public emoji = new Map<string, string>()
   public emojiAliases = new Map<string, string>()
+  public blacklist = new Map<string, Blacklist>()
 
   public constructor(options: Discord.ClientOptions) {
     super(options)
@@ -134,10 +138,21 @@ export default class App extends Discord.Client {
     return this
   }
 
+  public async syncBlacklist() {
+    const blacklist = await prisma.blacklist.findMany()
+
+    for (const ban of blacklist) {
+      this.blacklist.set(ban.id, ban)
+    }
+
+    setTimeout(async () => await this.syncBlacklist().catch(e => new Logger(this).error(e)), 300_000)
+  }
+
   public async connect() {
     this.prisma = prisma
 
     await this.load()
+    await this.syncBlacklist()
     await super.login(env.BOT_TOKEN)
   }
   public async postCommands() {

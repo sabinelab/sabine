@@ -1,5 +1,4 @@
 import { GuildSchema, ProfileSchema } from '@db'
-import type { Blacklist } from '@generated'
 import locales, { type Args, type Content } from '@i18n'
 import type { MessageComponentInteraction } from 'discord.js'
 import type App from '../app/App'
@@ -10,19 +9,16 @@ export default class ComponentInteractionRunner {
   public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
     if (!interaction.guild || !interaction.guildId) return
 
+    if (app.blacklist.get(interaction.user.id)) return
+    if (app.blacklist.get(interaction.guildId)) return await interaction.guild.leave()
+
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
 
-    const rawBlacklist = await app.redis.get('blacklist')
-    const blacklist: Blacklist[] = rawBlacklist ? JSON.parse(rawBlacklist) : []
-
     const guild =
       (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
-
-    if (blacklist.find(b => b.id === interaction.user.id)) return
-    if (blacklist.find(b => b.id === interaction.guildId)) return await interaction.guild.leave()
 
     if (i?.global && !command) {
       if (!interaction.guild || !interaction.guildId) return

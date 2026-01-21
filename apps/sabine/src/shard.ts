@@ -1,4 +1,3 @@
-import { prisma } from '@db'
 import { valorantMaps } from '@sabinelab/utils'
 import Bull from 'bull'
 import { REST, Routes, ShardingManager } from 'discord.js'
@@ -100,13 +99,6 @@ const processArenaQueue = async () => {
   }
 }
 
-const updateRedis = async () => {
-  const blacklist = await prisma.blacklist.findMany()
-  await Bun.redis.set('blacklist', JSON.stringify(blacklist))
-
-  setTimeout(updateRedis, 10 * 60 * 1000)
-}
-
 const patterns = ['*leaderboard:*', '*agent_selection:*', '*match:*']
 
 const keysToDelete = new Set<string>()
@@ -130,8 +122,6 @@ const keys = [...keysToDelete]
 if (keys.length) {
   await Bun.redis.unlink(...keys)
 }
-
-await updateRedis()
 
 const manager = new ShardingManager('src/index.ts', {
   token: env.BOT_TOKEN,
