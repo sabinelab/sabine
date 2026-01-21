@@ -154,10 +154,7 @@ export default class App extends Discord.Client {
       this.status.add(key)
     }
 
-    setTimeout(
-      async () => await this.syncCache().catch(e => new Logger(this).error(e)),
-      300_000
-    )
+    setTimeout(async () => await this.syncCache().catch(e => new Logger(this).error(e)), 300_000)
   }
 
   public async connect() {
