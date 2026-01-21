@@ -102,26 +102,18 @@ const processArenaQueue = async () => {
 
 const patterns = ['*leaderboard:*', '*agent_selection:*', '*match:*']
 
-const keysToDelete = new Set<string>()
-
 for (const pattern of patterns) {
   let cursor = '0'
 
   do {
     const [next, keys] = await Bun.redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100)
 
-    for (const key of keys) {
-      keysToDelete.add(key)
+    if (keys.length) {
+      await Bun.redis.unlink(...keys)
     }
 
     cursor = next
   } while (cursor !== '0')
-}
-
-const keys = [...keysToDelete]
-
-if (keys.length) {
-  await Bun.redis.unlink(...keys)
 }
 
 const manager = new ShardingManager('src/index.ts', {
