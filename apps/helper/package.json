@@ -1,8 +1,6 @@
 {
   "dependencies": {
     "@iamtraction/google-translate": "2.0.1",
-    "@prisma/adapter-pg": "^7.2.0",
-    "@prisma/client": "7.2.0",
     "@sabinelab/prisma": "workspace:*",
     "@types/express": "5.0.6",
     "body-parser": "2.2.2",
