@@ -495,7 +495,10 @@
     "sentinels": "Sentinels",
     "cooldown": "You are using this command too quickly. Try again {cooldown}",
     "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
-    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!"
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!",
+    "update_status": "The bot is temporarily unavailable for updates.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "maintenance_status": "The bot is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "cmd_status": "This command is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r"
   },
   "permissions": {
     "CreateInstantInvite": "Create Instant Invite",
