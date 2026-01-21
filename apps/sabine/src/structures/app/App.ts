@@ -44,6 +44,7 @@ export default class App extends Discord.Client {
   public emoji = new Map<string, string>()
   public emojiAliases = new Map<string, string>()
   public blacklist = new Map<string, Blacklist>()
+  public status = new Set<string>()
 
   public constructor(options: Discord.ClientOptions) {
     super(options)
@@ -138,15 +139,23 @@ export default class App extends Discord.Client {
     return this
   }
 
-  public async syncBlacklist() {
-    const blacklist = await prisma.blacklist.findMany()
+  public async syncCache() {
+    const [blacklist, keys] = await Promise.all([
+      prisma.blacklist.findMany(),
+      Bun.redis.keys('status:*')
+    ])
 
     for (const ban of blacklist) {
       this.blacklist.set(ban.id, ban)
     }
 
+    this.status.clear()
+    for (const key of keys) {
+      this.status.add(key)
+    }
+
     setTimeout(
-      async () => await this.syncBlacklist().catch(e => new Logger(this).error(e)),
+      async () => await this.syncCache().catch(e => new Logger(this).error(e)),
       300_000
     )
   }
@@ -155,7 +164,7 @@ export default class App extends Discord.Client {
     this.prisma = prisma
 
     await this.load()
-    await this.syncBlacklist()
+    await this.syncCache()
     await super.login(env.BOT_TOKEN)
   }
   public async postCommands() {

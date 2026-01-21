@@ -251,6 +251,14 @@ export class CommandManager {
       prefix: guild.prefix ?? env.PREFIX
     })
 
+    if (app.status.has('status:bot:update')) {
+      return await ctx.reply('helper.update_status')
+    } else if (app.status.has('status:bot:maintenance')) {
+      return await ctx.reply('helper.maintenance_status')
+    } else if (app.status.has(`status:cmd:${command.name}`)) {
+      return await ctx.reply('helper.cmd_status')
+    }
+
     const { permissions } = raw[ctx.locale]
 
     if (command.permissions) {
