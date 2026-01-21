@@ -49,50 +49,51 @@ changeMapQueue.process('change-arena-map', async () => {
 
 const processArenaQueue = async () => {
   try {
-    const queueLength = await Bun.redis.llen('arena:queue')
+    while (true) {
+      const queueLength = await Bun.redis.llen('arena:queue')
 
-    if (queueLength < 2) return
+      if (queueLength < 2) break
 
-    const payload1 = await Bun.redis.rpop('arena:queue')
-    const payload2 = await Bun.redis.rpop('arena:queue')
+      const payload1 = await Bun.redis.rpop('arena:queue')
+      const payload2 = await Bun.redis.rpop('arena:queue')
 
-    if (!payload1 || !payload2) {
-      if (payload1) await Bun.redis.lpush('arena:queue', payload1)
-
-      return
-    }
-
-    const parsedData1 = JSON.parse(payload1)
-    const parsedData2 = JSON.parse(payload2)
-
-    const p1InQueue = await Bun.redis.get(`arena:in_queue:${parsedData1.userId}`)
-    const p2InQueue = await Bun.redis.get(`arena:in_queue:${parsedData2.userId}`)
-
-    if (!p1InQueue) {
-      if (p2InQueue) {
-        await Bun.redis.lpush('arena:queue', payload2)
+      if (!payload1 || !payload2) {
+        if (payload1) {
+          await Bun.redis.lpush('arena:queue', payload1)
+        }
+        break
       }
 
-      return await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`)
-    }
+      const parsedData1 = JSON.parse(payload1)
+      const parsedData2 = JSON.parse(payload2)
 
-    if (!p2InQueue) {
-      if (p1InQueue) {
-        await Bun.redis.lpush('arena:queue', payload1)
+      const p1InQueue = await Bun.redis.get(`arena:in_queue:${parsedData1.userId}`)
+      const p2InQueue = await Bun.redis.get(`arena:in_queue:${parsedData2.userId}`)
+
+      if (!p1InQueue) {
+        if (p2InQueue) {
+          await Bun.redis.lpush('arena:queue', payload2)
+        }
+
+        await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`)
+        break
       }
 
-      return await Bun.redis.unlink(`arena:in_queue:${parsedData2.userId}`)
-    }
+      if (!p2InQueue) {
+        if (p1InQueue) {
+          await Bun.redis.lpush('arena:queue', payload1)
+        }
 
-    await Bun.redis.unlink(
-      `arena:in_queue:${parsedData1.userId}`,
-      `arena:in_queue:${parsedData2.userId}`
-    )
+        await Bun.redis.unlink(`arena:in_queue:${parsedData2.userId}`)
+        break
+      }
 
-    await arenaMatchQueue.add('arena', { parsedData1, parsedData2 })
+      await Bun.redis.unlink(
+        `arena:in_queue:${parsedData1.userId}`,
+        `arena:in_queue:${parsedData2.userId}`
+      )
 
-    if (queueLength - 2 >= 2) {
-      await processArenaQueue()
+      await arenaMatchQueue.add('arena', { parsedData1, parsedData2 })
     }
   } catch (e) {
     Logger.error(e as Error)
