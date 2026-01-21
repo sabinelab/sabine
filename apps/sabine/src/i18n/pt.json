@@ -496,9 +496,9 @@
     "cooldown": "Você está usando este comando rápido demais. Tente novamente {cooldown}",
     "you_need_to_register": "Você precisa se registrar para usar esta funcionalidade. Use {cmd} para iniciar.",
     "missing_argument": "Argumento faltando: `{arg}`\nUse {cmd} para obter ajuda sobre este comando!",
-    "update_status": "The bot is temporarily unavailable for updates.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
-    "maintenance_status": "The bot is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
-    "cmd_status": "This command is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r"
+    "update_status": "O bot está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
+    "maintenance_status": "O bot está temporariamente indisponível para uma manutenção.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
+    "cmd_status": "Este comando está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r"
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
