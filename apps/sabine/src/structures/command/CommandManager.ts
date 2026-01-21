@@ -18,10 +18,10 @@ import {
 } from 'discord.js'
 import { env } from '@/env'
 import type App from '@/structures/app/App'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import CommandContext from '@/structures/command/CommandContext'
 import type { CommandArguments, ResolveArguments } from '@/structures/command/createCommand'
 import Logger from '@/util/Logger'
-import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 
 const nullCatch = () => null
 const rest = new REST().setToken(env.BOT_TOKEN)

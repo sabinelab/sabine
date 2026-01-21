@@ -2,6 +2,7 @@ import { readdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { prisma } from '@db'
+import type { Blacklist } from '@generated'
 import { calcPlayerPrice, getPlayers, type Player } from '@sabinelab/players'
 import Queue from 'bull'
 import * as Discord from 'discord.js'
@@ -12,7 +13,6 @@ import { type Command, parseArguments } from '../command/createCommand'
 import type { CreateInteractionOptions } from '../interaction/createComponentInteraction'
 import type { CreateModalSubmitInteractionOptions } from '../interaction/createModalSubmitInteraction'
 import type { Listener } from './createListener'
-import type { Blacklist } from '@generated'
 
 type Reminder = {
   user: string
@@ -145,7 +145,10 @@ export default class App extends Discord.Client {
       this.blacklist.set(ban.id, ban)
     }
 
-    setTimeout(async () => await this.syncBlacklist().catch(e => new Logger(this).error(e)), 300_000)
+    setTimeout(
+      async () => await this.syncBlacklist().catch(e => new Logger(this).error(e)),
+      300_000
+    )
   }
 
   public async connect() {
