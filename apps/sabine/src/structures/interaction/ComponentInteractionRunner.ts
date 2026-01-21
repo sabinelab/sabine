@@ -39,6 +39,12 @@ export default class ComponentInteractionRunner {
         author: interaction.user
       })
 
+      if (app.status.has('status:bot:update')) {
+        return await ctx.reply('helper.update_status')
+      } else if (app.status.has('status:bot:maintenance')) {
+        return await ctx.reply('helper.maintenance_status')
+      }
+
       const t = <T extends Content>(content: T, args?: Args) => {
         return locales(ctx.locale, content, args)
       }
@@ -80,6 +86,14 @@ export default class ComponentInteractionRunner {
         interaction,
         author: interaction.user
       })
+
+      if (app.status.has('status:bot:update')) {
+        return await ctx.reply('helper.update_status')
+      } else if (app.status.has('status:bot:maintenance')) {
+        return await ctx.reply('helper.maintenance_status')
+      } else if (app.status.has(`status:cmd:${command.name}`)) {
+        return await ctx.reply('helper.cmd_status')
+      }
 
       if (
         command.messageComponentInteractionTime &&
@@ -131,6 +145,12 @@ export default class ComponentInteractionRunner {
       interaction,
       author: interaction.user
     })
+
+    if (app.status.has('status:bot:update')) {
+      return await ctx.reply('helper.update_status')
+    } else if (app.status.has('status:bot:maintenance')) {
+      return await ctx.reply('helper.maintenance_status')
+    }
 
     if (i.time && interaction.message.createdAt.getTime() + i.time < Date.now()) {
       ctx.setFlags(64)

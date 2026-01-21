@@ -37,6 +37,12 @@ export default class ModalSubmitInteractionRunner {
         author: interaction.user
       })
 
+      if (app.status.has('status:bot:update')) {
+        return await ctx.reply('helper.update_status')
+      } else if (app.status.has('status:bot:maintenance')) {
+        return await ctx.reply('helper.maintenance_status')
+      }
+
       for (const component of interaction.fields.fields.values()) {
         const value = interaction.fields.getTextInputValue(component.customId)
 
@@ -72,6 +78,14 @@ export default class ModalSubmitInteractionRunner {
       interaction,
       author: interaction.user
     })
+
+    if (app.status.has('status:bot:update')) {
+      return await ctx.reply('helper.update_status')
+    } else if (app.status.has('status:bot:maintenance')) {
+      return await ctx.reply('helper.maintenance_status')
+    } else if (app.status.has(`status:cmd:${command.name}`)) {
+      return await ctx.reply('helper.cmd_status')
+    }
 
     const t = <T extends Content>(content: T, args?: Args) => {
       return locales(ctx.locale, content, args)
