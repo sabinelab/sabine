@@ -1,9 +1,24 @@
 import { ProfileSchema, prisma } from '@db'
+import type { $Enums, Profile } from '@generated'
 import { valorantAgents, valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import type { MessageEditOptions, TextChannel } from 'discord.js'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import Match, { type KillEvent, type TeamRoster } from './Match'
 import Player from './Player'
+
+type SaveMatchOptions = {
+  winnerIdx: number
+  score1: number
+  score2: number
+  mode: $Enums.MatchMode
+  profile1: Profile
+  profile2: Profile
+  points?: number
+  fates?: number
+  winKey?: string
+  loseKey?: string
+  updateRank?: boolean
+}
 
 export default class Round extends Match {
   public override async start() {
@@ -132,2024 +147,274 @@ export default class Round extends Match {
 
     if (!profile1 || !profile2) return this
 
+    const winnerIdx = score1 > score2 ? 0 : 1
+
     if (this.mode === 'ranked') {
-      const max = Math.max(score1, score2)
-
-      if (max === 13 && score1 === max) {
-        const diff = score1 - score2
-        const maxDiff = 13
-        const minPts = 10
-        const maxPts = 40
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile1.rankedWins += 1
-        profile1.rankRating += pts
-        profile1.fates += 5
-        profile2.rankedDefeats += 1
-        profile2.rankRating -= pts - 5
-
-        if (profile2.rankRating < 0) {
-          profile2.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: pts,
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: -(pts - 5),
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 35
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedDefeats: {
-                increment: 1
-              },
-              rankRating: profile2.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 13 && score2 === max) {
-        const diff = score2 - score1
-        const maxDiff = 13
-        const minPts = 10
-        const maxPts = 40
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile2.rankedWins += 1
-        profile2.rankRating += pts
-        profile2.fates += 5
-        profile1.rankedDefeats += 1
-        profile1.rankRating -= pts - 5
-
-        if (profile1.rankRating < 0) {
-          profile1.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: pts,
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: -(pts - 5),
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 35
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedDefeats: {
-                increment: 1
-              },
-              rankRating: profile1.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max > 13 && score1 === max) {
-        const diff = score1 - score2
-        const maxDiff = 13
-        const minPts = 10
-        const maxPts = 40
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile1.rankedWins += 1
-        profile1.rankRating += pts
-        profile1.fates += 5
-        profile2.rankedDefeats += 1
-        profile2.rankRating -= pts - 5
-
-        if (profile2.rankRating < 0) {
-          profile2.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: pts,
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: -(pts - 5),
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 35
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedDefeats: {
-                increment: 1
-              },
-              rankRating: profile2.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max > 13 && score2 === max) {
-        const diff = score2 - score1
-        const maxDiff = 13
-        const minPts = 10
-        const maxPts = 40
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile2.rankedWins += 1
-        profile2.rankRating += pts
-        profile2.fates += 5
-        profile1.rankedDefeats += 1
-        profile1.rankRating -= pts - 5
-
-        if (profile1.rankRating < 0) {
-          profile1.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: pts,
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED',
-              points: -(pts - 5),
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 35
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedDefeats: {
-                increment: 1
-              },
-              rankRating: profile1.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
+      const diff = Math.abs(score1 - score2)
+      const pts = Math.round(10 + (diff - 1) * ((40 - 10) / (13 - 1)))
+      await this.saveMatch({
+        winnerIdx,
+        score1,
+        score2,
+        mode: 'RANKED',
+        profile1,
+        profile2,
+        points: pts,
+        fates: 35,
+        winKey: 'rankedWins',
+        loseKey: 'rankedDefeats',
+        updateRank: true
+      })
     } else if (this.mode === 'swiftplay:ranked') {
-      const max = Math.max(score1, score2)
-
-      if (max === 7 && score1 === max) {
-        const diff = score1 - score2
-        const maxDiff = 7
-        const minPts = 7
-        const maxPts = 15
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile1.rankedSwiftplayWins += 1
-        profile1.rankRating += pts
-        profile1.fates += 1
-        profile2.rankedSwiftplayDefeats += 1
-        profile2.rankRating -= pts - 5
-
-        if (profile2.rankRating < 0) {
-          profile2.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED_SWIFTPLAY',
-              points: pts,
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED_SWIFTPLAY',
-              points: -(pts - 5),
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedSwiftplayWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 7
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedSwiftplayDefeats: {
-                increment: 1
-              },
-              rankRating: profile2.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 7 && score2 === max) {
-        const diff = score2 - score1
-        const maxDiff = 7
-        const minPts = 7
-        const maxPts = 15
-        const pts = Math.round(minPts + (diff - 1) * ((maxPts - minPts) / (maxDiff - 1)))
-
-        profile2.rankedSwiftplayWins += 1
-        profile2.rankRating += pts
-        profile2.fates += 1
-        profile1.rankedSwiftplayDefeats += 1
-        profile1.rankRating -= pts - 5
-
-        if (profile1.rankRating < 0) {
-          profile1.rankRating = 0
-        }
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'RANKED_SWIFTPLAY',
-              points: pts,
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'RANKED_SWIFTPLAY',
-              points: -(pts - 5),
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              rankedSwiftplayWins: {
-                increment: 1
-              },
-              rankRating: {
-                increment: pts
-              },
-              fates: {
-                increment: 7
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              rankedSwiftplayDefeats: {
-                increment: 1
-              },
-              rankRating: profile1.rankRating
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
+      const diff = Math.abs(score1 - score2)
+      const pts = Math.round(7 + (diff - 1) * ((15 - 7) / (7 - 1)))
+      await this.saveMatch({
+        winnerIdx,
+        score1,
+        score2,
+        mode: 'RANKED_SWIFTPLAY',
+        profile1,
+        profile2,
+        points: pts,
+        fates: 7,
+        winKey: 'rankedSwiftplayWins',
+        loseKey: 'rankedSwiftplayDefeats',
+        updateRank: true
+      })
     } else if (this.mode === 'swiftplay:unranked') {
-      const max = Math.max(score1, score2)
-
-      if (max === 5 && score1 === max) {
-        profile1.swiftplayWins += 1
-        profile2.swiftplayDefeats += 1
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'SWIFTPLAY',
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'SWIFTPLAY',
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              swiftplayWins: {
-                increment: 1
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              swiftplayDefeats: {
-                increment: 1
-              }
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 5 && score2 === max) {
-        profile2.swiftplayWins += 1
-        profile1.swiftplayDefeats += 1
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'SWIFTPLAY',
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'SWIFTPLAY',
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              swiftplayWins: {
-                increment: 1
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              swiftplayDefeats: {
-                increment: 1
-              }
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
+      await this.saveMatch({
+        winnerIdx,
+        score1,
+        score2,
+        mode: 'SWIFTPLAY',
+        profile1,
+        profile2,
+        winKey: 'swiftplayWins',
+        loseKey: 'swiftplayDefeats'
+      })
     } else if (this.mode === 'unranked') {
-      const max = Math.max(score1, score2)
-
-      if (max === 13 && score1 === max) {
-        profile1.unrankedWins += 1
-        profile2.unrankedDefeats += 1
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'UNRANKED',
-              profileId: profile1.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'UNRANKED',
-              profileId: profile2.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              unrankedWins: {
-                increment: 1
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              unrankedDefeats: {
-                increment: 1
-              }
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 13 && score2 === max) {
-        profile2.unrankedWins += 1
-        profile1.unrankedDefeats += 1
-
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'UNRANKED',
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'UNRANKED',
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile2.id
-            },
-            data: {
-              unrankedWins: {
-                increment: 1
-              }
-            }
-          }),
-          prisma.profile.update({
-            where: {
-              id: profile1.id
-            },
-            data: {
-              unrankedDefeats: {
-                increment: 1
-              }
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
-    } else if (this.mode === 'tournament' && !this.overtime) {
-      const max = Math.max(score1, score2)
-
-      if (max === 13 && score1 === max) {
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma
-          .$transaction([
-            prisma.match.create({
-              data: {
-                mode: 'TOURNAMENT',
-                profileId: profile1.id,
-                winner: true,
-                teams: {
-                  create: [
-                    {
-                      user: this.teams[0].user,
-                      score: score1
-                    },
-                    {
-                      user: this.teams[1].user,
-                      score: score2
-                    }
-                  ]
-                },
-                metadata: stats
-              }
-            }),
-            prisma.match.create({
-              data: {
-                mode: 'TOURNAMENT',
-                profileId: profile2.id,
-                winner: false,
-                teams: {
-                  create: [
-                    {
-                      user: this.teams[1].user,
-                      score: score2
-                    },
-                    {
-                      user: this.teams[0].user,
-                      score: score1
-                    }
-                  ]
-                },
-                metadata: stats
-              }
-            })
-          ])
-          .catch(error => console.error('erro torneio com ot', error))
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 13 && score2 === max) {
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
-    } else {
-      const max = Math.max(score1, score2)
-
-      if (max === 13 && score1 === max) {
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma
-          .$transaction([
-            prisma.match.create({
-              data: {
-                mode: 'TOURNAMENT',
-                profileId: profile1.id,
-                winner: true,
-                teams: {
-                  create: [
-                    { user: this.teams[0].user, score: score1 },
-                    { user: this.teams[1].user, score: score2 }
-                  ]
-                },
-                metadata: stats
-              }
-            }),
-            prisma.match.create({
-              data: {
-                mode: 'TOURNAMENT',
-                profileId: profile2.id,
-                winner: false,
-                teams: {
-                  create: [
-                    { user: this.teams[1].user, score: score2 },
-                    { user: this.teams[0].user, score: score1 }
-                  ]
-                },
-                metadata: stats
-              }
-            })
-          ])
-          .catch(error => console.error('erro torneio sem ot', error))
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[0].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      } else if (max === 13 && score2 === max) {
-        const stats = {
-          stats: [
-            ...this.teams[0].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            })),
-            ...this.teams[1].roster.map(p => ({
-              id: p.id.toString(),
-              kills: p.kills,
-              deaths: p.deaths,
-              agent: p.agent.name,
-              ovr: p.ovr,
-              name: p.name
-            }))
-          ],
-          map: this.mapImage,
-          teams: [
-            {
-              name: this.teams[0].name,
-              user: this.teams[0].user
-            },
-            {
-              name: this.teams[1].name,
-              user: this.teams[1].user
-            }
-          ]
-        }
-
-        await prisma.$transaction([
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile2.id,
-              winner: true,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  },
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          }),
-          prisma.match.create({
-            data: {
-              mode: 'TOURNAMENT',
-              profileId: profile1.id,
-              winner: false,
-              teams: {
-                create: [
-                  {
-                    user: this.teams[0].user,
-                    score: score1
-                  },
-                  {
-                    user: this.teams[1].user,
-                    score: score2
-                  }
-                ]
-              },
-              metadata: stats
-            }
-          })
-        ])
-
-        const embed = new EmbedBuilder()
-          .setTitle(this.t(`simulator.mode.${this.mode}`))
-          .setDesc(
-            `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
-              this.t('simulator.match_finished')
-          )
-          .setImage(this.mapImage)
-          .setFields(
-            {
-              name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
-              value: this.teams[0].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            },
-            {
-              name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
-              value: this.teams[1].roster
-                .map(
-                  player =>
-                    `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
-                )
-                .join('\n'),
-              inline: true
-            }
-          )
-
-        await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
-
-        await (this.ctx.channel as TextChannel).send({
-          content: this.t('simulator.winner', {
-            t: this.teams[1].name,
-            users: this.mentions
-          }),
-          reply: {
-            messageReference: this.ctx.id
-          }
-        })
-      }
+      await this.saveMatch({
+        winnerIdx,
+        score1,
+        score2,
+        mode: 'UNRANKED',
+        profile1,
+        profile2,
+        winKey: 'unrankedWins',
+        loseKey: 'unrankedDefeats'
+      })
+    } else if (this.mode === 'tournament' || (this.mode === 'tournament' && !this.overtime)) {
+      await this.saveMatch({
+        winnerIdx,
+        score1,
+        score2,
+        mode: 'TOURNAMENT',
+        profile1,
+        profile2
+      })
     }
 
     return this
+  }
+
+  private async saveMatch(options: SaveMatchOptions) {
+    const {
+      winnerIdx,
+      score1,
+      score2,
+      mode,
+      profile1,
+      profile2,
+      points = 0,
+      fates = 0,
+      winKey,
+      loseKey,
+      updateRank = false
+    } = options
+    const winnerScore = winnerIdx === 0 ? score1 : score2
+    const loserScore = winnerIdx === 0 ? score2 : score1
+    const p1Win = winnerIdx === 0
+
+    if (winKey && loseKey) {
+      if (p1Win) {
+        ;(profile1 as any)[winKey] += 1
+        if (updateRank) profile1.rankRating += points
+        if (fates) profile1.fates += 5
+      } else {
+        ;(profile2 as any)[winKey] += 1
+        if (updateRank) profile2.rankRating += points
+        if (fates) profile2.fates += 5
+      }
+
+      if (p1Win) {
+        ;(profile2 as any)[loseKey] += 1
+        if (updateRank) {
+          profile2.rankRating -= points - 5
+          if (profile2.rankRating < 0) profile2.rankRating = 0
+        }
+      } else {
+        ;(profile1 as any)[loseKey] += 1
+        if (updateRank) {
+          profile1.rankRating -= points - 5
+          if (profile1.rankRating < 0) profile1.rankRating = 0
+        }
+      }
+    }
+
+    const stats = {
+      stats: [
+        ...this.teams[0].roster.map(p => ({
+          id: p.id.toString(),
+          kills: p.kills,
+          deaths: p.deaths,
+          agent: p.agent.name,
+          ovr: p.ovr,
+          name: p.name
+        })),
+        ...this.teams[1].roster.map(p => ({
+          id: p.id.toString(),
+          kills: p.kills,
+          deaths: p.deaths,
+          agent: p.agent.name,
+          ovr: p.ovr,
+          name: p.name
+        }))
+      ],
+      map: this.mapImage,
+      teams: [
+        {
+          name: this.teams[0].name,
+          user: this.teams[0].user
+        },
+        {
+          name: this.teams[1].name,
+          user: this.teams[1].user
+        }
+      ]
+    }
+
+    const transactions: (Promise<unknown> | any)[] = []
+
+    const createMatchData = {
+      mode: mode as $Enums.MatchMode,
+      profileId: p1Win ? profile1.id : profile2.id,
+      winner: true,
+      teams: {
+        create: [
+          {
+            user: p1Win ? this.teams[0].user : this.teams[1].user,
+            score: winnerScore
+          },
+          {
+            user: p1Win ? this.teams[1].user : this.teams[0].user,
+            score: loserScore
+          }
+        ]
+      },
+      metadata: stats
+    } as any
+
+    if (updateRank) createMatchData.points = points
+
+    const createMatchLoseData = {
+      mode: mode as $Enums.MatchMode,
+      profileId: p1Win ? profile2.id : profile1.id,
+      winner: false,
+      teams: {
+        create: [
+          {
+            user: p1Win ? this.teams[1].user : this.teams[0].user,
+            score: loserScore
+          },
+          {
+            user: p1Win ? this.teams[0].user : this.teams[1].user,
+            score: winnerScore
+          }
+        ]
+      },
+      metadata: stats
+    } as any
+
+    if (updateRank) createMatchLoseData.points = -(points - 5)
+
+    transactions.push(prisma.match.create({ data: createMatchData }))
+    transactions.push(prisma.match.create({ data: createMatchLoseData }))
+
+    if (winKey && loseKey) {
+      const winData = {
+        [winKey]: { increment: 1 }
+      } as any
+      if (fates) winData.fates = { increment: fates }
+      if (updateRank) winData.rankRating = { increment: points }
+
+      transactions.push(
+        prisma.profile.update({
+          where: {
+            id: p1Win ? profile1.id : profile2.id
+          },
+          data: winData
+        })
+      )
+
+      const loseData = {
+        [loseKey]: { increment: 1 }
+      } as any
+
+      if (updateRank) loseData.rankRating = p1Win ? profile2.rankRating : profile1.rankRating
+
+      transactions.push(
+        prisma.profile.update({
+          where: {
+            id: p1Win ? profile2.id : profile1.id
+          },
+          data: loseData
+        })
+      )
+    }
+
+    await prisma.$transaction(transactions)
+
+    const embed = new EmbedBuilder()
+      .setTitle(this.t(`simulator.mode.${this.mode}`))
+      .setDesc(
+        `### ${this.teams[0].name} ${this.rounds.filter(r => r.winning_team === 0).length} <:versus:1349105624180330516> ${this.rounds.filter(r => r.winning_team === 1).length} ${this.teams[1].name}\n` +
+          this.t('simulator.match_finished')
+      )
+      .setImage(this.mapImage)
+      .setFields(
+        {
+          name: `${this.teams[0].name} (${this.t(`simulator.sides.${this.teams[0].side}`)})`,
+          value: this.teams[0].roster
+            .map(
+              player =>
+                `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
+            )
+            .join('\n'),
+          inline: true
+        },
+        {
+          name: `${this.teams[1].name} (${this.t(`simulator.sides.${this.teams[1].side}`)})`,
+          value: this.teams[1].roster
+            .map(
+              player =>
+                `${valorantAgents.find(a => a.name === player.agent.name)!.emoji} ${player.name} (${Math.floor(player.ovr)}) — \`${player.kills}/${player.deaths}\``
+            )
+            .join('\n'),
+          inline: true
+        }
+      )
+
+    await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
+
+    await (this.ctx.channel as TextChannel).send({
+      content: this.t('simulator.winner', {
+        t: this.teams[winnerIdx].name,
+        users: this.mentions
+      }),
+      reply: {
+        messageReference: this.ctx.id
+      }
+    })
   }
 
   private async firstStep(duels: number) {
