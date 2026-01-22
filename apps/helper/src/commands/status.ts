@@ -123,7 +123,7 @@ export default createCommand({
 
       const button = new ButtonBuilder()
         .setCustomId('join-thread')
-        .setLabel('Join thread')
+        .setLabel('Join Updates Thread')
         .setStyle(ButtonStyle.Secondary)
         .setDisabled()
 

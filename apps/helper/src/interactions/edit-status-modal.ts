@@ -43,7 +43,7 @@ export default createModalSubmitInteraction({
 
     const button = new ButtonBuilder()
       .setCustomId('join-thread')
-      .setLabel('Join thread')
+      .setLabel('Join Updates Thread')
       .setStyle(ButtonStyle.Secondary)
 
     const message = await channel.messages.fetch(status.messageId)
@@ -53,7 +53,16 @@ export default createModalSubmitInteraction({
     }
 
     const promises = [
-      message.edit(embed.build(button.build('<@&1321226585290051717>')) as any),
+      message.edit(
+        embed.build(
+          button.build({
+            content: '<@&1321226585290051717> @here',
+            allowedMentions: {
+              parse: ['everyone']
+            }
+          })
+        ) as any
+      ),
       prisma.status.update({
         where: {
           id: status.id
