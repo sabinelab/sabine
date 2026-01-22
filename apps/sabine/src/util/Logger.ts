@@ -38,7 +38,8 @@ export default class Logger {
     const ignoredErrors = [
       'Missing Permissions',
       'AbortError: This operation was aborted',
-      'Missing Access'
+      'Missing Access',
+      'Unknown Message'
     ]
 
     if (ignoredErrors.some(e => error.toString().includes(e))) return
