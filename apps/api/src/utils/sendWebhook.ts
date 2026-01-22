@@ -3,8 +3,6 @@ import { error } from './logger'
 
 export default async function (data: unknown[], path: string) {
   try {
-    console.log(JSON.stringify(data, null, 2))
-
     const res = await fetch(env.WEBHOOK_URL + path, {
       method: 'post',
       headers: {
