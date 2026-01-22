@@ -76,7 +76,8 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'evil geniuses',
-    emoji: '<:eg:1439977513420984370>'
+    emoji: '<:eg:1439977513420984370>',
+    aliases: ['evil geniuses academy']
   },
   {
     name: 'furia',
@@ -106,7 +107,7 @@ export const emojis: Emoji[] = [
   {
     name: 'nrg esports',
     emoji: '<:nrg:1439977543930482761>',
-    aliases: ['nrg']
+    aliases: ['nrg', 'nrg academy']
   },
   {
     name: 'sentinels',
@@ -184,7 +185,7 @@ export const emojis: Emoji[] = [
   {
     name: 'detonation focusme',
     emoji: '<:dfm:1439977495452454912>',
-    aliases: ['detonation focusme gc']
+    aliases: ['detonation focusme gc', 'dfm academy']
   },
   {
     name: 'drx',
@@ -237,6 +238,10 @@ export const emojis: Emoji[] = [
     name: 'boom esports',
     emoji: '<:boom:1439977486959116318>'
   },
+  {
+    name: 'full sense',
+    emoji: '<:full_sense:1463982389696139446>'
+  },
   // VCT EMEA
   {
     name: 'bbl esports',
@@ -248,7 +253,8 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'fut esports',
-    emoji: '<:fut:1439977518093434910>'
+    emoji: '<:fut:1439977518093434910>',
+    aliases: ['fut esports academy']
   },
   {
     name: 'giantx',
@@ -275,7 +281,7 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'team liquid',
-    aliases: ['team liquid academy', 'team liquid brazil', 'team liquid honda'],
+    aliases: ['team liquid academy', 'team liquid brazil'],
     emoji: '<:liquid:1439977533293592726>'
   },
   {
@@ -289,6 +295,14 @@ export const emojis: Emoji[] = [
   {
     name: 'apeks',
     emoji: '<:apeks:1439977474900492418>'
+  },
+  {
+    name: 'ulf esports',
+    emoji: '<:ulf_esports:1463982561456947320>'
+  },
+  {
+    name: 'pcific esports',
+    emoji: '<:pcific_esports:1463982650648694875>'
   },
   {
     name: 'controller',
