@@ -7,8 +7,10 @@ import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
+import { type LivePayload, liveQueue } from '@/structures/queue/live-queue'
 import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-queue'
 import calcOdd from '@/util/calcOdd'
+import Logger from '@/util/Logger'
 
 const tournaments: { [key: string]: RegExp[] } = {
   'Valorant Champions Tour': [/valorant champions/, /valorant masters/, /vct \d{4}/],
@@ -134,10 +136,12 @@ const processPredictions = async (data: ResultsPayload) => {
 }
 
 const processResult = async (app: App, data: ResultsPayload) => {
+  data.when = new Date(data.when)
+
   const matchedEventNames = Object.keys(tournaments).filter(
     key =>
       key.toLowerCase() === data.tournament.name ||
-      tournaments[key].some(regex => regex.test(data.tournament.name))
+      tournaments[key].some(regex => regex.test(data.tournament.name.toLowerCase()))
   )
 
   if (!matchedEventNames.includes(data.tournament.name)) {
@@ -188,16 +192,7 @@ const processResult = async (app: App, data: ResultsPayload) => {
     const messages: Promise<unknown>[] = []
 
     for (const guild of guilds) {
-      if (
-        (!guild.events.some(e => e.name === data.tournament.name) &&
-          !guild.events.some(e =>
-            tournaments[e.name]?.some(regex =>
-              regex.test(data.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
-            )
-          )) ||
-        !guild.events[0]
-      )
-        continue
+      if (!guild.events[0]) continue
 
       const emoji1 =
         app.emoji.get(data.teams[0].name.toLowerCase()) ??
@@ -247,14 +242,141 @@ const processResult = async (app: App, data: ResultsPayload) => {
   }
 }
 
+const processLive = async (app: App, data: LivePayload) => {
+  const matchedEventNames = Object.keys(tournaments).filter(
+    key =>
+      key.toLowerCase() === data.tournament.name ||
+      tournaments[key].some(regex => regex.test(data.tournament.name.toLowerCase()))
+  )
+
+  if (!matchedEventNames.includes(data.tournament.name)) {
+    matchedEventNames.push(data.tournament.name)
+  }
+
+  let cursor: string | undefined
+
+  while (true) {
+    const guilds = await prisma.guild.findMany({
+      take: 1000,
+      skip: cursor ? 1 : 0,
+      cursor: cursor ? { id: cursor } : undefined,
+      orderBy: { id: 'asc' },
+      where: {
+        [data.game === 'valorant' ? 'valorantLiveFeedChannel' : 'lolLiveFeedChannel']: {
+          not: null
+        },
+        events: {
+          some: {
+            type: data.game,
+            name: {
+              in: matchedEventNames
+            }
+          }
+        }
+      },
+      include: {
+        events: {
+          where: {
+            type: data.game,
+            name: {
+              in: matchedEventNames
+            }
+          }
+        }
+      }
+    })
+
+    if (!guilds.length) break
+
+    const messages: Promise<unknown>[] = []
+
+    for (const guild of guilds) {
+      const channelId =
+        data.game === 'valorant' ? guild.valorantLiveFeedChannel : guild.lolLiveFeedChannel
+      if (!channelId) continue
+
+      if (!guild.events.length) continue
+
+      if (!data.teams[0] || !data.teams[1]) continue
+
+      const emoji1 =
+        app.emoji.get(data.teams[0].name.toLowerCase()) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
+        app.emoji.get('default')
+      const emoji2 =
+        app.emoji.get(data.teams[1].name.toLowerCase()) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
+        app.emoji.get('default')
+
+      const embed = new EmbedBuilder()
+        .setAuthor({
+          name:
+            data.game === 'valorant'
+              ? data.tournament.name
+              : ((data.tournament as any).full_name ?? data.tournament.name),
+          iconURL: data.tournament.image
+        })
+        .setTitle(t(guild.lang, 'helper.live_now'))
+        .setField(
+          `${emoji1} ${data.teams[0].name} \`${data.teams[0].score}\` <:versus:1349105624180330516> \`${data.teams[1].score}\` ${data.teams[1].name} ${emoji2}`,
+          data.game === 'valorant'
+            ? t(guild.lang, 'helper.live_feed_value', {
+                map: data.currentMap,
+                score: `${data.score1}-${data.score2}`
+              })
+            : ''
+        )
+
+      if (data.stage) embed.setFooter({ text: data.stage })
+
+      const button = new ButtonBuilder()
+      if (data.game === 'valorant') {
+        button.defineStyle('link').setLabel(t(guild.lang, 'helper.stats')).setURL(data.url!)
+      } else {
+        button
+          .defineStyle('blue')
+          .setLabel(t(guild.lang, 'helper.streams'))
+          .setCustomId(`stream;lol;${data.id}`)
+      }
+
+      messages.push(
+        limit(() =>
+          rest.post(Discord.Routes.channelMessages(channelId), {
+            body: {
+              embeds: [embed.toJSON()],
+              components: [
+                {
+                  type: 1,
+                  components: [button]
+                }
+              ]
+            }
+          })
+        )
+      )
+    }
+
+    await Promise.allSettled(messages)
+    cursor = guilds[guilds.length - 1].id
+  }
+}
+
 export default createListener({
   name: 'clientReady',
   async run(app) {
     if (app.shard?.ids[0]) return
 
-    await resultsQueue.process(async job => {
-      await processPredictions(job.data)
-      await processResult(app, job.data)
-    })
+    resultsQueue
+      .process(async job => {
+        await processPredictions(job.data)
+        await processResult(app, job.data)
+      })
+      .catch(e => new Logger(app).error(e))
+
+    liveQueue
+      .process(async job => {
+        await processLive(app, job.data)
+      })
+      .catch(e => new Logger(app).error(e))
   }
 })
