@@ -8,4 +8,7 @@ const schema = z.object({
   NODE_ENV: z.enum(['dev', 'prod']).optional()
 })
 
-export const env = schema.parse(Bun.env)
+export const env = schema.parse({
+  ...Bun.env,
+  INTERVAL: Number(Bun.env.INTERVAL) || undefined
+})
