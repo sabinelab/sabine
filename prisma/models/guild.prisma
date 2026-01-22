@@ -46,8 +46,6 @@ model GuildKey {
 
   key   Key    @relation(fields: [keyId], references: [id], onDelete: Cascade)
   keyId String @map("key_id")
-
-  @@unique([guildId, keyId])
 }
 
 model Key {
