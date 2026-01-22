@@ -1,22 +1,28 @@
+import type Bull from 'bull'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
-import { liveQueue } from '@/structures/queue/live-queue'
+import { type LivePayload, liveQueue } from '@/structures/queue/live-queue'
 
 export const valorantLive = new Elysia().post(
   '/webhooks/live/valorant',
   async req => {
+    const promises: Promise<Bull.Job<LivePayload>>[] = []
     for (const data of req.body) {
-      await liveQueue.add(
-        {
-          ...data,
-          game: 'valorant'
-        },
-        {
-          removeOnComplete: true,
-          removeOnFail: true
-        }
+      promises.push(
+        liveQueue.add(
+          {
+            ...data,
+            game: 'valorant'
+          },
+          {
+            removeOnComplete: true,
+            removeOnFail: true
+          }
+        )
       )
     }
+
+    await Promise.allSettled(promises)
 
     req.set.status = 'OK'
     return { ok: true }

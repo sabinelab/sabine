@@ -1,23 +1,29 @@
+import type Bull from 'bull'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
-import { resultsQueue } from '@/structures/queue/results-queue'
+import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-queue'
 
 export const valorantResults = new Elysia().post(
   '/webhooks/results/valorant',
   async req => {
+    const promises: Promise<Bull.Job<ResultsPayload>>[] = []
     for (const data of req.body) {
-      await resultsQueue.add(
-        {
-          ...data,
-          game: 'valorant',
-          when: new Date(data.when)
-        },
-        {
-          removeOnComplete: true,
-          removeOnFail: true
-        }
+      promises.push(
+        resultsQueue.add(
+          {
+            ...data,
+            game: 'valorant',
+            when: new Date(data.when)
+          },
+          {
+            removeOnComplete: true,
+            removeOnFail: true
+          }
+        )
       )
     }
+
+    await Promise.allSettled(promises)
 
     req.set.status = 'OK'
     return { ok: true }
