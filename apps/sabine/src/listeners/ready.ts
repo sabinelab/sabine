@@ -8,6 +8,7 @@ import createListener from '@/structures/app/createListener'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import { type LivePayload, liveQueue } from '@/structures/queue/live-queue'
+import { type NewsPayload, newsQueue } from '@/structures/queue/news-queue'
 import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-queue'
 import calcOdd from '@/util/calcOdd'
 import Logger from '@/util/Logger'
@@ -361,22 +362,92 @@ const processLive = async (app: App, data: LivePayload) => {
   }
 }
 
+const processNews = async (data: NewsPayload) => {
+  let cursor: string | undefined
+  const key = data.game === 'valorant' ? 'valorantNewsChannel' : 'lolNewsChannel'
+
+  while (true) {
+    const guilds = await prisma.guild.findMany({
+      take: 1000,
+      skip: cursor ? 1 : 0,
+      cursor: cursor
+        ? {
+            id: cursor
+          }
+        : undefined,
+      orderBy: {
+        id: 'asc'
+      },
+      where: {
+        [key]: {
+          not: null
+        }
+      }
+    })
+
+    if (!guilds.length) break
+
+    const messages: Promise<unknown>[] = []
+
+    for (const guild of guilds) {
+      const channelId = data.game === 'valorant' ? guild.valorantNewsChannel : guild.lolNewsChannel
+      if (!channelId) continue
+
+      const embed = new EmbedBuilder().setTitle(data.title)
+
+      if (data.description) {
+        embed.setDesc(data.description)
+      }
+
+      const button = new ButtonBuilder()
+        .setStyle(Discord.ButtonStyle.Link)
+        .setLabel(t(guild.lang, 'helper.source'))
+        .setURL(data.url)
+
+      messages.push(
+        limit(() =>
+          rest.post(Discord.Routes.channelMessages(channelId), {
+            body: {
+              embeds: [embed.toJSON()],
+              components: [
+                {
+                  type: 1,
+                  components: [button.toJSON()]
+                }
+              ]
+            }
+          })
+        )
+      )
+    }
+
+    await Promise.allSettled(messages)
+    cursor = guilds[guilds.length - 1].id
+  }
+}
+
 export default createListener({
   name: 'clientReady',
   async run(app) {
     if (app.shard?.ids[0]) return
 
     resultsQueue
+      .on('error', e => new Logger(app).error(e))
       .process(async job => {
         await processPredictions(job.data)
         await processResult(app, job.data)
       })
-      .catch(e => new Logger(app).error(e))
 
     liveQueue
+      .on('error', e => new Logger(app).error(e))
       .process(async job => {
         await processLive(app, job.data)
       })
-      .catch(e => new Logger(app).error(e))
+
+    newsQueue
+      .on('error', e => new Logger(app).error(e))
+      .process(async job => {
+        await processNews(job.data)
+      })
   }
 })
