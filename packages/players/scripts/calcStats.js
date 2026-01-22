@@ -18,7 +18,7 @@ export default function(stats) {
   const acs = ACS / 3
   const gamesense = (APR * 150) + (FBSR * 0.6)
 
-  const attributes = `,${aim.toFixed(2)},${hs.toFixed(2)},${mov.toFixed(2)},${aggression.toFixed(2)},${acs.toFixed(2)},${gamesense.toFixed(2)},true`
+  const attributes = `,${aim.toFixed(2)},${hs.toFixed(2)},${mov.toFixed(2)},${aggression.toFixed(2)},${acs.toFixed(2)},${gamesense.toFixed(2)}`
   
   return attributes
 }
