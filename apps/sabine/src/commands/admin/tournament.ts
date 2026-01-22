@@ -243,8 +243,8 @@ export default createCommand({
               create: [
                 {
                   name: tournament,
-                  channel1: matches_channel.toString(),
-                  channel2: results_channel.toString(),
+                  channel1: matches_channel.id,
+                  channel2: results_channel.id,
                   type: 'valorant'
                 }
               ]
@@ -255,8 +255,8 @@ export default createCommand({
               create: [
                 {
                   name: tournament,
-                  channel1: matches_channel.toString(),
-                  channel2: results_channel.toString(),
+                  channel1: matches_channel.id,
+                  channel2: results_channel.id,
                   type: 'valorant'
                 }
               ]
@@ -310,8 +310,8 @@ export default createCommand({
               create: [
                 {
                   name: tournament,
-                  channel1: matches_channel.toString(),
-                  channel2: results_channel.toString(),
+                  channel1: matches_channel.id,
+                  channel2: results_channel.id,
                   type: 'lol'
                 }
               ]

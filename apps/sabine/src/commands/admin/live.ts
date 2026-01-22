@@ -106,12 +106,11 @@ export default createCommand({
         valorant: async () => {
           if (!ctx.guild || !ctx.db.guild) return
 
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.valorant?.channel.toString() ?? ''
-          )!
+          const channel = ctx.args.enable?.valorant?.channel
 
-          if (![0, 5].some(t => t === channel.type))
+          if (!channel || ![0, 5].some(t => t === channel.type)) {
             return await ctx.reply('commands.live.invalid_channel')
+          }
 
           await prisma.guild.update({
             where: {
@@ -126,12 +125,11 @@ export default createCommand({
         lol: async () => {
           if (!ctx.guild || !ctx.db.guild) return
 
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.lol?.channel.toString() ?? ''
-          )!
+          const channel = ctx.args.enable?.valorant?.channel
 
-          if (![0, 5].some(t => t === channel.type))
+          if (!channel || ![0, 5].some(t => t === channel.type)) {
             return await ctx.reply('commands.live.invalid_channel')
+          }
 
           await prisma.guild.update({
             where: {
