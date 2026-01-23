@@ -1,9 +1,9 @@
 import { GuildSchema, ProfileSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
 import type { ModalSubmitInteraction } from 'discord.js'
+import Logger from '@/util/Logger'
 import type App from '../app/App'
 import ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
-import Logger from '@/util/Logger'
 
 export default class ModalSubmitInteractionRunner {
   public async run(app: App, interaction: ModalSubmitInteraction): Promise<unknown> {

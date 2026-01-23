@@ -1,10 +1,10 @@
 import { GuildSchema, ProfileSchema } from '@db'
 import locales, { type Args, type Content } from '@i18n'
 import type { MessageComponentInteraction } from 'discord.js'
+import Logger from '@/util/Logger'
 import type App from '../app/App'
 import ComponentInteractionContext from './ComponentInteractionContext'
 import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
-import Logger from '@/util/Logger'
 
 export default class ComponentInteractionRunner {
   public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
