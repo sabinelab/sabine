@@ -13,7 +13,7 @@ export type CreateInteractionOptions = {
   isThinking?: boolean
   ephemeral?: boolean
   flags?: number
-  run: (props: CreateInteractionProps) => Promise<any>
+  run: (props: CreateInteractionProps) => Promise<unknown>
   time?: number
   global?: boolean
 }

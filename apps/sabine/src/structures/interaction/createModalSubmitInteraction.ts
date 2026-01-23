@@ -12,7 +12,7 @@ export type CreateModalSubmitInteractionOptions = {
   ephemeral?: boolean
   flags?: number
   global?: boolean
-  run: (props: CreateModalSubmitInteractionProps) => Promise<any>
+  run: (props: CreateModalSubmitInteractionProps) => Promise<unknown>
 }
 
 export default function (options: CreateModalSubmitInteractionOptions) {
