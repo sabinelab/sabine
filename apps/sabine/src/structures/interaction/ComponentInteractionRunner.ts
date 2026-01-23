@@ -4,6 +4,7 @@ import type { MessageComponentInteraction } from 'discord.js'
 import type App from '../app/App'
 import ComponentInteractionContext from './ComponentInteractionContext'
 import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
+import Logger from '@/util/Logger'
 
 export default class ComponentInteractionRunner {
   public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
@@ -57,11 +58,17 @@ export default class ComponentInteractionRunner {
         ctx.setFlags(64)
       }
 
-      return await i.run({
-        ctx: ctx as ComponentInteractionContext & ModalSubmitInteractionContext,
-        t,
-        app
-      })
+      return i
+        .run({
+          ctx: ctx as ComponentInteractionContext & ModalSubmitInteractionContext,
+          t,
+          app
+        })
+        .catch(async e => {
+          ctx.setFlags(64)
+          await ctx.reply('helper.error', { e })
+          await new Logger(app).error(e)
+        })
     }
 
     if (command) {
@@ -115,12 +122,18 @@ export default class ComponentInteractionRunner {
         return locales(ctx.locale, content, args)
       }
 
-      return await command.createMessageComponentInteraction({
-        ctx,
-        t,
-        i: interaction,
-        app
-      })
+      return command
+        .createMessageComponentInteraction({
+          ctx,
+          t,
+          i: interaction,
+          app
+        })
+        .catch(async e => {
+          ctx.setFlags(64)
+          await ctx.reply('helper.error', { e })
+          await new Logger(app).error(e)
+        })
     }
 
     if (!i) return
@@ -176,6 +189,10 @@ export default class ComponentInteractionRunner {
       await interaction.deferReply()
     }
 
-    await i.run({ ctx, t, app })
+    i.run({ ctx, t, app }).catch(async e => {
+      ctx.setFlags(64)
+      await ctx.reply('helper.error', { e })
+      await new Logger(app).error(e)
+    })
   }
 }

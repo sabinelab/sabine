@@ -3,6 +3,7 @@ import locales, { type Args, type Content } from '@i18n'
 import type { ModalSubmitInteraction } from 'discord.js'
 import type App from '../app/App'
 import ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
+import Logger from '@/util/Logger'
 
 export default class ModalSubmitInteractionRunner {
   public async run(app: App, interaction: ModalSubmitInteraction): Promise<unknown> {
@@ -61,7 +62,11 @@ export default class ModalSubmitInteractionRunner {
         ctx.setFlags(i.flags)
       }
 
-      return await i.run({ ctx, t })
+      return i.run({ ctx, t }).catch(async e => {
+        ctx.setFlags(64)
+        await ctx.reply('helper.error', { e })
+        await new Logger(app).error(e)
+      })
     }
 
     if (!command || !command.createModalSubmitInteraction) return
@@ -91,6 +96,10 @@ export default class ModalSubmitInteractionRunner {
       return locales(ctx.locale, content, args)
     }
 
-    await command.createModalSubmitInteraction({ ctx, t, app, i: interaction })
+    command.createModalSubmitInteraction({ ctx, t, app, i: interaction }).catch(async e => {
+      ctx.setFlags(64)
+      await ctx.reply('helper.error', { e })
+      await new Logger(app).error(e)
+    })
   }
 }
