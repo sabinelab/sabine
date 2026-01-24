@@ -33,7 +33,6 @@ export default createCommand({
       descriptionLocalizations: {
         'pt-BR': 'Informe o jogador'
       },
-      autocomplete: true,
       required: true
     }
   },
