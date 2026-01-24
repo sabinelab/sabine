@@ -21,6 +21,7 @@ model Card {
   xp         Int @default(0) @db.SmallInt
   requiredXp Int @default(100) @map("required_xp")
 
+  @@index([profileId, playerId])
   @@index([profileId, activeRoster, id(sort: Desc)])
   @@index([profileId, arenaRoster, id])
 }
