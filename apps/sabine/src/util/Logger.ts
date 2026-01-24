@@ -70,12 +70,12 @@ export default class Logger {
         }
       })
     } else {
-      logger.error(`${error.name}: ${error.message}\n${error.stack}`)
+      logger.error(error)
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
         .setDesc(
-          `Shard ID: \`${shardId}\`\n\`\`\`js\n${error.name}: ${error.message}\n${error.stack}\`\`\``
+          `Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``
         )
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
