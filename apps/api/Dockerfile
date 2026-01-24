@@ -19,7 +19,7 @@ RUN --mount=type=secret,id=env,target=/app/.env \
 COPY . .
 
 RUN --mount=type=secret,id=env,target=/app/.env \
-    bun gen
+    bun --filter=@sabinelab/api generate
 RUN bun run build:api
 
 CMD ["bun", "start:api"]
