@@ -415,6 +415,9 @@
     "prefix": {
       "invalid_prefix": "Por favor, informe um prefixo.",
       "updated": "Prefixo do servidor alterado para `{prefix}`"
+    },
+    "show": {
+      "card_content": "Nível: `{level}`\nXP: `{xp}` {progress}"
     }
   },
   "simulator": {
@@ -498,7 +501,14 @@
     "missing_argument": "Argumento faltando: `{arg}`\nUse {cmd} para obter ajuda sobre este comando!",
     "update_status": "O bot está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
     "maintenance_status": "O bot está temporariamente indisponível para uma manutenção.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
-    "cmd_status": "Este comando está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r"
+    "cmd_status": "Este comando está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
+    "predictions": "Palpites",
+    "nobody_predicted": "Parece que ninguém deste servidor fez um palpite para esta partida...",
+    "predictions_response": [
+      "### Palpites de {guild}",
+      "**{correct_predictions}** usuários palpitaram corretamente.",
+      "**{incorrect_predictions}** usuários palpitaram incorretamente."
+    ]
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
