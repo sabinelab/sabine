@@ -220,18 +220,34 @@ export class ProfileSchema implements Profile {
 
   public async addPrediction(game: 'valorant' | 'lol', prediction: Prediction) {
     const { teams, ...pred } = prediction
-    await prisma.prediction.create({
-      data: {
-        ...pred,
-        game,
-        teams: {
-          create: teams
-        },
-        profile: {
-          connect: {
-            userId_guildId: {
-              userId: this.userId,
-              guildId: this.guildId
+
+    await prisma.profile.upsert({
+      where: {
+        userId_guildId: {
+          userId: this.userId,
+          guildId: this.guildId
+        }
+      },
+      create: {
+        userId: this.userId,
+        guildId: this.guildId,
+        predictions: {
+          create: {
+            ...pred,
+            game,
+            teams: {
+              create: teams
+            }
+          }
+        }
+      },
+      update: {
+        predictions: {
+          create: {
+            ...pred,
+            game,
+            teams: {
+              create: teams
             }
           }
         }
