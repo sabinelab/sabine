@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     },
     "prefix": {
       "invalid_prefix": "Por favor, informe um prefixo.",
@@ -501,7 +511,14 @@
     "missing_argument": "Argumento faltando: `{arg}`\nUse {cmd} para obter ajuda sobre este comando!",
     "update_status": "O bot está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
     "maintenance_status": "O bot está temporariamente indisponível para uma manutenção.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
-    "cmd_status": "Este comando está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r"
+    "cmd_status": "Este comando está temporariamente indisponível para atualizações.\nMais informações no nosso servidor oficial: https://discord.com/invite/FaqYcpA84r",
+    "predictions": "Predictions",
+    "nobody_predicted": "It seems like no one from this server made any predictions for this match...",
+    "predictions_response": [
+      "### {guild} Predictions",
+      "**{correct_predictions}** users predicted correctly.",
+      "**{incorrect_predictions}** users predicted incorrectly."
+    ]
   },
   "permissions": {
     "CreateInstantInvite": "Criar convite instantâneo",
