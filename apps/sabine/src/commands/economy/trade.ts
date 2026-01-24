@@ -224,7 +224,7 @@ export default createCommand({
               player: player.id,
               price: BigInt(ctx.args[5]),
               profileId: profile.id,
-              to: profile.userId
+              to: ctx.db.profile.userId
             },
             {
               type: 'TRADE_PLAYER',
