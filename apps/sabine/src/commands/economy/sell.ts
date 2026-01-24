@@ -78,7 +78,7 @@ export default createCommand({
     for (const c of cards) {
       const p = app.players.get(c.playerId)
 
-      if (!p) break
+      if (!p) continue
 
       const ovr = Math.floor(c.overall)
 
