@@ -11,6 +11,8 @@ export default createCommand({
     'pt-BR': 'Registre-se no bot'
   },
   category: 'economy',
+  syntax: 'register',
+  examples: ['register'],
   cooldown: true,
   async run({ ctx }) {
     const profile = await ProfileSchema.fetch(ctx.db.profile.userId, ctx.db.guild.id)

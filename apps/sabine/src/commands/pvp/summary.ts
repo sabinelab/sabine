@@ -33,6 +33,8 @@ export default createCommand({
     'pt-BR': 'Veja o resumo de uma partida'
   },
   category: 'pvp',
+  syntax: 'summary [seed]',
+  examples: ['summary 123456789'],
   args: {
     seed: {
       type: ApplicationCommandOptionType.Integer,

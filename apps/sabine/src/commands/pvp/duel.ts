@@ -172,6 +172,20 @@ export default createCommand({
       }
     }
   },
+  syntaxes: [
+    'duel unranked [user]',
+    'duel ranked [user]',
+    'duel swiftplay unranked [user]',
+    'duel swiftplay ranked [user]',
+    'duel tournament [user] [map]'
+  ],
+  examples: [
+    'duel unranked @user',
+    'duel ranked @user',
+    'duel swiftplay unranked @user',
+    'duel swiftplay ranked @user',
+    'duel tournament @user Ascent'
+  ],
   async run({ ctx, t, app }) {
     let id: string
     let mode: string

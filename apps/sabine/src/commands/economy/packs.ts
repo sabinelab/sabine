@@ -69,6 +69,8 @@ export default createCommand({
     'pt-BR': 'Abra ou veja pacotes'
   },
   category: 'economy',
+  syntax: 'packs',
+  examples: ['packs'],
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)

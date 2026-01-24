@@ -22,6 +22,8 @@ export default createCommand({
     'pt-BR': 'Mostra um jogador do seu elenco'
   },
   category: 'economy',
+  syntax: 'show [player]',
+  examples: ['show TenZ'],
   args: {
     player: {
       type: ApplicationCommandOptionType.String,

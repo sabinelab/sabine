@@ -14,6 +14,8 @@ export default createCommand({
     'pt-BR': 'Veja sua transação de jogadores'
   },
   category: 'economy',
+  syntax: 'transactions [page]',
+  examples: ['transactions', 'transactions 1'],
   args: {
     page: {
       type: ApplicationCommandOptionType.Integer,

@@ -7,6 +7,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Mostra a latência do bot'
   },
+  syntax: 'ping',
+  examples: ['ping'],
   async run({ ctx, app }) {
     if (ctx.guild) {
       return await ctx.reply(

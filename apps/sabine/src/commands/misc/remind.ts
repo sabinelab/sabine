@@ -11,6 +11,8 @@ export default createCommand({
     'pt-BR': 'Notifica você quando você puder usar /claim novamente'
   },
   category: 'misc',
+  syntax: 'remind',
+  examples: ['remind'],
   async run({ ctx }) {
     if (!ctx.db.profile.remind) {
       await prisma.profile.update({

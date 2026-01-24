@@ -40,6 +40,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Pesquise uma carta'
   },
+  syntax: 'card [card]',
+  examples: ['card TenZ', 'card 12345'],
   args: {
     card: {
       type: ApplicationCommandOptionType.String,

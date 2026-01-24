@@ -7,6 +7,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Veja o seu contador de obter'
   },
+  syntax: 'claims',
+  examples: ['claims'],
   async run({ ctx }) {
     await ctx.reply('commands.claims.res', {
       claims: ctx.db.profile.claims,

@@ -13,6 +13,8 @@ export default createCommand({
     'pt-BR': 'Remova um jogador do elenco principal'
   },
   category: 'economy',
+  syntax: 'remove [player]',
+  examples: ['remove 12345'],
   args: {
     player: {
       type: ApplicationCommandOptionType.String,

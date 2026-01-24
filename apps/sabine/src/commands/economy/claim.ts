@@ -89,6 +89,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Obtenha um jogador aleatório'
   },
+  syntax: 'claim',
+  examples: ['claim'],
   isThinking: true,
   messageComponentInteractionTime: 60 * 1000,
   cooldown: true,

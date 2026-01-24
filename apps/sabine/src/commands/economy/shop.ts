@@ -19,6 +19,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Loja de pacotes de cartas'
   },
+  syntax: 'shop',
+  examples: ['shop'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
     const container = new ContainerBuilder()

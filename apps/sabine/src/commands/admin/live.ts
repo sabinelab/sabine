@@ -98,6 +98,18 @@ export default createCommand({
     }
   },
   permissions: ['ManageChannels'],
+  syntaxes: [
+    'live enable valorant [channel]',
+    'live enable lol [channel]',
+    'live disable valorant',
+    'live disable lol'
+  ],
+  examples: [
+    'live enable valorant #live-feed',
+    'live enable lol #lol-live',
+    'live disable valorant',
+    'live disable lol'
+  ],
   async run({ ctx }) {
     if (!ctx.db.guild) return
 

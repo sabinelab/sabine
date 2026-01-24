@@ -101,6 +101,18 @@ export default createCommand({
     }
   },
   permissions: ['ManageChannels'],
+  syntaxes: [
+    'news enable valorant [channel]',
+    'news enable lol [channel]',
+    'news disable valorant',
+    'news disable lol'
+  ],
+  examples: [
+    'news enable valorant #news',
+    'news enable lol #lol-news',
+    'news disable valorant',
+    'news disable lol'
+  ],
   async run({ ctx }) {
     if (ctx.args.enable) {
       const games = {

@@ -11,6 +11,8 @@ export default createCommand({
     'pt-BR': 'Veja seu saldo'
   },
   category: 'economy',
+  syntax: 'balance',
+  examples: ['balance'],
   async run({ ctx, app }) {
     const profilesAheadCount = await app.prisma.profile.count({
       where: {

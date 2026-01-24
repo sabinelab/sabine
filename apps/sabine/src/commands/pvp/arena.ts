@@ -58,8 +58,8 @@ export default createCommand({
       }
     }
   },
-  syntax: 'arena join/leave/info/lineup',
-  examples: [],
+  syntaxes: ['arena join', 'arena leave', 'arena lineup', 'arena info'],
+  examples: ['arena join', 'arena leave', 'arena info', 'arena lineup'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx }) {
     const cards = await prisma.card.findMany({

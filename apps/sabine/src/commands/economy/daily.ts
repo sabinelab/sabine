@@ -11,6 +11,8 @@ export default createCommand({
     'pt-BR': 'Obtenha sua recompensa diária'
   },
   category: 'economy',
+  syntax: 'daily',
+  examples: ['daily'],
   async run({ ctx, app, t }) {
     if (ctx.db.profile.dailyTime && ctx.db.profile.dailyTime.getTime() > Date.now()) {
       return await ctx.reply('commands.daily.has_been_claimed', {

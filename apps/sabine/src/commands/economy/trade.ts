@@ -14,6 +14,8 @@ export default createCommand({
     'pt-BR': 'Negocie um jogador'
   },
   category: 'economy',
+  syntax: 'trade [user] [player] [price]',
+  examples: ['trade @user 12345 50000'],
   args: {
     user: {
       type: ApplicationCommandOptionType.User,

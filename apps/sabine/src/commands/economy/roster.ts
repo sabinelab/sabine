@@ -31,6 +31,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Veja seu elenco'
   },
+  syntax: 'roster [page]',
+  examples: ['roster', 'roster 1', 'roster 2'],
   args: {
     page: {
       type: ApplicationCommandOptionType.Integer,

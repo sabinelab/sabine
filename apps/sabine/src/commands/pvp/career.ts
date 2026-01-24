@@ -14,6 +14,8 @@ export default createCommand({
     'pt-BR': 'Veja sua carreira'
   },
   category: 'economy',
+  syntax: 'career [page]',
+  examples: ['career', 'career 1', 'career 2'],
   args: {
     page: {
       type: ApplicationCommandOptionType.Integer,

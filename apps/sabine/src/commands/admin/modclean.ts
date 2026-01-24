@@ -17,6 +17,7 @@ export default createCommand({
     'modclean predictions',
     'modclean stats'
   ],
+  examples: ['modclean all', 'modclean balance', 'modclean predictions', 'modclean stats'],
   args: {
     all: {
       type: ApplicationCommandOptionType.Subcommand,

@@ -24,6 +24,8 @@ export default createCommand({
     'pt-BR': 'Vote no bot'
   },
   category: 'misc',
+  syntax: 'vote',
+  examples: ['vote'],
   messageComponentInteractionTime: 60_000,
   async run({ ctx }) {
     const user =

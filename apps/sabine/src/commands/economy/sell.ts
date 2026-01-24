@@ -13,6 +13,8 @@ export default createCommand({
     'pt-BR': 'Venda um jogador'
   },
   category: 'economy',
+  syntax: 'sell [player]',
+  examples: ['sell 12345'],
   args: {
     player: {
       type: ApplicationCommandOptionType.String,

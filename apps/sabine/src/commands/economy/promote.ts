@@ -15,6 +15,8 @@ export default createCommand({
     'pt-BR': 'Promova um jogador para o elenco principal'
   },
   category: 'economy',
+  syntax: 'promote [player]',
+  examples: ['promote 12345'],
   args: {
     player: {
       type: ApplicationCommandOptionType.String,

@@ -10,6 +10,8 @@ export default createCommand({
   descriptionLocalizations: {
     'pt-BR': 'Mostra as informações do seu premium'
   },
+  syntax: 'premium',
+  examples: ['premium'],
   messageComponentInteractionTime: 5 * 60 * 1000,
   async run({ ctx, t }) {
     const user = await UserSchema.fetch(ctx.db.profile.userId)
