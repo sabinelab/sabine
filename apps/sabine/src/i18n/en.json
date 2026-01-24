@@ -415,6 +415,9 @@
     "prefix": {
       "invalid_prefix": "Please, provide a prefix.",
       "updated": "Changed server prefix to `{prefix}`"
+    },
+    "show": {
+      "card_content": "Level: `{level}`\nXP: `{xp}` {progress}"
     }
   },
   "simulator": {
