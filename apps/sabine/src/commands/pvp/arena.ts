@@ -88,11 +88,12 @@ export default createCommand({
         }
 
         const counts: { [key: string]: number } = {}
-        const duplicates = Object.values(counts).filter(count => count > 1).length
 
         for (const c of cards) {
           counts[c.playerId] = (counts[c.playerId] || 0) + 1
         }
+
+        const duplicates = Object.values(counts).filter(count => count > 1).length
 
         if (duplicates) {
           return await ctx.reply('commands.duel.duplicated_cards')
