@@ -5,7 +5,6 @@ import pLimit from 'p-limit'
 import { env } from '@/env'
 import type App from '@/structures/app/App'
 import createListener from '@/structures/app/createListener'
-import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import { type LivePayload, liveQueue } from '@/structures/queue/live-queue'
 import { type NewsPayload, newsQueue } from '@/structures/queue/news-queue'
@@ -216,22 +215,23 @@ const processResult = async (app: App, data: ResultsPayload) => {
         )
         .setFooter({ text: data.stage })
 
+      const row = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().setComponents(
+        new Discord.ButtonBuilder()
+          .setLabel(t(guild.lang, 'helper.stats'))
+          .setStyle(Discord.ButtonStyle.Link)
+          .setURL(`https://vlr.gg/${data.id}`),
+        new Discord.ButtonBuilder()
+          .setStyle(Discord.ButtonStyle.Primary)
+          .setLabel(t(guild.lang, 'helper.predictions'))
+          .setCustomId(`show-predictions;${data.game};${data.id}`)
+      )
+
       messages.push(
         limit(() =>
           rest.post(Discord.Routes.channelMessages(guild.events[0].channel2), {
             body: {
               embeds: [embed.toJSON()],
-              components: [
-                {
-                  type: 1,
-                  components: [
-                    new ButtonBuilder()
-                      .setLabel(t(guild.lang, 'helper.stats'))
-                      .defineStyle('link')
-                      .setURL(`https://vlr.gg/${data.id}`)
-                  ]
-                }
-              ]
+              components: [row.toJSON()]
             }
           })
         )
@@ -330,12 +330,15 @@ const processLive = async (app: App, data: LivePayload) => {
 
       if (data.stage) embed.setFooter({ text: data.stage })
 
-      const button = new ButtonBuilder()
+      const button = new Discord.ButtonBuilder()
       if (data.game === 'valorant') {
-        button.defineStyle('link').setLabel(t(guild.lang, 'helper.stats')).setURL(data.url!)
+        button
+          .setStyle(Discord.ButtonStyle.Link)
+          .setLabel(t(guild.lang, 'helper.stats'))
+          .setURL(data.url!)
       } else {
         button
-          .defineStyle('blue')
+          .setStyle(Discord.ButtonStyle.Primary)
           .setLabel(t(guild.lang, 'helper.streams'))
           .setCustomId(`stream;lol;${data.id}`)
       }
@@ -399,7 +402,7 @@ const processNews = async (data: NewsPayload) => {
         embed.setDesc(data.description)
       }
 
-      const button = new ButtonBuilder()
+      const button = new Discord.ButtonBuilder()
         .setStyle(Discord.ButtonStyle.Link)
         .setLabel(t(guild.lang, 'helper.source'))
         .setURL(data.url)
