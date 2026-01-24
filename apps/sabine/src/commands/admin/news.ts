@@ -120,7 +120,7 @@ export default createCommand({
           if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.valorant?.channel.toString() ?? ''
+            ctx.args.enable?.valorant?.channel.id ?? ''
           )!
 
           if (![0, 5].some(t => t === channel.type))
@@ -140,7 +140,7 @@ export default createCommand({
           if (!ctx.guild || !ctx.db.guild) return
 
           const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.lol?.channel.toString() ?? ''
+            ctx.args.enable?.lol?.channel.id ?? ''
           )!
 
           if (![0, 5].some(t => t === channel.type))

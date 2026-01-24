@@ -224,12 +224,12 @@ export default createCommand({
             cmd: `</tournament remove valorant:${id}>`
           })
 
-        if (matches_channel.toString() === results_channel.toString())
+        if (matches_channel.id === results_channel.id)
           return ctx.reply('commands.tournament.channels_must_be_different')
 
         if (
-          ctx.guild.channels.cache.get(matches_channel.toString())?.type !== 0 ||
-          ctx.guild.channels.cache.get(results_channel.toString())?.type !== 0
+          ctx.guild.channels.cache.get(matches_channel.id)?.type !== 0 ||
+          ctx.guild.channels.cache.get(results_channel.id)?.type !== 0
         ) {
           return ctx.reply('commands.tournament.invalid_channel')
         }
@@ -291,12 +291,12 @@ export default createCommand({
             cmd: `</tournament remove lol:${id}>`
           })
 
-        if (matches_channel.toString() === results_channel.toString())
+        if (matches_channel.id === results_channel.id)
           return ctx.reply('commands.tournament.channels_must_be_different')
 
         if (
-          ctx.guild.channels.cache.get(matches_channel.toString())?.type !== 0 ||
-          ctx.guild.channels.cache.get(results_channel.toString())?.type !== 0
+          ctx.guild.channels.cache.get(matches_channel.id)?.type !== 0 ||
+          ctx.guild.channels.cache.get(results_channel.id)?.type !== 0
         ) {
           return ctx.reply('commands.tournament.invalid_channel')
         }
@@ -322,8 +322,8 @@ export default createCommand({
               create: [
                 {
                   name: tournament,
-                  channel1: matches_channel.toString(),
-                  channel2: results_channel.toString(),
+                  channel1: matches_channel.id,
+                  channel2: results_channel.id,
                   type: 'lol'
                 }
               ]
