@@ -56,12 +56,15 @@ export default class App extends Discord.Client {
     for (const file of readdirSync(path.resolve(__dirname, '../../listeners'))) {
       const listener: Listener = (await import(`../../listeners/${file}`)).default
 
-      if (listener.name === 'ready')
-        this.once('ready', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
-      else
+      if (listener.name === 'clientReady') {
+        this.once('clientReady', () =>
+          listener.run(this).catch((e: Error) => new Logger(this).error(e))
+        )
+      } else {
         this.on(listener.name, (...args) =>
           listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e))
         )
+      }
     }
 
     for (const folder of readdirSync(path.resolve(__dirname, '../../commands'))) {
