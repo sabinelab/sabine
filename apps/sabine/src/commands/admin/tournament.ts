@@ -462,17 +462,19 @@ export default createCommand({
       if (group === 'add') {
         const tournaments = await service.getEvents(game)
 
-        tournaments.unshift({
-          name: 'Valorant Game Changers'
-        })
+        if (game === 'valorant') {
+          tournaments.unshift({
+            name: 'Valorant Game Changers'
+          })
 
-        tournaments.unshift({
-          name: 'Valorant Challengers League'
-        })
+          tournaments.unshift({
+            name: 'Valorant Challengers League'
+          })
 
-        tournaments.unshift({
-          name: 'Valorant Champions Tour'
-        })
+          tournaments.unshift({
+            name: 'Valorant Champions Tour'
+          })
+        }
 
         return await i.respond(
           tournaments
