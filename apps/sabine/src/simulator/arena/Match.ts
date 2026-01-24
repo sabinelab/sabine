@@ -4,10 +4,10 @@ import type { PlayerWeapon } from './Player'
 
 export type PlayerStats = {
   aim: number
-  HS: number
+  hs: number
   movement: number
   aggression: number
-  ACS: number
+  acs: number
   gamesense: number
 }
 
