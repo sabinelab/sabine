@@ -3,8 +3,8 @@ model Status {
   type        Type
   title       String
   description String
-  messageId   String
-  threadId    String
+  messageId   String @map("message_id")
+  threadId    String @map("thread_id")
 }
 
 enum Type {
