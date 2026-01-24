@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output = "./generated"
+  output   = "./generated"
 }
 
 datasource db {
@@ -111,6 +111,8 @@ model LolStream {
   embed_url   String?
   official    Boolean?
   raw_url     String?
+
+  @@index([liveMatchId])
 }
 
 model ValStream {
@@ -122,6 +124,8 @@ model ValStream {
   embed_url   String
   official    Boolean
   raw_url     String
+
+  @@index([liveMatchId])
 }
 
 model LolResultTeam {
@@ -134,6 +138,9 @@ model LolResultTeam {
   winner      Boolean?
   LiveMatch   LolLiveMatch? @relation(fields: [liveMatchId], references: [id])
   liveMatchId String?
+
+  @@index([resultId])
+  @@index([liveMatchId])
 }
 
 model ValResultTeam {
@@ -146,6 +153,9 @@ model ValResultTeam {
   winner      Boolean?
   liveMatch   ValLiveMatch? @relation(fields: [liveMatchId], references: [id])
   liveMatchId String?
+
+  @@index([resultId])
+  @@index([liveMatchId])
 }
 
 model LolMatchTeam {
@@ -154,6 +164,8 @@ model LolMatchTeam {
   matchId String
   name    String?
   country String?
+
+  @@index([matchId])
 }
 
 model ValMatchTeam {
@@ -162,4 +174,6 @@ model ValMatchTeam {
   matchId String
   name    String
   country String?
+
+  @@index([matchId])
 }
