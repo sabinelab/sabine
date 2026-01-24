@@ -39,15 +39,7 @@ export default createModalSubmitInteraction({
           }
         }
 
-        const index = preds.findIndex(p => p.match === ctx.args[2])
-
         let odd: number
-
-        if (preds[index].teams[0].winner) {
-          odd = calcOdd(oddA)
-        } else {
-          odd = calcOdd(oddB)
-        }
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -64,6 +56,12 @@ export default createModalSubmitInteraction({
         })
 
         if (!pred) return await ctx.reply('helper.prediction_needed')
+
+        if (pred.teams[0].winner) {
+          odd = calcOdd(oddA)
+        } else {
+          odd = calcOdd(oddB)
+        }
 
         await prisma.$transaction([
           prisma.prediction.update({
@@ -90,6 +88,8 @@ export default createModalSubmitInteraction({
         ])
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
+
+        if (winnerIndex === -1) return await ctx.reply('helper.prediction_needed')
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,
@@ -127,15 +127,7 @@ export default createModalSubmitInteraction({
           }
         }
 
-        const index = preds.findIndex(p => p.match === ctx.args[2])
-
         let odd: number
-
-        if (preds[index].teams[0].winner) {
-          odd = calcOdd(oddA)
-        } else {
-          odd = calcOdd(oddB)
-        }
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -152,6 +144,12 @@ export default createModalSubmitInteraction({
         })
 
         if (!pred) return await ctx.reply('helper.prediction_needed')
+
+        if (pred.teams[0].winner) {
+          odd = calcOdd(oddA)
+        } else {
+          odd = calcOdd(oddB)
+        }
 
         await prisma.$transaction([
           prisma.prediction.update({
@@ -178,6 +176,8 @@ export default createModalSubmitInteraction({
         ])
 
         const winnerIndex = pred.teams.findIndex(t => t.winner)
+
+        if (winnerIndex === -1) return await ctx.reply('helper.prediction_needed')
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,
