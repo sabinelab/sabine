@@ -501,7 +501,14 @@
     "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!",
     "update_status": "The bot is temporarily unavailable for updates.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
     "maintenance_status": "The bot is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
-    "cmd_status": "This command is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r"
+    "cmd_status": "This command is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "predictions": "Predictions",
+    "nobody_predicted": "It seems like no one from this server made any predictions for this match...",
+    "predictions_response": [
+      "### {guild} Predictions",
+      "**{correct_predictions}** users predicted correctly.",
+      "**{incorrect_predictions}** users predicted incorrectly."
+    ]
   },
   "permissions": {
     "CreateInstantInvite": "Create Instant Invite",
