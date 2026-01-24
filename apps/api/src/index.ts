@@ -215,7 +215,7 @@ for (const folder of fs.readdirSync(path.resolve(__dirname, './routes'))) {
 
 server.addHook('preHandler', auth)
 
-server.listen({ host: '0.0.0.0', port: 4000 }).then(() => info('HTTP server running at 3000'))
+server.listen({ host: '0.0.0.0', port: 4000 }).then(() => info('HTTP server running at 4000'))
 
 const sendNews = async () => {
   try {
