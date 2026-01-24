@@ -388,19 +388,19 @@ export default createCommand({
 
       let pos: number | null = null
 
-      if (ctx.db.profile.rankRating) {
+      if (ctx.db.profile.correctPredictions) {
         pos =
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
               OR: [
                 {
-                  rankRating: {
-                    gt: ctx.db.profile.rankRating
+                  correctPredictions: {
+                    gt: ctx.db.profile.correctPredictions
                   }
                 },
                 {
-                  rankRating: ctx.db.profile.rankRating,
+                  correctPredictions: ctx.db.profile.correctPredictions,
                   userId: {
                     lt: ctx.db.profile.userId
                   }
@@ -733,19 +733,19 @@ export default createCommand({
 
       let pos: number | null = null
 
-      if (ctx.db.profile.rankRating) {
+      if (ctx.db.profile.correctPredictions) {
         pos =
           (await app.prisma.profile.count({
             where: {
               guildId: ctx.db.guild.id,
               OR: [
                 {
-                  rankRating: {
-                    gt: ctx.db.profile.rankRating
+                  correctPredictions: {
+                    gt: ctx.db.profile.correctPredictions
                   }
                 },
                 {
-                  rankRating: ctx.db.profile.rankRating,
+                  correctPredictions: ctx.db.profile.correctPredictions,
                   userId: {
                     lt: ctx.db.profile.userId
                   }
