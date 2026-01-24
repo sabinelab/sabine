@@ -119,9 +119,7 @@ export default createCommand({
         valorant: async () => {
           if (!ctx.guild || !ctx.db.guild) return
 
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.valorant?.channel.id ?? ''
-          )!
+          const channel = ctx.guild.channels.cache.get(ctx.args.enable?.valorant?.channel.id ?? '')!
 
           if (![0, 5].some(t => t === channel.type))
             return await ctx.reply('commands.news.invalid_channel')
@@ -139,9 +137,7 @@ export default createCommand({
         lol: async () => {
           if (!ctx.guild || !ctx.db.guild) return
 
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.lol?.channel.id ?? ''
-          )!
+          const channel = ctx.guild.channels.cache.get(ctx.args.enable?.lol?.channel.id ?? '')!
 
           if (![0, 5].some(t => t === channel.type))
             return await ctx.reply('commands.news.invalid_channel')
