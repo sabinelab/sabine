@@ -60,4 +60,5 @@ model Profile {
   @@index([guildId, poisons(sort: Desc), userId(sort: Asc)])
   @@index([guildId, correctPredictions(sort: Desc), userId(sort: Asc)])
   @@index([guildId, rankRating(sort: Desc), userId(sort: Asc)])
+  @@index([guildId, arenaWins(sort: Desc), userId(sort: Asc)])
 }
