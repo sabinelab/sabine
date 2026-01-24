@@ -11,7 +11,7 @@ import createCommand from '../../structures/command/createCommand'
 
 const date = Date.now()
 
-const getNextPlayer = (
+export const getNextPlayer = (
   collection: Set<string>,
   currentPlayer: string,
   type: 'next' | 'previous'
