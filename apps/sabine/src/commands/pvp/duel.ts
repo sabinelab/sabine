@@ -233,11 +233,12 @@ export default createCommand({
 
     const authorCounts: { [key: string]: number } = {}
     const userCounts: { [key: string]: number } = {}
-    const authorDuplicates = Object.values(authorCounts).filter(count => count > 1).length
 
     for (const c of authorCards) {
       authorCounts[c.playerId] = (authorCounts[c.playerId] || 0) + 1
     }
+
+    const authorDuplicates = Object.values(authorCounts).filter(count => count > 1).length
 
     if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
       return await ctx.reply('commands.duel.needed_team_name')
