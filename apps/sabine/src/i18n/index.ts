@@ -20,7 +20,13 @@ type Locale = typeof en
 
 type Keys<T> = T extends object
   ? {
-      [K in keyof T]: K extends string ? (T[K] extends object ? `${K}.${Keys<T[K]>}` : K) : never
+      [K in keyof T]: K extends string
+        ? T[K] extends readonly any[]
+          ? K
+          : T[K] extends object
+            ? `${K}.${Keys<T[K]>}`
+            : K
+        : never
     }[keyof T]
   : never
 
@@ -31,7 +37,7 @@ const locale: Record<string, unknown> = {
 }
 
 export default function t<T extends Content>(lang: string, content: T, args?: Args): string {
-  let json: unknown = locale[lang]
+  let json = locale[lang]
 
   for (const param of content.split('.')) {
     if (json && typeof json === 'object') {
