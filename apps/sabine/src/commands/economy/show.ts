@@ -1,7 +1,3 @@
-import { env } from '@/env'
-import EmbedBuilder from '@/structures/builders/EmbedBuilder'
-import createCommand from '@/structures/command/createCommand'
-import { createProgressBar } from '@/util/createProgressBar'
 import { prisma } from '@db'
 import {
   ActionRowBuilder,
@@ -9,6 +5,10 @@ import {
   ButtonBuilder,
   ButtonStyle
 } from 'discord.js'
+import { env } from '@/env'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
+import createCommand from '@/structures/command/createCommand'
+import { createProgressBar } from '@/util/createProgressBar'
 
 const date = Date.now().toString()
 
@@ -94,7 +94,9 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`)
+        .setCustomId(
+          `show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`
+        )
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true)
 
