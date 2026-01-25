@@ -58,6 +58,7 @@
       "dependencies": {
         "@elysiajs/cors": "1.4.1",
         "@iamtraction/google-translate": "2.0.1",
+        "@sabinelab/players": "workspace:*",
         "@sabinelab/prisma": "workspace:*",
         "@sabinelab/utils": "workspace:*",
         "bull": "4.16.5",
