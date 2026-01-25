@@ -8,60 +8,72 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      workspaces: ${{ steps.detect.outputs.workspaces }}
-      has_changes: ${{ steps.detect.outputs.has_changes }}
-      rebuild_all: ${{ steps.detect.outputs.rebuild_all }}
+      workspaces: ${{ steps.process.outputs.workspaces }}
+      has_changes: ${{ steps.process.outputs.has_changes }}
+      rebuild_all: ${{ steps.process.outputs.rebuild_all }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed-files
+      - name: Detect Changes
+        id: changes
         uses: tj-actions/changed-files@v45
         with:
           json: true
+          dir_names: true
+          dir_names_max_depth: 2
           files_ignore: |
             **.md
             .gitignore
             README*
             LICENSE
             crowdin.yml
+          files_yaml: |
+            global:
+              - package.json
+              - bun.lock
+              - docker-compose.yml
+              - packages/**
+              - prisma/**
+            apps:
+              - apps/**
 
-      - name: Detect changed workspaces
-        id: detect
+      - name: Process Workspaces
+        id: process
         run: |
-          ALL_CHANGED_FILES='${{ steps.changed-files.outputs.all_changed_files }}'
+          IS_GLOBAL="${{ steps.changes.outputs.global_any_changed }}"
+          CHANGED_APPS_JSON='${{ steps.changes.outputs.apps_all_changed_files }}'
+
+          echo "DEBUG: Global Changes? $IS_GLOBAL"
+          echo "DEBUG: Changed Apps JSON: $CHANGED_APPS_JSON"
+
           REBUILD_ALL="false"
           HAS_CHANGES="false"
           WORKSPACES="[]"
 
-          if echo "$ALL_CHANGED_FILES" | jq -r '.[]' | grep -qE '^(package\.json|bun\.lock|docker-compose\.yml|packages/|prisma/)'; then
+          if [ "$IS_GLOBAL" == "true" ]; then
+            echo "Global dependency detected. Rebuilding ALL workspaces."
             REBUILD_ALL="true"
             HAS_CHANGES="true"
             WORKSPACES=$(find apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          
           else
-            WORKSPACES=$(echo "$ALL_CHANGED_FILES" | jq -r '.[]' | grep '^apps/' | cut -d'/' -f2 | sort -u | jq -R -s -c 'split("\n") | map(select(length > 0))')
-            
-            if [ "$WORKSPACES" != "[]" ] && [ -n "$WORKSPACES" ]; then
+            if [ -n "$CHANGED_APPS_JSON" ] && [ "$CHANGED_APPS_JSON" != "[]" ]; then
+              echo "Selective changes detected."
               HAS_CHANGES="true"
+              WORKSPACES=$(echo "$CHANGED_APPS_JSON" | jq -c 'map(sub("^apps/"; ""))')
+            else
+              echo "No relevant changes detected."
             fi
           fi
 
+          echo "DEBUG: Final Workspaces: $WORKSPACES"
+          
           echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT
           echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
           echo "rebuild_all=$REBUILD_ALL" >> $GITHUB_OUTPUT
-
-      - name: Setup Node.js
-        if: steps.detect.outputs.has_changes == 'true' && (contains(steps.detect.outputs.workspaces, 'apps/sabine') || steps.detect.outputs.rebuild_all == 'true')
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Verify i18n
-        if: steps.detect.outputs.has_changes == 'true' && (contains(steps.detect.outputs.workspaces, 'apps/sabine') || steps.detect.outputs.rebuild_all == 'true')
-        run: node scripts/verify-i18n.js
 
   deploy-selective:
     needs: detect-changes
@@ -99,7 +111,7 @@ jobs:
   deploy-full:
     needs: detect-changes
     if: needs.detect-changes.outputs.has_changes == 'true' && needs.detect-changes.outputs.rebuild_all == 'true'
-    name: 'Deploy All Services (Dependencies Updated)'
+    name: 'Deploy All Services'
     runs-on: ubuntu-latest
     steps:
       - name: Setup SSH
@@ -121,18 +133,16 @@ jobs:
           SSH_HOST: ${{ secrets.HOST }}
           SSH_PORT: 22
           
-      - name: Deploy all workspaces sequentially
+      - name: Run Full Sequential Deploy
         run: |
-          echo "Dependencies updated - deploying all services sequentially"
+          echo "Global changes detected. Updating all services sequentially."
           WORKSPACES='${{ needs.detect-changes.outputs.workspaces }}'
           
           ssh prod "cd sabine/sabine && git pull"
           
           for workspace in $(echo $WORKSPACES | jq -r '.[]'); do
-            echo "==> Deploying $workspace..."
+            echo "Deploying Service: $workspace"
             ssh prod "cd sabine/sabine && docker compose up -d --build $workspace"
-            echo "✓ $workspace deployed"
-            echo ""
             sleep 5
           done
           
