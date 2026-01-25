@@ -10,16 +10,6 @@ export default createModalSubmitInteraction({
   async run({ ctx }) {
     const games = {
       valorant: async () => {
-        const preds = await ctx.app.prisma.prediction.findMany({
-          where: {
-            game: 'valorant',
-            match: ctx.args[2]
-          },
-          include: {
-            teams: true
-          }
-        })
-
         const value = BigInt(ctx.args[3])
 
         if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
@@ -27,19 +17,6 @@ export default createModalSubmitInteraction({
         if (value < 500) return await ctx.reply('helper.min_value')
 
         if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
-
-        let oddA = 0
-        let oddB = 0
-
-        for (const pred of preds) {
-          if (pred.teams[0].winner && pred.bet) {
-            oddA += 1
-          } else if (pred.teams[1].winner && pred.bet) {
-            oddB += 1
-          }
-        }
-
-        let odd: number
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -56,6 +33,39 @@ export default createModalSubmitInteraction({
         })
 
         if (!pred) return await ctx.reply('helper.prediction_needed')
+
+        const [oddA, oddB] = await Promise.all([
+          ctx.app.prisma.prediction.count({
+            where: {
+              game: 'valorant',
+              match: ctx.args[2],
+              status: 'pending',
+              bet: { not: null },
+              teams: {
+                some: {
+                  name: pred.teams[0].name,
+                  winner: true
+                }
+              }
+            }
+          }),
+          ctx.app.prisma.prediction.count({
+            where: {
+              game: 'valorant',
+              match: ctx.args[2],
+              status: 'pending',
+              bet: { not: null },
+              teams: {
+                some: {
+                  name: pred.teams[1].name,
+                  winner: true
+                }
+              }
+            }
+          })
+        ])
+
+        let odd: number
 
         if (pred.teams[0].winner) {
           odd = calcOdd(oddA)
@@ -98,16 +108,6 @@ export default createModalSubmitInteraction({
         })
       },
       lol: async () => {
-        const preds = await ctx.app.prisma.prediction.findMany({
-          where: {
-            game: 'lol',
-            match: ctx.args[2]
-          },
-          include: {
-            teams: true
-          }
-        })
-
         const value = BigInt(ctx.args[3])
 
         if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
@@ -115,19 +115,6 @@ export default createModalSubmitInteraction({
         if (value < 500) return await ctx.reply('helper.min_value')
 
         if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
-
-        let oddA = 0
-        let oddB = 0
-
-        for (const pred of preds) {
-          if (pred.teams[0].winner && pred.bet) {
-            oddA += 1
-          } else if (pred.teams[1].winner && pred.bet) {
-            oddB += 1
-          }
-        }
-
-        let odd: number
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -144,6 +131,39 @@ export default createModalSubmitInteraction({
         })
 
         if (!pred) return await ctx.reply('helper.prediction_needed')
+
+        const [oddA, oddB] = await Promise.all([
+          ctx.app.prisma.prediction.count({
+            where: {
+              game: 'lol',
+              match: ctx.args[2],
+              status: 'pending',
+              bet: { not: null },
+              teams: {
+                some: {
+                  name: pred.teams[0].name,
+                  winner: true
+                }
+              }
+            }
+          }),
+          ctx.app.prisma.prediction.count({
+            where: {
+              game: 'lol',
+              match: ctx.args[2],
+              status: 'pending',
+              bet: { not: null },
+              teams: {
+                some: {
+                  name: pred.teams[1].name,
+                  winner: true
+                }
+              }
+            }
+          })
+        ])
+
+        let odd: number
 
         if (pred.teams[0].winner) {
           odd = calcOdd(oddA)

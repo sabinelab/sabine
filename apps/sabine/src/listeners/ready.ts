@@ -23,6 +23,35 @@ const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 const limit = pLimit(25)
 
 const processPredictions = async (data: ResultsPayload) => {
+  const [oddA, oddB] = await Promise.all([
+    prisma.prediction.count({
+      where: {
+        match: data.id,
+        status: 'pending',
+        bet: { not: null },
+        teams: {
+          some: {
+            name: data.teams[0].name,
+            winner: true
+          }
+        }
+      }
+    }),
+    prisma.prediction.count({
+      where: {
+        match: data.id,
+        status: 'pending',
+        bet: { not: null },
+        teams: {
+          some: {
+            name: data.teams[1].name,
+            winner: true
+          }
+        }
+      }
+    })
+  ])
+
   let cursor: string | undefined
 
   while (true) {
@@ -56,24 +85,12 @@ const processPredictions = async (data: ResultsPayload) => {
 
     if (!preds.length) break
 
-    let oddA = 0
-    let oddB = 0
     let winnerIndex = -1
 
     const hasbets = preds.some(m => m.bet)
 
     if (hasbets) {
       winnerIndex = data.teams.findIndex(t => t.winner)
-
-      for (const pred of preds) {
-        if (pred.bet) {
-          if (pred.teams[0].winner) {
-            oddA++
-          } else if (pred.teams[1].winner) {
-            oddB++
-          }
-        }
-      }
     }
 
     const transactions = preds.flatMap(pred => {
