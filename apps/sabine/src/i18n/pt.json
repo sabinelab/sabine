@@ -256,7 +256,7 @@
       "bonus4": "- Você recebeu **{poisons}** toxinas de bônus por este ser um servidor Premium Booster."
     },
     "claims": {
-      "res": "Seus claims: `{claims}`\nSeu pity: `{pity}`\nAo chegar ao pity **50**, uma carta Tier S (85+) é garantida!"
+      "res": "Seus claims: `{claims}`\nSeu pity: `{pity}`\nAo chegar ao pity **50**, uma carta Radiante (101+) é garantida!"
     },
     "card": {
       "name": "Nome",
