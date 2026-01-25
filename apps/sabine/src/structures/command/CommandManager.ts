@@ -437,6 +437,33 @@ export class CommandManager {
     command
       .run({ ctx, app, t, id: command.id })
       .then(async () => {
+        if (ctx.db.profile.warn) {
+          const update = await app.prisma.update.findFirst({
+            orderBy: {
+              publishedAt: 'desc'
+            }
+          })
+
+          if (update) {
+            const button = new ButtonBuilder()
+              .setLabel(t('helper.dont_show_again'))
+              .setStyle(ButtonStyle.Primary)
+              .setCustomId('dontshowagain')
+
+            await ctx.reply({
+              content: t('helper.warn', {
+                link: `https://sabinebot.xyz/changelog/v${update.id}`
+              }),
+              flags: 'Ephemeral',
+              components: [
+                {
+                  type: 1,
+                  components: [button.toJSON()]
+                }
+              ]
+            })
+          }
+        }
         if (data instanceof Message && data.deletable && command.ephemeral) {
           await data.delete().catch(voidCatch)
         }
