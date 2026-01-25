@@ -85,10 +85,13 @@ export default class ModalSubmitInteractionRunner {
     })
 
     if (app.status.has('status:bot:update')) {
+      ctx.setFlags(64)
       return await ctx.reply('helper.update_status')
     } else if (app.status.has('status:bot:maintenance')) {
+      ctx.setFlags(64)
       return await ctx.reply('helper.maintenance_status')
     } else if (app.status.has(`status:cmd:${command.name}`)) {
+      ctx.setFlags(64)
       return await ctx.reply('helper.cmd_status')
     }
 

@@ -41,8 +41,10 @@ export default class ComponentInteractionRunner {
       })
 
       if (app.status.has('status:bot:update')) {
+        ctx.setFlags(64)
         return await ctx.reply('helper.update_status')
       } else if (app.status.has('status:bot:maintenance')) {
+        ctx.setFlags(64)
         return await ctx.reply('helper.maintenance_status')
       }
 
