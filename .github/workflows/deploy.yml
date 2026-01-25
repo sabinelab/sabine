@@ -25,12 +25,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
           
       - name: Detect changed workspaces
         id: detect
         run: |
-          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
           
           if echo "$CHANGED_FILES" | grep -qE '^(package\.json|bun\.lock)$'; then
             echo "rebuild_all=true" >> $GITHUB_OUTPUT
