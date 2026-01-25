@@ -256,7 +256,7 @@
       "bonus4": "- Você recebeu **{poisons}** toxinas de bônus por este ser um servidor Premium Booster."
     },
     "claims": {
-      "res": "Your claims: `{claims}`\nYour pity: `{pity}`\nUpon reaching pity **75**, you're guaranteed a Radiant card (101+)!"
+      "res": "Seus claims: `{claims}`\nSeu pity: `{pity}`\nAo chegar ao pity **75**, uma carta Radiante (101+) é garantida!"
     },
     "card": {
       "name": "Nome",
@@ -396,8 +396,13 @@
           "- Elencos",
           "- Pity"
         ],
-        "balance": ["- Toxinas e destinos"],
-        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
+        "balance": [
+          "- Toxinas e destinos"
+        ],
+        "predictions": [
+          "- Palpites corretos/incorretos",
+          "- Palpites enviados"
+        ],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -408,9 +413,14 @@
           "- Elencos",
           "- Pity"
         ],
-        "stats": ["- Vitórias e derrotas", "- Palpites corretos/incorretos"]
+        "stats": [
+          "- Vitórias e derrotas",
+          "- Palpites corretos/incorretos"
+        ]
       },
-      "reseted": ["Você redefiniu com sucesso: \n{type}"]
+      "reseted": [
+        "Você redefiniu com sucesso: \n{type}"
+      ]
     },
     "prefix": {
       "invalid_prefix": "Por favor, informe um prefixo.",
