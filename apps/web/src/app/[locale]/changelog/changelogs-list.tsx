@@ -8,7 +8,7 @@ type Content = {
 }
 export type Changelog = {
   id: string
-  published_at: string
+  publishedAt: string
   content: Content[]
 }
 
@@ -21,7 +21,7 @@ const getChangelogs = async () => {
   const changelogs: Changelog[] = await res.json()
 
   return changelogs.sort(
-    (a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   )
 }
 
@@ -49,7 +49,7 @@ export default async function ChangelogsList(props: Props) {
             <h2 className='text-2xl font-bold'>v{update.id}</h2>
 
             <span className='text-gray-400 text-sm md:text-base'>
-              {moment(update.published_at).format('LLL')}
+              {moment(update.publishedAt).format('LLL')}
             </span>
           </Link>
         ))}
