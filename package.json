@@ -27,7 +27,7 @@
     "lint:players": "turbo run lint --filter='@sabinelab/players'",
     "check:players": "turbo run check --filter='@sabinelab/players'",
     "dev:web": "turbo run dev --filter='@sabinelab/web' --env-mode=loose",
-    "build:web": "turbo run build --filter='@sabinelab/web'",
+    "build:web": "turbo run build --filter='@sabinelab/web' --env-mode=loose",
     "start:web": "turbo run start --filter='@sabinelab/web' --env-mode=loose",
     "lint:web": "turbo run lint --filter='@sabinelab/web'",
     "check:web": "turbo run check --filter='@sabinelab/web'",
