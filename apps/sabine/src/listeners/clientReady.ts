@@ -341,8 +341,8 @@ const sendValorantMatches = async (app: App) => {
       updateGuildThunks.push(thunk)
     }
 
+    await Promise.allSettled(bulkDeleteThunks.map(task => delLimit(task)))
     await Promise.allSettled([
-      ...bulkDeleteThunks.map(task => delLimit(task)),
       ...updateGuildThunks.map(task => dbLimit(task)),
       ...sendMessageThunks.map(task => sendLimit(task))
     ])
@@ -712,8 +712,8 @@ const sendLolMatches = async (app: App) => {
       updateGuildThunks.push(thunk)
     }
 
+    await Promise.allSettled(bulkDeleteThunks.map(task => delLimit(task)))
     await Promise.allSettled([
-      ...bulkDeleteThunks.map(task => delLimit(task)),
       ...updateGuildThunks.map(task => dbLimit(task)),
       ...sendMessageThunks.map(task => sendLimit(task))
     ])
