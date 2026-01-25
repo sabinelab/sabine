@@ -1,4 +1,4 @@
-import { prisma } from '../src/database'
+import { prisma } from '../packages/prisma'
 
 export default async function (version, content) {
   if (!version) throw new Error('version is needed')
