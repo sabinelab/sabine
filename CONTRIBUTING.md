@@ -4,6 +4,27 @@ First off, thank you for considering contributing to Sabine! We welcome any help
 
 Sabine is an open-source project dedicated to providing a top-tier esports coverage and simulation experience on Discord.
 
+## 📦 Monorepo Structure
+
+This project is organized as a monorepo using [Turborepo](https://turbo.build/repo) and [Bun](https://bun.sh) workspaces.
+
+### Apps
+
+| Name | Description |
+|------|-------------|
+| `apps/sabine` | Discord bot application |
+| `apps/web` | Next.js website |
+| `apps/api` | REST API server |
+| `apps/helper` | Helper bot |
+
+### Packages
+
+| Name | Description |
+|------|-------------|
+| `packages/players` | Player data library |
+| `packages/prisma` | Database client and schemas |
+| `packages/utils` | Shared utilities |
+
 ## How Can I Contribute?
 
 ### Reporting Bugs
@@ -42,14 +63,14 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
     ```
 
 3.  **Set up environment variables:**
-    Create a `.env` file in the root directory. You can use `src/env.ts` as a template for the required variables. You must provide values for:
+    Create a `.env` file in the root directory. You can use `apps/<workspace>/src/env.ts` as a template for the required variables. You must provide values for:
     * `BOT_TOKEN`: Your Discord bot token.
     * `DATABASE_URL`: The connection string for your PostgreSQL database.
     * `REDIS_URL`: The URL for your Redis instance.
     * `AUTH`: Auth key for the internal API.
-    * ...and other variables defined in `src/env.ts`.
+    * ...and other variables defined in `apps/<workspace>/src/env.ts`.
 
-    *Note: The `docker-compose.yml` file is configured to start the **Redis** service via `docker compose up -d redis`. You must provide your own PostgreSQL database container. You can use [this repository as an example](https://github.com/levisantosp/postgres) for a quick setup.*
+    *Note: The `docker-compose.yml` file is configured to start the **Redis** service via `docker compose up -d redis`. You must provide your own PostgreSQL database container. You can use [this repository as an example](https://github.com/sabinelab/postgres) for a quick setup.*
 
 4.  **Sync the database:**
     Run the Prisma push command to sync your schema with the database.
@@ -57,11 +78,28 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
     bun push
     ```
 
-5.  **Run the bot in development (watch) mode:**
-    This command will start the bot and watch for file changes.
+5.  **Run in development mode:**
     ```bash
+    # Run all apps
     bun dev
+
+    # Or run specific apps
+    bun dev:sabine   # Discord bot
+    bun dev:web      # Website
+    bun dev:api      # API server
+    bun dev:helper   # Helper bot
     ```
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `bun dev` | Run all apps in development mode |
+| `bun run build` | Build all packages |
+| `bun lint` | Lint all packages |
+| `bun check` | Type-check all packages |
+| `bun dev:<app>` | Run specific app (sabine, web, api, helper) |
+| `bun build:<app>` | Build specific app |
 
 ## Code Style
 

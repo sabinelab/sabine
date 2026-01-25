@@ -1,28 +1,68 @@
 services:
-  app:
+  sabine:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: apps/sabine/Dockerfile
+      secrets:
+        - env
     image: sabine
     container_name: sabine
     restart: unless-stopped
-    ports:
-      - '5000:3001'
     depends_on:
       redis:
         condition: service_healthy
     env_file:
-      - .env
+      - apps/sabine/.env
     environment:
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://localhost:6379
       - NODE_ENV=production
+    network_mode: host
+
+  helper:
+    build: 
+      context: .
+      dockerfile: apps/helper/Dockerfile
+      secrets:
+        - env
+    image: sabine-helper
+    container_name: sabine-helper
+    restart: unless-stopped
+    env_file:
+      - apps/helper/.env
+    network_mode: host
+
+  web:
+    build: 
+      context: .
+      dockerfile: apps/web/Dockerfile
+      secrets:
+        - env
+    image: sabine-website
+    container_name: sabine-website
+    restart: always
+    env_file:
+      - apps/web/.env
+    network_mode: host
+
+  api:
+    build: 
+      context: .
+      dockerfile: apps/api/Dockerfile
+      secrets:
+        - env
+    image: sabine-api
+    container_name: sabine-api
+    restart: always
+    env_file:
+      - apps/api/.env
+    network_mode: host
 
   redis:
     image: redis:latest
     container_name: redis
-    ports:
-      - '6379:6379'
     restart: unless-stopped
+    network_mode: host
+    command: redis-server --bind localhost
     volumes:
       - redis_data:/data
     healthcheck:
@@ -33,3 +73,7 @@ services:
 
 volumes:
   redis_data:
+
+secrets:
+  env:
+    file: ./.env

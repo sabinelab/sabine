@@ -1,0 +1,43 @@
+model Prediction {
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String  @map("profile_id")
+
+  match String
+  game  Game
+  teams Team[]
+
+  status PredictionStatus @default(pending)
+  bet    BigInt?
+  odd    Int?             @db.SmallInt
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([profileId, game, match])
+  @@index([profileId, game, createdAt(sort: Desc)])
+  @@index([profileId, match, game])
+  @@index([game, match, status])
+}
+
+model Team {
+  id           String     @id @default(uuid())
+  prediction   Prediction @relation(fields: [predictionId], references: [id], onDelete: Cascade)
+  predictionId String     @map("prediction_id")
+
+  name   String
+  score  String
+  winner Boolean?
+
+  @@index([predictionId])
+}
+
+enum Game {
+  valorant
+  lol
+}
+
+enum PredictionStatus {
+  correct
+  pending
+  incorrect
+}

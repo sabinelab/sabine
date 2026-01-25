@@ -1,0 +1,179 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model LolEvent {
+  id     String  @id @default(uuid())
+  name   String
+  status String?
+  image  String?
+  url    String?
+}
+
+model ValEvent {
+  id     String  @id @default(uuid())
+  name   String
+  status String?
+  image  String?
+  url    String?
+}
+
+model LolMatch {
+  id                 String         @id
+  status             String?
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+  teams              LolMatchTeam[]
+  stage              String
+  when               DateTime
+  url                String?
+}
+
+model ValMatch {
+  id                 String         @id
+  status             String?
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+  teams              ValMatchTeam[]
+  stage              String
+  when               DateTime
+  url                String?
+}
+
+model LolResult {
+  id                 String          @id
+  status             String?
+  stage              String
+  when               DateTime
+  url                String?
+  teams              LolResultTeam[]
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+}
+
+model ValResult {
+  id                 String          @id
+  status             String?
+  stage              String
+  when               DateTime
+  url                String?
+  teams              ValResultTeam[]
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+}
+
+model News {
+  id          String  @id
+  title       String
+  description String?
+  url         String
+}
+
+model LolLiveMatch {
+  id                 String          @id
+  stage              String?
+  streams            LolStream[]
+  teams              LolResultTeam[]
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+}
+
+model ValLiveMatch {
+  id                 String          @id
+  currentMap         String
+  score1             String?
+  score2             String?
+  url                String?
+  stage              String?
+  streams            ValStream[]
+  teams              ValResultTeam[]
+  tournamentName     String
+  tournamentFullName String?
+  tournamentImage    String?
+}
+
+model LolStream {
+  id          String       @id @default(uuid())
+  liveMatch   LolLiveMatch @relation(fields: [liveMatchId], references: [id])
+  liveMatchId String
+  main        Boolean?
+  language    String?
+  embed_url   String?
+  official    Boolean?
+  raw_url     String?
+
+  @@index([liveMatchId])
+}
+
+model ValStream {
+  id          String       @id @default(uuid())
+  liveMatch   ValLiveMatch @relation(fields: [liveMatchId], references: [id])
+  liveMatchId String
+  main        Boolean
+  language    String
+  embed_url   String
+  official    Boolean
+  raw_url     String
+
+  @@index([liveMatchId])
+}
+
+model LolResultTeam {
+  id          String        @id @default(uuid())
+  match       LolResult?    @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId    String?
+  name        String
+  score       String
+  country     String?
+  winner      Boolean?
+  LiveMatch   LolLiveMatch? @relation(fields: [liveMatchId], references: [id])
+  liveMatchId String?
+
+  @@index([resultId])
+  @@index([liveMatchId])
+}
+
+model ValResultTeam {
+  id          String        @id @default(uuid())
+  match       ValResult?    @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  resultId    String?
+  name        String
+  score       String
+  country     String?
+  winner      Boolean?
+  liveMatch   ValLiveMatch? @relation(fields: [liveMatchId], references: [id])
+  liveMatchId String?
+
+  @@index([resultId])
+  @@index([liveMatchId])
+}
+
+model LolMatchTeam {
+  id      String   @id @default(uuid())
+  match   LolMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId String
+  name    String?
+  country String?
+
+  @@index([matchId])
+}
+
+model ValMatchTeam {
+  id      String   @id @default(uuid())
+  match   ValMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId String
+  name    String
+  country String?
+
+  @@index([matchId])
+}

@@ -1,0 +1,605 @@
+﻿id,name,collection,team,country,role,aim,hs,movement,aggression,acs,gamesense
+1,valyn,Base Card,no_team,us,controller,61.21,58.97,66.93,50,76.05,83.0
+2,jawgemo,Base Card,no_team,kh,duelist,89.14,77.55,82.91,80.95,70.73,56.82
+3,trent,Base Card,no_team,us,initiator,67.69,64.81,77.69,73.53,75.71,66.35
+4,JonahP,Base Card,no_team,ca,flex,74.23,67.18,74.21,70.06,72.18,67.8
+5,leaf,Base Card,no_team,us,flex,75.73,69.33,71.91,68.33,75.24,70.46
+6,artzin,Base Card,no_team,br,flex,71.36,67.48,70.22,68.45,69.56,66.77
+7,xenom,Base Card,no_team,br,controller,60.42,59.67,67.66,50,74.09,77.98
+8,cortezia,Base Card,no_team,br,sentinel,70.91,78.3,66.76,53.2,63.33,71.13
+9,Verno,Base Card,no_team,us,initiator,70.12,65.36,76.28,71.94,75.8,67.62
+10,aspas,Base Card,no_team,br,duelist,96.41,87.82,89.6,92.66,77.34,61.87
+11,mitch,Base Card,no_team,us,initiator,68.32,63.41,73.61,70.64,74.87,63.92
+12,Xeppaa,Base Card,no_team,us,flex,69.99,65.69,70.36,66.65,69.91,69.38
+13,v1c,Base Card,no_team,us,controller,61.74,59.71,68.11,50,76.44,81.48
+14,neT,Base Card,no_team,us,sentinel,72.01,79.13,69.65,54.0,66.07,74.79
+15,OXY,Base Card,no_team,us,duelist,88.05,79.52,87.26,84.78,71.38,56.2
+16,Ethan,Base Card,no_team,us,flex,69.1,67.74,72.0,66.91,68.91,66.74
+17,s0m,Eternal Heroes,nrg,us,controller,90.78,83.76,99.21,70.35,102.14,108.44
+18,brawk,Base Card,no_team,us,initiator,66.74,62.68,71.95,70.08,71.27,62.3
+19,mada,Base Card,no_team,ca,duelist,84.25,79.24,82.63,79.66,69.79,54.04
+20,skuba,Base Card,no_team,us,controller,62.77,62.62,67.64,50.87,76.17,81.15
+21,kiNgg,Base Card,no_team,cl,controller,64.78,63.92,72.47,52.61,76.42,85.37
+22,tex,Base Card,no_team,de,sentinel,72.54,84.27,72.57,57.13,66.44,72.71
+23,Okeanos,Base Card,no_team,vn,flex,72.23,68.9,68.87,67.04,68.8,68.15
+24,Sato,Base Card,no_team,br,duelist,92.2,81.01,86.68,87.07,73.91,60.51
+25,C0M,Base Card,no_team,us,initiator,62.53,58.48,69.6,67.04,68.19,58.84
+26,heat,Base Card,no_team,br,sentinel,75.98,81.9,69.84,55.4,64.9,72.57
+27,Palla,Base Card,no_team,br,duelist,80.6,74.71,76.59,76.54,65.5,53.5
+28,Urango,Base Card,no_team,br,flex,62.77,62.09,65.19,59.06,62.81,61.23
+29,tuyz,Base Card,no_team,br,controller,58.84,58.54,68.65,50,73.83,82.37
+30,basic,Base Card,no_team,it,initiator,66.67,60.87,70.61,68.63,72.03,61.9
+31,keznit,Base Card,no_team,cl,flex,75.84,71.81,76.99,69.36,74.38,70.39
+32,Mazino,Base Card,no_team,cl,flex,73.48,67.3,70.59,68.12,71.59,67.42
+33,adverso,Base Card,no_team,cl,initiator,64.46,63.57,72.08,70.38,72.55,60.33
+34,Shyy,Base Card,no_team,cl,sentinel,71.19,77.57,67.51,53.17,63.51,67.74
+35,Melser,Base Card,no_team,cl,controller,60.13,59.15,66.87,50,73.81,83.8
+36,johnqt,Base Card,no_team,ma,flex,74.26,72.78,75.12,71.23,77.39,73.68
+37,N4RRATE,Base Card,no_team,us,duelist,85.81,79.11,80.11,80.81,72.64,56.04
+38,bang,Base Card,no_team,us,controller,64.71,65.51,70.22,53.42,79.75,89.17
+39,Zellsis,Base Card,no_team,us,sentinel,65.72,75.85,62.14,50,60.73,67.81
+40,zekken,Base Card,no_team,us,controller,65.55,65.09,76.19,54.02,82.75,90.77
+41,Boostio,Base Card,no_team,us,sentinel,70.0,77.77,66.92,54.13,62.19,71.26
+42,zander,Base Card,no_team,ca,controller,60.82,61.4,69.77,50.28,75.49,84.86
+43,Cryo,Base Card,no_team,us,duelist,84.13,78.63,85.06,85.04,69.5,55.34
+44,eeiu,Base Card,no_team,ca,initiator,67.38,66.43,77.27,73.58,74.95,63.42
+45,Asuna,Base Card,no_team,us,flex,71.42,67.33,70.49,68.46,70.67,64.55
+46,NaturE,Base Card,no_team,us,flex,70.87,65.27,70.23,67.81,68.02,64.54
+47,Derrek,Base Card,no_team,us,initiator,66.39,64.62,74.13,72.03,76.14,63.27
+48,supamen,Base Card,no_team,us,controller,64.05,62.64,70.97,53.6,80.12,83.86
+49,icy,Base Card,no_team,us,duelist,81.46,73.72,75.94,79.55,68.16,52.61
+50,yay,Base Card,no_team,us,sentinel,76.17,82.85,71.02,54.66,65.85,76.81
+51,gobera,Base Card,no_team,br,sentinel,73.13,78.75,69.19,53.81,62.9,69.8
+52,lz,Base Card,no_team,br,controller,59.3,61.42,68.23,50.47,75.87,79.75
+53,spikeziN,Base Card,no_team,br,flex,76.57,72.09,79.04,75.55,77.3,74.38
+54,silentz,Base Card,no_team,br,duelist,82.36,78.77,82.21,82.75,70.78,56.11
+55,pryze,Base Card,no_team,br,initiator,61.47,60.79,69.23,68.32,71.2,61.25
+56,Virtyy,Base Card,no_team,do,duelist,84.01,74.25,80.25,77.04,69.65,54.95
+57,RobbieBk,Base Card,no_team,nl,initiator,67.97,66.73,76.22,71.91,77.76,64.42
+58,pANcada,Base Card,no_team,br,controller,63.21,63.88,71.98,54.76,82.64,86.88
+59,cauanzin,Base Card,no_team,br,initiator,69.92,65.47,71.33,66.01,71.16,64.34
+60,lukxo,Base Card,no_team,br,sentinel,78.69,82.56,74.72,56.59,67.26,76.23
+61,Boaster,Base Card,no_team,gb,controller,55.16,53.81,61.21,50,66.76,73.96
+62,crashies,Base Card,no_team,us,initiator,67.48,65.7,73.43,73.93,75.87,65.74
+63,kaajak,Base Card,no_team,pl,duelist,94.54,85.96,88.41,86.84,77.74,60.16
+64,Chronicle,Base Card,no_team,ru,flex,71.51,70.13,73.27,67.87,71.49,68.32
+65,Alfajer,Base Card,no_team,tr,sentinel,78.58,85.89,73.42,59.0,73.02,79.89
+66,Leo,Base Card,no_team,se,initiator,69.0,64.26,73.57,71.12,72.23,63.01
+67,Boo,Base Card,no_team,lt,controller,61.4,61.95,69.55,50.67,75.9,81.98
+68,MiniBoo,Base Card,no_team,lt,duelist,87.39,81.84,85.21,82.06,70.5,57.14
+69,Wo0t,Base Card,no_team,tr,duelist,88.51,79.38,85.6,85.26,73.29,56.32
+70,RieNs,Base Card,no_team,tr,initiator,69.55,65.18,77.08,74.44,79.92,65.38
+71,benjyfishy,Base Card,no_team,england,sentinel,76.22,84.93,71.45,58.14,68.93,75.43
+72,nAts,Base Card,no_team,ru,sentinel,79.34,83.9,75.8,59.91,69.07,78.25
+73,penny,Base Card,no_team,ca,duelist,78.5,75.1,76.66,74.51,65.14,53.3
+74,paTiTek,Base Card,no_team,pl,initiator,67.79,65.55,75.87,73.64,75.55,66.13
+75,Keiko,Base Card,no_team,gb,flex,77.97,72.86,77.18,72.39,77.69,72.58
+76,kamo,Base Card,no_team,pl,duelist,88.87,80.41,82.9,81.82,70.62,57.08
+77,Serial,Base Card,no_team,lv,controller,63.82,62.9,70.75,51.03,75.63,83.9
+78,Jamppi,Base Card,no_team,fi,initiator,65.68,62.4,73.78,68.57,72.41,63.82
+79,sociablEE,Base Card,no_team,tr,flex,75.62,69.1,74.28,71.14,74.32,69.71
+80,PROFEK,Base Card,no_team,pl,controller,57.71,59.4,65.14,50,73.17,79.71
+81,LewN,Base Card,no_team,tr,duelist,85.38,76.19,81.53,83.51,72.55,57.61
+82,MAGNUM,Base Card,no_team,cz,sentinel,70.16,78.7,67.16,53.2,62.38,69.31
+83,Hermes,Base Card,no_team,kr,flex,68.26,63.26,67.85,65.8,68.13,63.79
+84,Shao,Base Card,no_team,united_nations,initiator,68.08,63.18,75.95,69.77,74.92,64.88
+85,Ruxic,Base Card,no_team,tr,controller,61.52,63.86,69.22,52.02,76.11,85.04
+86,hiro,Base Card,no_team,tr,sentinel,73.09,80.96,71.76,55.38,67.95,75.85
+87,MrFalin,Base Card,no_team,tr,initiator,64.04,60.04,69.78,68.59,74.01,61.03
+88,xeus,Base Card,no_team,tr,duelist,89.8,82.63,85.91,86.43,75.51,57.0
+89,yetujey,Base Card,no_team,tr,sentinel,68.82,76.32,65.81,53.68,64.02,69.66
+90,AtaKaptan,Base Card,no_team,tr,controller,61.41,61.66,66.47,50.3,76.08,80.21
+91,qRaxs,Base Card,no_team,tr,flex,72.24,69.22,69.21,65.42,70.08,68.05
+92,Saadhak,Base Card,no_team,ar,flex,73.34,67.39,72.3,66.08,72.19,68.33
+93,Avez,Base Card,no_team,eg,initiator,67.97,67.05,78.58,73.74,75.21,67.88
+94,Elite,Base Card,no_team,tr,sentinel,76.18,81.64,70.85,55.74,67.44,74.19
+95,SUYGETSU,Base Card,no_team,united_nations,controller,69.28,69.17,74.05,57.43,84.51,93.62
+96,marteen,Base Card,no_team,cz,duelist,86.51,77.71,82.88,84.01,69.61,56.76
+97,Sayf,Base Card,no_team,se,flex,72.06,68.23,71.61,69.24,70.89,69.74
+98,Derke,Base Card,no_team,fi,duelist,96.6,84.34,92.68,89.21,78.08,62.18
+99,Kicks,Base Card,no_team,ee,controller,59.33,58.07,68.2,50,72.55,82.3
+100,CyvOph,Base Card,no_team,fr,controller,59.74,61.69,68.23,50,72.32,83.8
+101,Less,Base Card,no_team,br,sentinel,78.34,89.54,76.27,61.18,73.13,81.04
+102,Cloud,Base Card,no_team,ru,initiator,69.11,66.66,74.56,71.57,77.31,64.75
+103,grubinho,Base Card,no_team,pl,controller,62.05,61.65,69.14,50.62,77.4,82.69
+104,westside,Base Card,no_team,pl,sentinel,74.55,79.91,68.93,53.99,65.07,71.98
+105,Flickless,Base Card,no_team,be,flex,74.51,71.75,72.95,69.43,74.28,71.59
+106,ara,Base Card,no_team,ro,duelist,85.13,75.68,78.13,77.27,67.12,53.09
+107,flyuh,Base Card,no_team,us,initiator,65.65,61.57,74.14,69.51,76.09,63.62
+108,nataNk,Base Card,no_team,fr,flex,66.71,61.22,67.38,62.59,67.4,62.91
+109,baddyG,Base Card,no_team,pl,controller,60.8,60.7,66.79,50,77.24,82.3
+110,MONSTEERR,Base Card,no_team,cz,sentinel,74.23,79.63,67.41,55.04,63.79,71.29
+111,Filu,Base Card,no_team,pl,duelist,86.98,78.18,85.34,80.99,72.72,56.87
+112,Proxh,Base Card,no_team,tr,controller,63.19,61.08,69.51,50.99,76.45,85.84
+113,Veqaj,Base Card,no_team,fr,initiator,71.55,65.08,77.38,73.65,77.93,67.62
+114,ComeBack,Base Card,no_team,tr,duelist,85.32,77.91,83.86,81.36,70.33,55.19
+115,Minny,Base Card,no_team,cz,sentinel,71.3,80.6,70.21,54.43,65.08,74.4
+116,kamyk,Base Card,no_team,pl,flex,72.77,68.11,72.7,70.04,73.13,68.81
+117,nobody,Base Card,no_team,cn,initiator,72.64,69.93,79.16,75.93,80.22,69.82
+118,ZmjjKK,Base Card,no_team,cn,duelist,97.45,85.02,89.59,90.37,80.13,62.59
+119,CHICHOO,Base Card,no_team,cn,sentinel,75.0,81.67,72.98,57.65,70.18,75.96
+120,Smoggy,Base Card,no_team,cn,controller,63.37,61.8,68.9,51.99,77.48,84.48
+121,S1Mon,Base Card,no_team,cn,flex,69.24,69.3,72.41,67.73,72.9,69.45
+122,whzy,Base Card,no_team,cn,duelist,91.96,81.95,84.66,88.4,75.06,59.9
+123,Levius,Base Card,no_team,cn,sentinel,65.03,68.45,60.58,50,57.07,61.89
+124,rushia,Base Card,no_team,cn,controller,57.75,57.7,65.81,50,71.26,79.77
+125,nephh,Base Card,no_team,cn,initiator,63.14,62.21,72.02,67.53,70.5,59.92
+126,Knight,Base Card,no_team,cn,flex,72.14,71.22,72.49,69.33,75.05,69.92
+127,Haodong,Base Card,no_team,cn,controller,60.91,60.44,66.63,50,76.2,82.81
+128,Abo,Base Card,no_team,cn,sentinel,72.49,77.11,68.0,54.9,64.0,72.22
+129,Rb,Base Card,no_team,kr,flex,70.82,70.8,72.94,67.77,70.98,69.05
+130,TvirusLuke,Base Card,no_team,tw,duelist,82.29,73.08,80.79,80.41,67.61,52.27
+131,LuoK1ng,Base Card,no_team,cn,controller,61.61,60.4,68.39,50,73.61,83.37
+132,Kai,Base Card,no_team,cn,duelist,82.2,71.83,76.66,75.89,67.67,52.13
+133,FengF,Base Card,no_team,cn,sentinel,69.94,76.87,64.09,52.18,61.23,70.17
+134,HeyBay,Base Card,no_team,hk,sentinel,69.68,78.09,65.3,51.6,63.01,71.73
+135,Biank,Base Card,no_team,cn,initiator,57.91,53.74,64.19,60.43,64.25,55.04
+136,Scales,Base Card,no_team,cn,controller,55.84,55.39,61.41,50,69.46,74.54
+137,Ninebody,Base Card,no_team,cn,duelist,89.3,78.01,85.26,85.06,73.92,56.9
+138,zjc,Base Card,no_team,cn,sentinel,70.52,78.29,68.25,52.36,61.1,69.84
+139,Viva,Base Card,no_team,cn,initiator,65.09,62.69,73.16,67.9,71.67,61.17
+140,Midi,Base Card,no_team,cn,flex,67.26,62.71,66.99,61.75,66.25,64.83
+141,Rarga,Base Card,no_team,ru,duelist,86.52,80.7,84.32,85.34,73.7,58.21
+142,happywei,Base Card,no_team,tw,sentinel,74.43,81.56,72.16,57.11,68.98,72.89
+143,coconut,Base Card,no_team,hk,controller,58.84,60.88,69.22,51.23,75.73,81.4
+144,MarT1n,Base Card,no_team,cn,sentinel,66.53,75.59,66.21,50.95,62.07,69.82
+145,Nicc,Base Card,no_team,tw,initiator,64.63,64.06,72.52,69.41,71.87,63.06
+146,Flex1n,Base Card,no_team,cn,controller,60.88,61.71,66.44,50,76.58,82.64
+147,vo0kashu,Base Card,no_team,ru,sentinel,71.99,82.44,67.99,54.72,64.85,72.06
+148,Cangshu,Base Card,no_team,tw,flex,69.5,69.27,73.33,68.75,70.13,67.79
+149,Akeman,Base Card,no_team,cn,flex,74.11,71.43,75.42,70.74,73.68,72.53
+150,SpiritZ1,Base Card,no_team,tw,duelist,87.39,80.69,85.04,83.78,73.83,58.3
+151,SiuFatBB,Base Card,no_team,hk,initiator,72.07,65.5,79.59,74.39,76.33,66.58
+152,Yuicaw,Base Card,no_team,tw,flex,74.46,70.98,71.64,70.4,73.62,71.65
+153,Spring,Base Card,no_team,tw,controller,63.61,65.59,72.48,52.6,80.25,87.81
+154,Lysoar,Base Card,no_team,cn,sentinel,72.71,80.19,69.0,55.05,65.25,73.69
+155,Juicy,Base Card,no_team,sg,duelist,83.85,75.02,79.22,79.89,69.62,52.88
+156,o0o0o,Base Card,no_team,cn,initiator,66.44,64.67,72.9,69.25,74.52,65.53
+157,OBONE,Base Card,no_team,cn,sentinel,62.55,70.38,60.49,50,57.28,62.37
+158,BerliN,Base Card,no_team,tw,flex,72.5,68.63,70.5,66.07,73.16,66.17
+159,Autumn,Base Card,no_team,au,sentinel,75.52,82.55,70.73,56.68,67.97,74.8
+160,Life,Base Card,no_team,cn,duelist,87.81,82.24,82.2,84.86,72.93,58.33
+161,AAAAY,Base Card,no_team,cn,initiator,70.82,66.74,78.97,75.74,75.66,65.35
+162,yosemite,Base Card,no_team,cn,controller,55.41,58.35,63.98,50,69.28,75.14
+163,player,Base Card,no_team,cn,flex,71.1,67.89,68.92,65.9,68.24,68.04
+164,XiYiJi,Base Card,no_team,cn,flex,59.16,56.84,58.41,58.19,58.55,56.71
+165,deLb,Base Card,no_team,id,initiator,68.42,65.09,76.85,70.94,75.94,62.83
+166,HanChe,Base Card,no_team,tw,sentinel,73.45,79.25,70.09,55.06,68.24,71.75
+167,Crazyguy,Base Card,no_team,vn,flex,72.07,68.77,74.6,70.47,70.89,69.77
+168,Monyet,Base Card,no_team,id,controller,62.36,63.98,68.92,50.91,75.4,82.24
+169,xffero,Base Card,no_team,id,sentinel,72.72,78.14,68.33,53.88,64.48,69.19
+170,Jemkin,Base Card,no_team,ru,duelist,90.36,79.86,83.06,85.3,71.48,58.86
+171,Kushy,Base Card,no_team,id,initiator,68.22,64.66,78.45,72.34,75.12,67.36
+172,MaKo,Base Card,no_team,kr,controller,61.82,65.09,69.69,51.31,77.53,84.52
+173,free1ng,Base Card,no_team,kr,initiator,70.74,64.49,75.19,75.04,76.23,65.68
+174,HYUNMIN,Base Card,no_team,kr,duelist,85.58,77.55,84.7,83.62,73.17,56.84
+175,Estrella,Base Card,no_team,kr,flex,74.35,69.53,71.42,69.49,75.09,67.57
+176,BeYN,Base Card,no_team,kr,sentinel,68.14,75.33,63.74,50.13,61.98,65.24
+177,Munchkin,Base Card,no_team,kr,flex,73.1,69.12,74.01,69.49,74.99,67.76
+178,Foxy9,Base Card,no_team,kr,sentinel,68.72,78.05,65.23,52.16,63.95,70.7
+179,Ash,Base Card,no_team,kr,initiator,69.89,68.9,78.21,74.14,78.56,65.31
+180,t3xture,Base Card,no_team,kr,duelist,93.35,85.99,89.02,89.65,77.2,59.12
+181,Suggest,Base Card,no_team,kr,sentinel,62.33,67.64,58.81,50,55.98,60.99
+182,Karon,Base Card,no_team,kr,controller,66.58,67.53,74.17,53.92,84.7,88.12
+183,UdoTan,Base Card,no_team,kr,duelist,81.78,71.42,74.84,77.8,67.48,52.47
+184,Kr1stal,Base Card,no_team,ru,initiator,66.34,62.76,72.2,67.9,72.31,63.15
+185,PapiChulo,Base Card,no_team,ph,controller,59.03,59.44,65.86,50,72.27,77.98
+186,Ban,Base Card,no_team,kr,sentinel,72.13,77.61,68.84,52.95,63.09,73.28
+187,yoman,Base Card,no_team,kr,flex,67.0,65.17,67.84,65.34,68.94,65.99
+188,Deryeon,Base Card,no_team,sg,sentinel,69.67,75.71,65.5,50,63.11,69.71
+189,invy,Base Card,no_team,sg,sentinel,72.96,79.83,71.15,54.86,65.95,71.8
+190,Wild0reoo,Base Card,no_team,ph,flex,72.54,67.69,70.55,65.97,71.54,65.52
+191,Persia,Base Card,no_team,kr,controller,59.13,57.27,64.81,50,71.42,79.88
+192,Francis,Base Card,no_team,kr,flex,67.86,63.67,65.09,61.71,65.38,63.86
+193,margaret,Base Card,no_team,kr,sentinel,70.58,75.78,67.0,52.34,62.65,68.9
+194,Dambi,Base Card,no_team,kr,duelist,79.46,69.8,74.54,73.88,65.34,51.0
+195,Ivy,Base Card,no_team,kr,initiator,66.72,60.87,72.55,69.95,70.85,61.83
+196,Crws,Base Card,no_team,th,flex,65.77,62.2,65.95,62.93,64.95,64.52
+197,Killua,Base Card,no_team,th,flex,69.46,66.81,71.7,67.29,72.25,68.53
+198,thyy,Base Card,no_team,th,controller,60.35,63.28,67.32,50,78.44,85.62
+199,JitBoys,Base Card,no_team,th,sentinel,74.56,82.01,71.4,55.39,65.26,72.09
+200,primmie,Base Card,no_team,th,duelist,87.1,81.82,84.79,85.88,74.55,55.99
+201,Surf,Base Card,no_team,th,initiator,70.97,64.86,77.26,73.3,76.37,65.12
+202,stax,Base Card,no_team,kr,initiator,68.51,64.88,74.94,72.86,74.69,65.57
+203,Meteor,Base Card,no_team,kr,sentinel,76.14,81.02,71.57,56.81,68.16,73.15
+204,Sylvan,Base Card,no_team,kr,controller,58.79,58.98,67.55,50.24,74.89,79.69
+205,BuZz,Base Card,no_team,kr,duelist,90.31,81.1,86.29,86.32,73.18,59.43
+206,DH,Base Card,no_team,kr,sentinel,73.23,80.89,69.82,55.91,66.15,71.42
+207,iZu,Base Card,no_team,kr,flex,73.71,71.64,74.77,70.91,73.65,71.92
+208,carpe,Base Card,no_team,kr,controller,57.31,57.8,63.06,50,69.79,80.14
+209,PatMen,Base Card,no_team,ph,initiator,73.03,68.21,79.06,75.1,79.29,68.93
+210,Jinggg,Base Card,no_team,sg,duelist,89.99,80.02,85.65,84.85,71.84,57.25
+211,f0rsakeN,Base Card,no_team,id,flex,79.16,74.79,78.93,78.65,80.1,77.8
+212,d4v41,Base Card,no_team,my,sentinel,76.09,82.04,71.18,56.84,68.22,76.18
+213,something,Base Card,no_team,ru,duelist,87.41,80.85,84.24,84.89,73.0,58.54
+214,mindfreak,Base Card,no_team,id,controller,59.44,58.94,63.6,50,72.94,78.02
+215,TenTen,Base Card,no_team,kr,duelist,81.37,74.0,78.67,78.52,65.67,52.62
+216,SugarZ3ro,Base Card,no_team,jp,controller,60.02,60.78,70.48,51.11,75.28,83.46
+217,CLZ,Base Card,no_team,jp,sentinel,70.9,75.13,65.15,52.72,63.35,69.79
+218,Xdll,Base Card,no_team,jp,flex,70.87,66.97,70.27,66.12,70.1,65.72
+219,Meiy,Base Card,no_team,jp,duelist,81.35,74.28,76.96,77.12,69.58,53.45
+220,Art,Base Card,no_team,jp,flex,60.28,56.96,59.73,59.43,59.82,59.17
+221,Jinboong,Base Card,no_team,kr,sentinel,75.27,83.03,68.15,54.8,67.47,72.15
+222,Akame,Base Card,no_team,kr,initiator,66.18,61.88,75.15,71.32,75.06,61.89
+223,gyen,Base Card,no_team,jp,controller,60.49,60.39,68.58,50,74.75,81.09
+224,SSeS,Base Card,no_team,jp,controller,56.25,55.25,62.07,50,69.73,74.84
+225,dos9,Base Card,no_team,kz,controller,60.6,58.93,68.18,50.34,73.21,79.32
+226,Famouz,Base Card,no_team,id,duelist,79.68,73.39,78.91,78.22,67.49,51.2
+227,Shiro,Base Card,no_team,id,initiator,63.53,61.62,72.89,68.12,69.59,62.37
+228,NcSlasher,Base Card,no_team,id,flex,70.76,64.99,70.39,64.94,70.99,64.44
+229,BerserX,Base Card,no_team,id,sentinel,69.99,79.35,65.63,52.54,62.66,68.26
+230,KovaQ,Base Card,no_team,ch,flex,69.93,68.28,70.72,70.29,71.32,66.33
+231,UNFAKE,Base Card,no_team,pl,initiator,67.72,63.81,73.62,70.7,71.38,61.74
+232,RgLMeister,Base Card,no_team,br,controller,50.08,50,53.7,50,60.48,64.47
+233,maestr0,Base Card,no_team,br,duelist,67.53,62.33,67.6,66.46,58.01,50
+234,prozin,Base Card,no_team,br,flex,55.25,53.05,55.89,52.28,56.29,54.68
+235,gaabxx,Base Card,no_team,br,initiator,51.52,50,58.47,54.68,55.43,50
+236,frz,Base Card,no_team,br,sentinel,58.91,64.41,56.6,50,53.01,59.53
+237,lucks,Base Card,no_team,br,sentinel,55.19,58.62,53.39,50,50,54.67
+238,deNaro,Base Card,no_team,br,initiator,54.4,50.23,58.03,55.53,58.89,51.51
+239,Brinks,Base Card,no_team,br,controller,52.01,50,55.53,50,61.85,67.52
+240,forbanz,Base Card,no_team,br,duelist,73.94,67.37,68.89,67.69,60.27,50
+241,Askia,Base Card,no_team,br,flex,65.93,64.95,67.1,64.63,67.77,65.07
+242,mwzera,Base Card,no_team,br,initiator,65.15,64.43,73.76,69.55,71.92,62.24
+243,ambitioN,Base Card,no_team,br,duelist,71.46,68.84,70.35,72.35,60.86,50
+244,mazin,Base Card,no_team,br,flex,62.48,57.38,61.02,59.45,62.89,57.88
+245,jzz,Base Card,no_team,br,sentinel,61.3,68.44,60.97,50,57.78,62.29
+246,GuhRVN,Base Card,no_team,br,controller,52.9,50.46,55.73,50,62.02,69.18
+247,shion,Base Card,no_team,br,initiator,54.91,50.03,60.25,58.13,60.04,50.77
+248,liazzi,Base Card,no_team,br,flex,55.6,54.71,56.38,54.52,56.79,54.8
+249,sw,Base Card,no_team,br,controller,51.4,50,56.61,50,63.52,66.76
+250,tkzin,Base Card,no_team,br,duelist,75.65,68.94,68.54,70.92,60.25,50
+251,pollo,Base Card,no_team,br,sentinel,64.29,71.86,59.13,50,58.21,61.83
+252,Loss,Base Card,no_team,br,duelist,73.34,69.89,71.44,71.51,62.45,50
+253,skz,Base Card,no_team,br,flex,60.79,58.67,59.68,58.04,60.41,57.24
+254,above,Base Card,no_team,br,controller,52.37,53.16,58.0,50,66.01,71.28
+255,swag,Base Card,no_team,br,sentinel,56.4,62.69,53.17,50,50.94,58.48
+256,desire,Base Card,no_team,br,initiator,57.08,56.15,63.88,59.49,65.27,54.63
+257,demek,Base Card,no_team,pl,duelist,70.2,62.39,63.95,66.29,57.81,50
+258,Guardy,Base Card,no_team,es,initiator,55.19,51.39,61.72,60.01,62.86,53.44
+259,globeX,Base Card,no_team,eu,controller,51.33,50.46,56.92,50,60.42,66.5
+260,pika,Base Card,no_team,ar,initiator,53.06,52.27,58.24,57.27,59.47,52.32
+261,ZachKappa,Base Card,no_team,eu,duelist,72.5,66.44,67.42,68.35,61.5,50
+262,Fit1nho,Base Card,no_team,es,flex,69.65,67.13,70.89,64.38,71.52,66.63
+263,Vorwenn,Base Card,no_team,es,initiator,53.4,51.29,58.65,57.66,60.2,51.17
+264,Saiz,Base Card,no_team,es,sentinel,61.23,70.59,59.06,50,54.68,61.02
+265,krejzzs,Base Card,no_team,pl,duelist,73.94,67.56,71.46,73.14,61.8,50.55
+266,lowel,Base Card,no_team,es,controller,50.76,50.61,54.59,50,61.44,65.58
+267,hoody,Base Card,no_team,fi,flex,59.59,57.4,60.31,56.15,61.9,56.1
+268,YaBoiLewis,Base Card,no_team,wales,initiator,56.27,53.5,61.99,59.88,61.84,53.83
+269,Mistic,Base Card,no_team,gb,controller,56.52,56.58,65.56,50,72.5,79.96
+270,al0rante,Base Card,no_team,de,sentinel,60.8,67.78,58.04,50,54.3,62.78
+271,xuss,Base Card,no_team,pl,duelist,73.07,68.0,70.74,69.11,58.87,50
+272,Unfair,Base Card,no_team,de,initiator,60.18,57.17,65.57,63.99,66.01,57.97
+273,Kuba,Base Card,no_team,de,initiator,56.58,54.0,63.42,57.43,61.19,53.05
+274,iluri,Base Card,no_team,fi,initiator,56.41,53.92,62.15,59.12,61.51,53.35
+275,bipo,Base Card,no_team,it,duelist,72.42,67.05,68.7,71.29,59.01,50
+276,Lime,Base Card,no_team,gb,flex,62.7,58.62,63.4,59.28,62.47,59.29
+277,Fizzy,Base Card,no_team,pt,sentinel,57.93,62.62,57.16,50,54.22,57.6
+278,Obnoks,Base Card,no_team,de,controller,52.25,50,51.5,50,57.74,62.9
+279,Sayonara,Base Card,no_team,md,flex,68.51,66.29,68.08,66.43,69.29,65.97
+280,Foxie,Base Card,no_team,gb,flex,60.06,57.18,60.81,56.47,60.74,56.05
+281,logaN,Base Card,no_team,fr,sentinel,59.05,65.97,55.34,50,53.71,57.68
+282,lux9,Base Card,no_team,fr,duelist,77.36,68.24,73.22,71.25,63.77,50
+283,f4ngeer,Base Card,no_team,ru,duelist,73.13,68.04,71.24,69.3,60.19,50
+284,Yohpa,Base Card,no_team,fr,initiator,55.69,52.71,62.04,58.77,61.01,53.2
+285,Sevire,Base Card,no_team,nl,flex,60.35,60.24,62.48,57.82,61.0,59.67
+286,ease,Base Card,no_team,es,controller,52.02,50,51.9,50,58.28,65.24
+287,soren,Base Card,no_team,fr,sentinel,65.05,69.9,61.14,50,57.55,61.44
+288,PatMen,Masters Toronto 2025,prx,ph,initiator,84.54,82.46,95.17,90.6,94.02,81.28
+289,Jinggg,Masters Toronto 2025,prx,sg,duelist,106.37,94.72,102.02,101.96,89.22,67.57
+290,f0rsakeN,Masters Toronto 2025,prx,id,flex,96.83,88.45,98.37,88.87,93.03,89.99
+291,d4v41,Masters Toronto 2025,prx,my,sentinel,90.66,103.02,87.49,70.59,85.44,94.67
+292,something,Masters Toronto 2025,prx,ru,duelist,107.78,94.48,99.45,99.87,86.87,69.98
+293,MOLSI,Base Card,no_team,pl,initiator,66.86,62.54,72.34,72.01,73.09,62.69
+294,OLIZERA,Base Card,no_team,pt,sentinel,70.73,77.56,66.68,52.8,63.04,68.31
+295,AvovA,Base Card,no_team,dk,controller,60.01,61.15,66.99,51.61,74.37,81.41
+296,batujnax,Base Card,no_team,tr,flex,65.93,64.54,66.38,63.18,68.86,64.89
+297,alexiiik,Base Card,no_team,cz,duelist,86.14,77.92,84.41,82.92,74.21,58.04
+298,CoCo,Base Card,no_team,cn,flex,65.48,61.66,62.94,59.78,64.56,60.0
+299,stew,Base Card,no_team,kr,duelist,85.07,76.81,81.55,80.2,70.68,57.12
+300,Babyblue,Base Card,no_team,cn,initiator,67.17,61.52,73.88,70.24,72.24,63.53
+301,Yoyo,Base Card,no_team,tw,flex,65.78,62.89,63.9,62.05,66.52,60.88
+302,monk,Base Card,no_team,cn,flex,68.83,62.43,67.93,66.0,67.35,66.02
+303,Swerl,Base Card,no_team,ir,duelist,82.72,73.75,75.97,79.52,66.1,53.21
+304,Shr1mp,Base Card,no_team,cn,initiator,66.5,59.98,72.06,68.47,72.7,63.11
+305,Spitfires,Base Card,no_team,cn,duelist,81.77,71.43,78.07,74.83,67.57,53.59
+306,Nizzy,Base Card,no_team,vn,flex,73.6,70.33,75.99,72.3,75.95,71.94
+307,Zesbeew,Base Card,no_team,sg,controller,57.85,59.85,65.05,50.51,72.68,83.01
+308,KellyS,Base Card,no_team,ph,sentinel,70.55,77.37,68.61,53.89,63.21,69.07
+309,Dep,Base Card,no_team,jp,sentinel,69.88,77.11,67.8,52.88,63.18,72.56
+310,Kess,Base Card,no_team,kr,flex,72.03,67.53,71.88,65.94,72.3,68.85
+311,Dantedeu5,Base Card,no_team,ar,duelist,85.31,76.46,78.04,80.84,67.81,53.39
+312,trexx,Base Card,no_team,ru,initiator,64.25,60.59,70.74,67.27,72.86,63.19
+313,NoMan,Base Card,no_team,hk,flex,75.91,73.96,74.57,73.66,77.71,71.07
+314,NicoMachine,Base Card,no_team,cl,initiator,53.35,51.13,60.01,57.49,61.78,52.36
+315,Yeah,Base Card,no_team,br,duelist,72.53,65.45,71.93,69.31,61.02,50
+316,phc,Base Card,no_team,br,controller,50.78,50,56.54,50,61.52,68.0
+317,benG,Base Card,no_team,cl,sentinel,62.3,68.8,59.87,50,55.31,63.36
+318,mta,Base Card,no_team,cl,flex,66.83,60.54,65.16,62.86,63.71,62.34
+319,vaiZ,Base Card,no_team,cl,initiator,53.39,52.09,60.62,57.97,59.33,51.41
+320,murizzz,Base Card,no_team,br,flex,58.31,54.06,57.21,55.61,56.81,55.37
+321,snw,Base Card,no_team,br,duelist,79.0,70.62,74.25,74.0,62.37,50.47
+322,David,Base Card,no_team,cl,controller,52.57,51.69,56.24,50,63.69,69.13
+323,rubkkoide,Base Card,no_team,ar,sentinel,57.08,63.95,54.29,50,54.19,57.16
+324,Tacolilla,Base Card,no_team,cl,duelist,72.76,62.93,67.46,68.92,59.51,50
+325,Suther,Base Card,no_team,cl,flex,54.44,51.02,55.56,50.91,55.17,52.52
+326,delz1k,Base Card,no_team,cl,controller,51.47,50,54.47,50,60.67,65.38
+327,NagZet,Base Card,no_team,cl,sentinel,63.57,71.46,61.69,50,57.37,62.89
+328,Klaus,Base Card,no_team,ar,initiator,57.4,55.3,65.99,62.37,65.44,57.07
+329,jotinha,Base Card,no_team,ar,flex,59.64,56.99,59.74,59.04,61.37,56.19
+330,Neto,Base Card,no_team,ar,duelist,71.6,63.87,68.31,68.79,56.38,50
+331,mizu,Base Card,no_team,ar,sentinel,57.81,63.33,56.6,50,51.86,60.09
+332,HANLING,Base Card,no_team,ar,flex,59.09,55.57,58.43,57.7,57.86,56.48
+333,bnj,Base Card,no_team,ar,controller,52.15,50.64,54.88,50,60.89,67.22
+334,kivary,Base Card,no_team,cl,flex,59.27,56.24,58.63,57.46,58.91,56.24
+335,miyeon,Base Card,no_team,cl,flex,60.9,61.02,63.97,60.88,63.02,59.16
+336,deigara,Base Card,no_team,ar,flex,59.83,58.46,61.43,57.44,60.87,56.23
+337,Crazy NY,Base Card,no_team,cl,flex,59.54,55.65,59.4,57.72,59.75,58.04
+338,Tinchoff,Base Card,no_team,ar,sentinel,55.56,62.63,54.4,50,50.8,57.82
+339,Tuli,Base Card,no_team,cl,duelist,73.17,65.12,68.67,68.51,60.77,50
+340,Cebando,Base Card,no_team,ar,controller,53.1,50.74,58.92,50,63.36,71.1
+341,Mited,Base Card,no_team,co,initiator,56.91,54.79,61.35,60.47,63.36,53.78
+342,Feniz,Base Card,no_team,cr,sentinel,54.96,61.87,51.75,50,50,56.47
+343,Darker,Base Card,no_team,co,flex,56.09,50.66,56.21,51.78,53.74,52.17
+344,mixyce,Base Card,no_team,br,initiator,50.34,50,56.82,54.84,56.23,50
+345,Bruxo,Base Card,no_team,br,duelist,64.95,59.5,62.63,62.57,53.01,50
+346,sanoj,Base Card,no_team,br,sentinel,53.26,60.23,52.1,50,50.64,54.2
+347,Loweed,Base Card,no_team,br,flex,53.51,50.6,53.64,53.04,54.68,51.44
+348,Renna,Base Card,no_team,br,flex,51.28,50,52.0,50.75,52.37,50.22
+349,guuih,Base Card,no_team,br,sentinel,51.51,55.75,50,50,50,52.01
+350,Siduzord,Base Card,no_team,br,initiator,50,50,53.89,53.06,54.94,50
+351,Zanatsu,Base Card,no_team,br,duelist,69.01,63.38,64.1,64.0,58.04,50
+352,Tisora,Base Card,no_team,br,flex,59.24,56.6,58.34,56.86,57.7,56.41
+353,raafa,Base Card,no_team,br,controller,50,50,50,50,50,54.32
+354,havoc,Base Card,no_team,br,sentinel,60.33,66.38,55.67,50,52.76,60.49
+355,PxS,Base Card,no_team,us,initiator,54.37,53.71,59.15,59.1,61.55,53.17
+356,kon4n,Base Card,no_team,br,flex,54.1,50,51.52,50,51.82,50.24
+357,dgzin,Base Card,no_team,br,duelist,89.01,78.65,83.05,82.93,71.76,57.2
+358,Reduxx,Base Card,no_team,us,duelist,81.59,71.17,76.65,77.39,66.08,52.8
+359,NiSMO,Base Card,no_team,ca,flex,66.52,60.7,65.02,62.42,63.75,60.39
+360,nightz,Base Card,no_team,us,controller,53.44,54.51,60.69,50,67.61,75.34
+361,Kyu,Base Card,no_team,ca,initiator,58.08,56.48,63.98,61.57,67.24,57.7
+362,satellite,Base Card,no_team,ca,sentinel,60.89,65.25,56.45,50,56.2,61.21
+363,chloric,Base Card,no_team,us,flex,55.25,55.39,56.21,55.49,57.14,54.82
+364,RENZ,Base Card,no_team,us,duelist,73.23,65.62,67.41,67.76,58.8,50
+365,Wildfire,Base Card,no_team,ua,initiator,53.83,52.56,59.29,57.92,58.6,52.84
+366,Ange,Base Card,no_team,ca,controller,52.2,50,51.46,50,53.54,60.96
+367,geeza,Base Card,no_team,us,sentinel,58.87,66.43,58.0,50,54.37,57.76
+368,stax,Masters Bangkok 2025,t1,kr,initiator,83.44,82.51,93.45,88.28,95.97,79.81
+369,Meteor,Masters Bangkok 2025,t1,kr,sentinel,93.64,102.88,85.82,69.97,84.86,93.82
+370,Sylvan,Masters Bangkok 2025,t1,kr,controller,73.85,74.18,85.74,62.89,94.92,101.36
+371,BuZz,Masters Bangkok 2025,t1,kr,duelist,101.61,92.2,98.4,98.71,84.78,66.37
+372,iZu,Masters Bangkok 2025,t1,kr,flex,86.83,83.81,88.78,83.6,85.98,83.33
+373,johnqt,Champions 2024,sentinels,ma,sentinel,80.48,91.27,77.54,61.44,73.31,81.93
+374,Sacy,Champions 2024,sentinels,br,initiator,74.14,73.76,86.08,82.33,84.4,70.6
+375,TenZ,Champions 2024,sentinels,us,controller,69.42,68.4,77.21,57.55,84.1,94.22
+376,Zellsis,Champions 2024,sentinels,us,flex,79.06,75.39,77.42,74.34,78.23,76.03
+377,zekken,Champions 2024,sentinels,us,duelist,98.73,88.0,91.69,92.8,83.28,63.38
+378,Mazino,Champions 2024,leviatan,cl,flex,82.68,79.41,81.25,77.21,83.64,79.67
+379,aspas,Champions 2024,leviatan,br,duelist,104.19,90.48,95.86,99.5,82.19,65.33
+380,tex,Champions 2024,leviatan,de,sentinel,85.34,93.89,77.89,63.0,74.68,83.4
+381,C0M,Champions 2024,leviatan,us,initiator,71.2,68.0,81.45,75.64,78.08,68.78
+382,kiNgg,Champions 2024,leviatan,cl,controller,72.39,72.19,81.33,59.46,91.34,97.17
+383,Boo,Champions 2024,heretics,lt,controller,73.18,72.01,79.77,60.21,91.0,99.53
+384,MiniBoo,Champions 2024,heretics,lt,duelist,99.06,90.94,96.03,93.8,83.06,65.8
+385,Wo0t,Champions 2024,heretics,tr,flex,88.87,80.87,89.93,82.89,86.84,83.02
+386,RieNs,Champions 2024,heretics,tr,initiator,83.97,78.49,90.77,87.72,89.77,79.44
+387,benjyfishy,Champions 2024,heretics,england,sentinel,87.3,96.62,80.7,66.39,79.14,86.35
+388,nobody,Champions 2024,edg,cn,initiator,84.94,77.59,95.77,89.58,92.5,80.98
+389,ZmjjKK,Champions 2024,edg,cn,duelist,110,101.71,103.86,105.46,92.47,73.04
+390,CHICHOO,Champions 2024,edg,cn,sentinel,95.25,104.74,89.76,70.63,86.71,95.3
+391,Smoggy,Champions 2024,edg,cn,controller,78.42,77.54,85.08,62.93,96.26,108.78
+392,S1Mon,Champions 2024,edg,cn,flex,87.25,87.09,87.39,83.89,89.07,83.35
+393,Boostio,Masters Shanghai 2024,100t,us,sentinel,80.26,88.25,76.04,60.97,71.52,79.38
+394,bang,Masters Shanghai 2024,100t,ca,controller,72.1,69.14,80.76,58.81,88.36,93.83
+395,Cryo,Masters Shanghai 2024,100t,us,duelist,98.91,86.41,90.14,90.06,79.68,64.41
+396,eeiu,Masters Shanghai 2024,100t,ca,initiator,75.04,71.84,82.69,80.95,83.95,70.21
+397,Asuna,Masters Shanghai 2024,100t,us,flex,80.57,74.64,80.46,75.51,81.0,74.68
+398,valyn,Masters Shanghai 2024,g2,us,controller,72.12,72.36,77.32,57.11,89.72,94.31
+399,icy,Masters Shanghai 2024,g2,us,duelist,92.36,85.0,88.0,91.22,77.23,61.38
+400,trent,Masters Shanghai 2024,g2,us,initiator,80.1,75.95,88.48,83.07,89.85,75.98
+401,JonahP,Masters Shanghai 2024,g2,ca,flex,86.64,81.79,84.01,81.35,82.92,79.02
+402,leaf,Masters Shanghai 2024,g2,us,sentinel,84.39,93.9,80.49,65.53,77.79,85.95
+403,Boo,Masters Shanghai 2024,heretics,lt,controller,71.13,72.2,79.73,60.36,90.86,99.22
+404,paTiTek,Masters Shanghai 2024,heretics,pl,initiator,84.84,78.29,90.99,84.84,90.03,77.81
+405,Wo0t,Masters Shanghai 2024,heretics,tr,flex,87.45,84.64,87.21,83.5,91.56,87.74
+406,RieNs,Masters Shanghai 2024,heretics,tr,initiator,83.99,79.52,93.83,87.94,94.7,79.49
+407,benjyfishy,Masters Shanghai 2024,heretics,england,sentinel,85.74,94.02,84.86,65.14,78.08,88.14
+408,Munchkin,Masters Shanghai 2024,geng,kr,flex,88.73,85.78,91.85,87.37,90.8,84.01
+409,Meteor,Masters Shanghai 2024,geng,kr,sentinel,92.12,105.45,91.33,70.16,86.52,91.71
+410,Lakia,Masters Shanghai 2024,geng,kr,initiator,83.59,78.38,93.87,84.78,93.0,79.34
+411,t3xture,Masters Shanghai 2024,geng,kr,duelist,108.26,103.06,104.51,103.88,92.25,71.21
+412,Karon,Masters Shanghai 2024,geng,kr,controller,80.52,79.5,86.03,65.6,97.11,104.86
+413,P0PPIN,Base Card,no_team,us,initiator,68.52,64.61,73.28,69.68,73.47,62.97
+414,canezerra,Base Card,no_team,us,flex,71.57,69.21,72.54,70.0,72.73,70.69
+415,Eggster,Base Card,no_team,us,duelist,80.28,73.2,79.44,80.04,67.89,51.74
+416,Inspire,Base Card,no_team,us,sentinel,73.96,80.52,70.08,55.57,66.19,70.35
+417,ion2x,Base Card,no_team,us,controller,59.95,57.78,66.39,50,73.6,80.2
+418,Dark3st,Base Card,no_team,us,flex,63.88,61.01,63.03,60.41,63.74,61.21
+419,nerve,Base Card,no_team,us,initiator,59.38,53.66,64.23,60.3,65.85,54.57
+420,Logan,Base Card,no_team,us,sentinel,63.24,67.03,56.75,50,56.19,62.43
+421,alym,Base Card,no_team,ca,duelist,76.01,70.26,72.26,70.97,63.08,50
+422,toozy,Base Card,no_team,ca,controller,52.16,51.47,57.73,50,64.07,71.2
+423,qpert,Base Card,no_team,rs,controller,52.83,52.57,58.26,50,63.24,69.48
+424,NINJA,Base Card,no_team,pl,initiator,61.45,57.1,65.27,64.96,66.54,55.53
+425,rexxtoned,Base Card,no_team,ru,sentinel,66.75,70.19,62.42,50,59.0,63.64
+426,Donatello,Base Card,no_team,cz,duelist,78.25,68.69,73.63,71.86,62.52,50.95
+427,GSR,Base Card,no_team,rs,duelist,73.0,67.59,70.42,72.11,60.56,50
+428,Ziad,Base Card,no_team,eg,sentinel,66.8,70.42,62.61,50,58.42,66.71
+429,Shazeon,Base Card,no_team,de,flex,62.74,62.13,65.87,63.2,64.34,60.05
+430,prayy,Base Card,no_team,eu,duelist,74.2,69.05,73.86,71.11,62.21,50.81
+431,stavros,Base Card,no_team,de,flex,60.94,60.15,63.24,57.88,64.14,57.92
+432,cauanzin,Masters Madrid 2024,loud,br,initiator,76.93,70.6,85.64,80.54,86.01,73.31
+433,Less,Masters Madrid 2024,loud,br,sentinel,85.02,95.01,83.42,66.53,76.21,84.75
+434,tuyz,Masters Madrid 2024,loud,br,controller,70.26,69.58,76.82,58.58,84.55,91.62
+435,Saadhak,Masters Madrid 2024,loud,ar,flex,80.62,75.69,81.97,78.09,82.24,78.92
+436,qck,Masters Madrid 2024,loud,br,duelist,90.03,82.96,85.95,84.12,73.61,58.08
+437,Monyet,Masters Madrid 2024,prx,id,flex,86.61,80.08,83.06,83.01,87.67,81.05
+438,f0rsakeN,Masters Madrid 2024,prx,id,flex,85.16,82.83,87.68,82.97,89.69,85.25
+439,d4v41,Masters Madrid 2024,prx,my,controller,74.63,71.13,83.05,60.15,89.13,99.49
+440,something,Masters Madrid 2024,prx,ru,flex,90.5,86.95,90.54,82.19,86.78,83.43
+441,mindfreak,Masters Madrid 2024,prx,id,sentinel,83.04,91.46,82.54,64.08,77.45,85.41
+442,Munchkin,Masters Madrid 2024,geng,kr,flex,87.08,84.16,85.34,83.33,88.14,82.04
+443,Meteor,Masters Madrid 2024,geng,kr,sentinel,88.45,98.48,83.48,68.34,80.7,88.88
+444,Lakia,Masters Madrid 2024,geng,kr,initiator,77.91,74.68,86.35,79.23,86.44,74.23
+445,t3xture,Masters Madrid 2024,geng,kr,duelist,104.24,90.77,95.25,97.29,84.12,67.03
+446,Karon,Masters Madrid 2024,geng,kr,controller,74.09,76.03,84.97,60.31,93.74,102.62
+447,johnqt,Masters Madrid 2024,sentinels,ma,sentinel,90.3,104.13,87.67,70.29,84.04,90.32
+448,Sacy,Masters Madrid 2024,sentinels,br,initiator,83.14,81.92,92.69,91.59,95.52,78.29
+449,TenZ,Masters Madrid 2024,sentinels,us,controller,80.58,78.04,86.12,65.99,98.19,104.33
+450,Zellsis,Masters Madrid 2024,sentinels,us,flex,90.02,85.03,90.26,86.1,89.55,84.49
+451,zekken,Masters Madrid 2024,sentinels,us,duelist,108.32,101.77,107.56,104.41,91.72,70.39
+452,Boaster,Champions 2023,fnatic,gb,controller,72.97,70.32,79.68,58.4,86.37,99.12
+453,Derke,Champions 2023,fnatic,fi,duelist,103.41,92.73,99.24,98.23,83.23,65.32
+454,Chronicle,Champions 2023,fnatic,ru,flex,83.39,80.68,82.66,77.61,83.17,79.63
+455,Alfajer,Champions 2023,fnatic,tr,sentinel,89.15,93.91,84.2,67.17,80.48,84.8
+456,Leo,Champions 2023,fnatic,se,initiator,82.87,77.64,93.68,86.51,92.08,76.35
+457,cauanzin,Champions 2023,loud,br,initiator,81.16,78.6,90.27,87.64,91.15,78.73
+458,Less,Champions 2023,loud,br,sentinel,92.96,103.98,86.74,71.43,85.01,91.58
+459,tuyz,Champions 2023,loud,br,controller,70.46,72.22,79.86,59.25,91.53,100.46
+460,Saadhak,Champions 2023,loud,ar,flex,89.74,80.52,88.2,84.75,88.57,81.04
+461,aspas,Champions 2023,loud,br,duelist,106.1,95.18,101.25,98.63,90.1,69.95
+462,Jinggg,Champions 2023,prx,sg,duelist,105.12,100.87,105.53,103.19,90.09,69.74
+463,f0rsakeN,Champions 2023,prx,id,flex,94.47,85.09,89.63,85.34,93.62,85.04
+464,d4v41,Champions 2023,prx,my,flex,92.28,86.97,94.47,85.93,90.59,86.34
+465,something,Champions 2023,prx,ru,flex,95.79,90.47,95.42,88.41,92.81,87.11
+466,mindfreak,Champions 2023,prx,id,controller,75.89,78.56,86.8,62.32,93.52,104.32
+467,Ethan,Champions 2023,eg,us,flex,92.57,88.63,95.69,86.89,92.02,87.19
+468,jawgemo,Champions 2023,eg,kh,controller,77.85,78.03,90.04,66.9,99.58,104.82
+469,C0M,Champions 2023,eg,us,initiator,86.54,79.53,91.46,87.94,92.95,80.43
+470,Boostio,Champions 2023,eg,us,sentinel,95.68,102.65,92.59,69.01,84.72,94.41
+471,Demon1,Champions 2023,eg,ru,duelist,110,102.78,109.07,110,92.37,72.35
+472,valyn,Triple Crown: Americas 2025,g2,us,controller,86.27,84.18,91.3,68.68,101.42,109.05
+473,trent,Triple Crown: Americas 2025,g2,us,initiator,90.23,85.17,97.44,95.93,96.04,82.53
+474,JonahP,Triple Crown: Americas 2025,g2,ca,flex,98.36,90.93,93.9,93.46,97.94,90.32
+475,leaf,Triple Crown: Americas 2025,g2,us,sentinel,98.82,105.79,93.92,73.98,93.4,97.59
+476,jawgemo,Triple Crown: Americas 2025,g2,kh,duelist,107.35,101.98,103.6,103.86,89.55,71.1
+477,babybay,Triple Crown: Americas 2025,g2,us,sentinel,106.44,107.86,102.98,75.36,97.84,101.49
+478,crashies,Valorant Masters Tokyo 2023,nrg,us,initiator,79.18,72.81,86.1,81.28,85.67,76.51
+479,Victor,Valorant Masters Tokyo 2023,nrg,us,flex,85.23,81.47,86.64,82.27,87.59,82.21
+480,ardiis,Valorant Masters Tokyo 2023,nrg,lv,duelist,96.62,89.21,93.12,95.52,80.51,63.13
+481,FNS,Valorant Masters Tokyo 2023,nrg,ca,sentinel,78.76,87.37,75.0,61.66,73.48,78.17
+482,s0m,Valorant Masters Tokyo 2023,nrg,us,controller,75.87,73.83,83.69,62.51,93.63,97.32
+483,Jinggg,Valorant Masters Tokyo 2023,prx,sg,duelist,105.09,93.73,101.47,102.08,83.71,69.92
+484,f0rsakeN,Valorant Masters Tokyo 2023,prx,id,flex,89.16,87.95,92.31,85.4,92.54,87.94
+485,d4v41,Valorant Masters Tokyo 2023,prx,my,flex,85.71,83.5,89.01,84.02,89.58,80.69
+486,cgrs,Valorant Masters Tokyo 2023,prx,th,flex,84.09,81.06,83.41,79.24,81.54,81.25
+487,mindfreak,Valorant Masters Tokyo 2023,prx,id,controller,76.43,74.68,82.55,61.5,90.03,99.47
+488,Ethan,Valorant Masters Tokyo 2023,eg,us,flex,88.57,85.72,87.39,87.73,88.48,83.69
+489,jawgemo,Valorant Masters Tokyo 2023,eg,kh,controller,77.55,78.48,87.33,62.38,91.85,104.11
+490,C0M,Valorant Masters Tokyo 2023,eg,us,initiator,82.89,77.88,91.24,86.97,91.85,76.03
+491,Boostio,Valorant Masters Tokyo 2023,eg,us,sentinel,94.11,100.21,85.01,67.94,80.71,89.79
+492,Demon1,Valorant Masters Tokyo 2023,eg,ru,duelist,110,99.94,105.75,103.82,87.13,72.13
+493,Boaster,Valorant Masters Tokyo 2023,fnatic,gb,controller,75.26,76.31,84.58,60.25,92.39,98.69
+494,Derke,Valorant Masters Tokyo 2023,fnatic,fi,duelist,107.45,100.38,101.66,105.41,92.22,72.81
+495,Chronicle,Valorant Masters Tokyo 2023,fnatic,ru,flex,88.9,87.53,91.98,82.62,90.03,87.15
+496,Alfajer,Valorant Masters Tokyo 2023,fnatic,tr,sentinel,98.4,103.52,91.29,73.67,84.28,97.12
+497,Leo,Valorant Masters Tokyo 2023,fnatic,se,initiator,85.17,84.34,93.73,93.19,93.27,83.0
+498,PatMen,Valorant Champions 2025,prx,ph,initiator,79.15,76.09,86.48,81.46,85.45,72.43
+499,Jinggg,Valorant Champions 2025,prx,sg,duelist,97.11,87.87,91.45,93.62,82.55,66.08
+500,f0rsakeN,Valorant Champions 2025,prx,id,flex,86.24,80.05,83.68,80.3,82.28,79.98
+501,d4v41,Valorant Champions 2025,prx,my,sentinel,86.27,93.71,81.11,62.04,74.04,86.18
+502,something,Valorant Champions 2025,prx,ru,duelist,94.74,86.63,94.24,89.41,77.67,62.09
+503,MaKo,Valorant Champions 2025,drx,kr,controller,73.36,72.56,82.8,58.13,89.89,98.56
+504,free1ng,Valorant Champions 2025,drx,kr,initiator,81.7,75.3,92.79,84.36,92.51,75.89
+505,HYUNMIN,Valorant Champions 2025,drx,kr,duelist,98.66,90.66,94.89,97.83,84.62,66.83
+506,Flashback,Valorant Champions 2025,drx,kr,flex,86.07,81.85,85.92,80.69,87.67,84.62
+507,BeYN,Valorant Champions 2025,drx,kr,sentinel,83.73,93.27,80.88,63.34,77.7,86.02
+508,Boaster,Valorant Champions 2025,fnatic,gb,controller,70.41,69.66,78.55,58.31,86.35,99.01
+509,kaajak,Valorant Champions 2025,fnatic,pl,duelist,105.76,97.08,102.27,103.33,86.21,69.96
+510,Chronicle,Valorant Champions 2025,fnatic,ru,flex,87.95,87.13,88.94,84.89,88.37,84.99
+511,Alfajer,Valorant Champions 2025,fnatic,tr,sentinel,88.4,97.5,83.14,68.43,81.7,87.65
+512,crashies,Valorant Champions 2025,fnatic,us,initiator,82.58,79.17,94.74,88.22,92.43,80.59
+513,Ethan,Valorant Champions 2025,nrg,us,flex,95.21,88.32,93.63,90.71,93.29,90.79
+514,s0m,Valorant Champions 2025,nrg,us,controller,78.41,76.53,89.88,65.49,97.0,108.78
+515,brawk,Valorant Champions 2025,nrg,us,initiator,91.06,85.65,99.58,92.01,100.39,83.08
+516,mada,Valorant Champions 2025,nrg,ca,duelist,110,100.56,104.34,100.15,88.07,71.9
+517,skuba,Valorant Champions 2025,nrg,us,sentinel,91.88,104.49,88.29,70.56,81.81,94.51
+518,ANGE1,VCT LOCK//IN São Paulo,navi,ua,controller,70.25,66.76,76.09,56.1,83.79,91.49
+519,Shao,VCT LOCK//IN São Paulo,navi,united_nations,initiator,79.89,77.58,90.05,84.93,88.64,75.51
+520,Zyppan,VCT LOCK//IN São Paulo,navi,tr,flex,83.06,77.64,83.93,80.55,85.69,81.34
+521,SUYGETSU,VCT LOCK//IN São Paulo,navi,tr,sentinel,87.7,93.81,81.94,65.67,77.9,86.91
+522,cNed,VCT LOCK//IN São Paulo,navi,tr,duelist,97.18,89.28,94.23,91.02,79.76,62.46
+523,MaKo,VCT LOCK//IN São Paulo,drx,kr,controller,75.4,75.78,81.4,63.13,91.6,99.75
+524,Rb,VCT LOCK//IN São Paulo,drx,kr,flex,85.16,81.74,85.92,77.43,85.52,78.78
+525,BuZz,VCT LOCK//IN São Paulo,drx,kr,duelist,98.24,90.85,96.34,92.93,84.06,63.5
+526,stax,VCT LOCK//IN São Paulo,drx,kr,flex,84.47,77.76,83.74,76.95,81.72,78.71
+527,Zest,VCT LOCK//IN São Paulo,drx,kr,flex,79.16,75.31,82.24,77.74,81.93,78.32
+528,cauanzin,VCT LOCK//IN São Paulo,loud,br,initiator,85.69,79.72,91.02,87.5,92.96,77.91
+529,Less,VCT LOCK//IN São Paulo,loud,br,sentinel,98.03,107.14,88.55,70.31,88.18,97.43
+530,tuyz,VCT LOCK//IN São Paulo,loud,br,controller,73.61,74.54,85.63,62.3,91.07,103.08
+531,Saadhak,VCT LOCK//IN São Paulo,loud,ar,flex,87.74,84.0,85.73,80.98,87.04,83.79
+532,aspas,VCT LOCK//IN São Paulo,loud,br,duelist,106.68,101.53,104.6,103.11,88.05,72.62
+533,Boaster,VCT LOCK//IN São Paulo,fnatic,gb,controller,76.08,75.81,82.7,61.31,90.72,101.85
+534,Derke,VCT LOCK//IN São Paulo,fnatic,fi,duelist,110,102.1,105.65,105.84,89.19,71.01
+535,Chronicle,VCT LOCK//IN São Paulo,fnatic,ru,flex,84.96,84.5,88.88,80.66,89.64,83.84
+536,Alfajer,VCT LOCK//IN São Paulo,fnatic,tr,sentinel,90.59,96.13,84.27,68.77,80.1,92.57
+537,Leo,VCT LOCK//IN São Paulo,fnatic,se,initiator,89.66,83.84,97.53,92.73,96.8,84.05
+538,KROSTALY,Base Card,no_team,tr,flex,71.18,68.21,70.0,65.31,70.48,67.56
+539,baha,Base Card,no_team,tr,controller,61.8,60.09,68.27,50.19,73.89,79.99
+540,Jieni7,Base Card,no_team,cn,flex,69.01,69.3,71.47,68.79,69.85,68.18
+541,CoCo,Base Card,no_team,cn,flex,70.36,64.52,67.3,66.35,70.39,66.5
+542,lucas,Base Card,no_team,cn,initiator,68.67,64.28,75.27,71.77,75.54,64.49
+543,Francis,Base Card,no_team,kr,flex,71.55,65.05,69.14,65.56,67.54,66.83
+544,Xross,Base Card,no_team,kr,controller,60.4,59.02,68.12,50,74.44,82.75
+545,Flicker,Base Card,no_team,kr,duelist,85.84,77.3,80.18,81.81,70.63,55.88
+546,xavi8k,Base Card,no_team,ph,flex,70.83,66.94,70.6,67.61,73.55,69.68
+547,eKo,Base Card,no_team,kr,duelist,82.38,77.5,79.54,78.35,68.77,55.57
+548,naTz,Base Card,no_team,id,sentinel,69.88,79.11,66.48,52.26,62.84,72.18
+549,blowz,Base Card,no_team,br,initiator,69.8,67.7,77.67,75.57,75.3,67.79
+550,Neon,Base Card,no_team,ar,flex,78.0,75.73,77.44,73.2,75.91,75.67
+551,babybay,Base Card,no_team,us,sentinel,70.43,77.77,68.03,54.22,66.38,71.82
+552,ANGE1,Eternal Heroes,navi,ua,controller,86.84,84.93,97.89,69.0,105.95,108.69
+553,FNS,Eternal Heroes,nrg,ca,sentinel,100.05,104.07,92.8,74.75,87.69,99.69
+554,Sacy,Eternal Heroes,sentinels,br,initiator,94.8,91.29,102.25,100.54,105.68,89.34
+555,TenZ,Eternal Heroes,sentinels,us,duelist,110,107.48,110,110,97.19,75.06
+556,ANGE1,Valorant Champions 2022,fpx,ua,controller,70.06,72.23,77.67,58.93,88.14,94.36
+557,Shao,Valorant Champions 2022,fpx,united_nations,initiator,81.02,75.17,86.55,83.72,88.99,74.36
+558,Zyppan,Valorant Champions 2022,fpx,tr,flex,86.13,79.3,83.43,81.36,84.98,79.49
+559,SUYGETSU,Valorant Champions 2022,fpx,tr,sentinel,90.09,99.72,82.85,67.62,78.57,86.39
+560,ardiis,Valorant Champions 2022,fpx,lv,duelist,101.44,92.46,93.94,92.95,82.72,63.0
+561,MaKo,Valorant Champions 2022,drx,kr,controller,76.97,76.31,83.14,62.01,94.6,99.84
+562,Rb,Valorant Champions 2022,drx,kr,flex,85.48,78.25,83.76,77.26,86.07,80.18
+563,BuZz,Valorant Champions 2022,drx,kr,duelist,102.79,90.31,98.53,96.94,83.53,66.61
+564,stax,Valorant Champions 2022,drx,kr,flex,83.67,77.95,84.78,80.23,82.8,80.38
+565,Zest,Valorant Champions 2022,drx,kr,flex,85.33,79.17,85.04,78.53,86.18,78.38
+566,yay,Valorant Champions 2022,optic,us,sentinel,93.46,99.15,85.61,67.55,81.53,90.59
+567,Marved,Valorant Champions 2022,optic,ca,controller,76.12,77.32,84.75,64.37,94.21,101.58
+568,crashies,Valorant Champions 2022,optic,us,initiator,84.61,78.77,95.96,88.17,90.74,81.0
+569,Victor,Valorant Champions 2022,optic,us,flex,90.76,85.86,89.49,82.39,86.42,84.22
+570,FNS,Valorant Champions 2022,optic,ca,sentinel,87.46,92.66,80.79,63.68,79.95,85.25
+571,Sacy,Valorant Champions 2022,loud,br,initiator,90.37,83.74,98.14,92.7,98.84,87.35
+572,Less,Valorant Champions 2022,loud,br,sentinel,99.41,106.7,92.6,74.13,88.38,99.39
+573,pANcada,Valorant Champions 2022,loud,br,controller,83.32,79.09,90.64,66.2,101.14,109.39
+574,Saadhak,Valorant Champions 2022,loud,ar,flex,89.96,89.25,90.46,87.08,94.77,86.4
+575,aspas,Valorant Champions 2022,loud,br,duelist,110,104.09,108.72,107.76,93.88,71.13
+576,Boaster,Valorant Masters Copenhagen 2022,fnatic,gb,controller,70.68,68.01,80.15,56.35,85.86,95.03
+577,Derke,Valorant Masters Copenhagen 2022,fnatic,fi,duelist,102.88,93.25,94.8,95.96,82.77,64.04
+578,Mistic,Valorant Masters Copenhagen 2022,fnatic,gb,flex,84.91,81.4,86.37,78.01,86.1,77.93
+579,Alfajer,Valorant Masters Copenhagen 2022,fnatic,tr,sentinel,86.91,93.5,81.82,64.8,79.61,88.31
+580,Enzo,Valorant Masters Copenhagen 2022,fnatic,fr,initiator,82.12,76.92,89.68,87.52,90.24,75.83
+581,yay,Valorant Masters Copenhagen 2022,optic,us,sentinel,90.21,100.29,83.5,68.22,79.85,89.25
+582,Marved,Valorant Masters Copenhagen 2022,optic,ca,controller,75.6,74.29,85.31,61.82,95.11,98.5
+583,crashies,Valorant Masters Copenhagen 2022,optic,us,initiator,84.08,77.35,94.06,89.6,94.18,76.96
+584,Victor,Valorant Masters Copenhagen 2022,optic,us,flex,88.55,82.86,91.09,81.89,87.12,84.89
+585,FNS,Valorant Masters Copenhagen 2022,optic,ca,sentinel,85.8,93.42,81.79,65.9,77.43,88.15
+586,Jinggg,Valorant Masters Copenhagen 2022,prx,sg,duelist,108.56,97.16,104.15,105.13,87.82,70.65
+587,f0rsakeN,Valorant Masters Copenhagen 2022,prx,id,flex,93.68,86.03,91.07,89.24,94.02,87.65
+588,d4v41,Valorant Masters Copenhagen 2022,prx,my,flex,91.12,85.0,92.01,88.86,90.33,84.21
+589,Benkai,Valorant Masters Copenhagen 2022,prx,sg,flex,88.27,85.04,90.09,85.89,89.62,86.08
+590,mindfreak,Valorant Masters Copenhagen 2022,prx,id,controller,79.99,77.14,89.63,63.95,96.62,108.95
+591,ANGE1,Valorant Masters Copenhagen 2022,fpx,ua,controller,80.5,77.34,87.65,65.28,94.11,103.83
+592,Shao,Valorant Masters Copenhagen 2022,fpx,united_nations,initiator,86.73,85.07,99.28,91.11,98.63,82.4
+593,Zyppan,Valorant Masters Copenhagen 2022,fpx,tr,flex,96.43,88.73,93.77,90.82,95.23,87.21
+594,SUYGETSU,Valorant Masters Copenhagen 2022,fpx,tr,sentinel,96.53,108.04,93.86,72.54,88.82,95.92
+595,ardiis,Valorant Masters Copenhagen 2022,fpx,lv,duelist,108.43,100.76,100.49,102.73,88.89,68.15
+596,ZynX,Base Card,no_team,kr,flex,72.41,68.4,70.49,67.07,72.35,65.74
+597,sheydos,Base Card,no_team,ru,initiator,67.56,64.58,72.66,70.3,74.77,65.17
+598,Flashback,Eternal Heroes,drx,kr,flex,97.32,91.79,100.1,94.74,98.83,91.18
+599,seven,Base Card,no_team,mx,flex,74.98,54.86,77.90,63.00,76.00,79.90
+600,Loita,Base Card,no_team,tr,controller,75.12,70.44,79.80,71.90,69.43,81.50
+601,Rosé,Base Card,no_team,tr,initiator,70.52,66.04,76.95,69.60,60.17,77.40
+602,lovers rock,Base Card,no_team,tr,duelist,73.04,59.28,76.00,75.00,74.80,61.50
+603,Crewen,Base Card,no_team,tr,sentinel,76.08,72.16,79.80,65.90,67.73,65.10
+604,Lar0k,Base Card,no_team,tr,flex,76.04,72.68,72.65,65.60,68.60,82.50

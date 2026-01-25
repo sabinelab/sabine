@@ -1,0 +1,280 @@
+{
+  "header": {
+    "commands": "Commands",
+    "changelog": "Changelog",
+    "cards": "Cards"
+  },
+  "home": {
+    "title": "Bringing the eSports to your Discord server!",
+    "add": "Add to Discord",
+    "build": {
+      "title": "Build your Dream Team and Compete in Ranked Matches",
+      "desc": "Build your Dream Team is too easy. Just run the command <strong>/claim</strong> to claim a random player, <strong>/promote</strong> to promote him to active roster and <strong>/roster</strong> to see your roster."
+    },
+    "cards": {
+      "title": "Giant Diversity of Cards",
+      "desc": "There are {size} different cards to use and get by using <strong>/claim</strong> or buy by using <strong>/sign</strong>."
+    },
+    "realtime": {
+      "title": "Get Real-Time Live Matches Information",
+      "desc": "Get real-time live information on your favorite teams."
+    }
+  },
+  "commands": {
+    "title": "Bot Commands",
+    "admin": {
+      "description": "See the dashboard and change the bot language"
+    },
+    "activatekey": {
+      "description": "Activate your premium key on a server"
+    },
+    "career": {
+      "description": "See your career"
+    },
+    "claim": {
+      "description": "Claim a random player"
+    },
+    "coins": {
+      "description": "See your coins"
+    },
+    "daily": {
+      "description": "Get your daily reward"
+    },
+    "duel": {
+      "description": "Start a duel with someone"
+    },
+    "help": {
+      "description": "List of commands"
+    },
+    "info": {
+      "description": "Shows the bot informations"
+    },
+    "language": {
+      "description": "Change the language that I interact with you, overriding the language set on the server"
+    },
+    "live": {
+      "description": "Enable and disable the live feed feature"
+    },
+    "news": {
+      "description": "Enable and disable the news feature"
+    },
+    "ping": {
+      "description": "See the bot ping"
+    },
+    "player": {
+      "description": "See informations about a player"
+    },
+    "predictions": {
+      "description": "See your predictions"
+    },
+    "premium": {
+      "description": "See informations about your premium plan"
+    },
+    "promote": {
+      "description": "Promote a player to active roster"
+    },
+    "leaderboard": {
+      "description": "Check the leaderboard of predictions, rating, and coins"
+    },
+    "remove": {
+      "description": "Remove a player from active roster"
+    },
+    "roster": {
+      "description": "See your roster informations"
+    },
+    "sell": {
+      "description": "Sell a player"
+    },
+    "sign": {
+      "description": "Sign a player"
+    },
+    "team": {
+      "description": "See informations about a team"
+    },
+    "tournament": {
+      "description": "Add and remove tournaments"
+    },
+    "card": {
+      "description": "Check informations about a card"
+    },
+    "claims": {
+      "description": "Check your claims and your pity"
+    },
+    "remind": {
+      "description": "Enable/disable the reminder for when you can use /claim again."
+    },
+    "transactions": {
+      "description": "Check your players transactions"
+    },
+    "trade": {
+      "description": "Trade players with users"
+    },
+    "packs": {
+      "description": "Open or view your packs"
+    },
+    "arena": {
+      "description": "View information about the Arena, change your lineup, and join/leave the Arena queue"
+    },
+    "summary": {
+      "description": "View a match summary"
+    },
+    "shop": {
+      "description": "Card shop pack"
+    }
+  },
+  "footer": {
+    "contact": "Contact",
+    "legal": "Legal",
+    "learn": "Learn",
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "commands": "Commands",
+    "guidelines": "Guidelines"
+  },
+  "metadata": {
+    "title": "Sabine | Your VALORANT simulator",
+    "desc": "Dive into a VALORANT/League of Legends bot with statistics, predictions, live scores, betting and more."
+  },
+  "wiki": {
+    "title": "Select a Module",
+    "module": {
+      "predictions": {
+        "title": "Tournaments, predictions and results",
+        "introduction": {
+          "title": "Introduction to Tournament, predictions and results",
+          "description": "This feature lets you track Valorant and League of Legends matches, make predictions, and view the results."
+        },
+        "tournaments": {
+          "title": "Adding Tournaments",
+          "description": "To add a Valorant or League of Legends tournament, you must use <strong>/tournament add</strong>, select the game, select the matches channel and select the results channel.\n\nIt is highly recommended that the matches channel be a channel where members cannot send messages and only Sabine's message flow is allowed."
+        },
+        "predictions": {
+          "title": "Making Predictions",
+          "description": "To make a prediction, you must to go to the matches channel and look for the Sabine's message. After that, look for the <strong>Predict</strong> button and make your prediction."
+        },
+        "bets": {
+          "title": "Making Bets",
+          "description": "To make a bet, you must go to the matches channel and look for the Sabine's message. You must also have at least 500 coins to make a bet. After that, look for the <strong>Bet</strong> button and make your bet."
+        }
+      },
+      "simulator": {
+        "title": "Simulator",
+        "introduction": {
+          "title": "Introduction to Simulator",
+          "description": "The simulator is a unique experience. Build your roster with players of different skill levels, duel against opponents, and prove you have what it takes to lead your team to the top. Every decision matters — victory depends on your team level!"
+        },
+        "how_it_works": {
+          "title": "How it Works",
+          "description": "Each match in the simulator is resolved based on your players' stats and a bit of luck. The stronger and more balanced your team is, the higher your chances of winning.\n\nTo duel against someone, your team must have 5 players on active roster. After that, you can use <strong>/duel</strong> to duel agains someone."
+        },
+        "players": {
+          "title": "Players",
+          "description": "Every player in the simulator has a overall and unique <a>attributes</a> like aim, headshot, movement, aggression, ACS, and game sense. You can buy and sell players you do not want. Some players are rarer and perform better in clutch situations.\n\nClaim a random player by using <strong>/claim</strong>."
+        },
+        "matches": {
+          "title": "Matches",
+          "description": "Matches are played in a BO1 format and whoever scores 13 points first wins. You can track your recent results and matches by using <strong>/career</strong>."
+        },
+        "progress": {
+          "title": "Progression and Ranking",
+          "description": "Winning matches earns you points and helps your team climb the global leaderboard. The higher you go, the more recognition you gain — and stronger players might want to join your roster. Rankings are updated regularly, and the best teams get featured."
+        }
+      },
+      "cards": {
+        "title": "Cards",
+        "introduction": {
+          "title": "Introduction to Cards",
+          "description": "All players' stats are taken from the website <a>thespike.gg</a>."
+        },
+        "calc": {
+          "title": "Attributes Calculation",
+          "description": "AIM: <strong>(KPR * 40) + (HS% * 1.8)</strong>\nHS: <strong>HS% * 2</strong>\nMOV: <strong>(1.5 - DPR) * 80</strong>\nAGG: <strong>(FBPR * 250) + (KPR * 15)</strong>\nACS: <strong>ACS / 3</strong>\nGMS: <strong>(APR * 150) + (FBSR * 0.6)</strong>\n\nAfter the calculation, most players get manually adjusted buffs and debuffs based on the tier they play in."
+        },
+        "attributes": {
+          "title": "Attributes",
+          "description": "AIM: <strong>Self-explanatory</strong>\nHS: <strong>Self-explanatory</strong>\nMOV: <strong>Movement</strong>\nAGG: <strong>Aggression</strong>\nACS: <strong>Average Score Combat</strong>\nGMS: <strong>Game Sense</strong>"
+        }
+      },
+      "meta": {
+        "title": "Meta Agents",
+        "introduction": {
+          "title": "Introduction to Meta Agents",
+          "description": "Just like in Valorant, each map has its meta agents, and the simulator is no different. Here you can check the meta agents for each map to avoid debuffs on your players."
+        }
+      }
+    }
+  },
+  "changelog": {
+    "title": "Last Updates"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "description": "Last Update: 8/7/2025\n\nThis website does not collect, store, or share any personal information.\nWe do not use cookies, tracking tools, or analytics services.\nIf you have any questions about this Privacy Policy, you can contact us via Discord in our official server."
+  },
+  "cards": {
+    "title": "Cards",
+    "search": "Search",
+    "more_information": "More information",
+    "purchasable": {
+      "true": "Purchasable",
+      "false": "Non-purchasable"
+    },
+    "collection": "Collection: <strong>{collection}</strong>",
+    "role": {
+      "duelist": "Role: <strong>Duelist</strong>",
+      "initiator": "Role: <strong>Initiator</strong>",
+      "controller": "Role: <strong>Controller</strong>",
+      "flex": "Role: <strong>Flex</strong>",
+      "sentinel": "Role: <strong>Sentinel</strong>"
+    },
+    "stats": {
+      "aim": "Aim: <strong>{stats}</strong>",
+      "hs": "Headshot: <strong>{stats}</strong>",
+      "movement": "Movement: <strong>{stats}</strong>",
+      "aggression": "Aggression: <strong>{stats}</strong>",
+      "acs": "ACS: <strong>{stats}</strong>",
+      "gamesense": "Game sense: <strong>{stats}</strong>",
+      "title": "Card Stats"
+    },
+    "price": "Price: <strong>{price} coins</strong>"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "description": "Last Update: September 2, 2025\n\nWelcome to Sabine, a Discord bot developed for tracking matches, making predictions and providing entertainment related to Valorant and League of Legends. By using our bot, you agree to the following terms.",
+    "acceptance": {
+      "title": "Acceptance",
+      "description": "By using Sabine, you agree to comply with these Terms of Use. If you do not agree with any part, do not use the bot.\n\nViolating these terms will result in your Discord account being suspended from using the bot."
+    },
+    "usage": {
+      "title": "Bot Usage",
+      "description": "<li>The bot is for recreational and entertainment purposes only.</li><li>You agree not to use the bot for illegal or harmful purposes or in violation of Discord rules.</li><li>You are responsible for all actions of your Discord account while using the bot.</li>"
+    },
+    "content": {
+      "title": "Content",
+      "description": "<li>Sabine provides information, statistics, and match results.</li><li>The bot is not responsible for losses or damages resulting from real money bets, predictions, or decisions based on the bot.</li>"
+    },
+    "restrictions": {
+      "title": "Restrictions",
+      "description": "<li>You agree not to modify, copy, or redistribute the bot.</li><li>Premium features may require payment.</li><li>Excessive or abusive use may result in suspension or ban from the bot.</li>"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "<li>The bot collects basic Discord data (username, ID, messages necessary for features).</li><li>Data is used only to provide the bot's functionalities and is not sold to third parties.</li>"
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "description": "<li>The bot is provided “as is”.</li><li>We do not guarantee uninterrupted availability or error-free performance.</li><li>Any decision based on the bot’s information is solely your responsibility.</li>"
+    },
+    "changes": {
+      "title": "Changes",
+      "description": "<li>We may update or modify these terms at any time.</li><li>Continued use of the bot after changes implies acceptance of the new terms.</li>"
+    }
+  },
+  "guidelines": {
+    "title": "Guidelines",
+    "description": "Sabine's goal to bring eSports and entertainment to you and your Discord server. To do this, you must follow some rules to avoid having your account suspended from using the bot.",
+    "subtitle": "The following actions will not be tolerated",
+    "guidelines": "<li>Not following Discord guidelines.</li><li>Exploiting bugs or system glitches.</li><li>Using secondary/alt accounts for personal gain, such as trading players with yourself, playing matches against yourself to climb the leaderboard faster, etc.</li><li>Selling, renting, or trading coins/cards for real money or any item of real-world monetary value. If this happens, report it to our team.</li><li>Attempting to evade or bypass punishments. Evading your suspension (creating or using another account to use Sabine) will result in your suspension not being lifted.</li><li>Attempting to attack, harm, or take down Sabine.</li><li>We are not responsible for accounts that are sold, borrowed, gifted, hacked, etc. The responsibility for what happens with your account lies with you. If someone else uses your account to break the rules, you will be the one banned, since the account belongs to you.</li>"
+  },
+  "close": "Close"
+}

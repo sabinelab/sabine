@@ -1,0 +1,17 @@
+model Update {
+  id          String    @id
+  publishedAt DateTime  @default(now()) @map("published_at")
+  content     Content[]
+
+  @@index([publishedAt(sort: Desc)])
+}
+
+model Content {
+  id       String @id @default(uuid())
+  update   Update @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  updateId String @map("update_id")
+  lang     String
+  text     String
+
+  @@index([updateId])
+}

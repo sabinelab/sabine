@@ -1,0 +1,198 @@
+import { GuildSchema, ProfileSchema } from '@db'
+import locales, { type Args, type Content } from '@i18n'
+import type { MessageComponentInteraction } from 'discord.js'
+import Logger from '@/util/Logger'
+import type App from '../app/App'
+import ComponentInteractionContext from './ComponentInteractionContext'
+import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
+
+export default class ComponentInteractionRunner {
+  public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
+    if (!interaction.guild || !interaction.guildId) return
+
+    if (app.blacklist.get(interaction.user.id)) return
+    if (app.blacklist.get(interaction.guildId)) return await interaction.guild.leave()
+
+    const args = interaction.customId.split(';')
+    const i = app.interactions.get(args[0])
+    const command = app.commands.get(args[0])
+
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
+
+    if (i?.global && !command) {
+      if (!interaction.guild || !interaction.guildId) return
+      if (!profile) {
+        profile = new ProfileSchema(interaction.user.id, interaction.guild.id)
+      }
+
+      const ctx = new ComponentInteractionContext({
+        args,
+        app: app,
+        guild: interaction.guild,
+        locale: profile.lang,
+        db: {
+          profile,
+          guild
+        },
+        interaction,
+        author: interaction.user
+      })
+
+      if (app.status.has('status:bot:update')) {
+        return await ctx.reply('helper.update_status')
+      } else if (app.status.has('status:bot:maintenance')) {
+        return await ctx.reply('helper.maintenance_status')
+      }
+
+      const t = <T extends Content>(content: T, args?: Args) => {
+        return locales(ctx.locale, content, args)
+      }
+
+      if (i.ephemeral) {
+        await interaction.deferReply({ flags: 64 })
+      } else if (i.isThinking) {
+        await interaction.deferReply()
+      } else if (i.flags) {
+        ctx.setFlags(64)
+      }
+
+      return i
+        .run({
+          ctx: ctx as ComponentInteractionContext & ModalSubmitInteractionContext,
+          t,
+          app
+        })
+        .catch(async e => {
+          ctx.setFlags(64)
+          await ctx.reply('helper.error', { e })
+          await new Logger(app).error(e)
+        })
+    }
+
+    if (command) {
+      if (!command.createMessageComponentInteraction) return
+      if (!profile) {
+        return await interaction.reply(
+          locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+            cmd: `</register:${app.commands.get('register')?.id}>`
+          })
+        )
+      }
+
+      const ctx = new ComponentInteractionContext({
+        args,
+        app: app,
+        guild: interaction.guild,
+        locale: profile.lang,
+        db: {
+          profile,
+          guild
+        },
+        interaction,
+        author: interaction.user
+      })
+
+      if (app.status.has('status:bot:update')) {
+        return await ctx.reply('helper.update_status')
+      } else if (app.status.has('status:bot:maintenance')) {
+        return await ctx.reply('helper.maintenance_status')
+      } else if (app.status.has(`status:cmd:${command.name}`)) {
+        return await ctx.reply('helper.cmd_status')
+      }
+
+      if (
+        command.messageComponentInteractionTime &&
+        interaction.message.createdAt.getTime() + command.messageComponentInteractionTime <
+          Date.now()
+      ) {
+        ctx.setFlags(64)
+
+        return await ctx.reply('helper.unknown_interaction')
+      }
+
+      if (args[1] !== 'all' && args[1] !== interaction.user.id) {
+        ctx.setFlags(64)
+
+        return await ctx.reply('helper.this_isnt_for_you')
+      }
+
+      const t = <T extends Content>(content: T, args?: Args) => {
+        return locales(ctx.locale, content, args)
+      }
+
+      return command
+        .createMessageComponentInteraction({
+          ctx,
+          t,
+          i: interaction,
+          app
+        })
+        .catch(async e => {
+          ctx.setFlags(64)
+          await ctx.reply('helper.error', { e })
+          await new Logger(app).error(e)
+        })
+    }
+
+    if (!i) return
+
+    if (!profile) {
+      return await interaction.reply(
+        locales(guild?.lang ?? 'en', 'helper.you_need_to_register', {
+          cmd: `</register:${app.commands.get('register')?.id}>`
+        })
+      )
+    }
+
+    const ctx = new ComponentInteractionContext({
+      args,
+      app,
+      guild: interaction.guild,
+      locale: profile.lang,
+      db: {
+        profile,
+        guild
+      },
+      interaction,
+      author: interaction.user
+    })
+
+    if (app.status.has('status:bot:update')) {
+      return await ctx.reply('helper.update_status')
+    } else if (app.status.has('status:bot:maintenance')) {
+      return await ctx.reply('helper.maintenance_status')
+    }
+
+    if (i.time && interaction.message.createdAt.getTime() + i.time < Date.now()) {
+      ctx.setFlags(64)
+
+      return await ctx.reply('helper.unknown_interaction')
+    }
+
+    if (args[1] !== interaction.user.id) {
+      ctx.setFlags(64)
+
+      return await ctx.reply('helper.this_isnt_for_you')
+    }
+
+    const t = <T extends Content>(content: T, args?: Args) => {
+      return locales(ctx.locale, content, args)
+    }
+
+    if (i.flags) {
+      ctx.setFlags(i.flags)
+    } else if (i.ephemeral) {
+      await interaction.deferReply({ flags: 64 })
+    } else if (i.isThinking) {
+      await interaction.deferReply()
+    }
+
+    i.run({ ctx, t, app }).catch(async e => {
+      ctx.setFlags(64)
+      await ctx.reply('helper.error', { e })
+      await new Logger(app).error(e)
+    })
+  }
+}

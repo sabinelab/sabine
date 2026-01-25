@@ -3,3 +3,10 @@ scripts/
 *test*
 node_modules/
 prisma/generated/
+.env
+.env.*
+**/.env
+**/.env.*
+.next/
+apps/api/prisma/generated
+apps/api/prisma/database.db

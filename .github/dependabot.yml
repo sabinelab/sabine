@@ -1,6 +1,41 @@
 version: 2
 updates:
-  - package-ecosystem: 'npm'
+  - package-ecosystem: 'bun'
     directory: '/'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/apps/api'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/apps/helper'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/apps/sabine'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/apps/web'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/packages/players'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/packages/prisma'
+    schedule:
+      interval: 'daily'
+
+  - package-ecosystem: 'bun'
+    directory: '/packages/utils'
     schedule:
       interval: 'daily'

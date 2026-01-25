@@ -1,4 +1,4 @@
-import { prisma } from '../src/database'
+import { prisma } from '../packages/prisma'
 
 export default async function (version, content) {
   if (!version) throw new Error('version is needed')
@@ -13,7 +13,7 @@ export default async function (version, content) {
           data: content
         }
       },
-      published_at: new Date()
+      publishedAt: new Date()
     }
   })
 }

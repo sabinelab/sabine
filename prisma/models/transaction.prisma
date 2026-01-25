@@ -1,0 +1,37 @@
+model Transaction {
+  id        String  @id @default(uuid())
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String  @map("profile_id")
+
+  type   TransactionType
+  player Int?            @db.SmallInt
+  pack   Pack?
+  price  BigInt?
+  to     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([profileId, createdAt(sort: Desc)])
+}
+
+enum Pack {
+  IRON
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+  ASCENDANT
+  IMMORTAL
+  RADIANT
+}
+
+enum TransactionType {
+  CLAIM_PLAYER_BY_CLAIM_COMMAND
+  CLAIM_PLAYER_BY_COMMAND
+  SELL_PLAYER
+  TRADE_PLAYER
+  SIGN_PLAYER
+  CLAIM_PACK_BY_VOTE
+  CLAIM_PLAYER_BY_PACK
+}

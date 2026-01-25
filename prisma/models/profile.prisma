@@ -1,0 +1,64 @@
+model Profile {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  predictions          Prediction[]
+  correctPredictions   Int          @default(0) @map("correct_predictions") @db.SmallInt
+  incorrectPredictions Int          @default(0) @map("incorrect_predictions") @db.SmallInt
+
+  cards   Card[]
+  poisons BigInt @default(0)
+
+  teamName String? @map("team_name") @db.VarChar(20)
+  teamTag  String? @map("team_tag") @db.VarChar(4)
+
+  arenaWins           Int @default(0) @map("arena_wins") @db.SmallInt
+  rankedWins          Int @default(0) @map("ranked_wins") @db.SmallInt
+  unrankedWins        Int @default(0) @map("unranked_wins") @db.SmallInt
+  swiftplayWins       Int @default(0) @map("swiftplay_wins") @db.SmallInt
+  rankedSwiftplayWins Int @default(0) @map("ranked_swiftplay_wins") @db.SmallInt
+
+  arenaDefeats           Int @default(0) @map("arena_defeats") @db.SmallInt
+  rankedDefeats          Int @default(0) @map("ranked_defeats") @db.SmallInt
+  unrankedDefeats        Int @default(0) @map("unranked_defeats") @db.SmallInt
+  swiftplayDefeats       Int @default(0) @map("swiftplay_defeats") @db.SmallInt
+  rankedSwiftplayDefeats Int @default(0) @map("ranked_swiftplay_defeats") @db.SmallInt
+
+  dailyTime DateTime? @map("daily_time")
+  claimTime DateTime? @map("claim_time")
+
+  pity   Int   @default(0) @db.SmallInt
+  claims Int   @default(0)
+  fates  Float @default(0) @db.DoublePrecision
+
+  rankRating Int @default(0) @map("rank_rating")
+
+  remind   Boolean?
+  remindIn String?  @map("remind_in")
+  reminded Boolean  @default(true)
+
+  transactions Transaction[]
+  career       Match[]
+
+  ironPacks      Int @default(0) @map("iron_packs")
+  bronzePacks    Int @default(0) @map("bronze_packs")
+  silverPacks    Int @default(0) @map("silver_packs")
+  goldPacks      Int @default(0) @map("gold_packs")
+  platinumPacks  Int @default(0) @map("platinum_packs")
+  diamondPacks   Int @default(0) @map("diamond_packs")
+  ascendantPacks Int @default(0) @map("ascendant_packs")
+  immortalPacks  Int @default(0) @map("immortal_packs")
+  radiantPacks   Int @default(0) @map("radiant_packs")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId String @map("guild_id")
+
+  @@unique([userId, guildId])
+  @@index([guildId, poisons(sort: Desc), userId(sort: Asc)])
+  @@index([guildId, correctPredictions(sort: Desc), userId(sort: Asc)])
+  @@index([guildId, rankRating(sort: Desc), userId(sort: Asc)])
+  @@index([guildId, arenaWins(sort: Desc), userId(sort: Asc)])
+}

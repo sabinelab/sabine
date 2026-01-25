@@ -1,0 +1,27 @@
+{
+  "name": "@sabinelab/api",
+  "version": "1.0.0",
+  "author": "levisantosp",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@fastify/type-provider-typebox": "6.1.0",
+    "@prisma/adapter-libsql": "7.3.0",
+    "cheerio": "1.2.0",
+    "colors": "1.4.0",
+    "fastify": "5.7.1",
+    "moment": "2.30.1"
+  },
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "scripts": {
+    "start": "rm -rf ./prisma/database.db && bun push && bun .",
+    "build": "bun lint && bun tsgo",
+    "dev": "rm -rf ./prisma/database.db && bun push && bun --watch .",
+    "push": "bunx prisma db push",
+    "generate": "bunx prisma generate",
+    "lint": "bunx biome check",
+    "check": "tsgo"
+  },
+  "type": "module"
+}

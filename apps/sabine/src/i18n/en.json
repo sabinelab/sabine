@@ -1,0 +1,554 @@
+{
+  "commands": {
+    "predictions": {
+      "embed": {
+        "author": "Your predictions",
+        "field": "Prediction: `{score1}-{score2}`\nStats: [click here]({link})\nStatus: {status}",
+        "footer": "Page {page}",
+        "desc": "Correct predictions: `{correct}`\nIncorrect predictions: `{wrong}`\nTotal predictions: `{t}`"
+      },
+      "no_predictions": "You do not have predictions.",
+      "no_pages": "Nothing to show in this page."
+    },
+    "help": {
+      "command_not_found": "Command not found.",
+      "name": "Name",
+      "aliases": "Aliases",
+      "examples": "Examples",
+      "syntax": "Syntax",
+      "permissions": "Permissions",
+      "footer": "[] = required argument | <> = optional argument",
+      "bot_permissions": "My permissions",
+      "field": "Commands ({q})",
+      "community": "Community and Support",
+      "privacy": "Terms of Service and Privacy",
+      "support": {
+        "title": "Help & Support",
+        "desc": "[Wiki](https://sabinebot.xyz/wiki)\n[Commands List](https://sabinebot.xyz/commands)"
+      },
+      "get": {
+        "title": "Get Sabine",
+        "desc": "[Add Sabine to your server](https://api.sabinebot.xyz/invite)\n[Get premium](https://discord.com/invite/FaqYcpA84r)"
+      }
+    },
+    "leaderboard": {
+      "no_users": "No users to show in this page.",
+      "predictions": {
+        "title": "Predictions Leaderboard",
+        "author": "Page {page}",
+        "footer": "Your position: #{pos}",
+        "description1": "**{pos} {user} — `{predictions}` correct predictions**",
+        "description2": "{pos} {user} — `{predictions}` correct predictions"
+      },
+      "poisons": {
+        "title": "Poisons Leaderboard",
+        "author": "Page {page}",
+        "footer": "Your position: #{pos}",
+        "description1": "**{pos} {user} — `{poisons}` poisons**",
+        "description2": "{pos} {user} — `{poisons}` poisons"
+      },
+      "rating": {
+        "title": "Rating Leaderboard",
+        "author": "Page {page}",
+        "footer": "Your position: #{pos}",
+        "description1": "**{pos} {user} — `{rr}` points**",
+        "description2": "{pos} {user} — `{rr}` points"
+      }
+    },
+    "admin": {
+      "tournament_has_been_added": "This tournament already has been added.",
+      "tournament_added": "The tournament **{t}** has been added successfully!",
+      "channels_must_be_different": "The matches channel and results channel cannot be the same. It is recommended that the matches channel be a separate channel where there will be no member interaction.",
+      "tournament_removed": "The tournament **{t}** has been removed successfully!",
+      "dashboard": "Dashboard",
+      "event_channels": "Matches will be announced in {ch1}\nResults will be announced in {ch2}",
+      "desc": "- Language: `{lang}` (change by using: </admin language:{id}>)\n- Limit of tournaments: `{limit}`\n- VALORANT news channel: {vlr_news}\n- VALORANT live feed channel: {vlr_live}\n- League of Legends news channel: {lol_news}\n- League of legends live feed channel: {lol_live}",
+      "invalid_channel": "Invalid channel type. Consider select a TEXT channel.",
+      "limit_reached": "This server has reached the maximum limit of tournaments that can be added. If you want to add this tournaments, consider removing one using {cmd}",
+      "channel_being_used": "The channel {ch} is already being used to send the results of a tournament. Consider using another channel for this.\nCheck the channels that are already in use by using {cmd}",
+      "resend_time": "This feature has already been used recently on this server. Try again {t}.",
+      "resending": "<a:carregando:809221866434199634> Resending matches... Please, wait.",
+      "resend": "Resend {game} matches",
+      "confirm": "You are about to FORCE the submission of matches on this server!\nIt is worth remembering that this action is **IRREVERSIBLE** and can only be done **ONCE a hour**! If you still want to add more tournaments, add them before using this feature. Do you want to continue?",
+      "continue": "Continue",
+      "remove_all": "Remove all",
+      "removed_all_tournaments": "All tournaments have been removed successfully!",
+      "resent": "Matches resent successfully!",
+      "invalid_channel2": "Invalid channel type. Consider select a TEXT or ANNOUNCEMENT channel.",
+      "news_enabled": "News feature enabled to channel {ch}",
+      "news_disabled": "News feature disabled successfully!",
+      "no_premium": "This server does not have any premium keys.",
+      "premium": "This server has the {key} key activated.\nThe key expires {expiresAt}",
+      "lol_esports_coverage": "League of Legends e-sports coverage",
+      "vlr_esports_coverage": "VALORANT e-sports coverage",
+      "tournaments": "## {game} tournaments added"
+    },
+    "info": {
+      "embed": {
+        "title": "Bot information"
+      },
+      "lib": "Library",
+      "creator": "Creator",
+      "guilds": "Servers",
+      "users": "Users",
+      "invite": "Invite me!"
+    },
+    "premium": {
+      "you_dont_have_premium": "You do not have an active plan. Buy one in [support server](https://discord.com/invite/FaqYcpA84r)!",
+      "embed": {
+        "description": "Thank you for supporting the bot by subscribing to the premium.\nYour plan expires {expiresAt}",
+        "field": {
+          "value": "Key: `{key}`\nExpires {expiresAt}",
+          "value2": "Key: `{key}`"
+        }
+      },
+      "button": {
+        "label": "View activation keys"
+      },
+      "you_dont_have_keys": "You do not have any activation key."
+    },
+    "activatekey": {
+      "key_activated": "Your key has been activated successfully! Enjoy the benefits!",
+      "invalid_key": "Invalid key!",
+      "button": "Continue",
+      "would_like_to_continue": "This server has a {key} key activated. Would you like to continue?",
+      "key_already_activated": "This key is already activated!",
+      "limit_reached": "This key is already activated in 2 servers."
+    },
+    "tournament": {
+      "tournament_added": "The tournament **{t}** has been added successfully!",
+      "channels_must_be_different": "The matches channel and results channel cannot be the same. It is recommended that the matches channel be a separate channel where there will be no member interaction.",
+      "tournament_removed": "The tournament **{t}** has been removed successfully!",
+      "remove_all": "Remove all",
+      "invalid_channel": "Invalid channel type. Consider select a TEXT channel.",
+      "limit_reached": "This server has reached the maximum limit of tournaments that can be added. If you want to add this tournaments, consider removing one using {cmd}"
+    },
+    "news": {
+      "invalid_channel": "Invalid channel type. Consider select a TEXT or ANNOUNCEMENT channel.",
+      "news_enabled": "News feature enabled to channel {ch}",
+      "news_disabled": "News feature disabled successfully!",
+      "buy_premium": "Buy the premium!"
+    },
+    "live": {
+      "invalid_channel": "Invalid channel type. Consider select a TEXT channel.",
+      "live_enabled": "Live feed feature enabled to channel {ch}",
+      "live_disabled": "Live feed feature has been disabled successfully!",
+      "buy_premium": "Buy the premium!"
+    },
+    "claim": {
+      "claimed": "**{player}** joined your roster for free\nMarket value: `{price}`",
+      "has_been_claimed": "You have already used this command recently. Try again {t}",
+      "sell": "Sell",
+      "promote": "Promote"
+    },
+    "roster": {
+      "container": {
+        "title": "### Your Roster",
+        "desc": "Team name: **{name}**\nRoster value: `{value}`\nRoster overall: `{ovr}`",
+        "active_players": "### Active Players ({total})",
+        "reserve_players": "### Reserve Players ({total})",
+        "button": {
+          "promote": "Promote",
+          "remove": "Remove",
+          "promote_arena": "Promote to Arena"
+        },
+        "card_content": "> {card}\n> ID: `{id}`\n> Level: `{level}`\n> XP: `{xp}` {progress}"
+      },
+      "change_team": "Change team name or tag",
+      "practice": "Practice (0.5 fates per XP)",
+      "upgrade": "Upgrade ({cost} poisons)",
+      "modal": {
+        "title": "Insert the new name and tag",
+        "team_name": "New name",
+        "team_tag": "New tag",
+        "practice": {
+          "title": "Improve your team",
+          "description": "Insert the amount of XP",
+          "max": "Maximum XP accepted: {max}"
+        }
+      },
+      "team_info_changed": "You changed the name of your team to **{name}** and the tag to **{tag}** successfully!",
+      "invalid_value": "Please, provide a value less than or equal to {value}.",
+      "value_too_short": "You need at least **{required_fates} fates** to do this and you have **{fates}**.",
+      "max_xp_reached": "This card has reached the maximum XP. Consider upgrade the level using the `Upgrade` button.",
+      "practiced": "You practiced with **{card}** for **{cost} fates**, and now it has {xp} XP!",
+      "max_level_reached": "This card has reached the maximum level. Congratulations! 🎉",
+      "poisons_needed": "You need at least **{required_poisons} poisons** to upgrade this card and you have **{poisons}**.",
+      "xp_needed": "This card doesn't have enough XP for this.",
+      "upgraded": "You upgraded **{card}** for **{poisons} poisons**, and now it's now level {level}!",
+      "already_promoted": "This player doens't exists or has already been promoted."
+    },
+    "promote": {
+      "player_not_found": "Player not found!",
+      "player_promoted": "You promoted **{p}** successfully!",
+      "select_player": "Select a player to replace"
+    },
+    "remove": {
+      "player_not_found": "Player not found!",
+      "player_removed": "You removed **{p}** successfully!"
+    },
+    "sell": {
+      "player_not_found": "Player not found!",
+      "sold": "You sold **{p}** for **{price}** poisons successfully"
+    },
+    "balance": {
+      "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
+    },
+    "duel": {
+      "started": "### Match started",
+      "already_in_match": "You already started a match. Wait until it finishes and try again.",
+      "needed_team_name": "You need to set your team name before play.",
+      "team_not_completed_1": "Your team is not completed.",
+      "team_not_completed_2": "Your opponent's team is not completed.",
+      "needed_team_name_2": "Your opponent needs to set team name before play.",
+      "already_in_match_2": "Your opponent is already in match.",
+      "request": "{opponent}, {author} wants to duel against you in a **{mode}** mode match. You gonna accept or chicken out? 🐔\n-# {opponent} have 1 minute to accept",
+      "button": "Accept",
+      "duplicated_cards": "You cannot have duplicated cards in your roster.",
+      "duplicated_cards2": "Your opponent cannot have duplicated cards in roster.",
+      "cannot_duel": "You cannot duel against yourself.",
+      "mode": {
+        "ranked": "Ranked",
+        "swiftplay;ranked": "Ranked Swiftplay",
+        "swiftplay;unranked": "Swiftplay",
+        "tournament": "Tournament",
+        "unranked": "Unranked"
+      },
+      "embed": {
+        "title": "Agents Select",
+        "desc": "You need to select the agents your players will use."
+      },
+      "time": "You have 5 minutes to select the agents",
+      "agent_selected": "**{p}** will play as **{agent}**.",
+      "duplicated_agent": "One of your players is already using this agent.",
+      "starting_in": "Match starting {time}",
+      "error": "{users}\nAn unexpected error has occurred...\n`{e}`"
+    },
+    "career": {
+      "no_pages": "Nothing to show in this page.",
+      "embed": {
+        "author": "Your Career",
+        "desc": "**Points:** `{rr}RR`\n**Wins/Defeats** (arena): `{arena_wins}/{arena_defeats}`\n**Wins/Defeats** (ranked): `{ranked_wins}/{ranked_defeats}`\n**Wins/Defeats** (unranked): `{unranked_wins}/{unranked_defeats}`\n**Wins/Defeats** (ranked swiftplay): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Wins/Defeats** (swiftplay): `{swiftplay_wins}/{swiftplay_defeats}`\n**Total Wins:** `{total_wins}`\n**Total Defeats:** `{total_defeats}`\n**Matches Played:** `{total}`",
+        "footer": "Page {page}"
+      },
+      "type": {
+        "ranked_win": "Beat {user} for `{score}` **[{points}RR]**",
+        "ranked_defeat": "Lost to {user} for `{score}` **[{points}RR]**",
+        "unranked_win": "Beat {user} for `{score}`",
+        "unranked_defeat": "Lost to {user} for `{score}`"
+      },
+      "mode": {
+        "RANKED": "Ranked",
+        "UNRANKED": "Unranked",
+        "RANKED_SWIFTPLAY": "Ranked Swiftplay",
+        "SWIFTPLAY": "Swiftplay",
+        "TOURNAMENT": "Tournament",
+        "ARENA": "Arena"
+      },
+      "seed": "Seed"
+    },
+    "daily": {
+      "has_been_claimed": "You have already collected your daily reward. Try again {t}",
+      "res": "You received **{poisons}** poisons and **{fates}** fates today!",
+      "bonus": "- You received **{poisons}** bonus poisons and **{fates}** bonus fates for being a Premium user.",
+      "bonus2": "- You received **{poisons}** bonus poisons and **{fates}** bonus fates for being a Premium Booster user.",
+      "bonus3": "- You received **{poisons}** bonus poisons for this being a Premium server.",
+      "bonus4": "- You received **{poisons}** bonus poisons for this being a Premium Booster server."
+    },
+    "claims": {
+      "res": "Your claims: `{claims}`\nYour pity: `{pity}`\nUpon reaching pity **75**, you're guaranteed a Radiant card (101+)!"
+    },
+    "card": {
+      "name": "Name",
+      "collection": "Collection",
+      "price": "Price",
+      "devalued_price": "Sells for",
+      "missing_card": "Please, provide a valid player.",
+      "player_not_found": "Player not found!"
+    },
+    "trade": {
+      "missing_poisons": "{user} needs **{poisons}** more poisons to purchase your player.",
+      "request": "{user}, {author} wants to sell **{player} — {collection}** for you for **{poisons}** poisons. You wanna buy?",
+      "make_purchase": "Make purchase",
+      "cancel": "Cancel",
+      "cancelled": "Trade cancelled.",
+      "res": "You sold **{player} — {collection}** for {user} for **{poisons}** poisons succesfully!",
+      "invalid_value": "Please, provide a value greater than or equal to **{value}**.",
+      "cannot_trade": "You cannot trade with yourself.",
+      "has_been_traded": "You already traded a player recently. Try again {t}",
+      "player_not_found": "Player not found!"
+    },
+    "transactions": {
+      "type": {
+        "CLAIM_PLAYER_BY_CLAIM_COMMAND": "Claimed **{player}** by {cmd} command",
+        "CLAIM_PLAYER_BY_COMMAND": "Received **{player}** from the system (`.giveplayer` command)",
+        "SELL_PLAYER": "Sold **{player}** for **{price}** poisons",
+        "TRADE_PLAYER": "Traded **{player}** with {user} for **{price}** poisons",
+        "CLAIM_PACK_BY_VOTE": "Received one **{pack} pack** by [voting for the bot](https://discordbotlist.com/bots/sabine/upvote)",
+        "CLAIM_PLAYER_BY_PACK": "Claimed **{player}** opening a pack"
+      },
+      "embed": {
+        "title": "Your Transactions",
+        "footer": "Page {page}"
+      },
+      "none_yet": "You don't have any transaction to show."
+    },
+    "remind": {
+      "enabled": "Now I'll notify you when your {cmd} is ready!",
+      "disabled": "Now I won't notify you when your {cmd} is ready!"
+    },
+    "packs": {
+      "container": {
+        "title": "### Your Packs",
+        "button": "Open"
+      },
+      "type": {
+        "iron": "Iron Packs: `{count}`",
+        "bronze": "Bronze Packs: `{count}`",
+        "silver": "Silver Packs: `{count}`",
+        "gold": "Gold Packs: `{count}`",
+        "platinum": "Platinum Packs: `{count}`",
+        "diamond": "Diamond Packs: `{count}`",
+        "ascendant": "Ascendant Packs: `{count}`",
+        "immortal": "Immortal Packs: `{count}`",
+        "radiant": "Radiant Packs: `{count}`"
+      },
+      "you_dont_have_this_pack": "You don't have this pack.",
+      "pack_opened": "You opened one **{pack} pack** successfully!\nYou received: {players}",
+      "back": "Back"
+    },
+    "arena": {
+      "is_already_in_queue": "You are already in the Arena queue.",
+      "joined": "You joined the queue successfully!",
+      "left": "You left the queue succesfully!",
+      "is_not_in_queue": "You are not in the Arena queue.",
+      "invalid_lineup": "You need to set the **{map}** map lineup. Use {cmd} to get started!",
+      "no_players": "You do not have any Arena players. Use {cmd} to get started!",
+      "your_players": "### Your Players",
+      "promote": "Set Agent",
+      "remove": "Remove",
+      "select_agent": "Select an agent for **{player}**.",
+      "agent_selected": "**{p}** will play as **{agent}**.",
+      "map": "Current Map: `{map}`\nRun {cmd} to promote a player",
+      "embed": {
+        "title": "Arena Information",
+        "desc": "People in queue now: `{queueLength}`\nCurrent Map: `{map}`\nThe map will change {when}"
+      },
+      "null_map": "The Arena map hasn't been defined yet due to an unknown issue, so you cannot join the queue. If the issue persists, report it to our team on [our official Discord](https://discord.com/invite/FaqYcpA84r) server!"
+    },
+    "summary": {
+      "match_not_found": "This match could not be found. Check the seed and try again.",
+      "embed": {
+        "title": "Game Mode: {mode} | Summary"
+      }
+    },
+    "shop": {
+      "container": {
+        "title": "### Card Pack Shop",
+        "text": {
+          "gold": "(`{price}` fates) Gold Pack — 73-77 overall",
+          "platinum": "(`{price}` fates) Platinum Pack — 78-82 overall",
+          "diamond": "(`{price}` fates) Diamond Pack — 83-86 overall",
+          "ascendant": "(`{price}` fates) Ascendant Pack — 87-90 overall"
+        },
+        "button": "Buy"
+      },
+      "not_enough": "You do not have enough fates.",
+      "success": {
+        "gold": "You bought a **Gold** pack for **{fates} fates** succesfully!",
+        "platinum": "You bought a **Platinum** pack for **{fates} fates** succesfully!",
+        "diamond": "You bought a **Diamond** pack for **{fates} fates** succesfully!",
+        "ascendant": "You bought a **Ascendant** pack for **{fates} fates** succesfully!"
+      }
+    },
+    "register": {
+      "already_registered": "You are already registered.",
+      "success": "You have been registered succcessfully!"
+    },
+    "vote": {
+      "title": "Vote for the bot and earn rewards",
+      "description": "Vote for the bot now and stand a chance to win amazing rewards!\n\nLast vote: {last_vote}\nCurrent streak: `{current_streak}`\nTotal votes: `{total}`",
+      "field": "Rewards",
+      "value": "Radiant Pack (`95+`): `0.5%`\nImmortal Pack (`91-94`): `1.5%`\nAscendant Pack (`87-90`): `3%`\nDiamond Pack (`83-86`): `15%`\nPlatinum Pack (`78-82`): `30%`\nGold Pack (`73-77`): `20%`\nSilver Pack (`67-72`): `15%`\nBronze Pack (`60-66`): `10%`\nIron Pack (`59-`): `5%`\n\nFor every 20 votes without breaking the streak, a Radiant Pack is guaranteed.",
+      "vote": "Vote now!",
+      "claim_reward": "Claim reward",
+      "already_claimed": "You need to vote for the bot to claim your reward.",
+      "claimed": "You claimed one **{pack}** pack by voting for the bot!"
+    },
+    "modclean": {
+      "button": "Reset",
+      "content": [
+        "Are you sure you want to proceed?",
+        "You're about to reset: \n{type}",
+        "This action is **irreversible**.",
+        "-# Please confirm within 30 seconds"
+      ],
+      "type": {
+        "all": [
+          "- Incorrect/correct predictions",
+          "- Submitted predictions",
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "balance": ["- Poisons and fates"],
+        "predictions": ["- Incorrect/correct predictions", "- Submitted predictions"],
+        "simulator": [
+          "- Matches",
+          "- Career",
+          "- Poisons and fates",
+          "- Packs",
+          "- Claims",
+          "- Wins and defeats",
+          "- Rosters",
+          "- Pity"
+        ],
+        "stats": ["- Wins and defeats", "- Incorrect/correct predictions"]
+      },
+      "reseted": ["You have successfully reset: \n{type}"]
+    },
+    "prefix": {
+      "invalid_prefix": "Please, provide a prefix.",
+      "updated": "Changed server prefix to `{prefix}`"
+    },
+    "show": {
+      "card_content": "Level: `{level}`\nXP: `{xp}` {progress}"
+    }
+  },
+  "simulator": {
+    "sides": {
+      "ATTACK": "Attacker",
+      "DEFENSE": "Defender"
+    },
+    "round_started": "*Round {n} started*",
+    "winner": "{users}\n**{t}** won the match!",
+    "switch_sides": "<:switch_sides:1406035456897978547> Switch sides",
+    "won_by_elimination": "- **{t} won the round by eliminating the entire opposing team**",
+    "kill": "**{t1} {p1}** killed **{t2} {p2}** with {w}",
+    "spike_not_planted": "- The spike was not planted on time\n- **{t}** won the round",
+    "spike_detonated": "- Spike detonated\n- **{t}** won the round",
+    "spike_defused": "- Spike defused\n- **{t}** won the round",
+    "spike_planted": "- *Spike planted at bomb site {bomb}*",
+    "mode": {
+      "ranked": "Game Mode: Ranked",
+      "unranked": "Game Mode: Unranked",
+      "swiftplay:ranked": "Game Mode: Ranked Swiftplay",
+      "swiftplay:unranked": "Game Mode: Swiftplay",
+      "tournament": "Game Mode: Tournament"
+    },
+    "match_started": "Match Started",
+    "processing": "<a:loading:809221866434199634> Processing the round...\n",
+    "match_finished": "- Match finished",
+    "send_message": "{user} Your Arena match result:\n{p1} **{score}** {p2}"
+  },
+  "helper": {
+    "predict": "Predict",
+    "stats": "Stats",
+    "prediction_modal": {
+      "title": "Your prediction for the match"
+    },
+    "palpitate_response": "You predicted {t1} `{s1}-{s2}` {t2}",
+    "replied": "You have already predicted this match.",
+    "started": "This match has already started or finished.",
+    "permissions": {
+      "user": "You're weak. You lack the following permissions to use this command: {permissions}",
+      "bot": "I lack the following permissions for this command to work properly: {permissions}"
+    },
+    "error": "An unexpected error has occurred...\n```fix\n{e}```",
+    "privacy": "Before you start to use the bot, you must accept the [Terms of Service and Privacy](https://sabinebot.xyz/terms)",
+    "verified": "Make your prediction by clicking the button below.",
+    "pickem": {
+      "label": "Pick'em",
+      "res": "Join the PICK'EM for a chance to win a <:booster:1272968894239215636> **Discord Nitro** or a <:nitro:1272968817496297542> **Discord Nitro Basic** by joining our official server!\nhttps://discord.gg/g5nmc376yh"
+    },
+    "banned": "**You are banned and can not use the bot.\nIf you think this is a mistake, contact us in our Discord server!**\n**When:** {when}\n**Ends at:** {ends}\n**Reason:** `{reason}`",
+    "interaction_failed": "It was not possible to run this action... If the problem persists, report it to the team in my [support server](https://discord.gg/g5nmc376yh).",
+    "premium_feature": "Oops, looks like you have found a premium feature. Unlock it by buying the premium on our support server!",
+    "live_feed_value": "Current map: `{map}`\nMap score: `{score}`",
+    "source": "View full article",
+    "live_now": "LIVE NOW",
+    "streams": "Streams",
+    "bet": "Bet",
+    "prediction_needed": "You must to make a prediction before bet",
+    "bet_modal": {
+      "title": "Betting for {teams}",
+      "label": "Insert the amount you want to bet"
+    },
+    "poisons_needed": "You need to have at least 500 poisons to make a bet",
+    "invalid_poisons": "Insert a valid value",
+    "too_much": "You do not have enough poisons",
+    "bet_res": "You bet **{poisons}** poisons on **{team}**\nThe current odd is `{odd}x`. The value can change as users make bets.",
+    "min_value": "The minimum bet is 500 poisons",
+    "warn": "A new patch is available! Check what has changed in {link}",
+    "dont_show_again": "Do not show again",
+    "wont_be_warned": "You won't be warned about this update again.",
+    "yes": "Yes",
+    "no": "No",
+    "unknown_interaction": "Hmm... looks like the data from this interaction is gone because you took too long to use it... please use the command again!",
+    "this_isnt_for_you": "This interaction is not for you! Run this command yourself!",
+    "reminder": "{user} Your {cmd} is ready!",
+    "controllers": "Controllers",
+    "duelists": "Duelists",
+    "initiators": "Initiators",
+    "sentinels": "Sentinels",
+    "cooldown": "You are using this command too quickly. Try again {cooldown}",
+    "you_need_to_register": "You need to register to use this feature. Run {cmd} to start.",
+    "missing_argument": "Missing argument: `{arg}`\nRun {cmd} to get help about this command!",
+    "update_status": "The bot is temporarily unavailable for updates.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "maintenance_status": "The bot is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "cmd_status": "This command is temporarily unavailable for a maintenance.\nMore information on our official server: https://discord.com/invite/FaqYcpA84r",
+    "predictions": "Predictions",
+    "nobody_predicted": "It seems like no one from this server made any predictions for this match...",
+    "predictions_response": [
+      "### {guild} Predictions",
+      "**{correct_predictions}** users predicted correctly.",
+      "**{incorrect_predictions}** users predicted incorrectly."
+    ]
+  },
+  "permissions": {
+    "CreateInstantInvite": "Create Instant Invite",
+    "KickMembers": "Kick Members",
+    "BanMembers": "Ban Members",
+    "Administrator": "Administrator",
+    "ManageChannels": "Manage Channels",
+    "ManageGuild": "Manage Guild",
+    "AddReactions": "Add Reactions",
+    "SendMessages": "Send Messages",
+    "SendTTSMessages": "Send TTS Messages",
+    "ManageMessages": "Manage Messages",
+    "EmbedLinks": "Embed Links",
+    "AttachFiles": "Attach Files",
+    "ReadMessageHistory": "Read Message History",
+    "MentionEveryone": "Mention Everyone",
+    "UseVAD": "Use VAD",
+    "ChangeNickname": "Change Nickname",
+    "ManageNicknames": "Manage Nicknames",
+    "ManageRoles": "Manage Roles",
+    "ManageEmojisAndStickers": "Manage Emojis And Stickers",
+    "UseExternalEmojis": "Use External Emojis",
+    "ViewAuditLog": "View Audit Log",
+    "PrioritySpeaker": "Priority Speaker",
+    "Stream": "Stream",
+    "ViewChannel": "View Channel",
+    "ViewGuildInsights": "View Guild Insights",
+    "Connect": "Connect",
+    "Speak": "Speak",
+    "MuteMembers": "Mute Members",
+    "DeafenMembers": "Deafen Members",
+    "MoveMembers": "Move Members",
+    "ManageWebhooks": "Manage Webhooks",
+    "UseApplicationCommands": "Use Application Commands",
+    "CreatePrivateThreads": "Create Private Threads",
+    "CreatePublicThreads": "Create Public Threads",
+    "UseExternalStickers": "Use External Stickers",
+    "ManageThreads": "Manage Threads",
+    "SendMessagesInThreads": "Send Messages In Threads",
+    "StartEmbeddedActivities": "Start Activities",
+    "ModerateMembers": "Timeout Members"
+  }
+}
