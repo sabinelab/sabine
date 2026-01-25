@@ -78,6 +78,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@headlessui/react": "2.2.9",
+        "@sabinelab/players": "workspace:*",
         "@sabinelab/utils": "workspace:*",
         "@tailwindcss/typography": "0.5.19",
         "lucide-react": "0.563.0",
