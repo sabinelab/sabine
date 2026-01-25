@@ -232,11 +232,18 @@ const processResult = async (app: App, data: ResultsPayload) => {
         )
         .setFooter({ text: data.stage })
 
-      const row = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().setComponents(
-        new Discord.ButtonBuilder()
-          .setLabel(t(guild.lang, 'helper.stats'))
-          .setStyle(Discord.ButtonStyle.Link)
-          .setURL(`https://vlr.gg/${data.id}`),
+      const row = new Discord.ActionRowBuilder<Discord.ButtonBuilder>()
+
+      if (data.game === 'valorant') {
+        row.addComponents(
+          new Discord.ButtonBuilder()
+            .setLabel(t(guild.lang, 'helper.stats'))
+            .setStyle(Discord.ButtonStyle.Link)
+            .setURL(`https://vlr.gg/${data.id}`)
+        )
+      }
+
+      row.addComponents(
         new Discord.ButtonBuilder()
           .setStyle(Discord.ButtonStyle.Primary)
           .setLabel(t(guild.lang, 'helper.predictions'))
