@@ -3,16 +3,7 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - 'apps/**'
-      - 'package.json'
-      - 'bun.lock'
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
-      - 'README*'
-      - 'LICENSE'
-      - 'crowdin.yml'
+
 
 jobs:
   detect-changes:
@@ -30,7 +21,7 @@ jobs:
       - name: Detect changed workspaces
         id: detect
         run: |
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- . ':!**.md' ':!.gitignore' ':!README*' ':!LICENSE' ':!crowdin.yml')
           
           if echo "$CHANGED_FILES" | grep -qE '^(package\.json|bun\.lock)$'; then
             echo "rebuild_all=true" >> $GITHUB_OUTPUT
