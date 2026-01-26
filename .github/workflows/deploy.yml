@@ -3,147 +3,100 @@ on:
   push:
     branches:
       - 'main'
-
 jobs:
-  detect-changes:
+  deploy:
+    name: 'Deploy to Production'
     runs-on: ubuntu-latest
-    outputs:
-      workspaces: ${{ steps.process.outputs.workspaces }}
-      has_changes: ${{ steps.process.outputs.has_changes }}
-      rebuild_all: ${{ steps.process.outputs.rebuild_all }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect Changes
+      - uses: actions/checkout@v4
+      
+      - uses: dorny/paths-filter@v3
         id: changes
-        uses: tj-actions/changed-files@v45
         with:
-          json: true
-          dir_names: true
-          dir_names_max_depth: 2
-          files_ignore: |
-            **.md
-            .gitignore
-            README*
-            LICENSE
-            crowdin.yml
-          files_yaml: |
-            global:
-              - package.json
-              - bun.lock
-              - docker-compose.yml
-              - packages/**
-              - prisma/**
-            apps:
-              - apps/**
+          filters: |
+            sabine:
+              - 'apps/sabine/**'
+              - '!**/*.md'
+            helper:
+              - 'apps/helper/**'
+              - '!**/*.md'
+            web:
+              - 'apps/web/**'
+              - '!**/*.md'
+            api:
+              - 'apps/api/**'
+              - '!**/*.md'
+            all:
+              - 'packages/**'
+              - 'package.json'
+              - 'bun.lock'
+              - 'docker-compose.yml'
+              - '!**/*.md'
+              - '!crowdin.yml'
+              - '!.github/dependabot.yml'
 
-      - name: Process Workspaces
-        id: process
+      - name: Setup ssh
         run: |
-          IS_GLOBAL="${{ steps.changes.outputs.global_any_changed }}"
-          CHANGED_APPS_JSON='${{ steps.changes.outputs.apps_all_changed_files }}'
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
+          chmod 600 ~/.ssh/sabine
+          cat >>~/.ssh/config << END
+          Host prod
+            HostName $SSH_HOST
+            User $SSH_USERNAME
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/sabine
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USERNAME: ${{ secrets.USERNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.HOST }}
+          SSH_PORT: 22
 
-          echo "DEBUG: Global Changes? $IS_GLOBAL"
-          echo "DEBUG: Changed Apps JSON: $CHANGED_APPS_JSON"
-
-          REBUILD_ALL="false"
-          HAS_CHANGES="false"
-          WORKSPACES="[]"
-
-          if [ "$IS_GLOBAL" == "true" ]; then
-            echo "Global dependency detected. Rebuilding ALL workspaces."
-            REBUILD_ALL="true"
-            HAS_CHANGES="true"
-            WORKSPACES=$(find apps -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | jq -R -s -c 'split("\n") | map(select(length > 0))')
+      - name: Calculate changes and deploy
+        env:
+          CHANGED_SABINE: ${{ steps.changes.outputs.sabine }}
+          CHANGED_HELPER: ${{ steps.changes.outputs.helper }}
+          CHANGED_WEB: ${{ steps.changes.outputs.web }}
+          CHANGED_API: ${{ steps.changes.outputs.api }}
+          CHANGED_ALL: ${{ steps.changes.outputs.all }}
+        run: |
+          # Construct list of services to deploy
+          SERVICES_TO_DEPLOY=""
           
+          if [ "$CHANGED_ALL" == "true" ]; then
+            SERVICES_TO_DEPLOY="all"
           else
-            if [ -n "$CHANGED_APPS_JSON" ] && [ "$CHANGED_APPS_JSON" != "[]" ]; then
-              echo "Selective changes detected."
-              HAS_CHANGES="true"
-              WORKSPACES=$(echo "$CHANGED_APPS_JSON" | jq -c 'map(sub("^apps/"; ""))')
-            else
-              echo "No relevant changes detected."
-            fi
+            [ "$CHANGED_SABINE" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY sabine"
+            [ "$CHANGED_HELPER" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY helper"
+            [ "$CHANGED_WEB" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY web"
+            [ "$CHANGED_API" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY api"
           fi
 
-          echo "DEBUG: Final Workspaces: $WORKSPACES"
-          
-          echo "workspaces=$WORKSPACES" >> $GITHUB_OUTPUT
-          echo "has_changes=$HAS_CHANGES" >> $GITHUB_OUTPUT
-          echo "rebuild_all=$REBUILD_ALL" >> $GITHUB_OUTPUT
+          # Trim leading space
+          SERVICES_TO_DEPLOY=$(echo $SERVICES_TO_DEPLOY | xargs)
 
-  deploy-selective:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.has_changes == 'true' && needs.detect-changes.outputs.rebuild_all == 'false'
-    name: 'Deploy ${{ matrix.workspace }}'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        workspace: ${{ fromJson(needs.detect-changes.outputs.workspaces) }}
-    steps:
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
-          chmod 600 ~/.ssh/sabine
-          cat >>~/.ssh/config << END
-          Host prod
-            HostName $SSH_HOST
-            User $SSH_USERNAME
-            Port $SSH_PORT
-            IdentityFile ~/.ssh/sabine
-            StrictHostKeyChecking no
-          END
-        env:
-          SSH_USERNAME: ${{ secrets.USERNAME }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.HOST }}
-          SSH_PORT: 22
-          
-      - name: Deploy ${{ matrix.workspace }}
-        run: |
-          echo "Deploying ${{ matrix.workspace }}..."
-          ssh prod 'cd sabine/sabine && git pull && docker compose up -d --build ${{ matrix.workspace }}'
+          if [ -z "$SERVICES_TO_DEPLOY" ]; then
+            echo "No deployable changes detected."
+            exit 0
+          fi
 
-  deploy-full:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.has_changes == 'true' && needs.detect-changes.outputs.rebuild_all == 'true'
-    name: 'Deploy All Services'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup SSH
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
-          chmod 600 ~/.ssh/sabine
-          cat >>~/.ssh/config << END
-          Host prod
-            HostName $SSH_HOST
-            User $SSH_USERNAME
-            Port $SSH_PORT
-            IdentityFile ~/.ssh/sabine
-            StrictHostKeyChecking no
-          END
-        env:
-          SSH_USERNAME: ${{ secrets.USERNAME }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.HOST }}
-          SSH_PORT: 22
-          
-      - name: Run Full Sequential Deploy
-        run: |
-          echo "Global changes detected. Updating all services sequentially."
-          WORKSPACES='${{ needs.detect-changes.outputs.workspaces }}'
-          
-          ssh prod "cd sabine/sabine && git pull"
-          
-          for workspace in $(echo $WORKSPACES | jq -r '.[]'); do
-            echo "Deploying Service: $workspace"
-            ssh prod "cd sabine/sabine && docker compose up -d --build $workspace"
-            sleep 5
-          done
-          
-          echo "All services deployed successfully!"
+          echo "Deploying: $SERVICES_TO_DEPLOY"
+
+          # Pass the variable to the SSH command
+          ssh prod "cd sabine/sabine && git pull && bash -c '
+            SERVICES=\"$SERVICES_TO_DEPLOY\"
+            if [ \"\$SERVICES\" == \"all\" ]; then
+              echo \"Full rebuild triggered...\"
+              docker compose up -d --build
+            else
+              for service in \$SERVICES; do
+                echo \"Rebuilding \$service...\"
+                docker compose up -d --build \$service
+                echo \"Waiting 10s for stability...\"
+                sleep 10
+              done
+            fi
+          '"
