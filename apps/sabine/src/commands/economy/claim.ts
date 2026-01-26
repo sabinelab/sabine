@@ -19,15 +19,15 @@ type Tier =
 
 const tier = (() => {
   const tier: Record<Tier, Player[]> = {
-    radiant: [], // 0.5%
-    immortal: [], // 1.5%
-    ascendant: [], // 3.0%
-    diamond: [], // 15.0%
-    platinum: [], // 30.0%
-    gold: [], // 20.0%
-    silver: [], // 15.0%
-    bronze: [], // 10.0%
-    iron: [] // 5.0%
+    radiant: [], // 0.1%
+    immortal: [], // 0.4%
+    ascendant: [], // 1.0%
+    diamond: [], // 3.5%
+    platinum: [], // 8.0%
+    gold: [], // 15.0%
+    silver: [], // 50.0%
+    bronze: [], // 15.0%
+    iron: [] // 7.0%
   }
 
   for (const p of app.players.values()) {
@@ -51,21 +51,21 @@ const getRandomPlayer = () => {
   const random = Math.random() * 100
 
   const pool =
-    random < 0.5
+    random < 0.1
       ? tier.radiant
-      : random < 2.0
+      : random < 0.5
         ? tier.immortal
-        : random < 5.0
+        : random < 1.5
           ? tier.ascendant
-          : random < 20.0
+          : random < 5.0
             ? tier.diamond
-            : random < 50.0
+            : random < 13.0
               ? tier.platinum
-              : random < 70.0
+              : random < 28.0
                 ? tier.gold
-                : random < 85.0
+                : random < 78.0
                   ? tier.silver
-                  : random < 95.0
+                  : random < 93.0
                     ? tier.bronze
                     : tier.iron
 
