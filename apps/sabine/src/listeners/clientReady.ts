@@ -173,7 +173,7 @@ const sendValorantMatches = async (app: App) => {
 
       if (!data.length) continue
 
-      for (const e of guild.events) {
+      for (const e of guild.events.filter(e => e.type === 'valorant')) {
         const thunk = async () => {
           try {
             const messages = (await rest.get(Routes.channelMessages(e.channel1), {
@@ -557,7 +557,7 @@ const sendLolMatches = async (app: App) => {
         )
       } else data = res.filter(d => guild.events.some(e => e.name === d.tournament.name))
 
-      for (const e of guild.events) {
+      for (const e of guild.events.filter(e => e.type === 'lol')) {
         const thunk = async () => {
           try {
             const messages = (await rest.get(Routes.channelMessages(e.channel1), {
