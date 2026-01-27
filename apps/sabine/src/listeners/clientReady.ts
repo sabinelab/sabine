@@ -1035,7 +1035,7 @@ export default createListener({
           await rest.post(Routes.channelMessages(profile.remindIn), {
             body: {
               content: t(profile.user.lang, 'helper.reminder', {
-                user: `<@${profile.id}>`,
+                user: `<@${profile.userId}>`,
                 cmd: `</claim:${app.commands.get('claim')?.id}>`
               })
             }
