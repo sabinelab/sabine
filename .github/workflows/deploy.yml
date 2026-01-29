@@ -85,9 +85,8 @@ jobs:
 
           echo "Deploying: $SERVICES_TO_DEPLOY"
 
-          # Pass the variable to the SSH command
-          ssh prod "cd sabine/sabine && git pull && bash -c '
-            SERVICES=\"$SERVICES_TO_DEPLOY\"
+          # Pass the variable to the SSH command using proper expansion
+          ssh prod "cd sabine/sabine && git pull && SERVICES=\"$SERVICES_TO_DEPLOY\" bash -c '
             if [ \"\$SERVICES\" == \"all\" ]; then
               echo \"Full rebuild triggered...\"
               docker compose up -d --build
