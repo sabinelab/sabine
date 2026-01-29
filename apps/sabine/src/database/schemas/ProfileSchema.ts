@@ -229,8 +229,18 @@ export class ProfileSchema implements Profile {
         }
       },
       create: {
-        userId: this.userId,
-        guildId: this.guildId,
+        user: {
+          connectOrCreate: {
+            where: { id: this.userId },
+            create: { id: this.userId }
+          }
+        },
+        guild: {
+          connectOrCreate: {
+            where: { id: this.guildId },
+            create: { id: this.guildId }
+          }
+        },
         predictions: {
           create: {
             ...pred,
