@@ -12,7 +12,7 @@
     "fastify-type-provider-zod": "^6.1.0",
     "mercadopago": "2.12.0",
     "moment": "2.30.1",
-    "stripe": "20.2.0"
+    "stripe": "20.3.1"
   },
   "name": "@sabinelab/helper",
   "version": "0.0.0",
