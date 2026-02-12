@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - 'main'
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.mdx'
+      - '.github/dependabot.yml'
+      - 'crowdin.yml'
 jobs:
   deploy:
     name: 'Deploy to Production'
@@ -17,22 +22,17 @@ jobs:
           filters: |
             sabine:
               - 'apps/sabine/**'
-              - '!**/*.md'
             helper:
               - 'apps/helper/**'
-              - '!**/*.md'
             web:
               - 'apps/web/**'
-              - '!**/*.md'
             api:
               - 'apps/api/**'
-              - '!**/*.md'
-            all:
+            global:
+              - '*'
               - 'packages/**'
-              - 'package.json'
-              - 'bun.lock'
-              - 'docker-compose.yml'
               - '!**/*.md'
+              - '!**/*.mdx'
               - '!crowdin.yml'
               - '!.github/dependabot.yml'
 
@@ -61,13 +61,14 @@ jobs:
           CHANGED_HELPER: ${{ steps.changes.outputs.helper }}
           CHANGED_WEB: ${{ steps.changes.outputs.web }}
           CHANGED_API: ${{ steps.changes.outputs.api }}
-          CHANGED_ALL: ${{ steps.changes.outputs.all }}
+          CHANGED_GLOBAL: ${{ steps.changes.outputs.global }}
+          DEPLOY_DELAY_SECONDS: 15
         run: |
           # Construct list of services to deploy
           SERVICES_TO_DEPLOY=""
           
-          if [ "$CHANGED_ALL" == "true" ]; then
-            SERVICES_TO_DEPLOY="all"
+          if [ "$CHANGED_GLOBAL" == "true" ]; then
+            SERVICES_TO_DEPLOY="sabine helper web api"
           else
             [ "$CHANGED_SABINE" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY sabine"
             [ "$CHANGED_HELPER" == "true" ] && SERVICES_TO_DEPLOY="$SERVICES_TO_DEPLOY helper"
@@ -85,17 +86,12 @@ jobs:
 
           echo "Deploying: $SERVICES_TO_DEPLOY"
 
-          # Pass the variable to the SSH command using proper expansion
-          ssh prod "cd sabine/sabine && git pull && SERVICES=\"$SERVICES_TO_DEPLOY\" bash -c '
-            if [ \"\$SERVICES\" == \"all\" ]; then
-              echo \"Full rebuild triggered...\"
-              docker compose up -d --build
-            else
-              for service in \$SERVICES; do
-                echo \"Rebuilding \$service...\"
-                docker compose up -d --build \$service
-                echo \"Waiting 10s for stability...\"
-                sleep 10
-              done
-            fi
+          # Pass variables to the SSH command using proper expansion
+          ssh prod "cd sabine/sabine && git pull && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
+            for service in \$SERVICES; do
+              echo \"Rebuilding \$service...\"
+              docker compose up -d --build \$service
+              echo \"Waiting \${DEPLOY_DELAY}s for VPS stability...\"
+              sleep \$DEPLOY_DELAY
+            done
           '"
