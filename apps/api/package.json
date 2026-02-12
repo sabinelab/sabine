@@ -5,10 +5,10 @@
   "main": "src/index.ts",
   "dependencies": {
     "@fastify/type-provider-typebox": "6.1.0",
-    "@prisma/adapter-libsql": "7.3.0",
+    "@prisma/adapter-libsql": "7.4.0",
     "cheerio": "1.2.0",
     "colors": "1.4.0",
-    "fastify": "5.7.1",
+    "fastify": "5.7.4",
     "moment": "2.30.1"
   },
   "description": "",

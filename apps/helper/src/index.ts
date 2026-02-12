@@ -16,7 +16,7 @@ await app.connect()
 const cache = new Set<string>()
 
 const route: FastifyPluginAsyncZod = async fastify => {
-  fastify.post(
+  fastify.withTypeProvider<ZodTypeProvider>().post(
     '/mercadopago',
     {
       schema: {
@@ -72,7 +72,7 @@ const route: FastifyPluginAsyncZod = async fastify => {
     }
   )
 
-  fastify.post(
+  fastify.withTypeProvider<ZodTypeProvider>().post(
     '/stripe',
     {
       schema: {
@@ -133,10 +133,10 @@ const route: FastifyPluginAsyncZod = async fastify => {
   )
 }
 
-const server = fastify().withTypeProvider<ZodTypeProvider>()
+const server = fastify()
+  .withTypeProvider<ZodTypeProvider>()
+  .setValidatorCompiler(validatorCompiler)
+  .setSerializerCompiler(serializerCompiler)
 
-server.setValidatorCompiler(validatorCompiler)
-server.setSerializerCompiler(serializerCompiler)
-
-server.register(route)
-server.listen({ host: '0.0.0.0', port: 3000 })
+await server.register(route as any)
+await server.listen({ host: '0.0.0.0', port: 3000 })
