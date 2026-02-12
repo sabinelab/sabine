@@ -66,6 +66,17 @@ jobs:
         run: |
           # Construct list of services to deploy
           SERVICES_TO_DEPLOY=""
+          SKIP_SABINE_DEPLOY="false"
+
+          # Verify sabine i18n only when apps/sabine changed.
+          # If verification fails, skip sabine deploy without failing the workflow.
+          if [ "$CHANGED_SABINE" == "true" ]; then
+            echo "apps/sabine changed. Running i18n verification..."
+            if ! node scripts/verify-i18n.js; then
+              echo "i18n verification failed. Skipping deploy for service: sabine"
+              SKIP_SABINE_DEPLOY="true"
+            fi
+          fi
           
           if [ "$CHANGED_GLOBAL" == "true" ]; then
             SERVICES_TO_DEPLOY="sabine helper web api"
@@ -78,6 +89,10 @@ jobs:
 
           # Trim leading space
           SERVICES_TO_DEPLOY=$(echo $SERVICES_TO_DEPLOY | xargs)
+
+          if [ "$SKIP_SABINE_DEPLOY" == "true" ]; then
+            SERVICES_TO_DEPLOY=$(echo "$SERVICES_TO_DEPLOY" | sed 's/\<sabine\>//g' | xargs)
+          fi
 
           if [ -z "$SERVICES_TO_DEPLOY" ]; then
             echo "No deployable changes detected."
