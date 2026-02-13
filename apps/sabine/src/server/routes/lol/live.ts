@@ -46,15 +46,17 @@ export const lolLive = new Elysia().post(
           )
         ]),
         stage: z.optional(z.string()),
-        streams: z.array(
-          z.object({
-            main: z.boolean(),
-            language: z.string(),
-            embed_url: z.string(),
-            official: z.boolean(),
-            raw_url: z.string()
-          })
-        ).optional()
+        streams: z
+          .array(
+            z.object({
+              main: z.boolean(),
+              language: z.string(),
+              embed_url: z.string(),
+              official: z.boolean(),
+              raw_url: z.string()
+            })
+          )
+          .optional()
       })
     )
   }
