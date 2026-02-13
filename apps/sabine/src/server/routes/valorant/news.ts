@@ -31,7 +31,7 @@ export const news = new Elysia().post(
     body: z.array(
       z.object({
         title: z.string(),
-        description: z.string(),
+        description: z.string().optional(),
         url: z.string(),
         id: z.string()
       })

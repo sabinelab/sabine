@@ -40,7 +40,7 @@ export const valorantResults = new Elysia().post(
           z.object({
             name: z.string(),
             score: z.string(),
-            country: z.string(),
+            country: z.string().optional(),
             winner: z.boolean()
           })
         ),

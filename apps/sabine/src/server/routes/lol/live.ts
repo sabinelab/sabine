@@ -54,7 +54,7 @@ export const lolLive = new Elysia().post(
             official: z.boolean(),
             raw_url: z.string()
           })
-        )
+        ).optional()
       })
     )
   }

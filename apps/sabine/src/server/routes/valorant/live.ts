@@ -36,7 +36,7 @@ export const valorantLive = new Elysia().post(
             score: z.string()
           })
         ),
-        currentMap: z.string(),
+        currentMap: z.string().optional(),
         score1: z.string(),
         score2: z.string(),
         id: z.string(),
