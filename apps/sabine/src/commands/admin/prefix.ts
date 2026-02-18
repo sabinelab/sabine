@@ -24,11 +24,15 @@ export default createCommand({
   syntax: 'prefix [prefix]',
   examples: ['prefix !', 'prefix s!'],
   async run({ ctx }) {
-    await prisma.guild.update({
+    await prisma.guild.upsert({
       where: {
         id: ctx.db.guild.id
       },
-      data: {
+      update: {
+        prefix: ctx.args.prefix
+      },
+      create: {
+        id: ctx.guild.id,
         prefix: ctx.args.prefix
       }
     })

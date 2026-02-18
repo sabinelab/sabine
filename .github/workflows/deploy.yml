@@ -6,7 +6,7 @@ on:
     paths-ignore:
       - '**/*.md'
       - '**/*.mdx'
-      - '.github/dependabot.yml'
+      - '.github/*'
       - 'crowdin.yml'
 jobs:
   deploy:
@@ -29,12 +29,14 @@ jobs:
             api:
               - 'apps/api/**'
             global:
-              - '*'
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'biome.json'
+              - 'docker-compose.yml'
+              - 'prisma.config.js'
+              - 'prisma/**'
               - 'packages/**'
-              - '!**/*.md'
-              - '!**/*.mdx'
-              - '!crowdin.yml'
-              - '!.github/dependabot.yml'
 
       - name: Setup ssh
         run: |

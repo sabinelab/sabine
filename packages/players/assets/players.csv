@@ -15,7 +15,7 @@
 14,neT,Base Card,no_team,us,sentinel,72.01,79.13,69.65,54.0,66.07,74.79
 15,OXY,Base Card,no_team,us,duelist,88.05,79.52,87.26,84.78,71.38,56.2
 16,Ethan,Base Card,no_team,us,flex,69.1,67.74,72.0,66.91,68.91,66.74
-17,s0m,Eternal Heroes,nrg,us,controller,90.78,83.76,99.21,70.35,102.14,108.44
+17,s0m,Eternal Heroes,nrg,us,controller,100.78,93.76,99.21,95.35,102.14,105.44
 18,brawk,Base Card,no_team,us,initiator,66.74,62.68,71.95,70.08,71.27,62.3
 19,mada,Base Card,no_team,ca,duelist,84.25,79.24,82.63,79.66,69.79,54.04
 20,skuba,Base Card,no_team,us,controller,62.77,62.62,67.64,50.87,76.17,81.15
@@ -550,9 +550,9 @@
 549,blowz,Base Card,no_team,br,initiator,69.8,67.7,77.67,75.57,75.3,67.79
 550,Neon,Base Card,no_team,ar,flex,78.0,75.73,77.44,73.2,75.91,75.67
 551,babybay,Base Card,no_team,us,sentinel,70.43,77.77,68.03,54.22,66.38,71.82
-552,ANGE1,Eternal Heroes,navi,ua,controller,86.84,84.93,97.89,69.0,105.95,108.69
-553,FNS,Eternal Heroes,nrg,ca,sentinel,100.05,104.07,92.8,74.75,87.69,99.69
-554,Sacy,Eternal Heroes,sentinels,br,initiator,94.8,91.29,102.25,100.54,105.68,89.34
+552,ANGE1,Eternal Heroes,navi,ua,controller,93.84,86.93,90.89,89.0,95.95,104.69
+553,FNS,Eternal Heroes,nrg,ca,sentinel,95.05,90.07,92.8,94.75,93.69,106.69
+554,Sacy,Eternal Heroes,sentinels,br,initiator,96.8,94.29,102.25,100.54,100.68,110.34
 555,TenZ,Eternal Heroes,sentinels,us,duelist,110,107.48,110,110,97.19,75.06
 556,ANGE1,Valorant Champions 2022,fpx,ua,controller,70.06,72.23,77.67,58.93,88.14,94.36
 557,Shao,Valorant Champions 2022,fpx,united_nations,initiator,81.02,75.17,86.55,83.72,88.99,74.36
@@ -584,7 +584,7 @@
 583,crashies,Valorant Masters Copenhagen 2022,optic,us,initiator,84.08,77.35,94.06,89.6,94.18,76.96
 584,Victor,Valorant Masters Copenhagen 2022,optic,us,flex,88.55,82.86,91.09,81.89,87.12,84.89
 585,FNS,Valorant Masters Copenhagen 2022,optic,ca,sentinel,85.8,93.42,81.79,65.9,77.43,88.15
-586,Jinggg,Valorant Masters Copenhagen 2022,prx,sg,duelist,108.56,97.16,104.15,105.13,87.82,70.65
+586,Jinggg,Valorant Masters Copenhagen 2022,prx,sg,duelist,92.56,90.16,92.15,95.13,90.82,70.65
 587,f0rsakeN,Valorant Masters Copenhagen 2022,prx,id,flex,93.68,86.03,91.07,89.24,94.02,87.65
 588,d4v41,Valorant Masters Copenhagen 2022,prx,my,flex,91.12,85.0,92.01,88.86,90.33,84.21
 589,Benkai,Valorant Masters Copenhagen 2022,prx,sg,flex,88.27,85.04,90.09,85.89,89.62,86.08
@@ -592,11 +592,11 @@
 591,ANGE1,Valorant Masters Copenhagen 2022,fpx,ua,controller,80.5,77.34,87.65,65.28,94.11,103.83
 592,Shao,Valorant Masters Copenhagen 2022,fpx,united_nations,initiator,86.73,85.07,99.28,91.11,98.63,82.4
 593,Zyppan,Valorant Masters Copenhagen 2022,fpx,tr,flex,96.43,88.73,93.77,90.82,95.23,87.21
-594,SUYGETSU,Valorant Masters Copenhagen 2022,fpx,tr,sentinel,96.53,108.04,93.86,72.54,88.82,95.92
-595,ardiis,Valorant Masters Copenhagen 2022,fpx,lv,duelist,108.43,100.76,100.49,102.73,88.89,68.15
+594,SUYGETSU,Valorant Masters Copenhagen 2022,fpx,tr,sentinel,98.53,98.04,96.86,92.54,98.82,95.92
+595,ardiis,Valorant Masters Copenhagen 2022,fpx,lv,duelist,95.43,92.76,100.49,102.73,88.89,68.15
 596,ZynX,Base Card,no_team,kr,flex,72.41,68.4,70.49,67.07,72.35,65.74
 597,sheydos,Base Card,no_team,ru,initiator,67.56,64.58,72.66,70.3,74.77,65.17
-598,Flashback,Eternal Heroes,drx,kr,flex,97.32,91.79,100.1,94.74,98.83,91.18
+598,Flashback,Eternal Heroes,drx,kr,flex,99.32,91.79,94.1,94.74,98.83,98.18
 599,seven,Base Card,no_team,mx,flex,74.98,54.86,77.90,63.00,76.00,79.90
 600,Loita,Base Card,no_team,tr,controller,75.12,70.44,79.80,71.90,69.43,81.50
 601,Rosé,Base Card,no_team,tr,initiator,70.52,66.04,76.95,69.60,60.17,77.40
