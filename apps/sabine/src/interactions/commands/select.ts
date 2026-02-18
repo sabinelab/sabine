@@ -12,7 +12,7 @@ export default createComponentInteraction({
 
     const player = app.players.get(ctx.interaction.values[0])
 
-    if (!player) return
+    if (!player) return await ctx.reply('[DEBUG] player could not be found')
 
     const controllers = new SelectMenuBuilder()
       .setCustomId(`selected;${ctx.author.id};${player.id};controller;${ctx.args[2]}`)
