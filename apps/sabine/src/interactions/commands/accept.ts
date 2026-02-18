@@ -110,7 +110,7 @@ export default createComponentInteraction({
           const player = app.players.get(card.playerId)!
           return {
             label: `${player.name}`,
-            value: card.id.toString()
+            value: card.playerId
           }
         })
       )
@@ -123,7 +123,7 @@ export default createComponentInteraction({
           const player = app.players.get(card.playerId)!
           return {
             label: `${player.name}`,
-            value: card.id.toString()
+            value: card.playerId
           }
         })
       )
