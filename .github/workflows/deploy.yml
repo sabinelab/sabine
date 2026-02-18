@@ -6,7 +6,7 @@ on:
     paths-ignore:
       - '**/*.md'
       - '**/*.mdx'
-      - '.github/dependabot.yml'
+      - '.github/*'
       - 'crowdin.yml'
 jobs:
   deploy:
