@@ -117,36 +117,40 @@ export default createCommand({
     if (ctx.args.enable) {
       const games = {
         valorant: async () => {
-          if (!ctx.guild || !ctx.db.guild) return
-
           const channel = ctx.guild.channels.cache.get(ctx.args.enable?.valorant?.channel.id ?? '')!
 
           if (![0, 5].some(t => t === channel.type))
             return await ctx.reply('commands.news.invalid_channel')
 
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
               id: ctx.guild.id
             },
-            data: {
+            update: {
+              valorantNewsChannel: channel.id
+            },
+            create: {
+              id: ctx.guild.id,
               valorantNewsChannel: channel.id
             }
           })
           await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
         },
         lol: async () => {
-          if (!ctx.guild || !ctx.db.guild) return
-
           const channel = ctx.guild.channels.cache.get(ctx.args.enable?.lol?.channel.id ?? '')!
 
           if (![0, 5].some(t => t === channel.type))
             return await ctx.reply('commands.news.invalid_channel')
 
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
               id: ctx.guild.id
             },
-            data: {
+            update: {
+              lolNewsChannel: channel.id
+            },
+            create: {
+              id: ctx.guild.id,
               lolNewsChannel: channel.id
             }
           })
@@ -159,27 +163,29 @@ export default createCommand({
     } else {
       const games = {
         valorant: async () => {
-          if (!ctx.db.guild) return
-
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
               id: ctx.db.guild.id
             },
-            data: {
+            update: {
               valorantNewsChannel: null
+            },
+            create: {
+              id: ctx.db.guild.id
             }
           })
           await ctx.reply('commands.news.news_disabled')
         },
         lol: async () => {
-          if (!ctx.db.guild) return
-
-          await prisma.guild.update({
+          await prisma.guild.upsert({
             where: {
               id: ctx.db.guild.id
             },
-            data: {
+            update: {
               lolNewsChannel: null
+            },
+            create: {
+              id: ctx.db.guild.id
             }
           })
           await ctx.reply('commands.news.news_disabled')
