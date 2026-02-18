@@ -65,11 +65,11 @@ export default createComponentInteraction({
     const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
     const key = keys.find(key => key.includes(ctx.author.id))
 
-    if (!key) return
+    if (!key) return await ctx.reply('[DEBUG] key could not be found')
 
     const value = await app.redis.get(key)
 
-    if (!value) return
+    if (!value) return await ctx.reply('[DEBUG] value could not be found')
 
     let data = JSON.parse(value)
 
@@ -107,7 +107,7 @@ export default createComponentInteraction({
 
     const profile = await ProfileSchema.fetch(ctx.args.at(-1)!, ctx.db.guild.id)
 
-    if (!profile) return
+    if (!profile) return await ctx.reply('[DEBUG] profile could not be found')
 
     const [userCards, authorCards] = await Promise.all([
       ctx.app.prisma.card.findMany({
@@ -170,11 +170,11 @@ export default createComponentInteraction({
 
     const channel =
       app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
-    if (!channel || channel.type !== ChannelType.GuildText) return
+    if (!channel || channel.type !== ChannelType.GuildText) return await ctx.reply('[DEBUG] channel could not be found or is invalid')
 
     const message =
       channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
-    if (!message) return
+    if (!message) return await ctx.reply('[DEBUG] message could not be found')
 
     await ctx.edit('commands.duel.agent_selected', {
       p: app.players.get(card?.playerId ?? '')!.name,
