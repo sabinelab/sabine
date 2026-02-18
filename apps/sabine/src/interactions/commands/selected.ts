@@ -40,9 +40,7 @@ const renderTeam = (options: Options) => {
 
       let emoji: string | undefined = '<a:loading:809221866434199634>'
 
-      const foundData = options.data[options.ownerId].find(
-        (p: any) => p.id.toString() === card.playerId
-      )
+      const foundData = options.data[options.ownerId].find(p => p.id.toString() === card.playerId)
 
       if (foundData?.agent) {
         emoji = valorantAgents.find(agent => agent.name === foundData.agent?.name)?.emoji
@@ -170,12 +168,12 @@ export default createComponentInteraction({
       )
       .setFooter({ text: t('commands.duel.time') })
 
-    const channel = app.channels.cache.get(data.channelId)
-
+    const channel =
+      app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
     if (!channel || channel.type !== ChannelType.GuildText) return
 
-    const message = channel.messages.cache.get(data.messageId)
-
+    const message =
+      channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
     if (!message) return
 
     await ctx.edit('commands.duel.agent_selected', {
