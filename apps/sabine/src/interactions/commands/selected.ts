@@ -170,7 +170,8 @@ export default createComponentInteraction({
 
     const channel =
       app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
-    if (!channel || channel.type !== ChannelType.GuildText) return await ctx.reply('[DEBUG] channel could not be found or is invalid')
+    if (!channel || channel.type !== ChannelType.GuildText)
+      return await ctx.reply('[DEBUG] channel could not be found or is invalid')
 
     const message =
       channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
