@@ -47,7 +47,7 @@
   "author": "levisantosp",
   "license": "ISC",
   "dependencies": {
-    "@prisma/adapter-pg": "7.4.0",
+    "@prisma/adapter-pg": "7.4.1",
     "@prisma/client": "7.4.0",
     "@sabinelab/players": "workspace:*",
     "pino": "10.3.1",
