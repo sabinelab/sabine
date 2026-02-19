@@ -85,9 +85,11 @@ export default createComponentInteraction({
       return await ctx.reply('commands.duel.duplicated_agent')
     }
 
+    console.log(ctx.args[2])
+
     const card = await ctx.app.prisma.card.findFirst({
       where: {
-        id: BigInt(ctx.args[2]),
+        playerId: ctx.args[2],
         profileId: ctx.db.profile.id
       }
     })
