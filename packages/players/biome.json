@@ -1,7 +1,8 @@
 {
-  "extends": ["../../biome.json"],
-  "files": {
-    "includes": ["!scripts/*", "!**/test.js", "!**/test.ts", "!prisma/generated", "!dist"],
-    "ignoreUnknown": false
-  }
+    "extends": ["../../biome.json"],
+    "files": {
+        "includes": ["!scripts/*", "!**/test.js", "!**/test.ts", "!prisma/generated", "!dist"],
+        "ignoreUnknown": false
+    },
+    "root": false
 }
