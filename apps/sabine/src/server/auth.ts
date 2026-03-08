@@ -1,10 +1,10 @@
-import { Elysia } from 'elysia'
-import { env } from '@/env'
+import { Elysia } from "elysia"
+import { env } from "@/env"
 
-export const auth = new Elysia().onBeforeHandle({ as: 'global' }, ({ headers, set }) => {
-  if (headers.authorization !== env.AUTH && headers.Authorization !== env.AUTH) {
-    set.status = 'Unauthorized'
+export const auth = new Elysia().onBeforeHandle({ as: "global" }, ({ headers, set }) => {
+    if (headers.authorization !== env.AUTH && headers.Authorization !== env.AUTH) {
+        set.status = "Unauthorized"
 
-    return { message: 'Unauthorized' }
-  }
+        return { message: "Unauthorized" }
+    }
 })
