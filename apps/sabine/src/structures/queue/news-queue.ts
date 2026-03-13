@@ -4,9 +4,9 @@ import Bull from "bull"
 import { env } from "@/env"
 
 export type NewsPayload = NewsData & {
-    game: $Enums.Game
+	game: $Enums.Game
 }
 
 export const newsQueue = new Bull<NewsPayload>("live", {
-    redis: env.REDIS_URL
+	redis: env.REDIS_URL
 })

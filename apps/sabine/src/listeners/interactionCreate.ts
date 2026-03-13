@@ -8,51 +8,51 @@ import ComponentInteractionRunner from "../structures/interaction/ComponentInter
 import ModalSubmitInteractionRunner from "../structures/interaction/ModalSubmitInteractionRunner"
 
 const interactionType: Record<number, (app: App, i: Interaction) => Promise<unknown>> = {
-    [InteractionType.ApplicationCommand]: async (app, interaction) => {
-        if (!interaction.isChatInputCommand()) return
+	[InteractionType.ApplicationCommand]: async (app, interaction) => {
+		if (!interaction.isChatInputCommand()) return
 
-        return await new CommandManager().exec(app, interaction)
-    },
-    [InteractionType.ApplicationCommandAutocomplete]: async (app, interaction) => {
-        if (!interaction.isAutocomplete()) return
+		return await new CommandManager().exec(app, interaction)
+	},
+	[InteractionType.ApplicationCommandAutocomplete]: async (app, interaction) => {
+		if (!interaction.isAutocomplete()) return
 
-        const command = app.commands.get(interaction.commandName)
+		const command = app.commands.get(interaction.commandName)
 
-        if (!command || !command.createAutocompleteInteraction || !interaction.guildId) return
+		if (!command || !command.createAutocompleteInteraction || !interaction.guildId) return
 
-        const user =
-            (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
-        const guild =
-            (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+		const user =
+			(await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
+		const guild =
+			(await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
 
-        const t = <T extends Content>(content: T, args?: Args) => {
-            return locales(user.lang ?? guild?.lang, content, args)
-        }
+		const t = <T extends Content>(content: T, args?: Args) => {
+			return locales(user.lang ?? guild?.lang, content, args)
+		}
 
-        const args: string[] = []
+		const args: string[] = []
 
-        const sub = interaction.options.getSubcommand(false)
-        const group = interaction.options.getSubcommandGroup(false)
+		const sub = interaction.options.getSubcommand(false)
+		const group = interaction.options.getSubcommandGroup(false)
 
-        if (group) args.push(group)
-        if (sub) args.push(sub)
+		if (group) args.push(group)
+		if (sub) args.push(sub)
 
-        return await command.createAutocompleteInteraction({ i: interaction, t, app, args })
-    },
-    [InteractionType.MessageComponent]: async (app, interaction) => {
-        if (!interaction.isMessageComponent()) return
+		return await command.createAutocompleteInteraction({ i: interaction, t, app, args })
+	},
+	[InteractionType.MessageComponent]: async (app, interaction) => {
+		if (!interaction.isMessageComponent()) return
 
-        return await new ComponentInteractionRunner().run(app, interaction)
-    },
-    [InteractionType.ModalSubmit]: async (app, interaction) => {
-        if (!(interaction instanceof ModalSubmitInteraction)) return
+		return await new ComponentInteractionRunner().run(app, interaction)
+	},
+	[InteractionType.ModalSubmit]: async (app, interaction) => {
+		if (!(interaction instanceof ModalSubmitInteraction)) return
 
-        return await new ModalSubmitInteractionRunner().run(app, interaction)
-    }
+		return await new ModalSubmitInteractionRunner().run(app, interaction)
+	}
 }
 export default createListener({
-    name: "interactionCreate",
-    async run(app, interaction) {
-        await interactionType[interaction.type](app, interaction)
-    }
+	name: "interactionCreate",
+	async run(app, interaction) {
+		await interactionType[interaction.type](app, interaction)
+	}
 })

@@ -4,9 +4,9 @@ import { env } from "@/env"
 import type { LiveFeed } from "@/types"
 
 export type LivePayload = LiveFeed & {
-    game: $Enums.Game
+	game: $Enums.Game
 }
 
 export const liveQueue = new Bull<LivePayload>("live", {
-    redis: env.REDIS_URL
+	redis: env.REDIS_URL
 })

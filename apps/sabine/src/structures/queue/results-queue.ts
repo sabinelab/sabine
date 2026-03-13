@@ -4,8 +4,8 @@ import { env } from "@/env"
 import type { ResultsData } from "@/types"
 
 export type ResultsPayload = ResultsData & {
-    game: $Enums.Game
+	game: $Enums.Game
 }
 export const resultsQueue = new Bull<ResultsPayload>("results", {
-    redis: env.REDIS_URL
+	redis: env.REDIS_URL
 })
