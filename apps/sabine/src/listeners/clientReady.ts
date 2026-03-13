@@ -743,23 +743,28 @@ const runTasks = async (app: App) => {
 	setTimeout(async () => await runTasks(app), env.INTERVAL ?? 5 * 60 * 1000)
 }
 
+const setPresence = (app: App) => {
+	if (app.user?.id !== "1235576817683922954") {
+		app.user?.setStatus("dnd")
+		app.user?.setActivity({
+			name: `sabinebot.xyz | ${env.PREFIX}claim`,
+			type: ActivityType.Playing
+		})
+	} else {
+		app.user.setActivity({
+			name: `sabinebot.xyz | ${env.PREFIX}claim`,
+			type: ActivityType.Playing
+		})
+	}
+
+	setTimeout(setPresence, 3_600_000)
+}
+
 export default createListener({
 	name: "clientReady",
 	async run(app) {
+		setPresence(app)
 		Logger.info(`${app.user?.tag} online on Shard ${app.shard?.ids}!`)
-
-		if (app.user?.id !== "1235576817683922954") {
-			app.user?.setStatus("dnd")
-			app.user?.setActivity({
-				name: `sabinebot.xyz | ${env.PREFIX}claim`,
-				type: ActivityType.Playing
-			})
-		} else {
-			app.user.setActivity({
-				name: `sabinebot.xyz | ${env.PREFIX}claim`,
-				type: ActivityType.Playing
-			})
-		}
 
 		await app.postCommands()
 
