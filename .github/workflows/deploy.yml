@@ -1,24 +1,30 @@
 name: Deploy Apps
 on:
-  push:
-    branches:
-      - 'main'
-    paths-ignore:
-      - '**/*.md'
-      - '**/*.mdx'
-      - '.github/*'
-      - 'crowdin.yml'
+  workflow_call:
+    inputs:
+      base_sha:
+        required: true
+        type: string
+      deploy_sha:
+        required: true
+        type: string
 jobs:
   deploy:
     name: 'Deploy to Production'
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.deploy_sha }}
       
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          base: ${{ inputs.base_sha }}
+          ref: ${{ inputs.deploy_sha }}
           filters: |
             sabine:
               - 'apps/sabine/**'
@@ -64,6 +70,7 @@ jobs:
           CHANGED_WEB: ${{ steps.changes.outputs.web }}
           CHANGED_API: ${{ steps.changes.outputs.api }}
           CHANGED_GLOBAL: ${{ steps.changes.outputs.global }}
+          DEPLOY_SHA: ${{ inputs.deploy_sha }}
           DEPLOY_DELAY_SECONDS: 15
         run: |
           # Construct list of services to deploy
@@ -103,8 +110,8 @@ jobs:
 
           echo "Deploying: $SERVICES_TO_DEPLOY"
 
-          # Pass variables to the SSH command using proper expansion
-          ssh prod "cd sabine/sabine && git pull && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
+          # Fetch and deploy the exact commit that passed the Biome workflow.
+          ssh prod "cd sabine/sabine && git fetch origin main && git checkout --detach \"$DEPLOY_SHA\" && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
             for service in \$SERVICES; do
               echo \"Rebuilding \$service...\"
               docker compose up -d --build \$service

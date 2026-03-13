@@ -23,6 +23,8 @@ jobs:
   format-and-review:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    outputs:
+      final_sha: ${{ steps.capture-final-sha.outputs.sha }}
     permissions:
       contents: write
       pull-requests: write
@@ -41,9 +43,10 @@ jobs:
           
       - name: Attempt to implement Biome fixes
         run: |
-          biome check --write --no-errors-on-unmatched . || echo "Issues found, attempting auto-commit..."
+          biome check --write --no-errors-on-unmatched .
 
       - name: Get co-author noreply email
+        if: github.event_name == 'push'
         run: |
           ID=$(curl -s \
             -H "Authorization: Bearer ${{ github.token }}" \
@@ -62,6 +65,12 @@ jobs:
           commit_user_name: github-actions[bot]
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+
+      - name: Capture final commit SHA
+        id: capture-final-sha
+        if: github.event_name == 'push'
+        run: |
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           
       - name: Run Biome via Reviewdog (PR Only)
         if: github.event_name == 'pull_request'
@@ -72,3 +81,12 @@ jobs:
           filter_mode: diff_context
           fail_level: error
           workdir: .
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: format-and-review
+    uses: ./.github/workflows/deploy.yml
+    with:
+      base_sha: ${{ github.event.before }}
+      deploy_sha: ${{ needs.format-and-review.outputs.final_sha }}
+    secrets: inherit
