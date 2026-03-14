@@ -420,7 +420,7 @@ const sendLiveAndResults = async () => {
 			])
 
 			for (const match of vlrLiveMatches) {
-				const { streams, tournament, ...m } = match // eslint-disable-line
+				const { streams, tournament, ...m } = match
 
 				await prisma.valLiveMatch.create({
 					data: {
@@ -433,7 +433,7 @@ const sendLiveAndResults = async () => {
 							createMany: {
 								data: m.teams.map(t => ({
 									...t,
-									score: t.score as string
+									score: t.score ?? ""
 								}))
 							}
 						}
