@@ -89,4 +89,6 @@ jobs:
     with:
       base_sha: ${{ github.event.before }}
       deploy_sha: ${{ needs.format-and-review.outputs.final_sha }}
+      source_event_name: ${{ github.event_name }}
+      source_ref: ${{ github.ref }}
     secrets: inherit

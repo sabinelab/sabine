@@ -8,9 +8,16 @@ on:
       deploy_sha:
         required: true
         type: string
+      source_event_name:
+        required: true
+        type: string
+      source_ref:
+        required: true
+        type: string
 jobs:
   deploy:
     name: 'Deploy to Production'
+    if: ${{ inputs.source_event_name == 'push' && inputs.source_ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,6 +26,15 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ inputs.deploy_sha }}
+
+      - name: Verify deploy SHA belongs to main
+        run: |
+          git fetch origin refs/heads/main:refs/remotes/origin/main --force
+
+          if ! git merge-base --is-ancestor "${{ inputs.deploy_sha }}" origin/main; then
+            echo "Refusing deploy: ${{ inputs.deploy_sha }} is not contained in origin/main."
+            exit 1
+          fi
       
       - uses: dorny/paths-filter@v3
         id: changes
