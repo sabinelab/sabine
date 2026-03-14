@@ -41,8 +41,8 @@ export const lolResults = new Elysia().post(
 				),
 				tournament: z.object({
 					name: z.string(),
-					full_name: z.string(),
-					image: z.string()
+					full_name: z.string().nullable().optional(),
+					image: z.string().nullable().optional()
 				}),
 				stage: z.string(),
 				when: z.string()

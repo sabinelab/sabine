@@ -33,15 +33,15 @@ export const lolLive = new Elysia().post(
 				id: z.string(),
 				tournament: z.object({
 					name: z.string(),
-					full_name: z.string(),
-					image: z.string()
+					full_name: z.string().nullable().optional(),
+					image: z.string().nullable().optional()
 				}),
 				teams: z.union([
 					z.array(z.never()),
 					z.array(
 						z.object({
 							name: z.string(),
-							score: z.string()
+							score: z.string().optional()
 						})
 					)
 				]),

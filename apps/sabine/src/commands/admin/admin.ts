@@ -796,7 +796,7 @@ export default createCommand({
 
 						container
 							.addTextDisplayComponents(text => {
-								let content = `### ${d.tournament.full_name}\n`
+								let content = `### ${d.tournament.full_name ?? d.tournament.name}\n`
 
 								content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
 								content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`

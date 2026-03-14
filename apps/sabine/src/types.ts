@@ -13,8 +13,8 @@ export type MatchTeam = {
 
 export type MatchTournament = {
 	name: string
-	full_name?: string
-	image?: string
+	full_name?: string | null
+	image?: string | null
 }
 
 export type MatchesData = {

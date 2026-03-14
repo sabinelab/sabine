@@ -294,7 +294,6 @@ const sendLiveAndResults = async () => {
 				}
 			})
 		).map(({ tournamentFullName, tournamentImage, tournamentName, ...m }) => ({
-			// eslint-disable-line
 			...m,
 			tournament: {
 				name: tournamentName,
@@ -309,7 +308,6 @@ const sendLiveAndResults = async () => {
 				}
 			})
 		).map(({ tournamentFullName, tournamentImage, tournamentName, ...m }) => ({
-			// eslint-disable-line
 			...m,
 			tournament: {
 				name: tournamentName,
@@ -324,7 +322,6 @@ const sendLiveAndResults = async () => {
 				}
 			})
 		).map(({ tournamentFullName, tournamentImage, tournamentName, ...m }) => ({
-			// eslint-disable-line
 			...m,
 			tournament: {
 				name: tournamentName,
@@ -361,7 +358,6 @@ const sendLiveAndResults = async () => {
 					)
 			)
 			.map(({ tournamentFullName, tournamentImage, tournamentName, ...m }) => ({
-				// eslint-disable-line
 				...m,
 				tournament: {
 					name: tournamentName,
