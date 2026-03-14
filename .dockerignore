@@ -10,3 +10,4 @@ prisma/generated/
 .next/
 apps/api/prisma/generated
 apps/api/prisma/database.db
+postgres/
