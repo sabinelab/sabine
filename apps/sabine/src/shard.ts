@@ -1,11 +1,12 @@
 import { valorantMaps } from "@sabinelab/utils"
-import Bull from "bull"
 import { REST, Routes, ShardingManager } from "discord.js"
 import { env } from "@/env"
-import type { ArenaQueue } from "./listeners/clientReady"
 import EmbedBuilder from "./structures/builders/EmbedBuilder"
 import Logger from "./util/Logger"
 import "./server"
+import { Worker } from "bullmq"
+import { arenaMapQueue, processArenaMap } from "@/structures/queue/arena-map-queue"
+import { processMatch } from "@/structures/queue/arena-queue"
 
 const currentMapInit = await Bun.redis.get("arena:map")
 let mapsInit = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
@@ -23,82 +24,11 @@ const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)]
 
 if (!currentMapInit && mapInit) await Bun.redis.set("arena:map", mapInit)
 
-const arenaMatchQueue = new Bull<ArenaQueue>("arena", { redis: env.REDIS_URL })
-const changeMapQueue = new Bull("arena:map", { redis: env.REDIS_URL })
-
-changeMapQueue.process("change-arena-map", async () => {
-	const currentMap = await Bun.redis.get("arena:map")
-	let maps = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
-
-	const currentMapIndex = maps.indexOf(currentMap || "")
-
-	if (currentMapIndex !== -1) {
-		maps.splice(currentMapIndex, 1)
-	}
-
-	if (maps.length === 0) {
-		maps = valorantMaps.filter(m => m.current_map_pool).map(m => m.name)
-	}
-
-	const map = maps[Math.floor(Math.random() * maps.length)]
-
-	if (map) {
-		await Bun.redis.set("arena:map", map)
+new Worker("change-arena-map", async () => await processArenaMap().catch(Logger.error), {
+	connection: {
+		url: env.REDIS_URL
 	}
 })
-
-const processArenaQueue = async () => {
-	try {
-		while (true) {
-			const queueLength = await Bun.redis.llen("arena:queue")
-
-			if (queueLength < 2) break
-
-			const payload1 = await Bun.redis.rpop("arena:queue")
-			const payload2 = await Bun.redis.rpop("arena:queue")
-
-			if (!payload1 || !payload2) {
-				if (payload1) {
-					await Bun.redis.lpush("arena:queue", payload1)
-				}
-				break
-			}
-
-			const parsedData1 = JSON.parse(payload1)
-			const parsedData2 = JSON.parse(payload2)
-
-			const p1InQueue = await Bun.redis.get(`arena:in_queue:${parsedData1.userId}`)
-			const p2InQueue = await Bun.redis.get(`arena:in_queue:${parsedData2.userId}`)
-
-			if (!p1InQueue) {
-				if (p2InQueue) {
-					await Bun.redis.lpush("arena:queue", payload2)
-				}
-
-				await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`)
-				break
-			}
-
-			if (!p2InQueue) {
-				if (p1InQueue) {
-					await Bun.redis.lpush("arena:queue", payload1)
-				}
-
-				await Bun.redis.unlink(`arena:in_queue:${parsedData2.userId}`)
-				break
-			}
-
-			await Bun.redis.unlink(
-				`arena:in_queue:${parsedData1.userId}`,
-				`arena:in_queue:${parsedData2.userId}`
-			)
-
-			await arenaMatchQueue.add("arena", { parsedData1, parsedData2 })
-		}
-	} catch (e) {
-		Logger.error(e as Error)
-	}
-}
 
 const patterns = ["*leaderboard:*", "*agent_selection:*", "*match:*"]
 
@@ -136,26 +66,27 @@ if (!webhook) {
 
 manager.on("shardCreate", async shard => {
 	if (shard.id === 0) {
-		setInterval(processArenaQueue, 5000)
+		setInterval(processMatch, 5000)
 
-		const oldJobs = await changeMapQueue.getRepeatableJobs()
+		const oldJobs = await arenaMapQueue.getJobSchedulers()
 
 		const promises: Promise<unknown>[] = []
 		for (const job of oldJobs) {
-			promises.push(changeMapQueue.removeRepeatableByKey(job.key))
+			promises.push(arenaMapQueue.removeJobScheduler(job.key))
 		}
 		await Promise.all(promises)
 
-		await changeMapQueue.add(
-			"change-arena-map",
-			{},
+		await arenaMapQueue.upsertJobScheduler(
+			"change-arena-map-scheduler",
 			{
-				jobId: "change:map",
-				repeat: {
-					cron: "0 0 * * 0" // midnight every sunday
-				},
-				removeOnComplete: false,
-				removeOnFail: false
+				pattern: "0 0 * * 0"
+			},
+			{
+				name: "change-arena-map",
+				opts: {
+					removeOnComplete: false,
+					removeOnFail: false
+				}
 			}
 		)
 	}

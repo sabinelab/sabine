@@ -4,6 +4,7 @@ import type { Pack } from "@/commands/misc/vote"
 import { hydrateData, updateCache, voidCatch } from "@/database"
 import { UserSchema } from "@/database/schemas/UserSchema"
 import { app } from "@/structures/app/App"
+import { remindQueue } from "@/structures/queue/reminder-queue"
 
 type PredictionTeam = {
 	name: string
@@ -307,7 +308,7 @@ export class ProfileSchema implements Profile {
 				updates.remindIn = channel
 
 				if (this.remind) {
-					await app.queue.add(
+					await remindQueue.add(
 						"reminder",
 						{
 							channel,

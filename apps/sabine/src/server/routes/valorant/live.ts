@@ -1,4 +1,4 @@
-import type Bull from "bull"
+import type { Job } from "bullmq"
 import { Elysia } from "elysia"
 import { z } from "zod"
 import { type LivePayload, liveQueue } from "@/structures/queue/live-queue"
@@ -6,10 +6,11 @@ import { type LivePayload, liveQueue } from "@/structures/queue/live-queue"
 export const valorantLive = new Elysia().post(
 	"/webhooks/live/valorant",
 	async req => {
-		const promises: Promise<Bull.Job<LivePayload>>[] = []
+		const promises: Promise<Job<LivePayload>>[] = []
 		for (const data of req.body) {
 			promises.push(
 				liveQueue.add(
+					"live",
 					{
 						...data,
 						game: "valorant"
