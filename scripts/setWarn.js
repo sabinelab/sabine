@@ -1,9 +1,9 @@
-import { prisma } from '../packages/prisma'
+import { prisma } from "../packages/prisma"
 
 export default async function () {
-  await prisma.user.updateMany({
-    data: {
-      warn: true
-    }
-  })
+	await prisma.user.updateMany({
+		data: {
+			warn: true
+		}
+	})
 }
