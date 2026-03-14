@@ -489,7 +489,7 @@ const sendLiveAndResults = async () => {
 							createMany: {
 								data: m.teams.map(t => ({
 									...t,
-									score: t.score!
+									score: t.score ?? ""
 								}))
 							}
 						},
