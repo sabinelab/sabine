@@ -8,6 +8,8 @@
 		"ignoreUnknown": false,
 		"includes": [
 			"**",
+			"!postgres/*",
+			"!.turbo/*",
 			"!**/test.js",
 			"!**/test.ts",
 			"!prisma/generated",
