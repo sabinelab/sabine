@@ -119,7 +119,7 @@ for (const pattern of patterns) {
 const manager = new ShardingManager("src/index.ts", {
 	token: env.BOT_TOKEN,
 	mode: "process",
-	totalShards: 2
+	totalShards: env.NODE_ENV === "development" ? "auto" : 2
 })
 
 const rest = new REST().setToken(env.BOT_TOKEN)
