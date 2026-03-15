@@ -72,10 +72,6 @@ const getRandomPlayer = () => {
 	return pool[Math.floor(Math.random() * pool.length)]
 }
 
-const getRandomPlayerByTier = (t: Tier) => {
-	return tier[t][Math.floor(Math.random() * tier[t].length)]
-}
-
 const date = Date.now()
 
 export default createCommand({
@@ -101,14 +97,7 @@ export default createCommand({
 			})
 		}
 
-		let player: Player
-
-		if (ctx.db.profile.pity >= 74) {
-			player = getRandomPlayerByTier("radiant")
-		} else {
-			player = getRandomPlayer()
-		}
-
+		const player = getRandomPlayer()
 		let channel: string | undefined
 
 		if (ctx.data.channel && ctx.db.profile.remind) {

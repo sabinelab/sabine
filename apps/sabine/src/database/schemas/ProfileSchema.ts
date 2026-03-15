@@ -302,7 +302,6 @@ export class ProfileSchema implements Profile {
 			updates.claimTime = claimTime
 			updates.claims = { increment: 1 }
 			updates.reminded = false
-			updates.pity = { increment: 1 }
 
 			if (channel) {
 				updates.remindIn = channel
@@ -322,10 +321,6 @@ export class ProfileSchema implements Profile {
 						}
 					)
 				}
-			}
-
-			if (app.players.get(playerId)!.ovr >= 101) {
-				updates.pity = 0
 			}
 		}
 

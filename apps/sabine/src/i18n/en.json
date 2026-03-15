@@ -255,9 +255,6 @@
 			"bonus3": "- You received **{poisons}** bonus poisons for this being a Premium server.",
 			"bonus4": "- You received **{poisons}** bonus poisons for this being a Premium Booster server."
 		},
-		"claims": {
-			"res": "Your claims: `{claims}`\nYour pity: `{pity}`\nUpon reaching pity **75**, you're guaranteed a Radiant card (101+)!"
-		},
 		"card": {
 			"name": "Name",
 			"collection": "Collection",
