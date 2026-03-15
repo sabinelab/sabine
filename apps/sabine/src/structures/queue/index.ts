@@ -10,6 +10,7 @@ import {
 	processResult,
 	type ResultsPayload
 } from "@/structures/queue/results-queue"
+import { processTasks } from "@/structures/queue/tasks-queue"
 import Logger from "@/util/Logger"
 
 export const startWorkers = (app: App) => {
@@ -65,4 +66,11 @@ export const startWorkers = (app: App) => {
 			}
 		}
 	)
+
+	new Worker("tasks", async () => await processTasks(app).catch(e => new Logger(app).error(e)), {
+		connection: {
+			url: env.REDIS_URL
+		},
+		concurrency: 1
+	})
 }
