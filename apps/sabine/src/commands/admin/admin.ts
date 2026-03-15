@@ -9,6 +9,7 @@ import {
 	MessageFlags,
 	type TextChannel
 } from "discord.js"
+import { tournaments } from "@/config"
 import { voidCatch } from "@/database"
 import { env } from "@/env"
 import Service from "../../api"
@@ -18,12 +19,6 @@ import type { MatchesData } from "../../types"
 import Logger from "../../util/Logger"
 
 const service = new Service(env.AUTH)
-
-const tournaments: { [key: string]: RegExp[] } = {
-	"Valorant Champions Tour": [/valorant champions/, /valorant masters/, /vct \d{4}/],
-	"Valorant Challengers League": [/challengers \d{4}/, /vct \d{4}: ascension/],
-	"Valorant Game Changers": [/game changers \d{4}/]
-}
 
 export default createCommand({
 	name: "admin",

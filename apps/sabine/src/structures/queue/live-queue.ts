@@ -4,6 +4,7 @@ import t from "@i18n"
 import { Queue } from "bullmq"
 import { ButtonStyle, REST, Routes } from "discord.js"
 import pLimit from "p-limit"
+import { tournaments } from "@/config"
 import { env } from "@/env"
 import type App from "@/structures/app/App"
 import ButtonBuilder from "@/structures/builders/ButtonBuilder"
@@ -19,12 +20,6 @@ export const liveQueue = new Queue<LivePayload>("live", {
 		url: env.REDIS_URL
 	}
 })
-
-const tournaments: { [key: string]: RegExp[] } = {
-	"Valorant Champions Tour": [/valorant champions/, /valorant masters/, /vct \d{4}/],
-	"Valorant Challengers League": [/challengers \d{4}/],
-	"Valorant Game Changers": [/game changers \d{4}/]
-}
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 const limit = pLimit(25)
