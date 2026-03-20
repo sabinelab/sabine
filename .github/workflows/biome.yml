@@ -59,7 +59,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: |
-            fix(lint): implement automatic biome fixes
+            chore: apply biome auto-fixes
 
             Co-authored-by: levisantosp <${{ env.COAUTHOR_EMAIL }}>
           commit_user_name: github-actions[bot]
