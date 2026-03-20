@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation"
-import { env } from "@/env"
+import { redirect } from 'next/navigation'
+import { env } from '@/env'
 
 export default function Invite() {
-	redirect(env.INVITE)
+  redirect(env.INVITE)
 }

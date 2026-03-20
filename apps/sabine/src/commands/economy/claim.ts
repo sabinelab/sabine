@@ -1,165 +1,165 @@
-import { prisma } from "@db"
-import { calcPlayerPrice, type Player } from "@sabinelab/players"
-import { env } from "@/env"
-import { app } from "../../structures/app/App"
-import ButtonBuilder from "../../structures/builders/ButtonBuilder"
-import EmbedBuilder from "../../structures/builders/EmbedBuilder"
-import createCommand from "../../structures/command/createCommand"
+import { prisma } from '@db'
+import { calcPlayerPrice, type Player } from '@sabinelab/players'
+import { env } from '@/env'
+import { app } from '../../structures/app/App'
+import ButtonBuilder from '../../structures/builders/ButtonBuilder'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 type Tier =
-	| "iron"
-	| "bronze"
-	| "silver"
-	| "gold"
-	| "platinum"
-	| "diamond"
-	| "ascendant"
-	| "immortal"
-	| "radiant"
+  | 'iron'
+  | 'bronze'
+  | 'silver'
+  | 'gold'
+  | 'platinum'
+  | 'diamond'
+  | 'ascendant'
+  | 'immortal'
+  | 'radiant'
 
 const tier = (() => {
-	const tier: Record<Tier, Player[]> = {
-		radiant: [], // 0.1%
-		immortal: [], // 0.4%
-		ascendant: [], // 1.0%
-		diamond: [], // 3.5%
-		platinum: [], // 8.0%
-		gold: [], // 15.0%
-		silver: [], // 50.0%
-		bronze: [], // 15.0%
-		iron: [] // 7.0%
-	}
+  const tier: Record<Tier, Player[]> = {
+    radiant: [], // 0.1%
+    immortal: [], // 0.4%
+    ascendant: [], // 1.0%
+    diamond: [], // 3.5%
+    platinum: [], // 8.0%
+    gold: [], // 15.0%
+    silver: [], // 50.0%
+    bronze: [], // 15.0%
+    iron: [] // 7.0%
+  }
 
-	for (const p of app.players.values()) {
-		if (!p.ovr) continue
+  for (const p of app.players.values()) {
+    if (!p.ovr) continue
 
-		if (p.ovr >= 101) tier.radiant.push(p)
-		else if (p.ovr >= 95) tier.immortal.push(p)
-		else if (p.ovr >= 89) tier.ascendant.push(p)
-		else if (p.ovr >= 83) tier.diamond.push(p)
-		else if (p.ovr >= 77) tier.platinum.push(p)
-		else if (p.ovr >= 71) tier.gold.push(p)
-		else if (p.ovr >= 65) tier.silver.push(p)
-		else if (p.ovr >= 59) tier.bronze.push(p)
-		else tier.iron.push(p)
-	}
+    if (p.ovr >= 101) tier.radiant.push(p)
+    else if (p.ovr >= 95) tier.immortal.push(p)
+    else if (p.ovr >= 89) tier.ascendant.push(p)
+    else if (p.ovr >= 83) tier.diamond.push(p)
+    else if (p.ovr >= 77) tier.platinum.push(p)
+    else if (p.ovr >= 71) tier.gold.push(p)
+    else if (p.ovr >= 65) tier.silver.push(p)
+    else if (p.ovr >= 59) tier.bronze.push(p)
+    else tier.iron.push(p)
+  }
 
-	return tier
+  return tier
 })()
 
 const getRandomPlayer = () => {
-	const random = Math.random() * 100
+  const random = Math.random() * 100
 
-	const pool =
-		random < 0.1
-			? tier.radiant
-			: random < 0.5
-				? tier.immortal
-				: random < 1.5
-					? tier.ascendant
-					: random < 5.0
-						? tier.diamond
-						: random < 13.0
-							? tier.platinum
-							: random < 28.0
-								? tier.gold
-								: random < 78.0
-									? tier.silver
-									: random < 93.0
-										? tier.bronze
-										: tier.iron
+  const pool =
+    random < 0.1
+      ? tier.radiant
+      : random < 0.5
+        ? tier.immortal
+        : random < 1.5
+          ? tier.ascendant
+          : random < 5.0
+            ? tier.diamond
+            : random < 13.0
+              ? tier.platinum
+              : random < 28.0
+                ? tier.gold
+                : random < 78.0
+                  ? tier.silver
+                  : random < 93.0
+                    ? tier.bronze
+                    : tier.iron
 
-	return pool[Math.floor(Math.random() * pool.length)]
+  return pool[Math.floor(Math.random() * pool.length)]
 }
 
 const date = Date.now()
 
 export default createCommand({
-	name: "claim",
-	aliases: ["c"],
-	category: "economy",
-	nameLocalizations: {
-		"pt-BR": "obter"
-	},
-	description: "Claim a random player",
-	descriptionLocalizations: {
-		"pt-BR": "Obtenha um jogador aleatório"
-	},
-	syntax: "claim",
-	examples: ["claim"],
-	isThinking: true,
-	messageComponentInteractionTime: 60 * 1000,
-	cooldown: true,
-	async run({ ctx, t }) {
-		if (ctx.db.profile.claimTime && ctx.db.profile.claimTime > new Date()) {
-			return await ctx.reply("commands.claim.has_been_claimed", {
-				t: `<t:${(ctx.db.profile.claimTime.getTime() / 1000).toFixed(0)}:R>`
-			})
-		}
+  name: 'claim',
+  aliases: ['c'],
+  category: 'economy',
+  nameLocalizations: {
+    'pt-BR': 'obter'
+  },
+  description: 'Claim a random player',
+  descriptionLocalizations: {
+    'pt-BR': 'Obtenha um jogador aleatório'
+  },
+  syntax: 'claim',
+  examples: ['claim'],
+  isThinking: true,
+  messageComponentInteractionTime: 60 * 1000,
+  cooldown: true,
+  async run({ ctx, t }) {
+    if (ctx.db.profile.claimTime && ctx.db.profile.claimTime > new Date()) {
+      return await ctx.reply('commands.claim.has_been_claimed', {
+        t: `<t:${(ctx.db.profile.claimTime.getTime() / 1000).toFixed(0)}:R>`
+      })
+    }
 
-		const player = getRandomPlayer()
-		let channel: string | undefined
+    const player = getRandomPlayer()
+    let channel: string | undefined
 
-		if (ctx.data.channel && ctx.db.profile.remind) {
-			channel = ctx.data.channel.id
-		}
+    if (ctx.data.channel && ctx.db.profile.remind) {
+      channel = ctx.data.channel.id
+    }
 
-		await ctx.db.profile.addPlayerToRoster(
-			player.id.toString(),
-			"CLAIM_PLAYER_BY_CLAIM_COMMAND",
-			channel
-		)
+    await ctx.db.profile.addPlayerToRoster(
+      player.id.toString(),
+      'CLAIM_PLAYER_BY_CLAIM_COMMAND',
+      channel
+    )
 
-		const embed = new EmbedBuilder()
-			.setTitle(player.name)
-			.setDesc(
-				t("commands.claim.claimed", {
-					player: player.name,
-					price: calcPlayerPrice(player).toLocaleString()
-				})
-			)
-			.setImage(`${env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
+    const embed = new EmbedBuilder()
+      .setTitle(player.name)
+      .setDesc(
+        t('commands.claim.claimed', {
+          player: player.name,
+          price: calcPlayerPrice(player).toLocaleString()
+        })
+      )
+      .setImage(`${env.CDN_URL}/cards/${player.id}.png?ts=${date}`)
 
-		await ctx.reply(
-			embed.build({
-				components: [
-					{
-						type: 1,
-						components: [
-							new ButtonBuilder()
-								.defineStyle("green")
-								.setLabel(t("commands.claim.promote"))
-								.setCustomId(`claim;${ctx.author.id};promote;${player.id}`),
-							new ButtonBuilder()
-								.defineStyle("red")
-								.setLabel(t("commands.claim.sell"))
-								.setCustomId(`claim;${ctx.author.id};sell;${player.id}`)
-						]
-					}
-				]
-			})
-		)
-	},
-	async createMessageComponentInteraction({ ctx }) {
-		ctx.setFlags(64)
+    await ctx.reply(
+      embed.build({
+        components: [
+          {
+            type: 1,
+            components: [
+              new ButtonBuilder()
+                .defineStyle('green')
+                .setLabel(t('commands.claim.promote'))
+                .setCustomId(`claim;${ctx.author.id};promote;${player.id}`),
+              new ButtonBuilder()
+                .defineStyle('red')
+                .setLabel(t('commands.claim.sell'))
+                .setCustomId(`claim;${ctx.author.id};sell;${player.id}`)
+            ]
+          }
+        ]
+      })
+    )
+  },
+  async createMessageComponentInteraction({ ctx }) {
+    ctx.setFlags(64)
 
-		const card = await prisma.card.findFirst({
-			where: {
-				playerId: ctx.args[3],
-				profileId: ctx.db.profile.id,
-				level: {
-					lte: 1
-				}
-			}
-		})
+    const card = await prisma.card.findFirst({
+      where: {
+        playerId: ctx.args[3],
+        profileId: ctx.db.profile.id,
+        level: {
+          lte: 1
+        }
+      }
+    })
 
-		if (!card) {
-			return await ctx.reply("commands.sell.player_not_found")
-		}
+    if (!card) {
+      return await ctx.reply('commands.sell.player_not_found')
+    }
 
-		if (ctx.args[2] === "promote") {
-			await prisma.$transaction(async tx => {
-				await tx.$executeRaw`
+    if (ctx.args[2] === 'promote') {
+      await prisma.$transaction(async tx => {
+        await tx.$executeRaw`
           UPDATE "Card"
           SET active_roster = false
           WHERE id = (
@@ -177,40 +177,40 @@ export default createCommand({
           )
         `
 
-				await tx.card.update({
-					where: {
-						id: card.id
-					},
-					data: {
-						activeRoster: true
-					}
-				})
-			})
+        await tx.card.update({
+          where: {
+            id: card.id
+          },
+          data: {
+            activeRoster: true
+          }
+        })
+      })
 
-			await ctx.reply("commands.promote.player_promoted", {
-				p: app.players.get(ctx.args[3])?.name
-			})
-		} else if (ctx.args[2] === "sell") {
-			const player = app.players.get(ctx.args[3])
-			const card = await prisma.card.findFirst({
-				where: {
-					playerId: ctx.args[3],
-					profileId: ctx.db.profile.id,
-					activeRoster: false
-				}
-			})
+      await ctx.reply('commands.promote.player_promoted', {
+        p: app.players.get(ctx.args[3])?.name
+      })
+    } else if (ctx.args[2] === 'sell') {
+      const player = app.players.get(ctx.args[3])
+      const card = await prisma.card.findFirst({
+        where: {
+          playerId: ctx.args[3],
+          profileId: ctx.db.profile.id,
+          activeRoster: false
+        }
+      })
 
-			if (!player || !card) {
-				return await ctx.reply("commands.sell.player_not_found")
-			}
+      if (!player || !card) {
+        return await ctx.reply('commands.sell.player_not_found')
+      }
 
-			const price = BigInt(calcPlayerPrice(player, true))
+      const price = BigInt(calcPlayerPrice(player, true))
 
-			await ctx.db.profile.sellPlayer(card.id, price)
-			await ctx.reply("commands.sell.sold", {
-				p: player.name,
-				price: price.toLocaleString()
-			})
-		}
-	}
+      await ctx.db.profile.sellPlayer(card.id, price)
+      await ctx.reply('commands.sell.sold', {
+        p: player.name,
+        price: price.toLocaleString()
+      })
+    }
+  }
 })

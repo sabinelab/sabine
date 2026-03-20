@@ -1,20 +1,20 @@
-import { prisma } from "@db"
-import createComponentInteraction from "@/structures/interaction/createComponentInteraction"
+import { prisma } from '@db'
+import createComponentInteraction from '@/structures/interaction/createComponentInteraction'
 
 export default createComponentInteraction({
-	name: "dontshowagain",
-	flags: 64,
-	global: true,
-	async run({ ctx }) {
-		await prisma.user.update({
-			where: {
-				id: ctx.db.profile.userId
-			},
-			data: {
-				warn: false
-			}
-		})
+  name: 'dontshowagain',
+  flags: 64,
+  global: true,
+  async run({ ctx }) {
+    await prisma.user.update({
+      where: {
+        id: ctx.db.profile.userId
+      },
+      data: {
+        warn: false
+      }
+    })
 
-		await ctx.reply("helper.wont_be_warned")
-	}
+    await ctx.reply('helper.wont_be_warned')
+  }
 })

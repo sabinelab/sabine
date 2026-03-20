@@ -1,78 +1,78 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git"
-	},
-	"files": {
-		"ignoreUnknown": false,
-		"includes": [
-			"**",
-			"!postgres/*",
-			"!.turbo/*",
-			"!**/test.js",
-			"!**/test.ts",
-			"!prisma/generated",
-			"!node_modules/",
-			"!.next",
-			"!next-env.d.ts"
-		]
-	},
-	"formatter": {
-		"enabled": true,
-		"indentStyle": "space",
-		"indentWidth": 2,
-		"lineWidth": 100
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noExplicitAny": "off",
-				"noArrayIndexKey": "off",
-				"noDocumentCookie": "off"
-			},
-			"complexity": {
-				"noStaticOnlyClass": "off",
-				"useIndexOf": "off",
-				"noUselessFragments": "off"
-			},
-			"style": {
-				"noNonNullAssertion": "off",
-				"useTemplate": "off"
-			},
-			"a11y": {
-				"useKeyWithClickEvents": "off",
-				"noStaticElementInteractions": "off",
-				"useButtonType": "off",
-				"noSvgWithoutTitle": "off"
-			},
-			"correctness": {
-				"noChildrenProp": "off"
-			}
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "single",
-			"semicolons": "asNeeded",
-			"trailingCommas": "none",
-			"arrowParentheses": "asNeeded",
-			"jsxQuoteStyle": "single"
-		}
-	},
-	"css": {
-		"parser": {
-			"tailwindDirectives": true
-		}
-	},
-	"assist": {
-		"enabled": true,
-		"actions": {
-			"source": {
-				"organizeImports": "on"
-			}
-		}
-	}
+  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git"
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!postgres/*",
+      "!.turbo/*",
+      "!**/test.js",
+      "!**/test.ts",
+      "!prisma/generated",
+      "!node_modules/",
+      "!.next",
+      "!next-env.d.ts"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noDocumentCookie": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off",
+        "useIndexOf": "off",
+        "noUselessFragments": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useTemplate": "off"
+      },
+      "a11y": {
+        "useKeyWithClickEvents": "off",
+        "noStaticElementInteractions": "off",
+        "useButtonType": "off",
+        "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "noChildrenProp": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none",
+      "arrowParentheses": "asNeeded",
+      "jsxQuoteStyle": "single"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  }
 }
