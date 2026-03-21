@@ -53,42 +53,7 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.profile.rankedWins
-    const unranked_defeats = ctx.db.profile.unrankedDefeats
-    const unranked_wins = ctx.db.profile.unrankedWins
-    const ranked_swiftplay_wins = ctx.db.profile.rankedSwiftplayWins
-    const swiftplay_wins = ctx.db.profile.swiftplayWins
-    const ranked_defeats = ctx.db.profile.rankedDefeats
-    const ranked_swiftplay_defeats = ctx.db.profile.rankedSwiftplayDefeats
-    const swiftplay_defeats = ctx.db.profile.swiftplayDefeats
-    const arena_wins = ctx.db.profile.arenaWins
-    const arena_defeats = ctx.db.profile.arenaDefeats
-    const total_wins =
-      ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
-    const total_defeats =
-      ranked_defeats +
-      unranked_defeats +
-      swiftplay_defeats +
-      ranked_swiftplay_defeats +
-      arena_defeats
-
-    let content =
-      t('commands.career.embed.desc', {
-        ranked_wins,
-        unranked_wins,
-        ranked_swiftplay_wins,
-        swiftplay_wins,
-        ranked_defeats,
-        unranked_defeats,
-        ranked_swiftplay_defeats,
-        swiftplay_defeats,
-        total_wins,
-        total_defeats,
-        total: matches.length,
-        rr: ctx.db.profile.rankRating,
-        arena_defeats,
-        arena_wins
-      }) + '\n\n'
+    let content = ''
 
     const embed = new EmbedBuilder()
       .setAuthor({
@@ -195,42 +160,7 @@ export default createCommand({
       return await ctx.reply('commands.career.no_pages')
     }
 
-    const ranked_wins = ctx.db.profile.rankedWins
-    const unranked_defeats = ctx.db.profile.unrankedDefeats
-    const unranked_wins = ctx.db.profile.unrankedWins
-    const ranked_swiftplay_wins = ctx.db.profile.rankedSwiftplayWins
-    const swiftplay_wins = ctx.db.profile.swiftplayWins
-    const ranked_defeats = ctx.db.profile.rankedDefeats
-    const ranked_swiftplay_defeats = ctx.db.profile.rankedSwiftplayDefeats
-    const swiftplay_defeats = ctx.db.profile.swiftplayDefeats
-    const arena_wins = ctx.db.profile.arenaWins
-    const arena_defeats = ctx.db.profile.arenaDefeats
-    const total_wins =
-      ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
-    const total_defeats =
-      ranked_defeats +
-      unranked_defeats +
-      swiftplay_defeats +
-      ranked_swiftplay_defeats +
-      arena_defeats
-
-    let content =
-      t('commands.career.embed.desc', {
-        ranked_wins,
-        unranked_wins,
-        ranked_swiftplay_wins,
-        swiftplay_wins,
-        ranked_defeats,
-        unranked_defeats,
-        ranked_swiftplay_defeats,
-        swiftplay_defeats,
-        total_wins,
-        total_defeats,
-        total: matches.length,
-        rr: ctx.db.profile.rankRating,
-        arena_defeats,
-        arena_wins
-      }) + '\n\n'
+    let content = ''
 
     const embed = new EmbedBuilder()
       .setAuthor({
