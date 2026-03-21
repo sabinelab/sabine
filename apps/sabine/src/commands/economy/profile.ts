@@ -1,6 +1,6 @@
+import { prisma } from '@db'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
-import { prisma } from '@db'
 
 export default createCommand({
   name: 'profile',
