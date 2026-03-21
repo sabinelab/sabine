@@ -82,7 +82,7 @@ export default createComponentInteraction({
     }
 
     if (duplicatedAgent) {
-      return await ctx.reply('commands.duel.duplicated_agent')
+      return await ctx.reply('commands.battle.duplicated_agent')
     }
 
     const card = await ctx.app.prisma.card.findFirst({
@@ -127,8 +127,8 @@ export default createComponentInteraction({
     const isAuthor = key.split(':')[2] === ctx.author.id
 
     const embed = new EmbedBuilder()
-      .setTitle(t('commands.duel.embed.title'))
-      .setDesc(t('commands.duel.embed.desc'))
+      .setTitle(t('commands.battle.embed.title'))
+      .setDesc(t('commands.battle.embed.desc'))
       .setImage(data.image)
       .setFields(
         {
@@ -166,7 +166,7 @@ export default createComponentInteraction({
           inline: true
         }
       )
-      .setFooter({ text: t('commands.duel.time') })
+      .setFooter({ text: t('commands.battle.time') })
 
     const channel =
       app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
@@ -176,7 +176,7 @@ export default createComponentInteraction({
       channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
     if (!message) return
 
-    await ctx.edit('commands.duel.agent_selected', {
+    await ctx.edit('commands.battle.agent_selected', {
       p: app.players.get(card?.playerId ?? '')!.name,
       agent: agentName
     })
@@ -191,7 +191,7 @@ export default createComponentInteraction({
         content:
           message.content +
           '\n' +
-          t('commands.duel.starting_in', {
+          t('commands.battle.starting_in', {
             time: `<t:${((Date.now() + timeout) / 1000).toFixed(0)}:R>`
           }),
         embeds: [embed],
@@ -252,7 +252,7 @@ export default createComponentInteraction({
           await app.redis.unlink(`match:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
           await app.redis.unlink(`match:${ctx.db.guild.id}:${profile.userId}`)
 
-          await ctx.reply('commands.duel.error', {
+          await ctx.reply('commands.battle.error', {
             users: `${ctx.interaction.user} <@${match.teams[1].user}>`,
             e: e as Error
           })

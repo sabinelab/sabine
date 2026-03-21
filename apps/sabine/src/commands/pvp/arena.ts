@@ -96,7 +96,7 @@ export default createCommand({
         const duplicates = Object.values(counts).filter(count => count > 1).length
 
         if (duplicates) {
-          return await ctx.reply('commands.duel.duplicated_cards')
+          return await ctx.reply('commands.battle.duplicated_cards')
         }
 
         const isAlreadyInQueue = await ctx.app.redis.exists(
@@ -107,11 +107,7 @@ export default createCommand({
           return await ctx.reply('commands.arena.is_already_in_queue')
         }
 
-        const payload: {
-          userId: string
-          channelId: string
-          guildId: string
-        } = {
+        const payload = {
           userId: ctx.db.profile.userId,
           guildId: ctx.db.guild.id,
           channelId: ctx.data.channelId
@@ -426,7 +422,7 @@ export default createCommand({
       if (cards.some(c => c.arenaAgentName === agent.name)) {
         ctx.setFlags(64)
 
-        return await ctx.reply('commands.duel.duplicated_agent')
+        return await ctx.reply('commands.battle.duplicated_agent')
       }
 
       await prisma.card.update({

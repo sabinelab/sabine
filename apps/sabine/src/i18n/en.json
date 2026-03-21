@@ -194,7 +194,7 @@
     "balance": {
       "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
     },
-    "duel": {
+    "battle": {
       "started": "### Match started",
       "already_in_match": "You already started a match. Wait until it finishes and try again.",
       "needed_team_name": "You need to set your team name before play.",
@@ -202,11 +202,11 @@
       "team_not_completed_2": "Your opponent's team is not completed.",
       "needed_team_name_2": "Your opponent needs to set team name before play.",
       "already_in_match_2": "Your opponent is already in match.",
-      "request": "{opponent}, {author} wants to duel against you in a **{mode}** mode match. You gonna accept or chicken out? 🐔\n-# {opponent} have 1 minute to accept",
+      "request": "{opponent}, {author} wants to battle against you in a **{mode}** mode match. You gonna accept or chicken out? 🐔\n-# {opponent} have 1 minute to accept",
       "button": "Accept",
       "duplicated_cards": "You cannot have duplicated cards in your roster.",
       "duplicated_cards2": "Your opponent cannot have duplicated cards in roster.",
-      "cannot_duel": "You cannot duel against yourself.",
+      "cannot_battle": "You cannot battle against yourself.",
       "mode": {
         "ranked": "Ranked",
         "swiftplay;ranked": "Ranked Swiftplay",
