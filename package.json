@@ -8,6 +8,7 @@
     "build": "turbo run build",
     "check": "turbo run check",
     "lint": "turbo run lint",
+    "format": "turbo run format",
     "dev": "turbo run dev",
     "start:sabine": "turbo run start --filter='@sabinelab/sabine' --env-mode=loose",
     "dev:sabine": "turbo run dev --filter='@sabinelab/sabine' --env-mode=loose",
