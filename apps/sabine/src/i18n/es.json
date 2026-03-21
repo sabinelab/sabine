@@ -194,41 +194,40 @@
     "balance": {
       "res": "- You have **{c} poisons** and **{f} fates**! You are in **#{p} place** on the leaderboard.\n- Check out other rich people using {cmd}.\n- Claim **poisons** and **fates** by using {cmd2}."
     },
-    "duel": {
-      "started": "### Partido comenzado",
-      "already_in_match": "Ya comenzaste un partido. Espera hasta que termine e intenta de nuevo.",
-      "needed_team_name": "Necesitas establecer el nombre de tu equipo antes de jugar.",
-      "team_not_completed_1": "Tu equipo no está completo.",
-      "team_not_completed_2": "El equipo de tu oponente no está completo.",
-      "needed_team_name_2": "Tu oponente necesita establecer el nombre del equipo antes de jugar.",
-      "already_in_match_2": "Tu oponente ya está en un partido.",
-      "request": "{opponent}, {author} quiere tener un duelo contigo en un partido modo **{mode}**. ¿Vas a aceptar o te vas a acobardar? 🐔\n-# {opponent} tiene 1 minuto para aceptar",
-      "button": "Aceptar",
-      "duplicated_cards": "No puedes tener cartas duplicadas en tu plantilla.",
-      "duplicated_cards2": "Tu oponente no puede tener cartas duplicadas en su plantilla.",
-      "cannot_duel": "No puedes tener un duelo contra ti mismo.",
+    "battle": {
+      "started": "### Match started",
+      "already_in_match": "You already started a match. Wait until it finishes and try again.",
+      "needed_team_name": "You need to set your team name before play.",
+      "team_not_completed_1": "Your team is not completed.",
+      "team_not_completed_2": "Your opponent's team is not completed.",
+      "needed_team_name_2": "Your opponent needs to set team name before play.",
+      "already_in_match_2": "Your opponent is already in match.",
+      "request": "{opponent}, {author} wants to battle against you in a **{mode}** mode match. You gonna accept or chicken out? 🐔\n-# {opponent} have 1 minute to accept",
+      "button": "Accept",
+      "duplicated_cards": "You cannot have duplicated cards in your roster.",
+      "duplicated_cards2": "Your opponent cannot have duplicated cards in roster.",
+      "cannot_battle": "You cannot battle against yourself.",
       "mode": {
-        "ranked": "Clasificatoria",
-        "swiftplay;ranked": "Swiftplay Clasificatoria",
+        "ranked": "Ranked",
+        "swiftplay;ranked": "Ranked Swiftplay",
         "swiftplay;unranked": "Swiftplay",
-        "tournament": "Torneo",
-        "unranked": "No Clasificatoria"
+        "tournament": "Tournament",
+        "unranked": "Unranked"
       },
       "embed": {
-        "title": "Selección de Agentes",
-        "desc": "Necesitas seleccionar los agentes que usarán tus jugadores."
+        "title": "Agents Select",
+        "desc": "You need to select the agents your players will use."
       },
-      "time": "Tienes 5 minutos para seleccionar los agentes",
-      "agent_selected": "**{p}** jugará como **{agent}**.",
-      "duplicated_agent": "Uno de tus jugadores ya está usando este agente.",
-      "starting_in": "Partido comenzando en {time}",
-      "error": "{users}\nHa ocurrido un error inesperado...\n`{e}`"
+      "time": "You have 5 minutes to select the agents",
+      "agent_selected": "**{p}** will play as **{agent}**.",
+      "duplicated_agent": "One of your players is already using this agent.",
+      "starting_in": "Match starting {time}",
+      "error": "{users}\nAn unexpected error has occurred...\n`{e}`"
     },
     "career": {
       "no_pages": "No hay nada que mostrar en esta página.",
       "embed": {
         "author": "Tu Carrera",
-        "desc": "**Puntos:** `{rr}RR`\n**Victorias/Derrotas** (arena): `{arena_wins}/{arena_defeats}`\n**Victorias/Derrotas** (clasificatoria): `{ranked_wins}/{ranked_defeats}`\n**Victorias/Derrotas** (no clasificatoria): `{unranked_wins}/{unranked_defeats}`\n**Victorias/Derrotas** (swiftplay clasificatoria): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Victorias/Derrotas** (swiftplay): `{swiftplay_wins}/{swiftplay_defeats}`\n**Victorias Totales:** `{total_wins}`\n**Derrotas Totales:** `{total_defeats}`\n**Partidos Jugados:** `{total}`",
         "footer": "Page {page}"
       },
       "type": {
@@ -254,9 +253,6 @@
       "bonus2": "- Recibiste **{poisons}** toxinas de bonificación y **{fates}** destinos de bonificación por ser usuario Premium Booster.",
       "bonus3": "- Recibiste **{poisons}** toxinas de bonificación porque este es un servidor Premium.",
       "bonus4": "- Recibiste **{poisons}** toxinas de bonificación porque este es un servidor Premium Booster."
-    },
-    "claims": {
-      "res": "Tus reclamos: `{claims}`\nTu pity: `{pity}`\n¡Al alcanzar el pity **75**, tienes garantizada una carta Radiante (101+)!"
     },
     "card": {
       "name": "Nombre",
@@ -418,6 +414,36 @@
     },
     "show": {
       "card_content": "Level: `{level}`\nXP: `{xp}` {progress}"
+    },
+    "profile": {
+      "title": "Your Profile",
+      "description": [
+        "Claims: `{claims}`",
+        "Points: `{points}RR`",
+        "Total wins: `{total_wins}`",
+        "Total defeats: `{total_defeats}`"
+      ],
+      "arena": {
+        "title": "Arena",
+        "description": ["Wins: `{arena_wins}`", "Defeats: `{arena_defeats}`"]
+      },
+      "ranked": {
+        "title": "Ranked",
+        "description": ["Wins: `{ranked_wins}`", "Defeats: `{ranked_defeats}`"]
+      },
+      "ranked_swiftplay": {
+        "title": "Ranked Swiftplay",
+        "description": ["Wins: `{ranked_swiftplay_wins}`", "Defeats: `{ranked_swiftplay_defeats}`"]
+      },
+      "unranked": {
+        "title": "Unranked",
+        "description": ["Wins: `{unranked_wins}`", "Defeats: `{unranked_defeats}`"]
+      },
+      "swiftplay": {
+        "title": "Swiftplay",
+        "description": ["Wins: `{swiftplay_wins}`", "Defeats: `{swiftplay_defeats}`"]
+      },
+      "last_battle": "Last Battle"
     }
   },
   "simulator": {
