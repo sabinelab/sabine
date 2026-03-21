@@ -228,7 +228,6 @@
       "no_pages": "Nothing to show in this page.",
       "embed": {
         "author": "Your Career",
-        "desc": "**Points:** `{rr}RR`\n**Wins/Defeats** (arena): `{arena_wins}/{arena_defeats}`\n**Wins/Defeats** (ranked): `{ranked_wins}/{ranked_defeats}`\n**Wins/Defeats** (unranked): `{unranked_wins}/{unranked_defeats}`\n**Wins/Defeats** (ranked swiftplay): `{ranked_swiftplay_wins}/{ranked_swiftplay_defeats}`\n**Wins/Defeats** (swiftplay): `{swiftplay_wins}/{swiftplay_defeats}`\n**Total Wins:** `{total_wins}`\n**Total Defeats:** `{total_defeats}`\n**Matches Played:** `{total}`",
         "footer": "Page {page}"
       },
       "type": {
@@ -415,6 +414,36 @@
     },
     "show": {
       "card_content": "Level: `{level}`\nXP: `{xp}` {progress}"
+    },
+    "profile": {
+      "title": "Your Profile",
+      "description": [
+        "Claims: `{claims}`",
+        "Points: `{points}RR`",
+        "Total wins: `{total_wins}`",
+        "Total defeats: `{total_defeats}`"
+      ],
+      "arena": {
+        "title": "Arena",
+        "description": ["Wins: `{arena_wins}`", "Defeats: `{arena_defeats}`"]
+      },
+      "ranked": {
+        "title": "Ranked",
+        "description": ["Wins: `{ranked_wins}`", "Defeats: `{ranked_defeats}`"]
+      },
+      "ranked_swiftplay": {
+        "title": "Ranked Swiftplay",
+        "description": ["Wins: `{ranked_swiftplay_wins}`", "Defeats: `{ranked_swiftplay_defeats}`"]
+      },
+      "unranked": {
+        "title": "Unranked",
+        "description": ["Wins: `{unranked_wins}`", "Defeats: `{unranked_defeats}`"]
+      },
+      "swiftplay": {
+        "title": "Swiftplay",
+        "description": ["Wins: `{swiftplay_wins}`", "Defeats: `{swiftplay_defeats}`"]
+      },
+      "last_battle": "Last Battle"
     }
   },
   "simulator": {
