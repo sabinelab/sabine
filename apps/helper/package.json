@@ -7,7 +7,7 @@
     "colors": "1.4.0",
     "discord-html-transcripts": "3.3.0",
     "discord.js": "14.25.1",
-    "enhanced-ms": "4.2.0",
+    "enhanced-ms": "4.3.0",
     "fastify": "5.8.2",
     "fastify-type-provider-zod": "6.1.0",
     "mercadopago": "2.12.0",
