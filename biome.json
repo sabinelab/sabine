@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.8/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git"
@@ -8,7 +8,8 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
-      "!scripts/*",
+      "!postgres/*",
+      "!.turbo/*",
       "!**/test.js",
       "!**/test.ts",
       "!prisma/generated",

@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url'
 import { prisma } from '@db'
 import type { Blacklist } from '@generated'
 import { calcPlayerPrice, getPlayers, type Player } from '@sabinelab/players'
-import Queue from 'bull'
 import * as Discord from 'discord.js'
 import { env } from '@/env'
 import { emojis } from '@/util/emojis'
@@ -14,18 +13,8 @@ import type { CreateInteractionOptions } from '../interaction/createComponentInt
 import type { CreateModalSubmitInteractionOptions } from '../interaction/createModalSubmitInteraction'
 import type { Listener } from './createListener'
 
-type Reminder = {
-  user: string
-  channel: string
-  guild: string
-}
-
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-const queue = new Queue<Reminder>('reminder', {
-  redis: env.REDIS_URL
-})
 
 const rest = new Discord.REST().setToken(env.BOT_TOKEN)
 
@@ -34,7 +23,6 @@ export default class App extends Discord.Client {
   public aliases = new Map<string, string>()
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
-  public queue: typeof queue
   public interactions = new Map<
     string,
     CreateInteractionOptions & CreateModalSubmitInteractionOptions
@@ -49,7 +37,6 @@ export default class App extends Discord.Client {
   public constructor(options: Discord.ClientOptions) {
     super(options)
     this.redis = Bun.redis
-    this.queue = queue
   }
 
   public async load() {

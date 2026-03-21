@@ -25,7 +25,11 @@ export default createListener({
       if (group) args.push(group)
       if (sub) args.push(sub)
 
-      return await command.createAutocompleteInteraction({ i: interaction, app, args })
+      return await command.createAutocompleteInteraction({
+        i: interaction,
+        app,
+        args
+      })
     }
 
     if (interaction.type === InteractionType.MessageComponent) {

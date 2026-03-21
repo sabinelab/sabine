@@ -1,4 +1,4 @@
-import type Bull from 'bull'
+import type { Job } from 'bullmq'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
 import { type NewsPayload, newsQueue } from '@/structures/queue/news-queue'
@@ -6,10 +6,11 @@ import { type NewsPayload, newsQueue } from '@/structures/queue/news-queue'
 export const news = new Elysia().post(
   '/webhooks/news/valorant',
   async req => {
-    const promises: Promise<Bull.Job<NewsPayload>>[] = []
+    const promises: Promise<Job<NewsPayload>>[] = []
     for (const data of req.body) {
       promises.push(
         newsQueue.add(
+          'news',
           {
             ...data,
             game: 'valorant'

@@ -134,7 +134,9 @@ export default createCommand({
               valorantNewsChannel: channel.id
             }
           })
-          await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
+          await ctx.reply('commands.news.news_enabled', {
+            ch: channel.toString()
+          })
         },
         lol: async () => {
           const channel = ctx.guild.channels.cache.get(ctx.args.enable?.lol?.channel.id ?? '')!
@@ -154,7 +156,9 @@ export default createCommand({
               lolNewsChannel: channel.id
             }
           })
-          await ctx.reply('commands.news.news_enabled', { ch: channel.toString() })
+          await ctx.reply('commands.news.news_enabled', {
+            ch: channel.toString()
+          })
         }
       }
 

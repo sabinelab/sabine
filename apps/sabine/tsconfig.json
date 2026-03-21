@@ -20,6 +20,7 @@
       "@db": ["./src/database"],
       "@types": ["./src/types"],
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["bun"]
   }
 }

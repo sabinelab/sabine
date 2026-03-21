@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -47,7 +47,9 @@ console.log(`Reference: en.json (${enKeys.length} keys)`)
 const missingEs = enKeys.filter(key => !Object.hasOwn(esKeys, key))
 if (missingEs.length > 0) {
   console.error('\n❌ Missing keys in es.json:')
-  missingEs.forEach(key => console.error(`   - ${key}`))
+  for (const key of missingEs) {
+    console.error(`   - ${key}`)
+  }
   hasError = true
 } else {
   console.log('✅ es.json passed')
@@ -56,7 +58,9 @@ if (missingEs.length > 0) {
 const missingPt = enKeys.filter(key => !Object.hasOwn(ptKeys, key))
 if (missingPt.length > 0) {
   console.error('\n❌ Missing keys in pt.json:')
-  missingPt.forEach(key => console.error(`   - ${key}`))
+  for (const key of missingPt) {
+    console.error(`   - ${key}`)
+  }
   hasError = true
 } else {
   console.log('✅ pt.json passed')

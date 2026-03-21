@@ -72,10 +72,6 @@ const getRandomPlayer = () => {
   return pool[Math.floor(Math.random() * pool.length)]
 }
 
-const getRandomPlayerByTier = (t: Tier) => {
-  return tier[t][Math.floor(Math.random() * tier[t].length)]
-}
-
 const date = Date.now()
 
 export default createCommand({
@@ -101,14 +97,7 @@ export default createCommand({
       })
     }
 
-    let player: Player
-
-    if (ctx.db.profile.pity >= 74) {
-      player = getRandomPlayerByTier('radiant')
-    } else {
-      player = getRandomPlayer()
-    }
-
+    const player = getRandomPlayer()
     let channel: string | undefined
 
     if (ctx.data.channel && ctx.db.profile.remind) {
@@ -198,7 +187,9 @@ export default createCommand({
         })
       })
 
-      await ctx.reply('commands.promote.player_promoted', { p: app.players.get(ctx.args[3])?.name })
+      await ctx.reply('commands.promote.player_promoted', {
+        p: app.players.get(ctx.args[3])?.name
+      })
     } else if (ctx.args[2] === 'sell') {
       const player = app.players.get(ctx.args[3])
       const card = await prisma.card.findFirst({
@@ -216,7 +207,10 @@ export default createCommand({
       const price = BigInt(calcPlayerPrice(player, true))
 
       await ctx.db.profile.sellPlayer(card.id, price)
-      await ctx.reply('commands.sell.sold', { p: player.name, price: price.toLocaleString() })
+      await ctx.reply('commands.sell.sold', {
+        p: player.name,
+        price: price.toLocaleString()
+      })
     }
   }
 })

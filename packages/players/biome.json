@@ -3,5 +3,6 @@
   "files": {
     "includes": ["!scripts/*", "!**/test.js", "!**/test.ts", "!prisma/generated", "!dist"],
     "ignoreUnknown": false
-  }
+  },
+  "root": false
 }

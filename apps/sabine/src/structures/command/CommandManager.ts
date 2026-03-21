@@ -514,7 +514,9 @@ export class CommandManager {
         await rest.post(Routes.webhook(webhook.id, webhook.token), {
           body: {
             embeds: [embed.toJSON()],
-            avatar_url: app.user?.displayAvatarURL({ size: 2048 })
+            avatar_url: app.user?.displayAvatarURL({
+              size: 2048
+            })
           }
         })
       })

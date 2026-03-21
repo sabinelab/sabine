@@ -72,7 +72,11 @@ export default createCommand({
         .setCustomId(`activatekey;${ctx.author.id};${key.type};${ctx.args.key}`)
 
       await ctx.reply(
-        button.build(t('commands.activatekey.would_like_to_continue', { key: key.type }))
+        button.build(
+          t('commands.activatekey.would_like_to_continue', {
+            key: key.type
+          })
+        )
       )
     } else {
       await app.prisma.guildKey.create({

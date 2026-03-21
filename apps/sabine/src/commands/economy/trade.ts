@@ -78,7 +78,9 @@ export default createCommand({
     const price = calcPlayerPrice(player, true)
 
     if (BigInt(ctx.args.price) < price) {
-      return await ctx.reply('commands.trade.invalid_value', { value: price.toLocaleString() })
+      return await ctx.reply('commands.trade.invalid_value', {
+        value: price.toLocaleString()
+      })
     }
 
     if (ctx.args.user.id === ctx.author.id) {

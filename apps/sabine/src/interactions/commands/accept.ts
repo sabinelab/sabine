@@ -11,7 +11,7 @@ export default createComponentInteraction({
   async run({ ctx, app, t }) {
     const profile = await ProfileSchema.fetch(ctx.args[2], ctx.db.guild.id)
     if (!profile) {
-      return await ctx.reply('commands.duel.team_not_completed_2')
+      return await ctx.reply('commands.battle.team_not_completed_2')
     }
 
     const [userCards, authorCards] = await Promise.all([
@@ -32,33 +32,33 @@ export default createComponentInteraction({
     const keys = await app.redis.keys(`agent_selection:${ctx.db.guild.id}*`)
 
     if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
-      return await ctx.reply('commands.duel.needed_team_name')
+      return await ctx.reply('commands.battle.needed_team_name')
     }
 
     if (authorCards.length < 5) {
-      return await ctx.reply('commands.duel.team_not_completed_1')
+      return await ctx.reply('commands.battle.team_not_completed_1')
     }
 
     if (userCards.length < 5) {
-      return await ctx.reply('commands.duel.team_not_completed_2')
+      return await ctx.reply('commands.battle.team_not_completed_2')
     }
 
     if (!profile.teamName || !profile.teamTag) {
-      return await ctx.reply('commands.duel.needed_team_name_2')
+      return await ctx.reply('commands.battle.needed_team_name_2')
     }
 
     if (
       (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.author.id}`)) ||
       keys.some(key => key.includes(ctx.author.id))
     ) {
-      return await ctx.reply('commands.duel.already_in_match')
+      return await ctx.reply('commands.battle.already_in_match')
     }
 
     if (
       (await app.redis.get(`match:${ctx.db.guild.id}:${profile.userId}`)) ||
       keys.some(key => key.includes(profile.userId))
     ) {
-      return await ctx.reply('commands.duel.already_in_match_2')
+      return await ctx.reply('commands.battle.already_in_match_2')
     }
 
     let maps = valorantMaps
@@ -74,8 +74,8 @@ export default createComponentInteraction({
     }
 
     const embed = new EmbedBuilder()
-      .setTitle(t('commands.duel.embed.title'))
-      .setDesc(t('commands.duel.embed.desc'))
+      .setTitle(t('commands.battle.embed.title'))
+      .setDesc(t('commands.battle.embed.desc'))
       .setFields(
         {
           name: profile.teamName,
@@ -101,7 +101,7 @@ export default createComponentInteraction({
         }
       )
       .setImage(map.image)
-      .setFooter({ text: t('commands.duel.time') })
+      .setFooter({ text: t('commands.battle.time') })
 
     const menu1 = new SelectMenuBuilder()
       .setPlaceholder(profile.teamName)

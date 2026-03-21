@@ -9,6 +9,7 @@ import {
   MessageFlags,
   type TextChannel
 } from 'discord.js'
+import { tournaments } from '@/config'
 import { voidCatch } from '@/database'
 import { env } from '@/env'
 import Service from '../../api'
@@ -18,12 +19,6 @@ import type { MatchesData } from '../../types'
 import Logger from '../../util/Logger'
 
 const service = new Service(env.AUTH)
-
-const tournaments: { [key: string]: RegExp[] } = {
-  'Valorant Champions Tour': [/valorant champions/, /valorant masters/, /vct \d{4}/],
-  'Valorant Challengers League': [/challengers \d{4}/, /vct \d{4}: ascension/],
-  'Valorant Game Changers': [/game changers \d{4}/]
-}
 
 export default createCommand({
   name: 'admin',
@@ -148,11 +143,19 @@ export default createCommand({
               type: 1,
               components: [
                 new ButtonBuilder()
-                  .setLabel(t('commands.admin.resend', { game: 'VALORANT' }))
+                  .setLabel(
+                    t('commands.admin.resend', {
+                      game: 'VALORANT'
+                    })
+                  )
                   .setStyle(ButtonStyle.Danger)
                   .setCustomId(`admin;${ctx.author.id};resend;vlr`),
                 new ButtonBuilder()
-                  .setLabel(t('commands.admin.resend', { game: 'League of Legends' }))
+                  .setLabel(
+                    t('commands.admin.resend', {
+                      game: 'League of Legends'
+                    })
+                  )
                   .setStyle(ButtonStyle.Danger)
                   .setCustomId(`admin;${ctx.author.id};resend;lol`)
               ]
@@ -480,7 +483,9 @@ export default createCommand({
         if (!channel || channel.type !== ChannelType.GuildText) continue
 
         try {
-          const messages = await channel.messages.fetch({ limit: 100 })
+          const messages = await channel.messages.fetch({
+            limit: 100
+          })
           const messagesIds = messages.filter(m => m.author.id === app.user?.id).map(m => m.id)
 
           if (messagesIds.length === 1) {
@@ -531,7 +536,12 @@ export default createCommand({
                   channelBatches.set(e.channel1, [])
                 }
 
-                channelBatches.get(e.channel1)?.push({ d, e, emoji1, emoji2 })
+                channelBatches.get(e.channel1)?.push({
+                  d,
+                  e,
+                  emoji1,
+                  emoji2
+                })
               } else {
                 if (!matches.some(m => m.matchId === d.id)) {
                   matches.push({
@@ -698,7 +708,9 @@ export default createCommand({
         if (!channel || channel.type !== ChannelType.GuildText) continue
 
         try {
-          const messages = await channel.messages.fetch({ limit: 100 })
+          const messages = await channel.messages.fetch({
+            limit: 100
+          })
           const messagesIds = messages.filter(m => m.author.id === app.user?.id).map(m => m.id)
 
           if (messagesIds.length === 1) {
@@ -744,7 +756,11 @@ export default createCommand({
                   channelBatches.set(e.channel1, [])
                 }
 
-                channelBatches.get(e.channel1)?.push({ d, emoji1, emoji2 })
+                channelBatches.get(e.channel1)?.push({
+                  d,
+                  emoji1,
+                  emoji2
+                })
               } else {
                 matches.push({
                   matchId: d.id!,
@@ -775,7 +791,7 @@ export default createCommand({
 
             container
               .addTextDisplayComponents(text => {
-                let content = `### ${d.tournament.full_name}\n`
+                let content = `### ${d.tournament.full_name ?? d.tournament.name}\n`
 
                 content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
                 content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`

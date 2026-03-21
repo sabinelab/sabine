@@ -1,6 +1,6 @@
 {
   "name": "@sabinelab/players",
-  "version": "1.7.3",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "node test.ts",
-    "lint": "biome check",
+    "lint": "biome ci",
+    "format": "biome check --write",
     "build": "biome check && rm -rf dist && tsgo",
     "check": "tsgo --noEmit",
     "prepublishOnly": "bun run build"

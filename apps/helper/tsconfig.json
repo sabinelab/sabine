@@ -17,6 +17,7 @@
       "@generated": ["../../prisma/generated/client"],
       "@db": ["./src/database"],
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["bun"]
   }
 }

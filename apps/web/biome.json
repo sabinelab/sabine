@@ -2,5 +2,6 @@
   "extends": ["../../biome.json"],
   "files": {
     "includes": ["!node_modules/", "!.next", "!next-env.d.ts"]
-  }
+  },
+  "root": false
 }

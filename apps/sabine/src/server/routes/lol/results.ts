@@ -1,4 +1,4 @@
-import type Bull from 'bull'
+import type { Job } from 'bullmq'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
 import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-queue'
@@ -6,10 +6,11 @@ import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-qu
 export const lolResults = new Elysia().post(
   '/webhooks/results/lol',
   async req => {
-    const promises: Promise<Bull.Job<ResultsPayload>>[] = []
+    const promises: Promise<Job<ResultsPayload>>[] = []
     for (const data of req.body) {
       promises.push(
         resultsQueue.add(
+          'results',
           {
             ...data,
             game: 'lol',
@@ -41,8 +42,8 @@ export const lolResults = new Elysia().post(
         ),
         tournament: z.object({
           name: z.string(),
-          full_name: z.string(),
-          image: z.string()
+          full_name: z.string().nullable().optional(),
+          image: z.string().nullable().optional()
         }),
         stage: z.string(),
         when: z.string()

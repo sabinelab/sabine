@@ -71,6 +71,8 @@ export default createComponentInteraction({
       ]
     })
 
-    await ctx.interaction.editReply({ content: `Ticket created successfully!\n${msg.url}` })
+    await ctx.interaction.editReply({
+      content: `Ticket created successfully!\n${msg.url}`
+    })
   }
 })

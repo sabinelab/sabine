@@ -1,9 +1,10 @@
 import { prisma } from '@db'
-import type { $Enums, Profile } from '@generated'
+import type { $Enums, Prisma, Profile } from '@generated'
 import type { Pack } from '@/commands/misc/vote'
 import { hydrateData, updateCache, voidCatch } from '@/database'
 import { UserSchema } from '@/database/schemas/UserSchema'
 import { app } from '@/structures/app/App'
+import { remindQueue } from '@/structures/queue/reminder-queue'
 
 type PredictionTeam = {
   name: string
@@ -277,7 +278,7 @@ export class ProfileSchema implements Profile {
     const player = app.players.get(playerId)
     if (!player) return this
 
-    const updates: any = {
+    const updates: Prisma.ProfileUpdateArgs['data'] = {
       cards: {
         create: {
           acs: player.acs,
@@ -301,13 +302,12 @@ export class ProfileSchema implements Profile {
       updates.claimTime = claimTime
       updates.claims = { increment: 1 }
       updates.reminded = false
-      updates.pity = { increment: 1 }
 
       if (channel) {
         updates.remindIn = channel
 
         if (this.remind) {
-          await app.queue.add(
+          await remindQueue.add(
             'reminder',
             {
               channel,
@@ -321,10 +321,6 @@ export class ProfileSchema implements Profile {
             }
           )
         }
-      }
-
-      if (app.players.get(playerId)!.ovr >= 101) {
-        updates.pity = 0
       }
     }
 
@@ -460,7 +456,7 @@ export class ProfileSchema implements Profile {
     } as const
     const fieldToIncrement = packField[options.pack]
 
-    const update: any = {}
+    const update: Prisma.ProfileUpdateArgs['data'] = {}
 
     if (checkStreak(options.voteStreak + 1) && fieldToIncrement !== 'radiantPacks') {
       update.radiantPacks = {

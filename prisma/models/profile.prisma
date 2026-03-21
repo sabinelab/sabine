@@ -27,7 +27,6 @@ model Profile {
   dailyTime DateTime? @map("daily_time")
   claimTime DateTime? @map("claim_time")
 
-  pity   Int   @default(0) @db.SmallInt
   claims Int   @default(0)
   fates  Float @default(0) @db.DoublePrecision
 

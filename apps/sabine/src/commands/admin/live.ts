@@ -134,7 +134,9 @@ export default createCommand({
               valorantLiveFeedChannel: channel.id
             }
           })
-          await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
+          await ctx.reply('commands.live.live_enabled', {
+            ch: channel.toString()
+          })
         },
         lol: async () => {
           const channel = ctx.args.enable?.valorant?.channel
@@ -155,7 +157,9 @@ export default createCommand({
               lolLiveFeedChannel: channel.id
             }
           })
-          await ctx.reply('commands.live.live_enabled', { ch: channel.toString() })
+          await ctx.reply('commands.live.live_enabled', {
+            ch: channel.toString()
+          })
         }
       }
 

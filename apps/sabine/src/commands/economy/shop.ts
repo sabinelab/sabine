@@ -29,7 +29,11 @@ export default createCommand({
       .addSectionComponents(section =>
         section
           .addTextDisplayComponents(text =>
-            text.setContent(ctx.t('commands.shop.container.text.gold', { price: price.gold }))
+            text.setContent(
+              ctx.t('commands.shop.container.text.gold', {
+                price: price.gold
+              })
+            )
           )
           .setButtonAccessory(button =>
             button
@@ -43,7 +47,9 @@ export default createCommand({
         section
           .addTextDisplayComponents(text =>
             text.setContent(
-              ctx.t('commands.shop.container.text.platinum', { price: price.platinum })
+              ctx.t('commands.shop.container.text.platinum', {
+                price: price.platinum
+              })
             )
           )
           .setButtonAccessory(button =>
@@ -71,7 +77,9 @@ export default createCommand({
         section
           .addTextDisplayComponents(text =>
             text.setContent(
-              ctx.t('commands.shop.container.text.ascendant', { price: price.ascendant })
+              ctx.t('commands.shop.container.text.ascendant', {
+                price: price.ascendant
+              })
             )
           )
           .setButtonAccessory(button =>
@@ -140,7 +148,9 @@ export default createCommand({
             }
           }
         })
-        await ctx.reply('commands.shop.success.platinum', { fates: price.platinum })
+        await ctx.reply('commands.shop.success.platinum', {
+          fates: price.platinum
+        })
       },
       diamond: async () => {
         if (ctx.db.profile.fates < price.diamond) {
@@ -166,7 +176,9 @@ export default createCommand({
             }
           }
         })
-        await ctx.reply('commands.shop.success.diamond', { fates: price.diamond })
+        await ctx.reply('commands.shop.success.diamond', {
+          fates: price.diamond
+        })
       },
       ascendant: async () => {
         if (ctx.db.profile.fates < price.ascendant) {
@@ -192,7 +204,9 @@ export default createCommand({
             }
           }
         })
-        await ctx.reply('commands.shop.success.ascendant', { fates: price.ascendant })
+        await ctx.reply('commands.shop.success.ascendant', {
+          fates: price.ascendant
+        })
       }
     }
 

@@ -27,7 +27,9 @@ export default function ChangelogSkeleton() {
 
             {/* List Items */}
             <ul className='space-y-4 pl-2'>
-              {Array.from({ length: group.itemCount }).map((_, i) => (
+              {Array.from({
+                length: group.itemCount
+              }).map((_, i) => (
                 <li key={i} className='flex items-start pl-4 relative'>
                   {/* Bullet point mimic */}
                   <div className='absolute left-0 top-2.5 w-1.5 h-1.5 bg-gray-600/30 rotate-45 rounded-[1px]' />

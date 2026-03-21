@@ -107,7 +107,10 @@ export class UserSchema implements User {
     const webhooks = await channel.fetchWebhooks()
     let webhook = webhooks.find(w => w.name === app.user?.username + ' Logger')
 
-    if (!webhook) webhook = await channel.createWebhook({ name: app.user?.username + ' Logger' })
+    if (!webhook)
+      webhook = await channel.createWebhook({
+        name: app.user?.username + ' Logger'
+      })
 
     await webhook.send({
       avatarURL: app.user?.displayAvatarURL({ size: 2048 }),

@@ -128,7 +128,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.poisons.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -184,7 +188,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
@@ -242,7 +248,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.rating.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -298,7 +308,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
@@ -356,7 +368,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.predictions.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -412,7 +428,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
@@ -473,7 +491,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.poisons.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -529,7 +551,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
@@ -587,7 +611,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.rating.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -643,7 +671,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
@@ -701,7 +731,11 @@ export default createCommand({
           })
         })
         .setTitle(ctx.t('commands.leaderboard.predictions.title'))
-        .setThumb((await app.getUser(profiles[0].userId)).displayAvatarURL({ size: 2048 }))
+        .setThumb(
+          (await app.getUser(profiles[0].userId)).displayAvatarURL({
+            size: 2048
+          })
+        )
         .setDesc(
           profiles
             .slice(0, 10)
@@ -757,7 +791,9 @@ export default createCommand({
 
       if (pos) {
         embed.setFooter({
-          text: ctx.t('commands.leaderboard.predictions.footer', { pos })
+          text: ctx.t('commands.leaderboard.predictions.footer', {
+            pos
+          })
         })
       }
 
