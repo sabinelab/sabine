@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "node test.ts",
-    "lint": "biome check",
+    "lint": "biome ci",
+    "format": "biome check --write",
     "build": "biome check && rm -rf dist && tsgo",
     "check": "tsgo --noEmit",
     "prepublishOnly": "bun run build"

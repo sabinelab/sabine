@@ -20,7 +20,8 @@
     "dev": "rm -rf ./prisma/database.db && bun push && bun --watch .",
     "push": "bunx prisma db push",
     "generate": "bunx prisma generate",
-    "lint": "bunx biome check",
+    "lint": "biome ci",
+    "format": "biome check --write",
     "check": "tsgo"
   },
   "type": "module"

@@ -22,7 +22,8 @@
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
     "build": "bun lint && tsgo",
-    "lint": "biome check",
+    "lint": "biome ci",
+    "format": "biome check --write",
     "check": "tsgo"
   },
   "keywords": [],
