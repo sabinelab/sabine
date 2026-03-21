@@ -5,14 +5,14 @@ import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: 'duel',
+  name: 'battle',
   nameLocalizations: {
-    'pt-BR': 'confronto'
+    'pt-BR': 'batalha'
   },
   category: 'economy',
-  description: 'Start a duel with someone',
+  description: 'Start a battle with someone',
   descriptionLocalizations: {
-    'pt-BR': 'Inicia um confronto com alguém'
+    'pt-BR': 'Inicia uma batalha com alguém'
   },
   args: {
     unranked: {
@@ -21,9 +21,9 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'sem-classificação'
       },
-      description: 'Start a unranked duel',
+      description: 'Start a unranked battle',
       descriptionLocalizations: {
-        'pt-BR': 'Inicia um confronto sem classificação'
+        'pt-BR': 'Inicia uma batalha sem classificação'
       },
       args: {
         user: {
@@ -46,9 +46,9 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'ranqueado'
       },
-      description: 'Start a ranked duel',
+      description: 'Start a ranked battle',
       descriptionLocalizations: {
-        'pt-BR': 'Inicia um confronto ranqueado'
+        'pt-BR': 'Inicia uma batalha ranqueado'
       },
       args: {
         user: {
@@ -71,9 +71,9 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'frenético'
       },
-      description: 'Start a swiftplay duel',
+      description: 'Start a swiftplay battle',
       descriptionLocalizations: {
-        'pt-BR': 'Inicia um confronto frenético'
+        'pt-BR': 'Inicia uma batalha frenético'
       },
       args: {
         unranked: {
@@ -82,9 +82,9 @@ export default createCommand({
           nameLocalizations: {
             'pt-BR': 'sem-classificação'
           },
-          description: 'Start a unranked swiftplay duel',
+          description: 'Start a unranked swiftplay battle',
           descriptionLocalizations: {
-            'pt-BR': 'Inicia um confronto frenético sem classificação'
+            'pt-BR': 'Inicia uma batalha frenético sem classificação'
           },
           args: {
             user: {
@@ -107,9 +107,9 @@ export default createCommand({
           nameLocalizations: {
             'pt-BR': 'ranqueado'
           },
-          description: 'Start a ranked swiftplay duel',
+          description: 'Start a ranked swiftplay battle',
           descriptionLocalizations: {
-            'pt-BR': 'Inicia um confronto frenético ranqueado'
+            'pt-BR': 'Inicia uma batalha frenético ranqueado'
           },
           args: {
             user: {
@@ -134,9 +134,9 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'torneio'
       },
-      description: 'Start a tournament duel',
+      description: 'Start a tournament battle',
       descriptionLocalizations: {
-        'pt-BR': 'Inicia um confronto em torneio'
+        'pt-BR': 'Inicia uma batalha em torneio'
       },
       args: {
         user: {
@@ -173,18 +173,18 @@ export default createCommand({
     }
   },
   syntaxes: [
-    'duel unranked [user]',
-    'duel ranked [user]',
-    'duel swiftplay unranked [user]',
-    'duel swiftplay ranked [user]',
-    'duel tournament [user] [map]'
+    'battle unranked [user]',
+    'battle ranked [user]',
+    'battle swiftplay unranked [user]',
+    'battle swiftplay ranked [user]',
+    'battle tournament [user] [map]'
   ],
   examples: [
-    'duel unranked @user',
-    'duel ranked @user',
-    'duel swiftplay unranked @user',
-    'duel swiftplay ranked @user',
-    'duel tournament @user Ascent'
+    'battle unranked @user',
+    'battle ranked @user',
+    'battle swiftplay unranked @user',
+    'battle swiftplay ranked @user',
+    'battle tournament @user Ascent'
   ],
   async run({ ctx, t, app }) {
     let id: string
@@ -211,7 +211,7 @@ export default createCommand({
 
     const profile = await ProfileSchema.fetch(id, ctx.db.guild.id)
     if (!profile) {
-      return await ctx.reply('commands.duel.team_not_completed_2')
+      return await ctx.reply('commands.battle.team_not_completed_2')
     }
 
     const [userCards, authorCards] = await Promise.all([
@@ -241,41 +241,41 @@ export default createCommand({
     const authorDuplicates = Object.values(authorCounts).filter(count => count > 1).length
 
     if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
-      return await ctx.reply('commands.duel.needed_team_name')
+      return await ctx.reply('commands.battle.needed_team_name')
     }
 
     if (authorCards.length < 5) {
-      return await ctx.reply('commands.duel.team_not_completed_1')
+      return await ctx.reply('commands.battle.team_not_completed_1')
     }
 
     if (authorDuplicates) {
-      return await ctx.reply('commands.duel.duplicated_cards')
+      return await ctx.reply('commands.battle.duplicated_cards')
     }
 
     if (userCards.length < 5) {
-      return await ctx.reply('commands.duel.team_not_completed_2')
+      return await ctx.reply('commands.battle.team_not_completed_2')
     }
 
     if (!profile.teamName || !profile.teamTag) {
-      return await ctx.reply('commands.duel.needed_team_name_2')
+      return await ctx.reply('commands.battle.needed_team_name_2')
     }
 
     if (
       (await app.redis.get(`match:${ctx.db.guild.id}:${ctx.author.id}`)) ||
       keys.some(key => key.includes(ctx.author.id))
     ) {
-      return await ctx.reply('commands.duel.already_in_match')
+      return await ctx.reply('commands.battle.already_in_match')
     }
 
     if (
       (await app.redis.get(`match:${ctx.db.guild.id}:${profile.userId}`)) ||
       keys.some(key => key.includes(profile.userId))
     ) {
-      return await ctx.reply('commands.duel.already_in_match_2')
+      return await ctx.reply('commands.battle.already_in_match_2')
     }
 
     if (id === ctx.author.id) {
-      return await ctx.reply('commands.duel.cannot_duel')
+      return await ctx.reply('commands.battle.cannot_battle')
     }
 
     for (const c of userCards) {
@@ -285,20 +285,20 @@ export default createCommand({
     const userDuplicates = Object.values(userCounts).filter(count => count > 1).length
 
     if (userDuplicates) {
-      return await ctx.reply('commands.duel.duplicated_cards2')
+      return await ctx.reply('commands.battle.duplicated_cards2')
     }
 
     const button = new ButtonBuilder()
       .defineStyle('green')
-      .setLabel(t('commands.duel.button'))
+      .setLabel(t('commands.battle.button'))
       .setCustomId(`accept;${id};${ctx.author.id};${mode}${map}`)
 
     await ctx.reply(
       button.build(
-        t('commands.duel.request', {
+        t('commands.battle.request', {
           author: ctx.author.toString(),
           opponent: `<@${id}>`,
-          mode: t(`commands.duel.mode.${mode}`)
+          mode: t(`commands.battle.mode.${mode}`)
         })
       )
     )
