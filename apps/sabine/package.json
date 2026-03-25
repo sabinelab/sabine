@@ -24,7 +24,7 @@
     "@sabinelab/players": "workspace:*",
     "@sabinelab/prisma": "workspace:*",
     "@sabinelab/utils": "workspace:*",
-    "bullmq": "5.71.0",
+    "bullmq": "5.71.1",
     "discord.js": "14.25.1",
     "elysia": "1.4.27",
     "humanize-duration": "3.33.2",
