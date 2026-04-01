@@ -45,7 +45,8 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'titan esports club',
-    emoji: '<:tec:1439977502876373074>'
+    emoji: '<:tec:1439977502876373074>',
+    aliases: ['wuxi titan esports club']
   },
   {
     name: 'tyloo',
@@ -304,6 +305,11 @@ export const emojis: Emoji[] = [
     name: 'pcific esports',
     emoji: '<:pcific_esports:1463982650648694875>'
   },
+  {
+    name: 'eternal fire',
+    emoji: '<:eternal_fire:1488923197129887804>'
+  },
+  // UTILS
   {
     name: 'controller',
     emoji: '<:controller:1404609821818228817>'
