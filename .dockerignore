@@ -1,7 +1,6 @@
 scripts/
 .gitignore
 *test*
-node_modules/
 **/node_modules
 prisma/generated/
 .env
