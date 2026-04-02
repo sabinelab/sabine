@@ -87,7 +87,7 @@ jobs:
           CHANGED_API: ${{ steps.changes.outputs.api }}
           CHANGED_GLOBAL: ${{ steps.changes.outputs.global }}
           DEPLOY_SHA: ${{ inputs.deploy_sha }}
-          DEPLOY_DELAY_SECONDS: 15
+          DEPLOY_DELAY_SECONDS: 5
         run: |
           # Construct list of services to deploy
           SERVICES_TO_DEPLOY=""
@@ -128,10 +128,17 @@ jobs:
 
           # Fetch and deploy the exact commit that passed the Biome workflow.
           ssh prod "cd sabine/sabine && git fetch origin main && git checkout --detach \"$DEPLOY_SHA\" && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
-            for service in \$SERVICES; do
+            services=(\$SERVICES)
+            last_index=\$((${#services[@]} - 1))
+
+            for index in \"\${!services[@]}\"; do
+              service=\${services[\$index]}
               echo \"Rebuilding \$service...\"
               docker compose up -d --build \$service
-              echo \"Waiting \${DEPLOY_DELAY}s for VPS stability...\"
-              sleep \$DEPLOY_DELAY
+
+              if [ \"\$index\" -lt \"\$last_index\" ]; then
+                echo \"Waiting \${DEPLOY_DELAY}s for VPS stability...\"
+                sleep \$DEPLOY_DELAY
+              fi
             done
           '"
