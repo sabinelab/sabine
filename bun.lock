@@ -44,7 +44,7 @@
         "body-parser": "2.2.2",
         "colors": "1.4.0",
         "discord-html-transcripts": "3.3.0",
-        "discord.js": "14.26.0",
+        "discord.js": "14.26.2",
         "enhanced-ms": "4.3.0",
         "fastify": "5.8.4",
         "fastify-type-provider-zod": "6.1.0",
@@ -63,7 +63,7 @@
         "@sabinelab/prisma": "workspace:*",
         "@sabinelab/utils": "workspace:*",
         "bullmq": "5.71.1",
-        "discord.js": "14.26.0",
+        "discord.js": "14.26.2",
         "elysia": "1.4.28",
         "humanize-duration": "3.33.2",
         "moment": "2.30.1",
@@ -726,7 +726,7 @@
 
     "discord-markdown-parser": ["discord-markdown-parser@1.2.0", "", { "dependencies": { "@khanacademy/simple-markdown": "^0.13.6" } }, "sha512-RSvx1cEBT/k7Vgvj5yW+RZ+uvGcIHem86CTsWnCEivoker0UrRqmZagQCYS/jj0OM1C7HXFsqOPu8OwwcBLCuA=="],
 
-    "discord.js": ["discord.js@14.26.0", "", { "dependencies": { "@discordjs/builders": "^1.14.0", "@discordjs/collection": "1.5.3", "@discordjs/formatters": "^0.6.2", "@discordjs/rest": "^2.6.1", "@discordjs/util": "^1.2.0", "@discordjs/ws": "^1.2.3", "@sapphire/snowflake": "3.5.3", "discord-api-types": "^0.38.40", "fast-deep-equal": "3.1.3", "lodash.snakecase": "4.1.1", "magic-bytes.js": "^1.13.0", "tslib": "^2.6.3", "undici": "6.24.1" } }, "sha512-I+5dmdg7WnjIOEXspX6mJ4jLgblhZV6QpQcC3U2JjrFWnHCKDpoLkhV46SBP8k9QePs3YWJOvndVutUARRO0AQ=="],
+    "discord.js": ["discord.js@14.26.2", "", { "dependencies": { "@discordjs/builders": "^1.14.1", "@discordjs/collection": "1.5.3", "@discordjs/formatters": "^0.6.2", "@discordjs/rest": "^2.6.1", "@discordjs/util": "^1.2.0", "@discordjs/ws": "^1.2.3", "@sapphire/snowflake": "3.5.3", "discord-api-types": "^0.38.40", "fast-deep-equal": "3.1.3", "lodash.snakecase": "4.1.1", "magic-bytes.js": "^1.13.0", "tslib": "^2.6.3", "undici": "6.24.1" } }, "sha512-feShi+gULJ6R2MAA4/KkCFnkJcuVrROJrKk4czplzq8gE1oqhqgOy9K0Scu44B8oGeWKe04egquzf+ia6VtXAw=="],
 
     "dom-serializer": ["dom-serializer@2.0.0", "", { "dependencies": { "domelementtype": "^2.3.0", "domhandler": "^5.0.2", "entities": "^4.2.0" } }, "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg=="],
 
