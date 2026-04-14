@@ -12,7 +12,6 @@
       "!.turbo/*",
       "!**/test.js",
       "!**/test.ts",
-      "!prisma/src/schemas/generated",
       "!node_modules/",
       "!.next",
       "!next-env.d.ts"

@@ -1,4 +1,8 @@
 {
   "extends": ["../biome.json"],
-  "root": false
+  "root": false,
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["*", "!src/schemas/generated"]
+  }
 }
