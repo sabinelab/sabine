@@ -30,14 +30,14 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref }}
           persist-credentials: true
           
       - name: Setup Biome
-        uses: biomejs/setup-biome@v2
+        uses: biomejs/setup-biome@main
         with:
           version: latest
           
