@@ -41,8 +41,13 @@
     "gen": "bunx --bun prisma generate"
   },
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "api",
+    "helper",
+    "players",
+    "prisma",
+    "sabine",
+    "utils",
+    "web"
   ],
   "keywords": [],
   "author": "levisantosp",
