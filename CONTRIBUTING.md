@@ -12,18 +12,18 @@ This project is organized as a monorepo using [Turborepo](https://turbo.build/re
 
 | Name | Description |
 |------|-------------|
-| `apps/sabine` | Discord bot application |
-| `apps/web` | Next.js website |
-| `apps/api` | REST API server |
-| `apps/helper` | Helper bot |
+| `sabine` | Discord bot application |
+| `web` | Next.js website |
+| `api` | REST API server |
+| `helper` | Helper bot |
 
 ### Packages
 
 | Name | Description |
 |------|-------------|
-| `packages/players` | Player data library |
-| `packages/prisma` | Database client and schemas |
-| `packages/utils` | Shared utilities |
+| `players` | Player data library |
+| `prisma` | Database client and schemas |
+| `utils` | Shared utilities |
 
 ## How Can I Contribute?
 
@@ -63,12 +63,12 @@ To get Sabine running locally, you'll need [Bun](https://bun.sh/), [Docker](http
     ```
 
 3.  **Set up environment variables:**
-    Create a `.env` file in the root directory. You can use `apps/<workspace>/src/env.ts` as a template for the required variables. You must provide values for:
+    Create a `.env` file in the root directory. You can use `<workspace>/src/env.ts` as a template for the required variables. You must provide values for:
     * `BOT_TOKEN`: Your Discord bot token.
     * `DATABASE_URL`: The connection string for your PostgreSQL database.
     * `REDIS_URL`: The URL for your Redis instance.
     * `AUTH`: Auth key for the internal API.
-    * ...and other variables defined in `apps/<workspace>/src/env.ts`.
+    * ...and other variables defined in `<workspace>/src/env.ts`.
 
     *Note: The `docker-compose.yml` file is configured to start the **Redis** service via `docker compose up -d redis`. You must provide your own PostgreSQL database container. You can use [this repository as an example](https://github.com/sabinelab/postgres) for a quick setup.*
 
