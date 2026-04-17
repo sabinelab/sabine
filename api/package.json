@@ -16,13 +16,13 @@
   "license": "ISC",
   "scripts": {
     "start": "rm -rf ./prisma/database.db && bun push && bun .",
-    "build": "bun lint && bun tsgo",
+    "build": "biome ci && tsc",
     "dev": "rm -rf ./prisma/database.db && bun push && bun --watch .",
     "push": "bunx prisma db push",
     "generate": "bunx prisma generate",
     "lint": "biome ci",
     "format": "biome check --write",
-    "check": "tsgo"
+    "check": "tsc"
   },
   "type": "module"
 }

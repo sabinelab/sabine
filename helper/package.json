@@ -21,10 +21,10 @@
     "test": "bun test.ts",
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "build": "bun lint && tsgo",
+    "build": "biome ci && tsc",
     "lint": "biome ci",
     "format": "biome check --write",
-    "check": "tsgo"
+    "check": "tsc"
   },
   "keywords": [],
   "author": "",
