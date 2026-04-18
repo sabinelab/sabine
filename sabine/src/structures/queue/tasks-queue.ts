@@ -30,7 +30,7 @@ const delLimit = pLimit(10);
 const dbLimit = pLimit(50);
 
 const rest = new REST().setToken(env.BOT_TOKEN);
-const service = new Service(env.AUTH);
+const service = new Service();
 
 const sendValorantMatches = async (app: App) => {
   const [res, res2] = await Promise.all([
@@ -215,12 +215,13 @@ const sendValorantMatches = async (app: App) => {
 
           for (const e of guild.events) {
             if (
-              e.name === d.tournament.name ||
+              d.id &&
+              (e.name === d.tournament.name ||
               tournaments[e.name]?.some((regex) =>
                 regex.test(
                   d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
                 )
-              )
+              ))
             ) {
               if (d.stage.toLowerCase().includes("showmatch")) continue;
 
@@ -480,7 +481,7 @@ const sendLolMatches = async (app: App) => {
             continue;
 
           for (const e of guild.events) {
-            if (e.name === d.tournament.name) {
+            if (e.name === d.tournament.name && d.id) {
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
                 app.emoji.get(

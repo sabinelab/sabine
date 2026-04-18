@@ -3,7 +3,7 @@ import Service from "../../api";
 import { app } from "../../structures/app/App";
 import createModalSubmitInteraction from "../../structures/interaction/createModalSubmitInteraction";
 
-const service = new Service(env.AUTH);
+const service = new Service();
 
 export default createModalSubmitInteraction({
   name: "prediction",

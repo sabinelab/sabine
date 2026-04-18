@@ -11,14 +11,13 @@ import {
 } from "discord.js";
 import { tournaments } from "@/config";
 import { voidCatch } from "@/database";
-import { env } from "@/env";
 import Service from "../../api";
 import EmbedBuilder from "../../structures/builders/EmbedBuilder";
 import createCommand from "../../structures/command/createCommand";
 import type { MatchesData } from "../../types";
 import Logger from "../../util/Logger";
 
-const service = new Service(env.AUTH);
+const service = new Service();
 
 export default createCommand({
   name: "admin",
@@ -541,12 +540,13 @@ export default createCommand({
 
           for (const e of guild.events) {
             if (
-              e.name === d.tournament.name ||
-              tournaments[e.name]?.some((regex) =>
-                regex.test(
-                  d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
-                )
-              )
+              d.id &&
+              (e.name === d.tournament.name ||
+                tournaments[e.name]?.some((regex) =>
+                  regex.test(
+                    d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
+                  )
+                ))
             ) {
               if (d.stage.toLowerCase().includes("showmatch")) continue;
 
@@ -782,7 +782,7 @@ export default createCommand({
             continue;
 
           for (const e of guild.events) {
-            if (e.name === d.tournament.name) {
+            if (e.name === d.tournament.name && d.id) {
               if (d.stage.toLowerCase().includes("showmatch")) continue;
 
               const emoji1 =

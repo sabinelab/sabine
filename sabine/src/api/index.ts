@@ -1,55 +1,40 @@
-import LOLEvents from "./services/lol/EventsService";
-import LiveMatchesService from "./services/lol/LiveMatchesService";
-import LOLMatches from "./services/lol/MatchesService";
-import LOLResults from "./services/lol/ResultsService";
-import ValorantEvents from "./services/valorant/EventsService";
-import ValorantMatches from "./services/valorant/MatchesService";
-import ValorantPlayers from "./services/valorant/PlayersService";
-import ValorantResults from "./services/valorant/ResultsService";
-import ValorantTeams from "./services/valorant/TeamsService";
+import { lolEvents } from "./services/lol/events-service";
+import { lolLiveMatches } from "./services/lol/live-matches-service";
+import { lolMatches } from "./services/lol/matches-service";
+import { lolResults } from "./services/lol/results-service";
+import { valorantEvents } from "./services/valorant/events-service";
+import { valorantMatches } from "./services/valorant/matches-service";
+import { valorantPlayers } from "./services/valorant/players-service";
+import { valorantResults } from "./services/valorant/results-service";
 
 export default class Service {
-  private __auth: string;
-
-  public constructor(auth: string) {
-    this.__auth = auth;
-  }
-
   public async getEvents(game: "valorant" | "lol") {
     if (game === "valorant") {
-      return await ValorantEvents.get(this.__auth);
-    } else return await LOLEvents.get(this.__auth);
+      return await valorantEvents.get();
+    } else return await lolEvents.get();
   }
 
   public async getMatches(game: "valorant" | "lol") {
     if (game === "valorant") {
-      return await ValorantMatches.get(this.__auth);
-    } else return await LOLMatches.get(this.__auth);
+      return await valorantMatches.get();
+    } else return await lolMatches.get();
   }
 
   public async getAllPlayers() {
-    return await ValorantPlayers.get(this.__auth);
+    return await valorantPlayers.get();
   }
 
   public async getPlayerById(id: string | number) {
-    return await ValorantPlayers.getById(this.__auth, id);
-  }
-
-  public async getAllTeams() {
-    return await ValorantTeams.get(this.__auth);
-  }
-
-  public async getTeamById(id: string | number) {
-    return await ValorantTeams.getById(this.__auth, id);
+    return await valorantPlayers.getById(id);
   }
 
   public async getResults(game: "valorant" | "lol") {
     if (game === "valorant") {
-      return await ValorantResults.get(this.__auth);
-    } else return await LOLResults.get(this.__auth);
+      return await valorantResults.get();
+    } else return await lolResults.get();
   }
 
   public async getLiveMatches() {
-    return await LiveMatchesService.get(this.__auth);
+    return await lolLiveMatches.get();
   }
 }
