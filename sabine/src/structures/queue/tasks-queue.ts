@@ -237,7 +237,7 @@ const sendValorantMatches = async (app: App) => {
                 ) ??
                 app.emoji.get("default");
 
-              const index = guild.valorantMatches.findIndex((m) => m === d.id);
+              const index = guild.valorantMatches.indexOf(d.id);
 
               if (index > -1) guild.valorantMatches.splice(index, 1);
 
@@ -494,7 +494,7 @@ const sendLolMatches = async (app: App) => {
                 ) ??
                 app.emoji.get("default");
 
-              const index = guild.lolMatches.findIndex((m) => m === d.id);
+              const index = guild.lolMatches.indexOf(d.id);
 
               if (index > -1) guild.lolMatches.splice(index, 1);
 
