@@ -43,16 +43,15 @@ jobs:
           ref: ${{ inputs.deploy_sha }}
           filters: |
             sabine:
-              - 'apps/sabine/**'
+              - 'sabine/**'
             helper:
-              - 'apps/helper/**'
+              - 'helper/**'
             web:
-              - 'apps/web/**'
+              - 'web/**'
             api:
-              - 'apps/api/**'
+              - 'api/**'
             global:
               - 'package.json'
-              - 'bun.lock'
               - 'turbo.json'
               - 'biome.json'
               - 'docker-compose.yml'
@@ -63,8 +62,8 @@ jobs:
       - name: Setup ssh
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
-          chmod 600 ~/.ssh/sabine
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/key
+          chmod 600 ~/.ssh/key
           cat >>~/.ssh/config << END
           Host prod
             HostName $SSH_HOST
