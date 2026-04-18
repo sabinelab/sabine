@@ -2,7 +2,7 @@ import { env } from "@/env";
 import Service from "../../api";
 import createComponentInteraction from "../../structures/interaction/createComponentInteraction";
 
-const service = new Service(env.AUTH);
+const service = new Service();
 
 export default createComponentInteraction({
   name: "bet",

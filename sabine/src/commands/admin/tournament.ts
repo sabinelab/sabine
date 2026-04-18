@@ -4,7 +4,7 @@ import { env } from "@/env";
 import Service from "../../api";
 import createCommand from "../../structures/command/createCommand";
 
-const service = new Service(env.AUTH);
+const service = new Service();
 
 export default createCommand({
   name: "tournament",

@@ -33,8 +33,6 @@
         "noDocumentCookie": "off"
       },
       "complexity": {
-        "noStaticOnlyClass": "off",
-        "useIndexOf": "off",
         "noUselessFragments": "off"
       },
       "style": {
