@@ -34,7 +34,6 @@
       },
       "complexity": {
         "noStaticOnlyClass": "off",
-        "useIndexOf": "off",
         "noUselessFragments": "off"
       },
       "style": {
