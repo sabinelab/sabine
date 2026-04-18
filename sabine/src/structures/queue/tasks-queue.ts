@@ -217,11 +217,11 @@ const sendValorantMatches = async (app: App) => {
             if (
               d.id &&
               (e.name === d.tournament.name ||
-              tournaments[e.name]?.some((regex) =>
-                regex.test(
-                  d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
-                )
-              ))
+                tournaments[e.name]?.some((regex) =>
+                  regex.test(
+                    d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
+                  )
+                ))
             ) {
               if (d.stage.toLowerCase().includes("showmatch")) continue;
 
