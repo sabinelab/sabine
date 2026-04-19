@@ -69,7 +69,7 @@ jobs:
             HostName $SSH_HOST
             User $SSH_USERNAME
             Port $SSH_PORT
-            IdentityFile ~/.ssh/sabine
+            IdentityFile ~/.ssh/key
             StrictHostKeyChecking no
           END
         env:
