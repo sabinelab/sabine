@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import Service from "../../api";
 import createComponentInteraction from "../../structures/interaction/createComponentInteraction";
 

@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import Service from "../../api";
 import { app } from "../../structures/app/App";
 import createModalSubmitInteraction from "../../structures/interaction/createModalSubmitInteraction";

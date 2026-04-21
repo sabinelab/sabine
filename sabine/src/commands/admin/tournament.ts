@@ -1,6 +1,5 @@
 import { GuildSchema } from "@db";
 import { ApplicationCommandOptionType } from "discord.js";
-import { env } from "@/env";
 import Service from "../../api";
 import createCommand from "../../structures/command/createCommand";
 
