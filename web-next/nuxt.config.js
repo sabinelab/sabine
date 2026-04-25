@@ -21,7 +21,17 @@ export default defineNuxtConfig({
     }
   },
   vite: {
-    plugins: [tailwind()]
+    plugins: [tailwind()],
+    optimizeDeps: {
+      include: [
+        'lucide-vue-next',
+        'class-variance-authority',
+        '@vueuse/core',
+        'reka-ui',
+        'clsx',
+        'tailwind-merge'
+      ]
+    }
   },
   css: ['~/assets/css/main.css'],
   components: [
@@ -30,8 +40,19 @@ export default defineNuxtConfig({
       extensions: ['vue']
     }
   ],
-  modules: ['@nuxt/fonts', '@nuxt/image'],
+  modules: ['@nuxt/fonts', '@nuxt/image', '@nuxtjs/i18n'],
   experimental: {
     typedPages: true
+  },
+  i18n: {
+    defaultLocale: 'en-US',
+    strategy: 'no_prefix',
+    locales: [
+      {
+        code: 'en-us',
+        language: 'en-us',
+        file: 'en-us.json'
+      }
+    ]
   }
 })
