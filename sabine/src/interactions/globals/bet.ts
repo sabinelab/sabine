@@ -1,22 +1,22 @@
-import Service from "../../api";
-import createComponentInteraction from "../../structures/interaction/createComponentInteraction";
+import Service from '../../api'
+import createComponentInteraction from '../../structures/interaction/createComponentInteraction'
 
-const service = new Service();
+const service = new Service()
 
 export default createComponentInteraction({
-  name: "bet",
+  name: 'bet',
   flags: 64,
   global: true,
   async run({ ctx, t, app }) {
     if (ctx.db.profile.poisons < 500)
-      return await ctx.reply("helper.poisons_needed");
+      return await ctx.reply('helper.poisons_needed')
 
     const options = {
       valorant: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            game: "valorant",
+            game: 'valorant',
             profile: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
@@ -25,23 +25,23 @@ export default createComponentInteraction({
           include: {
             teams: true
           }
-        });
+        })
 
-        if (!pred) return await ctx.reply("helper.prediction_needed");
+        if (!pred) return await ctx.reply('helper.prediction_needed')
 
-        const matches = await service.getMatches("valorant");
-        const data = matches.find((m) => m.id === ctx.args[2]);
+        const matches = await service.getMatches('valorant')
+        const data = matches.find((m) => m.id === ctx.args[2])
 
-        if (!data || data.status === "LIVE") {
-          return await ctx.reply("helper.started");
+        if (!data || data.status === 'LIVE') {
+          return await ctx.reply('helper.started')
         }
 
-        let title = t("helper.bet_modal.title", {
+        let title = t('helper.bet_modal.title', {
           teams: `${pred.teams[0].name} vs ${pred.teams[1].name}`
-        });
+        })
 
         if (title.length > 45) {
-          title = title.slice(0, 42) + "...";
+          title = title.slice(0, 42) + '...'
         }
 
         await ctx.interaction.showModal({
@@ -53,13 +53,13 @@ export default createComponentInteraction({
               components: [
                 {
                   type: 4,
-                  customId: "response-1",
-                  label: t("helper.bet_modal.label"),
+                  customId: 'response-1',
+                  label: t('helper.bet_modal.label'),
                   style: 1,
                   minLength: 3,
                   required: true,
                   placeholder:
-                    "Ex.: " +
+                    'Ex.: ' +
                     (
                       Math.floor(Math.random() * (1000 - 500 + 1)) + 500
                     ).toString()
@@ -67,13 +67,13 @@ export default createComponentInteraction({
               ]
             }
           ]
-        });
+        })
       },
       lol: async () => {
         const pred = await app.prisma.prediction.findFirst({
           where: {
             match: ctx.args[2],
-            game: "lol",
+            game: 'lol',
             profile: {
               userId: ctx.db.profile.userId,
               guildId: ctx.db.guild.id
@@ -82,20 +82,20 @@ export default createComponentInteraction({
           include: {
             teams: true
           }
-        });
+        })
 
-        if (!pred) return await ctx.reply("helper.prediction_needed");
+        if (!pred) return await ctx.reply('helper.prediction_needed')
 
-        const matches = await service.getMatches("lol");
-        const data = matches.find((m) => m.id === ctx.args[2]);
+        const matches = await service.getMatches('lol')
+        const data = matches.find((m) => m.id === ctx.args[2])
 
-        if (!data || data.status === "LIVE") {
-          return await ctx.reply("helper.started");
+        if (!data || data.status === 'LIVE') {
+          return await ctx.reply('helper.started')
         }
 
         await ctx.interaction.showModal({
           customId: `betting;lol;${ctx.args[2]}`,
-          title: t("helper.bet_modal.title", {
+          title: t('helper.bet_modal.title', {
             teams: `${pred.teams[0].name} vs ${pred.teams[1].name}`
           }),
           components: [
@@ -104,13 +104,13 @@ export default createComponentInteraction({
               components: [
                 {
                   type: 4,
-                  customId: "response-1",
-                  label: t("helper.bet_modal.label"),
+                  customId: 'response-1',
+                  label: t('helper.bet_modal.label'),
                   style: 1,
                   minLength: 3,
                   required: true,
                   placeholder:
-                    "Ex.: " +
+                    'Ex.: ' +
                     (
                       Math.floor(Math.random() * (1000 - 500 + 1)) + 500
                     ).toString()
@@ -118,10 +118,10 @@ export default createComponentInteraction({
               ]
             }
           ]
-        });
+        })
       }
-    };
+    }
 
-    await options[ctx.args[1] as keyof typeof options]();
+    await options[ctx.args[1] as keyof typeof options]()
   }
-});
+})

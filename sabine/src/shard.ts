@@ -1,217 +1,228 @@
-import { valorantMaps } from "@sabinelab/utils";
-import { REST, Routes, ShardingManager } from "discord.js";
-import { env } from "@/env";
-import EmbedBuilder from "./structures/builders/EmbedBuilder";
-import Logger from "./util/Logger";
-import "./server";
-import { Worker } from "bullmq";
+import { valorantMaps } from '@sabinelab/utils'
+import { Worker } from 'bullmq'
+import { REST, Routes, ShardingManager, type APIWebhook } from 'discord.js'
+import { env } from '@/env'
 import {
   arenaMapQueue,
   processArenaMap
-} from "@/structures/queue/arena-map-queue";
-import { processMatch } from "@/structures/queue/arena-queue";
+} from '@/structures/queue/arena-map-queue'
+import './server'
+import { processMatch } from '@/structures/queue/arena-queue'
+import EmbedBuilder from './structures/builders/EmbedBuilder'
+import Logger from './util/Logger'
 
-const currentMapInit = await Bun.redis.get("arena:map");
-let mapsInit = valorantMaps
-  .filter((m) => m.current_map_pool)
-  .map((m) => m.name);
-const mapIndexInit = mapsInit.indexOf(currentMapInit || "");
+const currentMapInit = await Bun.redis.get('arena:map')
+let mapsInit = valorantMaps.filter((m) => m.current_map_pool).map((m) => m.name)
+const mapIndexInit = mapsInit.indexOf(currentMapInit || '')
 
 if (mapIndexInit !== -1) {
-  mapsInit.splice(mapIndexInit, 1);
+  mapsInit.splice(mapIndexInit, 1)
 }
 
 if (mapsInit.length === 0) {
-  mapsInit = valorantMaps.filter((m) => m.current_map_pool).map((m) => m.name);
+  mapsInit = valorantMaps.filter((m) => m.current_map_pool).map((m) => m.name)
 }
 
-const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)];
+const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)]
 
-if (!currentMapInit && mapInit) await Bun.redis.set("arena:map", mapInit);
+if (!currentMapInit && mapInit) await Bun.redis.set('arena:map', mapInit)
 
 new Worker(
-  "change-arena-map",
+  'change-arena-map',
   async () => await processArenaMap().catch(Logger.error),
   {
     connection: {
       url: env.REDIS_URL
     }
   }
-);
+)
 
-const patterns = ["*leaderboard:*", "*agent_selection:*", "*match:*"];
+const patterns = ['*leaderboard:*', '*agent_selection:*', '*match:*']
 
 for (const pattern of patterns) {
-  let cursor = "0";
+  let cursor = '0'
 
   do {
     const [next, keys] = await Bun.redis.scan(
       cursor,
-      "MATCH",
+      'MATCH',
       pattern,
-      "COUNT",
+      'COUNT',
       100
-    );
+    )
 
     if (keys.length) {
-      await Bun.redis.unlink(...keys);
+      await Bun.redis.unlink(...keys)
     }
 
-    cursor = next;
-  } while (cursor !== "0");
+    cursor = next
+  } while (cursor !== '0')
 }
 
-const manager = new ShardingManager("src/index.ts", {
+const manager = new ShardingManager('src/index.ts', {
   token: env.BOT_TOKEN,
-  mode: "process",
-  totalShards: env.NODE_ENV === "development" ? "auto" : 2
-});
+  mode: 'process',
+  totalShards: env.NODE_ENV === 'development' ? 'auto' : 2
+})
 
-const rest = new REST().setToken(env.BOT_TOKEN);
+const rest = new REST().setToken(env.BOT_TOKEN)
 
-const res = (await rest.get(Routes.channelWebhooks(env.SHARD_LOG))) as {
-  id: string;
-  token?: string;
-}[];
-const webhook = res.filter((w) => w.token)[0];
+const res = (await rest.get(
+  Routes.channelWebhooks(env.SHARD_LOG)
+)) as APIWebhook[]
+const webhook = res.find((w) => w.token)
 
 if (!webhook) {
-  Logger.warn("There is no webhook");
+  Logger.warn('There is no webhook')
 }
 
-manager.on("shardCreate", async (shard) => {
+manager.on('shardCreate', async (shard) => {
   if (shard.id === 0) {
-    setInterval(processMatch, 5000);
+    setInterval(processMatch, 5000)
 
-    const oldJobs = await arenaMapQueue.getJobSchedulers();
+    const oldJobs = await arenaMapQueue.getJobSchedulers()
 
-    const promises: Promise<unknown>[] = [];
+    const promises: Promise<unknown>[] = []
     for (const job of oldJobs) {
-      promises.push(arenaMapQueue.removeJobScheduler(job.key));
+      promises.push(arenaMapQueue.removeJobScheduler(job.key))
     }
-    await Promise.all(promises);
+    await Promise.all(promises)
 
     await arenaMapQueue.upsertJobScheduler(
-      "change-arena-map-scheduler",
+      'change-arena-map-scheduler',
       {
-        pattern: "0 0 * * 0"
+        pattern: '0 0 * * 0'
       },
       {
-        name: "change-arena-map",
+        name: 'change-arena-map',
         opts: {
           removeOnComplete: false,
           removeOnFail: false
         }
       }
-    );
+    )
   }
 
-  shard.on("disconnect", async () => {
+  shard.on('disconnect', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Disconnected")
+      .setTitle('Shard Disconnected')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Disconnected\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("ready", async () => {
+  shard.on('ready', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Ready")
+      .setTitle('Shard Ready')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Ready\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("resume", async () => {
+  shard.on('resume', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Resumed")
+      .setTitle('Shard Resumed')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Resumed\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("reconnecting", async () => {
+  shard.on('reconnecting', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Reconnecting")
+      .setTitle('Shard Reconnecting')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Reconnecting\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("death", async () => {
+  shard.on('death', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Dead")
+      .setTitle('Shard Dead')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Dead\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("spawn", async () => {
+  shard.on('spawn', async () => {
+    if (!webhook) return
+
     const embed = new EmbedBuilder()
-      .setTitle("Shard Spawned")
+      .setTitle('Shard Spawned')
       .setDesc(`Shard ID: \`${shard.id}\` => \`Spawned\``)
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
+    })
+  })
 
-  shard.on("error", async (error) => {
+  shard.on('error', async (error) => {
+    if (!webhook) return
+    
     const embed = new EmbedBuilder()
-      .setTitle("Shard Error")
+      .setTitle('Shard Error')
       .setDesc(
         `Shard ID: \`${shard.id}\` => \`Error\`\n\`\`\`fix\n${error.stack}\`\`\``
       )
-      .setTimestamp();
+      .setTimestamp()
 
-    const route = Routes.webhook(webhook.id, webhook.token);
+    const route = Routes.webhook(webhook.id, webhook.token)
 
     await rest.post(route, {
       body: {
         embeds: [embed]
       }
-    });
-  });
-});
+    })
+  })
+})
 
-manager.spawn();
+manager.spawn()

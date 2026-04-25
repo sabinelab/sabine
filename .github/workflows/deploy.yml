@@ -16,7 +16,7 @@ on:
         type: string
 jobs:
   deploy:
-    name: 'Deploy to Production'
+    name: 'deploy to production'
     if: ${{ inputs.source_event_name == 'push' && inputs.source_ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     permissions:
@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.deploy_sha }}
 
-      - name: Verify deploy SHA belongs to main
+      - name: verify deploy sha belongs to main
         run: |
           git fetch origin refs/heads/main:refs/remotes/origin/main --force
 
@@ -53,13 +53,15 @@ jobs:
             global:
               - 'package.json'
               - 'turbo.json'
-              - 'biome.json'
+              - '.oxfmtrc.json'
+              - '.oxlintrc.json'
+              - 'bun.lock'
               - 'docker-compose.yml'
               - 'prisma.config.js'
               - 'prisma/**'
               - 'packages/**'
 
-      - name: Setup ssh
+      - name: setup ssh
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/key
@@ -78,7 +80,7 @@ jobs:
           SSH_HOST: ${{ secrets.HOST }}
           SSH_PORT: 22
 
-      - name: Calculate changes and deploy
+      - name: calculate changes and deploy
         env:
           CHANGED_SABINE: ${{ steps.changes.outputs.sabine }}
           CHANGED_HELPER: ${{ steps.changes.outputs.helper }}
@@ -125,10 +127,16 @@ jobs:
 
           echo "Deploying: $SERVICES_TO_DEPLOY"
 
-          # Fetch and deploy the exact commit that passed the Biome workflow.
+          # Fetch and deploy the exact commit that passed the OXC workflow.
           ssh prod "cd sabine/sabine && git fetch origin main && git checkout --detach \"$DEPLOY_SHA\" && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
+            set -euo pipefail
+
+            git fetch origin main
+            git switch -C main \"\$DEPLOY_SHA\"
+            git branch --set-upstream-to=origin/main main || true
+
             services=(\$SERVICES)
-            last_index=\$((${#services[@]} - 1))
+            last_index=\$((\${#services[@]} - 1))
 
             for index in \"\${!services[@]}\"; do
               service=\${services[\$index]}

@@ -2,19 +2,19 @@ import {
   type ComponentEmojiResolvable,
   type InteractionReplyOptions,
   StringSelectMenuBuilder
-} from "discord.js";
+} from 'discord.js'
 
 export default class SelectMenuBuilder extends StringSelectMenuBuilder {
   public setCustomId(id: string) {
-    super.setCustomId(id);
+    super.setCustomId(id)
 
-    return this;
+    return this
   }
 
   public setPlaceholder(text: string) {
-    super.setPlaceholder(text);
+    super.setPlaceholder(text)
 
-    return this;
+    return this
   }
 
   public addOption(
@@ -24,9 +24,9 @@ export default class SelectMenuBuilder extends StringSelectMenuBuilder {
     emoji?: ComponentEmojiResolvable,
     isDefault = false
   ) {
-    super.addOptions({ label, value, description, emoji, default: isDefault });
+    super.addOptions({ label, value, description, emoji, default: isDefault })
 
-    return this;
+    return this
   }
 
   public setOption(
@@ -36,40 +36,40 @@ export default class SelectMenuBuilder extends StringSelectMenuBuilder {
     emoji?: ComponentEmojiResolvable,
     isDefault = false
   ) {
-    super.setOptions({ label, value, description, emoji, default: isDefault });
+    super.setOptions({ label, value, description, emoji, default: isDefault })
 
-    return this;
+    return this
   }
 
   public setMin(min: number) {
-    super.setMinValues(min);
+    super.setMinValues(min)
 
-    return this;
+    return this
   }
 
   public setMax(max: number) {
-    super.setMaxValues(max);
+    super.setMaxValues(max)
 
-    return this;
+    return this
   }
 
   public setDisabled(disabled = true) {
-    super.setDisabled(disabled);
+    super.setDisabled(disabled)
 
-    return this;
+    return this
   }
 
   public build(content?: string | InteractionReplyOptions) {
-    if (typeof content === "string") {
+    if (typeof content === 'string') {
       return {
-        content: content ?? "",
+        content: content ?? '',
         components: [
           {
             type: 1,
             components: [this.toJSON()]
           }
         ]
-      };
+      }
     } else {
       return {
         components: [
@@ -79,7 +79,7 @@ export default class SelectMenuBuilder extends StringSelectMenuBuilder {
           }
         ],
         ...content
-      };
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
-import type { $Enums } from "@generated";
-import t from "@i18n";
-import type { MatchesData } from "@types";
-import { Queue } from "bullmq";
+import type { $Enums } from '@generated'
+import t from '@i18n'
+import type { MatchesData } from '@types'
+import { Queue } from 'bullmq'
 import {
   ButtonBuilder,
   ButtonStyle,
@@ -11,71 +11,71 @@ import {
   MessageFlags,
   REST,
   Routes
-} from "discord.js";
-import pLimit from "p-limit";
-import Service from "@/api";
-import { tournaments } from "@/config";
-import { env } from "@/env";
-import type App from "@/structures/app/App";
-import Logger from "@/util/Logger";
+} from 'discord.js'
+import pLimit from 'p-limit'
+import Service from '@/api'
+import { tournaments } from '@/config'
+import { env } from '@/env'
+import type App from '@/structures/app/App'
+import Logger from '@/util/Logger'
 
-export const tasksQueue = new Queue("tasks", {
+export const tasksQueue = new Queue('tasks', {
   connection: {
     url: env.REDIS_URL
   }
-});
+})
 
-const sendLimit = pLimit(25);
-const delLimit = pLimit(10);
-const dbLimit = pLimit(50);
+const sendLimit = pLimit(25)
+const delLimit = pLimit(10)
+const dbLimit = pLimit(50)
 
-const rest = new REST().setToken(env.BOT_TOKEN);
-const service = new Service();
+const rest = new REST().setToken(env.BOT_TOKEN)
+const service = new Service()
 
 const sendValorantMatches = async (app: App) => {
   const [res, res2] = await Promise.all([
-    service.getMatches("valorant"),
-    service.getResults("valorant")
-  ]);
+    service.getMatches('valorant'),
+    service.getResults('valorant')
+  ])
 
-  if (!res?.length) return;
+  if (!res?.length) return
 
-  let cursor: string | undefined;
+  let cursor: string | undefined
 
   while (true) {
     const guilds = await app.prisma.guild.findMany({
       take: 1000,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
-      orderBy: { id: "asc" },
+      orderBy: { id: 'asc' },
       include: {
         events: {
           where: {
-            type: "valorant"
+            type: 'valorant'
           }
         },
         key: true,
         tbdMatches: {
           where: {
-            type: "valorant"
+            type: 'valorant'
           }
         }
       }
-    });
+    })
 
-    if (!guilds.length) break;
+    if (!guilds.length) break
 
-    const bulkDeleteThunks: (() => Promise<unknown>)[] = [];
-    const updateGuildThunks: (() => Promise<unknown>)[] = [];
-    const sendMessageThunks: (() => Promise<unknown>)[] = [];
+    const bulkDeleteThunks: (() => Promise<unknown>)[] = []
+    const updateGuildThunks: (() => Promise<unknown>)[] = []
+    const sendMessageThunks: (() => Promise<unknown>)[] = []
 
     for (const guild of guilds) {
       const matches: {
-        matchId: string;
-        guildId: string;
-        channel: string;
-        type: $Enums.EventType;
-      }[] = [];
+        matchId: string
+        guildId: string
+        channel: string
+        type: $Enums.EventType
+      }[] = []
 
       if (
         guild.valorantMatches.length &&
@@ -84,11 +84,11 @@ const sendValorantMatches = async (app: App) => {
             d.id === guild.valorantMatches[guild.valorantMatches.length - 1]
         )
       )
-        continue;
+        continue
 
-      guild.valorantMatches = [];
+      guild.valorantMatches = []
 
-      let data: MatchesData[];
+      let data: MatchesData[]
 
       if (guild.events.length > 5 && !guild.key) {
         if (
@@ -104,35 +104,35 @@ const sendValorantMatches = async (app: App) => {
               .reverse()
               .slice(0, 5)
               .some((e) => e.name === d.tournament.name)
-          );
+          )
         } else {
           data = res.filter((d) => {
             const events1 = guild.events
               .slice()
               .reverse()
               .slice(0, 5)
-              .some((e) => e.name === d.tournament.name);
+              .some((e) => e.name === d.tournament.name)
 
-            if (events1) return true;
+            if (events1) return true
 
             const events2 = guild.events
               .slice()
               .reverse()
               .slice(0, 5)
               .some((e) => {
-                const tour = tournaments[e.name];
-                if (!tour) return false;
+                const tour = tournaments[e.name]
+                if (!tour) return false
                 return tour.some((regex) =>
                   regex.test(
-                    d.tournament.name.replace(/\s+/g, " ").trim().toLowerCase()
+                    d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
                   )
-                );
-              });
+                )
+              })
 
-            if (events2) return true;
+            if (events2) return true
 
-            return false;
-          });
+            return false
+          })
         }
       } else {
         if (
@@ -140,70 +140,70 @@ const sendValorantMatches = async (app: App) => {
         ) {
           data = res.filter((d) =>
             guild.events.some((e) => e.name === d.tournament.name)
-          );
+          )
         } else {
           data = res.filter((d) => {
             const events1 = guild.events.some(
               (e) => e.name === d.tournament.name
-            );
+            )
 
-            if (events1) return true;
+            if (events1) return true
 
             const events2 = guild.events.some((e) => {
-              const tour = tournaments[e.name];
-              if (!tour) return false;
+              const tour = tournaments[e.name]
+              if (!tour) return false
               return tour.some((regex) =>
                 regex.test(
-                  d.tournament.name.replace(/\s+/g, " ").trim().toLowerCase()
+                  d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
                 )
-              );
-            });
+              )
+            })
 
-            if (events2) return true;
+            if (events2) return true
 
-            return false;
-          });
+            return false
+          })
         }
       }
 
-      if (!data.length) continue;
+      if (!data.length) continue
 
-      for (const e of guild.events.filter((e) => e.type === "valorant")) {
+      for (const e of guild.events.filter((e) => e.type === 'valorant')) {
         const thunk = async () => {
           try {
             const messages = (await rest.get(
               Routes.channelMessages(e.channel1),
               {
                 query: new URLSearchParams({
-                  limit: "100"
+                  limit: '100'
                 })
               }
-            )) as Collection<string, Message>;
+            )) as Collection<string, Message>
 
             const messagesIds = messages
               .filter((m) => m.author.id === app.user?.id)
-              .map((m) => m.id);
+              .map((m) => m.id)
 
             if (messagesIds.length === 1) {
               await rest.delete(
                 Routes.channelMessage(e.channel1, messagesIds[0])
-              );
+              )
             } else if (messagesIds.length) {
               await rest.post(Routes.channelBulkDelete(e.channel1), {
                 body: {
                   messages: messagesIds
                 }
-              });
+              })
             }
           } catch (e) {
-            new Logger(app).error(e as Error);
+            new Logger(app).error(e as Error)
           }
-        };
+        }
 
-        bulkDeleteThunks.push(thunk);
+        bulkDeleteThunks.push(thunk)
       }
 
-      const channelBatches = new Map<string, any[]>();
+      const channelBatches = new Map<string, any[]>()
 
       try {
         for (const d of data.map((body) => ({
@@ -211,7 +211,7 @@ const sendValorantMatches = async (app: App) => {
           when: new Date(body.when)
         }))) {
           if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue;
+            continue
 
           for (const e of guild.events) {
             if (
@@ -219,34 +219,34 @@ const sendValorantMatches = async (app: App) => {
               (e.name === d.tournament.name ||
                 tournaments[e.name]?.some((regex) =>
                   regex.test(
-                    d.tournament.name.trim().replace(/\s+/g, " ").toLowerCase()
+                    d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase()
                   )
                 ))
             ) {
-              if (d.stage.toLowerCase().includes("showmatch")) continue;
+              if (d.stage.toLowerCase().includes('showmatch')) continue
 
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
                 app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ""
+                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
                 ) ??
-                app.emoji.get("default");
+                app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
                 app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ""
+                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
                 ) ??
-                app.emoji.get("default");
+                app.emoji.get('default')
 
-              const index = guild.valorantMatches.indexOf(d.id);
+              const index = guild.valorantMatches.indexOf(d.id)
 
-              if (index > -1) guild.valorantMatches.splice(index, 1);
+              if (index > -1) guild.valorantMatches.splice(index, 1)
 
-              guild.valorantMatches.push(d.id!);
+              guild.valorantMatches.push(d.id!)
 
-              if (d.teams[0].name !== "TBD" && d.teams[1].name !== "TBD") {
+              if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
                 if (!channelBatches.has(e.channel1)) {
-                  channelBatches.set(e.channel1, []);
+                  channelBatches.set(e.channel1, [])
                 }
 
                 channelBatches.get(e.channel1)?.push({
@@ -254,64 +254,64 @@ const sendValorantMatches = async (app: App) => {
                   e,
                   emoji1,
                   emoji2
-                });
+                })
               } else {
                 if (!matches.some((m) => m.matchId === d.id)) {
                   matches.push({
                     matchId: d.id!,
                     channel: e.channel1,
                     guildId: guild.id,
-                    type: "valorant"
-                  });
+                    type: 'valorant'
+                  })
                 }
               }
 
-              break;
+              break
             }
           }
         }
       } catch (e) {
-        new Logger(app).error(e as Error);
+        new Logger(app).error(e as Error)
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 5;
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
-          const chunk = matches.slice(i, i + chunkSize);
+          const chunk = matches.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder().setAccentColor(6719296);
+          const container = new ContainerBuilder().setAccentColor(6719296)
 
           for (const data of chunk) {
-            const { d, emoji1, emoji2 } = data;
+            const { d, emoji1, emoji2 } = data
 
             container
               .addTextDisplayComponents((text) => {
-                let content = `### ${d.tournament.name}\n`;
+                let content = `### ${d.tournament.name}\n`
 
-                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`;
-                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`;
-                content += `-# ${d.stage}`;
+                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
+                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
+                content += `-# ${d.stage}`
 
-                return text.setContent(content);
+                return text.setContent(content)
               })
               .addActionRowComponents((row) =>
                 row.setComponents(
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.predict"))
+                    .setLabel(t(guild.lang, 'helper.predict'))
                     .setCustomId(`predict;valorant;${d.id}`)
                     .setStyle(ButtonStyle.Success),
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.bet"))
+                    .setLabel(t(guild.lang, 'helper.bet'))
                     .setCustomId(`bet;valorant;${d.id}`)
                     .setStyle(ButtonStyle.Secondary),
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.stats"))
+                    .setLabel(t(guild.lang, 'helper.stats'))
                     .setStyle(ButtonStyle.Link)
                     .setURL(`https://vlr.gg/${d.id}`)
                 )
               )
-              .addSeparatorComponents((separator) => separator);
+              .addSeparatorComponents((separator) => separator)
           }
 
           const thunk = async () => {
@@ -321,11 +321,11 @@ const sendValorantMatches = async (app: App) => {
                   components: [container.toJSON()],
                   flags: MessageFlags.IsComponentsV2
                 }
-              });
+              })
             }
-          };
+          }
 
-          sendMessageThunks.push(thunk);
+          sendMessageThunks.push(thunk)
         }
       }
 
@@ -338,7 +338,7 @@ const sendValorantMatches = async (app: App) => {
             valorantMatches: guild.valorantMatches,
             tbdMatches: {
               deleteMany: {
-                type: "valorant"
+                type: 'valorant'
               },
               create: matches.length
                 ? matches.map((m) => ({
@@ -352,64 +352,64 @@ const sendValorantMatches = async (app: App) => {
               deleteMany: {}
             }
           }
-        });
-      };
+        })
+      }
 
-      updateGuildThunks.push(thunk);
+      updateGuildThunks.push(thunk)
     }
 
-    await Promise.allSettled(bulkDeleteThunks.map((task) => delLimit(task)));
+    await Promise.allSettled(bulkDeleteThunks.map((task) => delLimit(task)))
     await Promise.allSettled([
       ...updateGuildThunks.map((task) => dbLimit(task)),
       ...sendMessageThunks.map((task) => sendLimit(task))
-    ]);
+    ])
 
-    cursor = guilds[guilds.length - 1].id;
+    cursor = guilds[guilds.length - 1].id
   }
-};
+}
 
 const sendLolMatches = async (app: App) => {
-  const res = await service.getMatches("lol");
-  const res2 = await service.getResults("lol");
+  const res = await service.getMatches('lol')
+  const res2 = await service.getResults('lol')
 
-  if (!res?.length) return;
+  if (!res?.length) return
 
-  let cursor: string | undefined;
+  let cursor: string | undefined
 
   while (true) {
     const guilds = await app.prisma.guild.findMany({
       take: 1000,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
-      orderBy: { id: "asc" },
+      orderBy: { id: 'asc' },
       include: {
         events: {
           where: {
-            type: "lol"
+            type: 'lol'
           }
         },
         key: true,
         tbdMatches: {
           where: {
-            type: "lol"
+            type: 'lol'
           }
         }
       }
-    });
+    })
 
-    if (!guilds.length) break;
+    if (!guilds.length) break
 
-    const bulkDeleteThunks: (() => Promise<unknown>)[] = [];
-    const updateGuildThunks: (() => Promise<unknown>)[] = [];
-    const sendMessageThunks: (() => Promise<unknown>)[] = [];
+    const bulkDeleteThunks: (() => Promise<unknown>)[] = []
+    const updateGuildThunks: (() => Promise<unknown>)[] = []
+    const sendMessageThunks: (() => Promise<unknown>)[] = []
 
     for (const guild of guilds) {
       const matches: {
-        matchId: string;
-        guildId: string;
-        channel: string;
-        type: $Enums.EventType;
-      }[] = [];
+        matchId: string
+        guildId: string
+        channel: string
+        type: $Enums.EventType
+      }[] = []
 
       if (
         guild.lolMatches.length &&
@@ -417,11 +417,11 @@ const sendLolMatches = async (app: App) => {
           (d) => d.id === guild.lolMatches[guild.lolMatches.length - 1]
         )
       )
-        continue;
+        continue
 
-      guild.lolMatches = [];
+      guild.lolMatches = []
 
-      let data: MatchesData[];
+      let data: MatchesData[]
 
       if (guild.events.length > 5 && !guild.key) {
         data = res.filter((d) =>
@@ -429,48 +429,48 @@ const sendLolMatches = async (app: App) => {
             .reverse()
             .slice(0, 5)
             .some((e) => e.name === d.tournament.name)
-        );
+        )
       } else
         data = res.filter((d) =>
           guild.events.some((e) => e.name === d.tournament.name)
-        );
+        )
 
-      for (const e of guild.events.filter((e) => e.type === "lol")) {
+      for (const e of guild.events.filter((e) => e.type === 'lol')) {
         const thunk = async () => {
           try {
             const messages = (await rest.get(
               Routes.channelMessages(e.channel1),
               {
                 query: new URLSearchParams({
-                  limit: "100"
+                  limit: '100'
                 })
               }
-            )) as Collection<string, Message>;
+            )) as Collection<string, Message>
 
             const messagesIds = messages
               .filter((m) => m.author.id === app.user?.id)
-              .map((m) => m.id);
+              .map((m) => m.id)
 
             if (messagesIds.length === 1) {
               await rest.delete(
                 Routes.channelMessage(e.channel1, messagesIds[0])
-              );
+              )
             } else if (messagesIds.length) {
               await rest.post(Routes.channelBulkDelete(e.channel1), {
                 body: {
                   messages: messagesIds
                 }
-              });
+              })
             }
           } catch (e) {
-            new Logger(app).error(e as Error);
+            new Logger(app).error(e as Error)
           }
-        };
+        }
 
-        bulkDeleteThunks.push(thunk);
+        bulkDeleteThunks.push(thunk)
       }
 
-      const channelBatches = new Map<string, any[]>();
+      const channelBatches = new Map<string, any[]>()
 
       try {
         for (const d of data.map((body) => ({
@@ -478,93 +478,93 @@ const sendLolMatches = async (app: App) => {
           when: new Date(body.when)
         }))) {
           if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue;
+            continue
 
           for (const e of guild.events) {
             if (e.name === d.tournament.name && d.id) {
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
                 app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ""
+                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
                 ) ??
-                app.emoji.get("default");
+                app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
                 app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ""
+                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
                 ) ??
-                app.emoji.get("default");
+                app.emoji.get('default')
 
-              const index = guild.lolMatches.indexOf(d.id);
+              const index = guild.lolMatches.indexOf(d.id)
 
-              if (index > -1) guild.lolMatches.splice(index, 1);
+              if (index > -1) guild.lolMatches.splice(index, 1)
 
-              if (!d.stage.toLowerCase().includes("showmatch"))
-                guild.lolMatches.push(d.id!);
+              if (!d.stage.toLowerCase().includes('showmatch'))
+                guild.lolMatches.push(d.id!)
 
-              if (d.stage.toLowerCase().includes("showmatch")) continue;
+              if (d.stage.toLowerCase().includes('showmatch')) continue
 
-              if (d.teams[0].name !== "TBD" && d.teams[1].name !== "TBD") {
+              if (d.teams[0].name !== 'TBD' && d.teams[1].name !== 'TBD') {
                 if (!channelBatches.has(e.channel1)) {
-                  channelBatches.set(e.channel1, []);
+                  channelBatches.set(e.channel1, [])
                 }
 
                 channelBatches.get(e.channel1)?.push({
                   d,
                   emoji1,
                   emoji2
-                });
+                })
               } else {
                 matches.push({
                   matchId: d.id!,
                   channel: e.channel1,
                   guildId: guild.id,
-                  type: "lol"
-                });
+                  type: 'lol'
+                })
               }
 
-              break;
+              break
             }
           }
         }
       } catch (e) {
-        new Logger(app).error(e as Error);
+        new Logger(app).error(e as Error)
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 5;
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
-          const chunk = matches.slice(i, i + chunkSize);
+          const chunk = matches.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder().setAccentColor(6719296);
+          const container = new ContainerBuilder().setAccentColor(6719296)
 
           for (const data of chunk) {
-            const { d, emoji1, emoji2 } = data;
+            const { d, emoji1, emoji2 } = data
 
             container
               .addTextDisplayComponents((text) => {
-                let content = `### ${d.tournament.full_name ?? d.tournament.name}\n`;
+                let content = `### ${d.tournament.full_name ?? d.tournament.name}\n`
 
-                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`;
-                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`;
-                content += `-# ${d.stage}`;
+                content += `**${emoji1} ${d.teams[0].name} <:versus:1349105624180330516> ${d.teams[1].name} ${emoji2}**\n`
+                content += `<t:${d.when.getTime() / 1000}:F> | <t:${d.when.getTime() / 1000}:R>\n`
+                content += `-# ${d.stage}`
 
-                return text.setContent(content);
+                return text.setContent(content)
               })
               .addActionRowComponents((row) =>
                 row.setComponents(
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.predict"))
+                    .setLabel(t(guild.lang, 'helper.predict'))
                     .setCustomId(`predict;lol;${d.id}`)
                     .setStyle(ButtonStyle.Success),
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.bet"))
+                    .setLabel(t(guild.lang, 'helper.bet'))
                     .setCustomId(`bet;lol;${d.id}`)
                     .setStyle(ButtonStyle.Secondary)
                 )
               )
-              .addSeparatorComponents((separator) => separator);
+              .addSeparatorComponents((separator) => separator)
           }
 
           const thunk = async () => {
@@ -574,11 +574,11 @@ const sendLolMatches = async (app: App) => {
                   components: [container.toJSON()],
                   flags: MessageFlags.IsComponentsV2
                 }
-              });
+              })
             }
-          };
+          }
 
-          sendMessageThunks.push(thunk);
+          sendMessageThunks.push(thunk)
         }
       }
 
@@ -591,7 +591,7 @@ const sendLolMatches = async (app: App) => {
             lolMatches: guild.lolMatches,
             tbdMatches: {
               deleteMany: {
-                type: "lol"
+                type: 'lol'
               },
               create: matches.map((m) => ({
                 type: m.type,
@@ -603,87 +603,87 @@ const sendLolMatches = async (app: App) => {
               deleteMany: {}
             }
           }
-        });
-      };
+        })
+      }
 
-      updateGuildThunks.push(thunk);
+      updateGuildThunks.push(thunk)
     }
 
-    await Promise.allSettled(bulkDeleteThunks.map((task) => delLimit(task)));
+    await Promise.allSettled(bulkDeleteThunks.map((task) => delLimit(task)))
     await Promise.allSettled([
       ...updateGuildThunks.map((task) => dbLimit(task)),
       ...sendMessageThunks.map((task) => sendLimit(task))
-    ]);
+    ])
 
-    cursor = guilds[guilds.length - 1].id;
+    cursor = guilds[guilds.length - 1].id
   }
-};
+}
 
 const sendValorantTBDMatches = async (app: App) => {
-  const res = await service.getMatches("valorant");
+  const res = await service.getMatches('valorant')
 
-  if (!res?.length) return;
+  if (!res?.length) return
 
-  let cursor: string | undefined;
+  let cursor: string | undefined
 
   while (true) {
     const guilds = await app.prisma.guild.findMany({
       take: 1000,
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
-      orderBy: { id: "asc" },
+      orderBy: { id: 'asc' },
       include: {
         tbdMatches: {
           where: {
-            type: "valorant"
+            type: 'valorant'
           }
         }
       }
-    });
+    })
 
-    if (!guilds.length) break;
+    if (!guilds.length) break
 
-    const sendMessageThunks: (() => Promise<unknown>)[] = [];
-    const updateGuildThunks: (() => Promise<unknown>)[] = [];
+    const sendMessageThunks: (() => Promise<unknown>)[] = []
+    const updateGuildThunks: (() => Promise<unknown>)[] = []
 
     for (const guild of guilds) {
-      if (!guild.tbdMatches.length) continue;
+      if (!guild.tbdMatches.length) continue
 
-      const channelBatches = new Map<string, any[]>();
+      const channelBatches = new Map<string, any[]>()
 
       for (const match of guild.tbdMatches) {
-        const data = res
-          .map((body) => ({
-            ...body,
-            when: new Date(body.when)
-          }))
-          .find((d) => d.id === match.id);
+        const found = res.find(d => d.id === match.id)
+        if (!found) continue
+        const data = {
+          ...found,
+          data: new Date(found.when)
+        }
 
-        if (!data) continue;
+        if (!data) continue
 
-        if (data.teams[0].name !== "TBD" && data.teams[1].name !== "TBD") {
+        if (data.teams[0].name !== 'TBD' && data.teams[1].name !== 'TBD') {
           const emoji1 =
             app.emoji.get(data.teams[0].name.toLowerCase()) ??
             app.emoji.get(
-              app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? ""
+              app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? ''
             ) ??
-            app.emoji.get("default");
+            app.emoji.get('default')
           const emoji2 =
             app.emoji.get(data.teams[1].name.toLowerCase()) ??
             app.emoji.get(
-              app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? ""
+              app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? ''
             ) ??
-            app.emoji.get("default");
+            app.emoji.get('default')
 
           if (!channelBatches.has(match.channel)) {
-            channelBatches.set(match.channel, []);
+            channelBatches.set(match.channel, [])
           }
 
           channelBatches
             .get(match.channel)
-            ?.push({ data, emoji1, emoji2, match });
+            ?.push({ data, emoji1, emoji2, match })
 
-          const m = guild.tbdMatches.filter((m) => m.id === match.id)[0];
+          const m = guild.tbdMatches.find((m) => m.id === match.id)
 
           const thunk = async () => {
             await app.prisma.guild.update({
@@ -693,55 +693,55 @@ const sendValorantTBDMatches = async (app: App) => {
               data: {
                 tbdMatches: {
                   delete: {
-                    id: m.id
+                    id: m?.id
                   }
                 }
               }
-            });
-          };
+            })
+          }
 
-          updateGuildThunks.push(thunk);
+          updateGuildThunks.push(thunk)
         }
       }
 
       for (const [channelId, matches] of channelBatches.entries()) {
-        const chunkSize = 5;
+        const chunkSize = 5
 
         for (let i = 0; i < matches.length; i += chunkSize) {
-          const chunk = matches.slice(i, i + chunkSize);
+          const chunk = matches.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder().setAccentColor(6719296);
+          const container = new ContainerBuilder().setAccentColor(6719296)
 
           for (const item of chunk) {
-            const { data, emoji1, emoji2, match } = item;
+            const { data, emoji1, emoji2, match } = item
 
             container
               .addTextDisplayComponents((text) => {
-                let content = `### ${data.tournament.name}\n`;
+                let content = `### ${data.tournament.name}\n`
 
-                content += `**${emoji1} ${data.teams[0].name} <:versus:1349105624180330516> ${data.teams[1].name} ${emoji2}**\n`;
-                content += `<t:${data.when.getTime() / 1000}:F> | <t:${data.when.getTime() / 1000}:R>\n`;
-                content += `-# ${data.stage}`;
+                content += `**${emoji1} ${data.teams[0].name} <:versus:1349105624180330516> ${data.teams[1].name} ${emoji2}**\n`
+                content += `<t:${data.when.getTime() / 1000}:F> | <t:${data.when.getTime() / 1000}:R>\n`
+                content += `-# ${data.stage}`
 
-                return text.setContent(content);
+                return text.setContent(content)
               })
               .addActionRowComponents((row) =>
                 row.setComponents(
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.predict"))
+                    .setLabel(t(guild.lang, 'helper.predict'))
                     .setCustomId(`predict;valorant;${match.id}`)
                     .setStyle(ButtonStyle.Success),
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.bet"))
+                    .setLabel(t(guild.lang, 'helper.bet'))
                     .setCustomId(`bet;valorant;${data.id}`)
                     .setStyle(ButtonStyle.Secondary),
                   new ButtonBuilder()
-                    .setLabel(t(guild.lang, "helper.stats"))
+                    .setLabel(t(guild.lang, 'helper.stats'))
                     .setStyle(ButtonStyle.Link)
                     .setURL(`https://vlr.gg/${data.id}`)
                 )
               )
-              .addSeparatorComponents((separator) => separator);
+              .addSeparatorComponents((separator) => separator)
           }
 
           const thunk = async () => {
@@ -751,11 +751,11 @@ const sendValorantTBDMatches = async (app: App) => {
                   components: [container.toJSON()],
                   flags: MessageFlags.IsComponentsV2
                 }
-              });
+              })
             }
-          };
+          }
 
-          sendMessageThunks.push(thunk);
+          sendMessageThunks.push(thunk)
         }
       }
     }
@@ -763,22 +763,22 @@ const sendValorantTBDMatches = async (app: App) => {
     await Promise.allSettled([
       ...updateGuildThunks.map((task) => dbLimit(task)),
       ...sendMessageThunks.map((task) => sendLimit(task))
-    ]);
+    ])
 
-    cursor = guilds[guilds.length - 1].id;
+    cursor = guilds[guilds.length - 1].id
   }
-};
+}
 
 export const processTasks = async (app: App) => {
-  const tasks = [sendValorantMatches, sendValorantTBDMatches, sendLolMatches];
+  const tasks = [sendValorantMatches, sendValorantTBDMatches, sendLolMatches]
 
   await Promise.all(
     tasks.map(async (task) => {
       try {
-        await task(app);
+        await task(app)
       } catch (e) {
-        new Logger(app).error(e as Error);
+        new Logger(app).error(e as Error)
       }
     })
-  );
-};
+  )
+}

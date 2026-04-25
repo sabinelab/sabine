@@ -1,22 +1,22 @@
-import type { Job } from "bullmq";
-import { Elysia } from "elysia";
-import { z } from "zod";
+import type { Job } from 'bullmq'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
 import {
   type ResultsPayload,
   resultsQueue
-} from "@/structures/queue/results-queue";
+} from '@/structures/queue/results-queue'
 
 export const valorantResults = new Elysia().post(
-  "/webhooks/results/valorant",
+  '/webhooks/results/valorant',
   async (req) => {
-    const promises: Promise<Job<ResultsPayload>>[] = [];
+    const promises: Promise<Job<ResultsPayload>>[] = []
     for (const data of req.body) {
       promises.push(
         resultsQueue.add(
-          "results",
+          'results',
           {
             ...data,
-            game: "valorant",
+            game: 'valorant',
             when: new Date(data.when)
           },
           {
@@ -24,13 +24,13 @@ export const valorantResults = new Elysia().post(
             removeOnFail: true
           }
         )
-      );
+      )
     }
 
-    await Promise.allSettled(promises);
+    await Promise.allSettled(promises)
 
-    req.set.status = "OK";
-    return { ok: true };
+    req.set.status = 'OK'
+    return { ok: true }
   },
   {
     body: z.array(
@@ -55,4 +55,4 @@ export const valorantResults = new Elysia().post(
       })
     )
   }
-);
+)

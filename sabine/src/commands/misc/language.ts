@@ -1,87 +1,87 @@
-import { prisma } from "@db";
-import { ApplicationCommandOptionType } from "discord.js";
-import createCommand from "../../structures/command/createCommand";
+import { prisma } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: "language",
-  aliases: ["lang"],
-  category: "misc",
+  name: 'language',
+  aliases: ['lang'],
+  category: 'misc',
   nameLocalizations: {
-    "pt-BR": "idioma"
+    'pt-BR': 'idioma'
   },
-  description: "Change the language that I interact with you",
+  description: 'Change the language that I interact with you',
   descriptionLocalizations: {
-    "pt-BR": "Altera o idioma que eu interajo com você"
+    'pt-BR': 'Altera o idioma que eu interajo com você'
   },
   args: {
     lang: {
       type: ApplicationCommandOptionType.String,
-      name: "lang",
+      name: 'lang',
       nameLocalizations: {
-        "pt-BR": "idioma"
+        'pt-BR': 'idioma'
       },
-      description: "Select the language",
+      description: 'Select the language',
       descriptionLocalizations: {
-        "pt-BR": "Selecione o idioma"
+        'pt-BR': 'Selecione o idioma'
       },
       choices: [
         {
-          name: "pt-BR",
-          value: "pt"
+          name: 'pt-BR',
+          value: 'pt'
         },
         {
-          name: "en-US",
-          value: "en"
+          name: 'en-US',
+          value: 'en'
         },
         {
-          name: "es-MX",
-          value: "es"
+          name: 'es-MX',
+          value: 'es'
         }
       ],
       required: true
     }
   },
-  syntax: "language [lang]",
-  examples: ["language en-US", "language pt-BR"],
+  syntax: 'language [lang]',
+  examples: ['language en-US', 'language pt-BR'],
   async run({ ctx }) {
     switch (ctx.args.lang) {
-      case "pt":
+      case 'pt':
         {
           await prisma.user.update({
             where: {
               id: ctx.db.profile.userId
             },
             data: {
-              lang: "pt"
+              lang: 'pt'
             }
-          });
-          await ctx.reply("Agora eu irei interagir em português com você!");
+          })
+          await ctx.reply('Agora eu irei interagir em português com você!')
         }
-        break;
-      case "en":
+        break
+      case 'en':
         {
           await prisma.user.update({
             where: {
               id: ctx.db.profile.userId
             },
             data: {
-              lang: "en"
+              lang: 'en'
             }
-          });
-          await ctx.reply("Now I will interact in english with you!");
+          })
+          await ctx.reply('Now I will interact in english with you!')
         }
-        break;
-      case "es": {
+        break
+      case 'es': {
         await prisma.user.update({
           where: {
             id: ctx.db.profile.userId
           },
           data: {
-            lang: "es"
+            lang: 'es'
           }
-        });
-        await ctx.reply("¡Ahora voy a interactuar contigo en español!");
+        })
+        await ctx.reply('¡Ahora voy a interactuar contigo en español!')
       }
     }
   }
-});
+})

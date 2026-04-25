@@ -1,5 +1,5 @@
-import { prisma } from "@db";
-import { calcPlayerOvr, calcPlayerPrice } from "@sabinelab/players";
+import { prisma } from '@db'
+import { calcPlayerOvr, calcPlayerPrice } from '@sabinelab/players'
 import {
   ActionRowBuilder,
   type APISelectMenuOption,
@@ -7,64 +7,64 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ContainerBuilder
-} from "discord.js";
-import SelectMenuBuilder from "@/structures/builders/SelectMenuBuilder";
-import createCommand from "@/structures/command/createCommand";
-import { createProgressBar } from "@/util/createProgressBar";
-import { formatNumber } from "@/util/formatNumber";
-import { getBuff } from "@/util/getBuff";
+} from 'discord.js'
+import SelectMenuBuilder from '@/structures/builders/SelectMenuBuilder'
+import createCommand from '@/structures/command/createCommand'
+import { createProgressBar } from '@/util/createProgressBar'
+import { formatNumber } from '@/util/formatNumber'
+import { getBuff } from '@/util/getBuff'
 
 const getUpgradeCost = (level: number) => {
-  const base = 25_000;
-  const multiplier = 1.45;
+  const base = 25_000
+  const multiplier = 1.45
 
-  return Math.floor(base * multiplier ** (level - 1));
-};
+  return Math.floor(base * multiplier ** (level - 1))
+}
 
 export default createCommand({
-  name: "roster",
-  category: "economy",
+  name: 'roster',
+  category: 'economy',
   nameLocalizations: {
-    "pt-BR": "elenco"
+    'pt-BR': 'elenco'
   },
-  description: "Check your roster",
+  description: 'Check your roster',
   descriptionLocalizations: {
-    "pt-BR": "Veja seu elenco"
+    'pt-BR': 'Veja seu elenco'
   },
-  syntax: "roster [page]",
-  examples: ["roster", "roster 1", "roster 2"],
+  syntax: 'roster [page]',
+  examples: ['roster', 'roster 1', 'roster 2'],
   args: {
     active: {
       type: ApplicationCommandOptionType.Subcommand,
-      name: "active",
+      name: 'active',
       nameLocalizations: {
-        "pt-BR": "titular"
+        'pt-BR': 'titular'
       },
-      description: "View your active roster",
+      description: 'View your active roster',
       descriptionLocalizations: {
-        "pt-BR": "Veja seu elenco titular"
+        'pt-BR': 'Veja seu elenco titular'
       }
     },
     reserve: {
       type: ApplicationCommandOptionType.Subcommand,
-      name: "reserve",
+      name: 'reserve',
       nameLocalizations: {
-        "pt-BR": "reserva"
+        'pt-BR': 'reserva'
       },
-      description: "View your reserve roster",
+      description: 'View your reserve roster',
       descriptionLocalizations: {
-        "pt-BR": "Veja seu elenco reserva"
+        'pt-BR': 'Veja seu elenco reserva'
       },
       args: {
         page: {
           type: ApplicationCommandOptionType.Integer,
-          name: "page",
+          name: 'page',
           nameLocalizations: {
-            "pt-BR": "página"
+            'pt-BR': 'página'
           },
-          description: "Provide a page",
+          description: 'Provide a page',
           descriptionLocalizations: {
-            "pt-BR": "Informe uma página"
+            'pt-BR': 'Informe uma página'
           }
         }
       }
@@ -79,19 +79,19 @@ export default createCommand({
           activeRoster: true
         },
         orderBy: {
-          id: "desc"
+          id: 'desc'
         },
         take: 5
-      });
+      })
 
-      let value = 0;
-      let ovr = 0;
+      let value = 0
+      let ovr = 0
 
       for (const card of cards) {
-        const player = ctx.app.players.get(card.playerId);
-        if (!player) continue;
+        const player = ctx.app.players.get(card.playerId)
+        if (!player) continue
 
-        ovr += card.overall;
+        ovr += card.overall
         value += calcPlayerPrice({
           ...player,
           acs: card.acs,
@@ -100,86 +100,86 @@ export default createCommand({
           aggression: card.aggression,
           hs: card.hs,
           aim: card.aim
-        });
+        })
       }
 
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
         .addTextDisplayComponents((text) =>
           text.setContent(
-            ctx.t("commands.roster.container.title") +
-              "\n" +
-              ctx.t("commands.roster.container.desc", {
+            ctx.t('commands.roster.container.title') +
+              '\n' +
+              ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
                 ovr: Math.floor(ovr / cards.length),
                 name: ctx.db.profile.teamName
                   ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
-                  : "`undefined`"
+                  : '`undefined`'
               })
           )
         )
         .addActionRowComponents((row) =>
           row.setComponents(
             new ButtonBuilder()
-              .setLabel(ctx.t("commands.roster.change_team"))
+              .setLabel(ctx.t('commands.roster.change_team'))
               .setCustomId(`roster;${ctx.author.id};team`)
               .setStyle(ButtonStyle.Primary)
           )
         )
-        .addSeparatorComponents((separator) => separator);
+        .addSeparatorComponents((separator) => separator)
 
       if (cards.length) {
         container.addTextDisplayComponents((text) =>
           text.setContent(
-            ctx.t("commands.roster.container.active_players", {
+            ctx.t('commands.roster.container.active_players', {
               total: cards.length
             })
           )
-        );
+        )
       }
 
       for (const card of cards) {
         container
           .addTextDisplayComponents((text) => {
-            const player = ctx.app.players.get(card.playerId);
+            const player = ctx.app.players.get(card.playerId)
 
-            if (!player) return text;
+            if (!player) return text
 
-            const emoji = ctx.app.emoji.get(player.role);
+            const emoji = ctx.app.emoji.get(player.role)
 
             return text.setContent(
-              ctx.t("commands.roster.container.card_content", {
+              ctx.t('commands.roster.container.card_content', {
                 card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                level: card.level >= 15 ? "`MAX`" : card.level,
+                level: card.level >= 15 ? '`MAX`' : card.level,
                 xp: `${card.xp}/${card.requiredXp}`,
                 progress: createProgressBar(card.xp / card.requiredXp),
                 id: card.playerId
               })
-            );
+            )
           })
           .addActionRowComponents((row) =>
             row.setComponents(
               new ButtonBuilder()
                 .setStyle(ButtonStyle.Danger)
-                .setLabel(ctx.t("commands.roster.container.button.remove"))
+                .setLabel(ctx.t('commands.roster.container.button.remove'))
                 .setCustomId(
                   `roster;${ctx.db.profile.userId};remove;${card.id}`
                 ),
               new ButtonBuilder()
                 .setLabel(
-                  ctx.t("commands.roster.container.button.promote_arena")
+                  ctx.t('commands.roster.container.button.promote_arena')
                 )
                 .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(card.arenaRoster),
               new ButtonBuilder()
-                .setLabel(ctx.t("commands.roster.practice"))
+                .setLabel(ctx.t('commands.roster.practice'))
                 .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                 .setStyle(ButtonStyle.Secondary)
                 .setDisabled(card.requiredXp <= card.xp),
               new ButtonBuilder()
                 .setLabel(
-                  ctx.t("commands.roster.upgrade", {
+                  ctx.t('commands.roster.upgrade', {
                     cost: formatNumber(getUpgradeCost(card.level))
                   })
                 )
@@ -187,15 +187,15 @@ export default createCommand({
                 .setStyle(ButtonStyle.Success)
                 .setDisabled(card.requiredXp > card.xp || card.level >= 15)
             )
-          );
+          )
       }
 
       await ctx.reply({
-        flags: "IsComponentsV2",
+        flags: 'IsComponentsV2',
         components: [container.toJSON()]
-      });
+      })
     } else if (ctx.args.reserve) {
-      const page = ctx.args.reserve.page || 1;
+      const page = ctx.args.reserve.page || 1
       const [cards, count] = await Promise.all([
         prisma.card.findMany({
           where: {
@@ -203,7 +203,7 @@ export default createCommand({
             activeRoster: false
           },
           orderBy: {
-            id: "asc"
+            id: 'asc'
           },
           skip: Math.max(0, (page - 1) * 5),
           take: 6
@@ -214,49 +214,49 @@ export default createCommand({
             activeRoster: false
           }
         })
-      ]);
+      ])
 
-      const container = new ContainerBuilder().setAccentColor(6719296);
+      const container = new ContainerBuilder().setAccentColor(6719296)
 
       if (cards.length) {
         container.addTextDisplayComponents((text) =>
           text.setContent(
-            ctx.t("commands.roster.container.reserve_players", {
+            ctx.t('commands.roster.container.reserve_players', {
               total: count
             })
           )
-        );
+        )
 
         for (const card of cards.slice(0, 5)) {
           container
             .addTextDisplayComponents((text) => {
-              const player = ctx.app.players.get(card.playerId);
+              const player = ctx.app.players.get(card.playerId)
 
-              if (!player) return text;
+              if (!player) return text
 
-              const emoji = ctx.app.emoji.get(player.role);
+              const emoji = ctx.app.emoji.get(player.role)
 
               return text.setContent(
-                ctx.t("commands.roster.container.card_content", {
+                ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                  level: card.level >= 15 ? "`MAX`" : card.level,
+                  level: card.level >= 15 ? '`MAX`' : card.level,
                   xp: `${card.xp}/${card.requiredXp}`,
                   progress: createProgressBar(card.xp / card.requiredXp),
                   id: card.playerId
                 })
-              );
+              )
             })
             .addActionRowComponents((row) =>
               row.setComponents(
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Success)
-                  .setLabel(ctx.t("commands.roster.container.button.promote"))
+                  .setLabel(ctx.t('commands.roster.container.button.promote'))
                   .setCustomId(
                     `roster;${ctx.db.profile.userId};promote;${card.id}`
                   ),
                 new ButtonBuilder()
                   .setLabel(
-                    ctx.t("commands.roster.container.button.promote_arena")
+                    ctx.t('commands.roster.container.button.promote_arena')
                   )
                   .setCustomId(
                     `roster;${ctx.author.id};promote-arena;${card.id}`
@@ -264,13 +264,13 @@ export default createCommand({
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
-                  .setLabel(ctx.t("commands.roster.practice"))
+                  .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                   .setStyle(ButtonStyle.Secondary)
                   .setDisabled(card.requiredXp <= card.xp),
                 new ButtonBuilder()
                   .setLabel(
-                    ctx.t("commands.roster.upgrade", {
+                    ctx.t('commands.roster.upgrade', {
                       cost: formatNumber(getUpgradeCost(card.level))
                     })
                   )
@@ -278,49 +278,47 @@ export default createCommand({
                   .setStyle(ButtonStyle.Success)
                   .setDisabled(card.requiredXp > card.xp || card.level >= 15)
               )
-            );
+            )
         }
       }
 
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
-        .setEmoji("1404176223621611572")
+        .setEmoji('1404176223621611572')
         .setCustomId(
           `roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`
-        );
+        )
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
-        .setEmoji("1404176291829121028")
-        .setCustomId(
-          `roster;${ctx.db.profile.userId};reserve;next;${page + 1}`
-        );
+        .setEmoji('1404176291829121028')
+        .setCustomId(`roster;${ctx.db.profile.userId};reserve;next;${page + 1}`)
 
       if (page <= 1) {
-        previous.setDisabled();
+        previous.setDisabled()
       }
       if (cards.length <= 5) {
-        next.setDisabled();
+        next.setDisabled()
       }
 
       const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
         previous,
         next
-      );
+      )
 
       await ctx.reply({
-        flags: "IsComponentsV2",
+        flags: 'IsComponentsV2',
         components: [container, row.toJSON()]
-      });
+      })
     }
   },
   async createMessageComponentInteraction({ ctx, i, t }) {
-    ctx.setFlags(64);
+    ctx.setFlags(64)
 
-    if (ctx.args[2] === "team") {
+    if (ctx.args[2] === 'team') {
       await i.showModal({
         customId: `roster;${ctx.db.profile.userId};team`,
-        title: t("commands.roster.modal.title"),
+        title: t('commands.roster.modal.title'),
         components: [
           {
             type: 1,
@@ -328,7 +326,7 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-1`,
-                label: t("commands.roster.modal.team_name"),
+                label: t('commands.roster.modal.team_name'),
                 style: 1,
                 minLength: 2,
                 maxLength: 20,
@@ -343,7 +341,7 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${i.user.id};team;response-2`,
-                label: t("commands.roster.modal.team_tag"),
+                label: t('commands.roster.modal.team_tag'),
                 style: 1,
                 minLength: 2,
                 maxLength: 4,
@@ -353,21 +351,21 @@ export default createCommand({
             ]
           }
         ]
-      });
-    } else if (ctx.args[2] === "promote") {
+      })
+    } else if (ctx.args[2] === 'promote') {
       const cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id
         }
-      });
-      const card = cards.find((c) => c.id === BigInt(ctx.args[3]));
+      })
+      const card = cards.find((c) => c.id === BigInt(ctx.args[3]))
       if (!card || card.activeRoster) {
-        return await ctx.reply("commands.roster.already_promoted");
+        return await ctx.reply('commands.roster.already_promoted')
       }
 
-      const player = ctx.app.players.get(card.playerId);
+      const player = ctx.app.players.get(card.playerId)
       if (!player) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
 
       if (cards.filter((c) => c.activeRoster).length < 5) {
@@ -378,45 +376,45 @@ export default createCommand({
           data: {
             activeRoster: true
           }
-        });
+        })
 
-        return await ctx.reply("commands.promote.player_promoted", {
+        return await ctx.reply('commands.promote.player_promoted', {
           p: player.name
-        });
+        })
       }
 
-      const options: APISelectMenuOption[] = [];
+      const options: APISelectMenuOption[] = []
 
       for (const c of cards.filter((c) => c.activeRoster)) {
-        const player = ctx.app.players.get(c.playerId);
-        if (!player) break;
+        const player = ctx.app.players.get(c.playerId)
+        if (!player) break
 
         options.push({
           label: `${player.name} (${Math.floor(c.overall)})`,
           description: player.role,
           value: c.id.toString()
-        });
+        })
       }
 
       const menu = new SelectMenuBuilder()
         .setCustomId(`roster;${ctx.db.profile.userId};promote2;${card.id}`)
-        .setOptions(options);
+        .setOptions(options)
 
-      await ctx.reply(menu.build(t("commands.promote.select_player")));
-    } else if (ctx.args[2] === "remove") {
+      await ctx.reply(menu.build(t('commands.promote.select_player')))
+    } else if (ctx.args[2] === 'remove') {
       const card = await prisma.card.findFirst({
         where: {
           profileId: ctx.db.profile.id,
           id: BigInt(ctx.args[3])
         }
-      });
+      })
       if (!card) {
-        return await ctx.reply("commands.remove.player_not_found");
+        return await ctx.reply('commands.remove.player_not_found')
       }
 
-      const p = ctx.app.players.get(card.playerId);
+      const p = ctx.app.players.get(card.playerId)
       if (!p) {
-        return await ctx.reply("commands.remove.player_not_found");
+        return await ctx.reply('commands.remove.player_not_found')
       }
 
       await prisma.card.update({
@@ -426,16 +424,16 @@ export default createCommand({
         data: {
           activeRoster: false
         }
-      });
+      })
 
-      await ctx.reply("commands.remove.player_removed", {
+      await ctx.reply('commands.remove.player_removed', {
         p: p.name
-      });
-    } else if (ctx.args[2] === "promote2") {
-      if (!ctx.interaction.isStringSelectMenu()) return;
+      })
+    } else if (ctx.args[2] === 'promote2') {
+      if (!ctx.interaction.isStringSelectMenu()) return
 
-      const idActive = ctx.interaction.values[0].split(";")[0];
-      const idSub = ctx.args[3];
+      const idActive = ctx.interaction.values[0].split(';')[0]
+      const idSub = ctx.args[3]
 
       const [card] = await prisma.$transaction([
         prisma.card.update({
@@ -454,31 +452,31 @@ export default createCommand({
             activeRoster: false
           }
         })
-      ]);
+      ])
 
-      const p = ctx.app.players.get(card.playerId);
+      const p = ctx.app.players.get(card.playerId)
 
-      await ctx.edit("commands.promote.player_promoted", { p: p?.name });
-    } else if (ctx.args[2] === "practice") {
+      await ctx.edit('commands.promote.player_promoted', { p: p?.name })
+    } else if (ctx.args[2] === 'practice') {
       const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
         }
-      });
+      })
       if (!card) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
       if (!ctx.app.players.get(card.playerId)) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
       if (card.level >= 15) {
-        return await ctx.reply("commands.roster.max_level_reached");
+        return await ctx.reply('commands.roster.max_level_reached')
       }
 
       await i.showModal({
         customId: `roster;${ctx.db.profile.userId};practice;${card.id}`,
-        title: ctx.t("commands.roster.modal.practice.title"),
+        title: ctx.t('commands.roster.modal.practice.title'),
         components: [
           {
             type: 1,
@@ -486,11 +484,11 @@ export default createCommand({
               {
                 type: 4,
                 customId: `roster;${ctx.db.profile.userId};practice;${ctx.args[3]};response`,
-                label: ctx.t("commands.roster.modal.practice.description"),
+                label: ctx.t('commands.roster.modal.practice.description'),
                 style: 1,
                 minLength: 1,
                 required: true,
-                placeholder: ctx.t("commands.roster.modal.practice.max", {
+                placeholder: ctx.t('commands.roster.modal.practice.max', {
                   max: card.requiredXp - card.xp
                 }),
                 value: (card.requiredXp - card.xp).toString()
@@ -498,22 +496,22 @@ export default createCommand({
             ]
           }
         ]
-      });
-    } else if (ctx.args[2] === "promote-arena") {
+      })
+    } else if (ctx.args[2] === 'promote-arena') {
       const cards = await prisma.card.findMany({
         where: {
           profileId: ctx.db.profile.id
         }
-      });
-      const card = cards.find((c) => c.id === BigInt(ctx.args[3]));
+      })
+      const card = cards.find((c) => c.id === BigInt(ctx.args[3]))
 
       if (!card || card.arenaRoster) {
-        return await ctx.reply("commands.roster.already_promoted");
+        return await ctx.reply('commands.roster.already_promoted')
       }
 
-      const player = ctx.app.players.get(card.playerId);
+      const player = ctx.app.players.get(card.playerId)
       if (!player) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
 
       if (cards.filter((c) => c.arenaRoster).length < 5) {
@@ -524,39 +522,39 @@ export default createCommand({
           data: {
             arenaRoster: true
           }
-        });
+        })
 
-        return await ctx.reply("commands.promote.player_promoted", {
+        return await ctx.reply('commands.promote.player_promoted', {
           p: player.name
-        });
+        })
       }
 
-      const options: APISelectMenuOption[] = [];
+      const options: APISelectMenuOption[] = []
 
       for (const c of cards.filter((c) => c.arenaRoster)) {
-        const player = ctx.app.players.get(c.playerId);
+        const player = ctx.app.players.get(c.playerId)
 
-        if (!player) break;
+        if (!player) break
 
         options.push({
           label: `${player.name} (${Math.floor(c.overall)})`,
           description: player.role,
           value: c.id.toString()
-        });
+        })
       }
 
       const menu = new SelectMenuBuilder()
         .setCustomId(
           `roster;${ctx.db.profile.userId};promote-arena2;${card.id}`
         )
-        .setOptions(options);
+        .setOptions(options)
 
-      await ctx.reply(menu.build(t("commands.promote.select_player")));
-    } else if (ctx.args[2] === "promote-arena2") {
-      if (!ctx.interaction.isStringSelectMenu()) return;
+      await ctx.reply(menu.build(t('commands.promote.select_player')))
+    } else if (ctx.args[2] === 'promote-arena2') {
+      if (!ctx.interaction.isStringSelectMenu()) return
 
-      const idActive = ctx.interaction.values[0].split(";")[0];
-      const idSub = ctx.args[3];
+      const idActive = ctx.interaction.values[0].split(';')[0]
+      const idSub = ctx.args[3]
 
       const [card] = await prisma.$transaction([
         prisma.card.update({
@@ -579,42 +577,42 @@ export default createCommand({
             arenaAgentRole: null
           }
         })
-      ]);
+      ])
 
-      const p = ctx.app.players.get(card.playerId);
+      const p = ctx.app.players.get(card.playerId)
 
-      await ctx.edit("commands.promote.player_promoted", { p: p?.name });
-    } else if (ctx.args[2] === "upgrade") {
+      await ctx.edit('commands.promote.player_promoted', { p: p?.name })
+    } else if (ctx.args[2] === 'upgrade') {
       const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
         }
-      });
+      })
       if (!card) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
 
-      const p = ctx.app.players.get(card.playerId);
+      const p = ctx.app.players.get(card.playerId)
       if (!p) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
       if (card.xp < card.requiredXp) {
-        return await ctx.reply("commands.roster.xp_needed");
+        return await ctx.reply('commands.roster.xp_needed')
       }
       if (card.level >= 15) {
-        return await ctx.reply("commands.roster.max_level_reached");
+        return await ctx.reply('commands.roster.max_level_reached')
       }
 
-      const cost = getUpgradeCost(card.level);
+      const cost = getUpgradeCost(card.level)
       if (ctx.db.profile.poisons < cost) {
-        return await ctx.reply("commands.roster.poisons_needed", {
+        return await ctx.reply('commands.roster.poisons_needed', {
           required_poisons: cost.toLocaleString(),
           poisons: ctx.db.profile.poisons.toLocaleString()
-        });
+        })
       }
 
-      const buff = 1 + getBuff(card.level + 1);
+      const buff = 1 + getBuff(card.level + 1)
       await prisma.$transaction([
         prisma.profile.update({
           where: {
@@ -653,15 +651,15 @@ export default createCommand({
             })
           }
         })
-      ]);
+      ])
 
-      await ctx.reply("commands.roster.upgraded", {
+      await ctx.reply('commands.roster.upgraded', {
         level: card.level + 1,
         poisons: cost.toLocaleString(),
         card: p.name
-      });
+      })
     } else {
-      const page = Number(ctx.args[4]) || 1;
+      const page = Number(ctx.args[4]) || 1
       const [cards, count] = await Promise.all([
         prisma.card.findMany({
           where: {
@@ -669,7 +667,7 @@ export default createCommand({
             activeRoster: false
           },
           orderBy: {
-            id: "asc"
+            id: 'asc'
           },
           skip: Math.max(0, (page - 1) * 5),
           take: 6
@@ -680,49 +678,49 @@ export default createCommand({
             activeRoster: false
           }
         })
-      ]);
+      ])
 
-      const container = new ContainerBuilder().setAccentColor(6719296);
+      const container = new ContainerBuilder().setAccentColor(6719296)
 
       if (cards.length) {
         container.addTextDisplayComponents((text) =>
           text.setContent(
-            ctx.t("commands.roster.container.reserve_players", {
+            ctx.t('commands.roster.container.reserve_players', {
               total: count
             })
           )
-        );
+        )
 
         for (const card of cards.slice(0, 5)) {
           container
             .addTextDisplayComponents((text) => {
-              const player = ctx.app.players.get(card.playerId);
+              const player = ctx.app.players.get(card.playerId)
 
-              if (!player) return text;
+              if (!player) return text
 
-              const emoji = ctx.app.emoji.get(player.role);
+              const emoji = ctx.app.emoji.get(player.role)
 
               return text.setContent(
-                ctx.t("commands.roster.container.card_content", {
+                ctx.t('commands.roster.container.card_content', {
                   card: `**${emoji} ${player.name} (${Math.floor(card.overall)}) — ${player.collection}**`,
-                  level: card.level >= 15 ? "`MAX`" : card.level,
+                  level: card.level >= 15 ? '`MAX`' : card.level,
                   xp: `${card.xp}/${card.requiredXp}`,
                   progress: createProgressBar(card.xp / card.requiredXp),
                   id: card.playerId
                 })
-              );
+              )
             })
             .addActionRowComponents((row) =>
               row.setComponents(
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Success)
-                  .setLabel(ctx.t("commands.roster.container.button.promote"))
+                  .setLabel(ctx.t('commands.roster.container.button.promote'))
                   .setCustomId(
                     `roster;${ctx.db.profile.userId};promote;${card.id}`
                   ),
                 new ButtonBuilder()
                   .setLabel(
-                    ctx.t("commands.roster.container.button.promote_arena")
+                    ctx.t('commands.roster.container.button.promote_arena')
                   )
                   .setCustomId(
                     `roster;${ctx.author.id};promote-arena;${card.id}`
@@ -730,13 +728,13 @@ export default createCommand({
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
-                  .setLabel(ctx.t("commands.roster.practice"))
+                  .setLabel(ctx.t('commands.roster.practice'))
                   .setCustomId(`roster;${ctx.author.id};practice;${card.id}`)
                   .setStyle(ButtonStyle.Secondary)
                   .setDisabled(card.requiredXp <= card.xp),
                 new ButtonBuilder()
                   .setLabel(
-                    ctx.t("commands.roster.upgrade", {
+                    ctx.t('commands.roster.upgrade', {
                       cost: formatNumber(getUpgradeCost(card.level))
                     })
                   )
@@ -744,52 +742,50 @@ export default createCommand({
                   .setStyle(ButtonStyle.Success)
                   .setDisabled(card.requiredXp > card.xp || card.level >= 15)
               )
-            );
+            )
         }
       }
 
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
-        .setEmoji("1404176223621611572")
+        .setEmoji('1404176223621611572')
         .setCustomId(
           `roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`
-        );
+        )
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
-        .setEmoji("1404176291829121028")
-        .setCustomId(
-          `roster;${ctx.db.profile.userId};reserve;next;${page + 1}`
-        );
+        .setEmoji('1404176291829121028')
+        .setCustomId(`roster;${ctx.db.profile.userId};reserve;next;${page + 1}`)
 
       if (page <= 1) {
-        previous.setDisabled();
+        previous.setDisabled()
       }
       if (cards.length <= 5) {
-        next.setDisabled();
+        next.setDisabled()
       }
 
       const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
         previous,
         next
-      );
+      )
 
       await ctx.edit({
-        flags: "IsComponentsV2",
+        flags: 'IsComponentsV2',
         components: [container.toJSON(), row.toJSON()]
-      });
+      })
     }
   },
   async createModalSubmitInteraction({ ctx, i }) {
-    ctx.setFlags(64);
+    ctx.setFlags(64)
 
-    if (ctx.args[2] === "team") {
+    if (ctx.args[2] === 'team') {
       const name = i.fields.getTextInputValue(
         `roster;${i.user.id};team;response-1`
-      );
+      )
       const tag = i.fields.getTextInputValue(
         `roster;${i.user.id};team;response-2`
-      );
+      )
 
       await prisma.profile.update({
         where: {
@@ -802,50 +798,50 @@ export default createCommand({
           teamName: name,
           teamTag: tag
         }
-      });
-      await ctx.reply("commands.roster.team_info_changed", { name, tag });
-    } else if (ctx.args[2] === "practice") {
+      })
+      await ctx.reply('commands.roster.team_info_changed', { name, tag })
+    } else if (ctx.args[2] === 'practice') {
       const card = await prisma.card.findFirst({
         where: {
           id: BigInt(ctx.args[3]),
           profileId: ctx.db.profile.id
         }
-      });
+      })
       if (!card) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
 
-      const p = ctx.app.players.get(card.playerId);
+      const p = ctx.app.players.get(card.playerId)
       if (!p) {
-        return await ctx.reply("commands.promote.player_not_found");
+        return await ctx.reply('commands.promote.player_not_found')
       }
 
       const value = Number(
         i.fields.getTextInputValue(
           `roster;${i.user.id};practice;${card.id};response`
         )
-      );
+      )
 
       if (card.xp >= card.requiredXp) {
-        return await ctx.reply("commands.roster.max_xp_reached");
+        return await ctx.reply('commands.roster.max_xp_reached')
       }
       if (
         Number.isNaN(value) ||
         value > card.requiredXp - card.xp ||
         value <= 0
       ) {
-        return await ctx.reply("commands.roster.invalid_value", {
+        return await ctx.reply('commands.roster.invalid_value', {
           value: card.requiredXp - card.xp
-        });
+        })
       }
 
-      const decrementValue = value * 0.5;
+      const decrementValue = value * 0.5
 
       if (ctx.db.profile.fates < decrementValue) {
-        return await ctx.reply("commands.roster.value_too_short", {
+        return await ctx.reply('commands.roster.value_too_short', {
           required_fates: decrementValue.toLocaleString(),
           fates: ctx.db.profile.fates.toLocaleString()
-        });
+        })
       }
 
       await prisma.$transaction([
@@ -869,13 +865,13 @@ export default createCommand({
             }
           }
         })
-      ]);
+      ])
 
-      await ctx.reply("commands.roster.practiced", {
+      await ctx.reply('commands.roster.practiced', {
         xp: card.xp + value,
         cost: decrementValue.toLocaleString(),
         card: p.name
-      });
+      })
     }
   }
-});
+})

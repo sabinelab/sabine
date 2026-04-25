@@ -1,4 +1,4 @@
-name: Biome Format and Check
+name: oxc format and check
 on:
   push:
     branches: ["**"]
@@ -20,75 +20,68 @@ on:
       - '.github/**'
 
 jobs:
-  format-and-review:
+  format-and-lint:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     outputs:
       final_sha: ${{ steps.capture-final-sha.outputs.sha }}
+
     permissions:
       contents: write
       pull-requests: write
+
     steps:
-      - name: Checkout code
+      - name: checkout code
         uses: actions/checkout@main
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref || github.ref }}
           persist-credentials: true
-          
-      - name: Setup Biome
-        uses: biomejs/setup-biome@main
-        with:
-          version: latest
-          
-      - name: Attempt to implement Biome fixes
-        run: |
-          biome check --write --no-errors-on-unmatched .
 
-      - name: Get co-author noreply email
+      - name: setup Bun
+        uses: oven-sh/setup-bun@main
+        with:
+          bun-version-file: package.json
+
+      - name: install dependencies
+        run: bun ci
+
+      - name: run oxlint and oxfmt autofix
         if: github.event_name == 'push'
         run: |
-          ID=$(curl -s \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/users/levisantosp | jq -r .id)
-          echo "COAUTHOR_EMAIL=${ID}+levisantosp@users.noreply.github.com" >> $GITHUB_ENV
-          
-      - name: Commit changes
-        if: github.event_name == 'push'
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: |
-            style: run biome auto-fix
+          bun lint --fix
+          bun fmt
 
-            Co-authored-by: levisantosp <${{ env.COAUTHOR_EMAIL }}>
+      - name: commit changes
+        if: github.event_name == 'push'
+        uses: stefanzweifel/git-auto-commit-action@master
+        with:
+          commit_message: 'style: run oxc autofix'
           commit_user_name: github-actions[bot]
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
 
-      - name: Capture final commit SHA
+      - name: capture final commit sha
         id: capture-final-sha
         if: github.event_name == 'push'
         run: |
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          
-      - name: Run Biome via Reviewdog (PR Only)
+
+      - name: check formatting
         if: github.event_name == 'pull_request'
-        uses: mongolyy/reviewdog-action-biome@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          filter_mode: diff_context
-          fail_level: error
-          workdir: .
+        run: bun fmt --check
+
+      - name: run oxlint with github annotations
+        if: github.event_name == 'pull_request'
+        run: bun lint --format=github
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: format-and-review
+    needs: format-and-lint
     uses: ./.github/workflows/deploy.yml
     with:
       base_sha: ${{ github.event.before }}
-      deploy_sha: ${{ needs.format-and-review.outputs.final_sha }}
+      deploy_sha: ${{ needs.format-and-lint.outputs.final_sha }}
       source_event_name: ${{ github.event_name }}
       source_ref: ${{ github.ref }}
     secrets: inherit

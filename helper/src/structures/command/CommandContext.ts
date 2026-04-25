@@ -1,43 +1,43 @@
-import type { GuildSchema, UserSchema } from "@db";
-import * as Discord from "discord.js";
-import type App from "../app/App";
+import type { GuildSchema, UserSchema } from '@db'
+import * as Discord from 'discord.js'
+import type App from '../app/App'
 
 type Database = {
-  guild: GuildSchema;
-  user: UserSchema;
-};
+  guild: GuildSchema
+  user: UserSchema
+}
 
 type CommandContextOptions<T> = {
-  app: App;
-  guild: Discord.Guild;
-  data: Discord.ChatInputCommandInteraction | Discord.Message<true>;
-  locale: string;
-  db: Database;
-  args: T;
-  author: Discord.User;
-};
+  app: App
+  guild: Discord.Guild
+  data: Discord.ChatInputCommandInteraction | Discord.Message<true>
+  locale: string
+  db: Database
+  args: T
+  author: Discord.User
+}
 
 export default class CommandContext<T> {
-  public app: App;
-  public guild: Discord.Guild;
-  public data: Discord.ChatInputCommandInteraction | Discord.Message<true>;
-  public locale: string;
-  public db: Database;
-  public args: T;
-  public author: Discord.User;
+  public app: App
+  public guild: Discord.Guild
+  public data: Discord.ChatInputCommandInteraction | Discord.Message<true>
+  public locale: string
+  public db: Database
+  public args: T
+  public author: Discord.User
 
   public constructor(options: CommandContextOptions<T>) {
-    this.app = options.app;
-    this.guild = options.guild;
-    this.data = options.data;
-    this.locale = options.locale;
-    this.db = options.db;
-    this.args = options.args;
-    this.author = options.author;
+    this.app = options.app
+    this.guild = options.guild
+    this.data = options.data
+    this.locale = options.locale
+    this.db = options.db
+    this.args = options.args
+    this.author = options.author
   }
 
   get message() {
-    return this.data instanceof Discord.Message ? this.data : null;
+    return this.data instanceof Discord.Message ? this.data : null
   }
 
   public async send<T extends string>(
@@ -49,39 +49,39 @@ export default class CommandContext<T> {
   ): Promise<Discord.Message | null | undefined> {
     if (this.data instanceof Discord.BaseInteraction) {
       const payload =
-        typeof content === "string"
+        typeof content === 'string'
           ? {
               content
             }
-          : (content as Discord.InteractionReplyOptions);
+          : (content as Discord.InteractionReplyOptions)
 
       if (files) {
-        payload.files = files;
+        payload.files = files
       }
 
       if (this.data.replied || this.data.deferred) {
-        return await this.data.followUp(payload);
+        return await this.data.followUp(payload)
       } else {
         return (
           await this.data.reply({
             ...payload,
             withResponse: true
           })
-        ).resource?.message;
+        ).resource?.message
       }
     } else {
       const payload =
-        typeof content === "string"
+        typeof content === 'string'
           ? {
               content
             }
-          : (content as Discord.MessageReplyOptions);
+          : (content as Discord.MessageReplyOptions)
 
       if (files) {
-        payload.files = files;
+        payload.files = files
       }
 
-      return await this.data.channel.send(payload);
+      return await this.data.channel.send(payload)
     }
   }
 
@@ -97,30 +97,30 @@ export default class CommandContext<T> {
   ): Promise<Discord.Message | null | undefined> {
     if (this.data instanceof Discord.BaseInteraction) {
       const payload =
-        typeof content === "string"
+        typeof content === 'string'
           ? {
               content
             }
-          : (content as Discord.InteractionEditReplyOptions);
+          : (content as Discord.InteractionEditReplyOptions)
 
       if (files) {
-        payload.files = files;
+        payload.files = files
       }
 
-      return await this.data.editReply(payload);
+      return await this.data.editReply(payload)
     } else {
       const payload =
-        typeof content === "string"
+        typeof content === 'string'
           ? {
               content
             }
-          : (content as Discord.MessageEditOptions);
+          : (content as Discord.MessageEditOptions)
 
       if (files) {
-        payload.files = files;
+        payload.files = files
       }
 
-      return await this.data.edit(payload);
+      return await this.data.edit(payload)
     }
   }
 }

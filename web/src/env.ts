@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const schema = z.object({
   AUTH: z.string(),
@@ -6,6 +6,6 @@ const schema = z.object({
   INVITE: z.string(),
   SUPPORT: z.string(),
   CDN_URL: z.string()
-});
+})
 
-export const env = schema.parse(process.env);
+export const env = schema.parse(process.env)

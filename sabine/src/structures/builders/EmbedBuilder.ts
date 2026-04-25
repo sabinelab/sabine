@@ -4,42 +4,42 @@ import {
   type EmbedAuthorOptions,
   type EmbedFooterOptions,
   type InteractionReplyOptions
-} from "discord.js";
+} from 'discord.js'
 
 export default class EmbedBuilder extends DJSEmbedBuilder {
   public constructor() {
-    super();
-    super.setColor(6719296);
+    super()
+    super.setColor(6719296)
   }
 
   public setAuthor(options: EmbedAuthorOptions) {
-    super.setAuthor(options);
+    super.setAuthor(options)
 
-    return this;
+    return this
   }
 
   public setTitle(title: string) {
-    super.setTitle(title);
+    super.setTitle(title)
 
-    return this;
+    return this
   }
 
   public setDesc(desc: string) {
-    super.setDescription(desc);
+    super.setDescription(desc)
 
-    return this;
+    return this
   }
 
   public addField(name: string, value: string, inline = false) {
-    super.addFields({ name, value, inline });
+    super.addFields({ name, value, inline })
 
-    return this;
+    return this
   }
 
   public addFields(fields: APIEmbedField[]) {
-    super.addFields(fields);
+    super.addFields(fields)
 
-    return this;
+    return this
   }
 
   public setField(name: string, value: string, inline = false) {
@@ -47,53 +47,53 @@ export default class EmbedBuilder extends DJSEmbedBuilder {
       name,
       value,
       inline
-    });
+    })
 
-    return this;
+    return this
   }
 
   public setFields(...fields: APIEmbedField[]) {
-    super.setFields(fields);
+    super.setFields(fields)
 
-    return this;
+    return this
   }
 
   public setImage(url: string) {
-    super.setImage(url);
+    super.setImage(url)
 
-    return this;
+    return this
   }
 
   public setThumb(url: string) {
-    super.setThumbnail(url);
+    super.setThumbnail(url)
 
-    return this;
+    return this
   }
 
   public setTimestamp(timestamp = new Date()) {
-    super.setTimestamp(timestamp);
+    super.setTimestamp(timestamp)
 
-    return this;
+    return this
   }
 
   public setFooter(footer: EmbedFooterOptions) {
-    super.setFooter(footer);
+    super.setFooter(footer)
 
-    return this;
+    return this
   }
 
   public build(content?: string | InteractionReplyOptions) {
-    if (typeof content === "string" || !content) {
+    if (typeof content === 'string' || !content) {
       return {
-        content: content ?? "",
+        content: content ?? '',
         embeds: [this.toJSON()],
         components: []
-      };
+      }
     } else {
       return {
         embeds: [this.toJSON()],
         ...content
-      };
+      }
     }
   }
 }

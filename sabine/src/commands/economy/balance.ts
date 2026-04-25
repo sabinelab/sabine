@@ -1,18 +1,18 @@
-import createCommand from "../../structures/command/createCommand";
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: "balance",
-  aliases: ["bal"],
+  name: 'balance',
+  aliases: ['bal'],
   nameLocalizations: {
-    "pt-BR": "saldo"
+    'pt-BR': 'saldo'
   },
-  description: "Check your balance",
+  description: 'Check your balance',
   descriptionLocalizations: {
-    "pt-BR": "Veja seu saldo"
+    'pt-BR': 'Veja seu saldo'
   },
-  category: "economy",
-  syntax: "balance",
-  examples: ["balance"],
+  category: 'economy',
+  syntax: 'balance',
+  examples: ['balance'],
   async run({ ctx, app }) {
     const profilesAheadCount = await app.prisma.profile.count({
       where: {
@@ -31,14 +31,14 @@ export default createCommand({
           }
         ]
       }
-    });
+    })
 
-    await ctx.reply("commands.balance.res", {
+    await ctx.reply('commands.balance.res', {
       c: ctx.db.profile.poisons.toLocaleString(),
       f: ctx.db.profile.fates.toLocaleString(),
       p: profilesAheadCount + 1,
-      cmd: `</leaderboard poisons:${app.commands.get("leaderboard")?.id}>`,
-      cmd2: `</daily:${app.commands.get("daily")?.id}>`
-    });
+      cmd: `</leaderboard poisons:${app.commands.get('leaderboard')?.id}>`,
+      cmd2: `</daily:${app.commands.get('daily')?.id}>`
+    })
   }
-});
+})

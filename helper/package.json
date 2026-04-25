@@ -1,4 +1,21 @@
 {
+  "name": "@sabinelab/helper",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "bun test.ts",
+    "start": "bun src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "build": "oxfmt --check && oxlint && tsc",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "check": "tsc"
+  },
   "dependencies": {
     "@iamtraction/google-translate": "^2.0.1",
     "@sabinelab/prisma": "workspace:*",
@@ -13,22 +30,5 @@
     "mercadopago": "^2.12.0",
     "moment": "^2.30.1",
     "stripe": "^22.0.2"
-  },
-  "name": "@sabinelab/helper",
-  "version": "0.0.0",
-  "main": "src/index.ts",
-  "scripts": {
-    "test": "bun test.ts",
-    "start": "bun src/index.ts",
-    "dev": "bun --watch src/index.ts",
-    "build": "biome ci && tsc",
-    "lint": "biome ci",
-    "format": "biome check --write",
-    "check": "tsc"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module"
+  }
 }

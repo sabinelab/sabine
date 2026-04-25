@@ -5,7 +5,6 @@ dist/
 prisma/src/schemas/generated
 api/prisma/generated
 api/prisma/database.db
-.github/
 .next/
 tsconfig.tsbuildinfo
 .turbo/

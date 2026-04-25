@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #1a1a1a;
@@ -29,7 +29,7 @@ html {
 }
 
 .markdown h2::before {
-  content: "";
+  content: '';
   @apply w-2 h-8 bg-green-500 mr-4 rounded-sm shadow-[0_0_10px_#22c55e80];
 }
 
@@ -38,7 +38,7 @@ html {
 }
 
 .markdown h3::before {
-  content: "#";
+  content: '#';
   @apply mr-2 text-green-500/50;
 }
 
@@ -73,7 +73,7 @@ html {
 }
 
 .markdown ul > li::before {
-  content: "";
+  content: '';
   @apply absolute left-0 top-2.5 w-1.5 h-1.5 bg-green-500 rotate-45 rounded-[1px];
 }
 
@@ -173,12 +173,12 @@ html {
   @apply pl-0 flex items-start;
 }
 
-.markdown input[type="checkbox"] {
+.markdown input[type='checkbox'] {
   @apply mt-1.5 mr-3 appearance-none w-4 h-4 rounded border border-gray-600 bg-gray-800 checked:bg-green-500 checked:border-green-500 transition-colors cursor-not-allowed relative;
 }
 
-.markdown input[type="checkbox"]:checked::after {
-  content: "";
+.markdown input[type='checkbox']:checked::after {
+  content: '';
   @apply absolute left-1 top-0.5 w-1.5 h-2 border-r-2 border-b-2 border-black rotate-45;
 }
 

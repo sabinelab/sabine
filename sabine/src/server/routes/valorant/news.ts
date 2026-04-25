@@ -1,32 +1,32 @@
-import type { Job } from "bullmq";
-import { Elysia } from "elysia";
-import { z } from "zod";
-import { type NewsPayload, newsQueue } from "@/structures/queue/news-queue";
+import type { Job } from 'bullmq'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
+import { type NewsPayload, newsQueue } from '@/structures/queue/news-queue'
 
 export const news = new Elysia().post(
-  "/webhooks/news/valorant",
+  '/webhooks/news/valorant',
   async (req) => {
-    const promises: Promise<Job<NewsPayload>>[] = [];
+    const promises: Promise<Job<NewsPayload>>[] = []
     for (const data of req.body) {
       promises.push(
         newsQueue.add(
-          "news",
+          'news',
           {
             ...data,
-            game: "valorant"
+            game: 'valorant'
           },
           {
             removeOnComplete: true,
             removeOnFail: true
           }
         )
-      );
+      )
     }
 
-    await Promise.allSettled(promises);
+    await Promise.allSettled(promises)
 
-    req.set.status = "OK";
-    return { ok: true };
+    req.set.status = 'OK'
+    return { ok: true }
   },
   {
     body: z.array(
@@ -38,4 +38,4 @@ export const news = new Elysia().post(
       })
     )
   }
-);
+)

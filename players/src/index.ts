@@ -1,90 +1,90 @@
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 export type Player = {
-  id: number;
-  name: string;
-  collection: string;
-  team: string;
-  country: string;
-  role: string;
-  aim: number;
-  hs: number;
-  movement: number;
-  aggression: number;
-  acs: number;
-  gamesense: number;
-  ovr: number;
-  price: number;
-};
+  id: number
+  name: string
+  collection: string
+  team: string
+  country: string
+  role: string
+  aim: number
+  hs: number
+  movement: number
+  aggression: number
+  acs: number
+  gamesense: number
+  ovr: number
+  price: number
+}
 
 export const getPlayers = () => {
   const lines = fs
-    .readFileSync(path.join(__dirname, "../assets/players.csv"))
+    .readFileSync(path.join(__dirname, '../assets/players.csv'))
     .toString()
-    .split("\n");
+    .split('\n')
   const headers = lines
     .shift()
-    ?.split(",")
-    .map((h) => h.trim());
-  const data: Player[] = [];
+    ?.split(',')
+    .map((h) => h.trim())
+  const data: Player[] = []
 
-  if (!headers) return [];
+  if (!headers) return []
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]?.trim();
-    if (!line) continue;
+    const line = lines[i]?.trim()
+    if (!line) continue
 
-    const attr = {} as Player;
-    const values = lines[i].split(",");
+    const attr = {} as Player
+    const values = lines[i].split(',')
 
     for (let i = 0; i < values.length; i++) {
-      let value: string | number = values[i];
+      let value: string | number = values[i]
 
       if (!Number.isNaN(Number(value))) {
-        value = Number(values[i]);
+        value = Number(values[i])
       }
 
-      attr[headers[i] as keyof Player] = value as never;
+      attr[headers[i] as keyof Player] = value as never
     }
 
-    attr.ovr = calcPlayerOvr(attr);
-    attr.price = calcPlayerPrice(attr);
+    attr.ovr = calcPlayerOvr(attr)
+    attr.price = calcPlayerPrice(attr)
 
-    data.push(attr);
+    data.push(attr)
   }
 
-  return data;
-};
+  return data
+}
 
 export const getPlayer = (id: string | number) => {
-  return getPlayers().find((player) => player.id === Number(id));
-};
+  return getPlayers().find((player) => player.id === Number(id))
+}
 
 export const calcPlayerPrice = (player: Player, devalue?: boolean) => {
-  const overall = calcPlayerOvr(player);
+  const overall = calcPlayerOvr(player)
 
-  let price = 1.06 ** overall * 10000;
+  let price = 1.06 ** overall * 10000
 
-  if (devalue) price *= 0.1;
+  if (devalue) price *= 0.1
 
-  return Math.floor(price);
-};
+  return Math.floor(price)
+}
 
 export const calcPlayerOvr = (player: Player) => {
   const weights: Record<
     string,
     {
-      aim: number;
-      hs: number;
-      movement: number;
-      aggression: number;
-      acs: number;
-      gamesense: number;
+      aim: number
+      hs: number
+      movement: number
+      aggression: number
+      acs: number
+      gamesense: number
     }
   > = {
     duelist: {
@@ -127,7 +127,7 @@ export const calcPlayerOvr = (player: Player) => {
       acs: 0.17,
       gamesense: 0.16
     }
-  };
+  }
 
   const roleWeights: Record<string, number> = weights[player.role] ?? {
     aim: 1 / 6,
@@ -136,7 +136,7 @@ export const calcPlayerOvr = (player: Player) => {
     aggression: 1 / 6,
     ACS: 1 / 6,
     gamesense: 1 / 6
-  };
+  }
 
   const stats: Record<string, number> = {
     aim: player.aim || 0,
@@ -145,13 +145,13 @@ export const calcPlayerOvr = (player: Player) => {
     aggression: player.aggression || 0,
     acs: player.acs || 0,
     gamesense: player.gamesense || 0
-  };
-
-  let overall = 0;
-
-  for (const statName in stats) {
-    overall += stats[statName] * roleWeights[statName];
   }
 
-  return overall;
-};
+  let overall = 0
+
+  for (const statName in stats) {
+    overall += stats[statName] * roleWeights[statName]
+  }
+
+  return overall
+}

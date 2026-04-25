@@ -1,31 +1,31 @@
-import { prisma } from "@db";
-import type { $Enums } from "@generated";
-import t from "@i18n";
-import type { NewsData } from "@types";
-import { Queue } from "bullmq";
-import { ButtonStyle, REST, Routes } from "discord.js";
-import pLimit from "p-limit";
-import { env } from "@/env";
-import ButtonBuilder from "@/structures/builders/ButtonBuilder";
-import EmbedBuilder from "@/structures/builders/EmbedBuilder";
+import { prisma } from '@db'
+import type { $Enums } from '@generated'
+import t from '@i18n'
+import type { NewsData } from '@types'
+import { Queue } from 'bullmq'
+import { ButtonStyle, REST, Routes } from 'discord.js'
+import pLimit from 'p-limit'
+import { env } from '@/env'
+import ButtonBuilder from '@/structures/builders/ButtonBuilder'
+import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 
 export type NewsPayload = NewsData & {
-  game: $Enums.Game;
-};
+  game: $Enums.Game
+}
 
-export const newsQueue = new Queue<NewsPayload>("news", {
+export const newsQueue = new Queue<NewsPayload>('news', {
   connection: {
     url: env.REDIS_URL
   }
-});
+})
 
-const rest = new REST().setToken(env.BOT_TOKEN);
-const limit = pLimit(25);
+const rest = new REST().setToken(env.BOT_TOKEN)
+const limit = pLimit(25)
 
 export const processNews = async (data: NewsPayload) => {
-  let cursor: string | undefined;
+  let cursor: string | undefined
   const key =
-    data.game === "valorant" ? "valorantNewsChannel" : "lolNewsChannel";
+    data.game === 'valorant' ? 'valorantNewsChannel' : 'lolNewsChannel'
 
   while (true) {
     const guilds = await prisma.guild.findMany({
@@ -37,36 +37,36 @@ export const processNews = async (data: NewsPayload) => {
           }
         : undefined,
       orderBy: {
-        id: "asc"
+        id: 'asc'
       },
       where: {
         [key]: {
           not: null
         }
       }
-    });
+    })
 
-    if (!guilds.length) break;
+    if (!guilds.length) break
 
-    const messages: Promise<unknown>[] = [];
+    const messages: Promise<unknown>[] = []
 
     for (const guild of guilds) {
       const channelId =
-        data.game === "valorant"
+        data.game === 'valorant'
           ? guild.valorantNewsChannel
-          : guild.lolNewsChannel;
-      if (!channelId) continue;
+          : guild.lolNewsChannel
+      if (!channelId) continue
 
-      const embed = new EmbedBuilder().setTitle(data.title);
+      const embed = new EmbedBuilder().setTitle(data.title)
 
       if (data.description) {
-        embed.setDesc(data.description);
+        embed.setDesc(data.description)
       }
 
       const button = new ButtonBuilder()
         .setStyle(ButtonStyle.Link)
-        .setLabel(t(guild.lang, "helper.source"))
-        .setURL(data.url);
+        .setLabel(t(guild.lang, 'helper.source'))
+        .setURL(data.url)
 
       messages.push(
         limit(() =>
@@ -82,10 +82,10 @@ export const processNews = async (data: NewsPayload) => {
             }
           })
         )
-      );
+      )
     }
 
-    await Promise.allSettled(messages);
-    cursor = guilds[guilds.length - 1].id;
+    await Promise.allSettled(messages)
+    cursor = guilds[guilds.length - 1].id
   }
-};
+}

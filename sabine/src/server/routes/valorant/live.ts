@@ -1,32 +1,32 @@
-import type { Job } from "bullmq";
-import { Elysia } from "elysia";
-import { z } from "zod";
-import { type LivePayload, liveQueue } from "@/structures/queue/live-queue";
+import type { Job } from 'bullmq'
+import { Elysia } from 'elysia'
+import { z } from 'zod'
+import { type LivePayload, liveQueue } from '@/structures/queue/live-queue'
 
 export const valorantLive = new Elysia().post(
-  "/webhooks/live/valorant",
+  '/webhooks/live/valorant',
   async (req) => {
-    const promises: Promise<Job<LivePayload>>[] = [];
+    const promises: Promise<Job<LivePayload>>[] = []
     for (const data of req.body) {
       promises.push(
         liveQueue.add(
-          "live",
+          'live',
           {
             ...data,
-            game: "valorant"
+            game: 'valorant'
           },
           {
             removeOnComplete: true,
             removeOnFail: true
           }
         )
-      );
+      )
     }
 
-    await Promise.allSettled(promises);
+    await Promise.allSettled(promises)
 
-    req.set.status = "OK";
-    return { ok: true };
+    req.set.status = 'OK'
+    return { ok: true }
   },
   {
     body: z.array(
@@ -50,4 +50,4 @@ export const valorantLive = new Elysia().post(
       })
     )
   }
-);
+)
