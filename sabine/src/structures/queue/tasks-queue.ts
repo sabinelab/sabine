@@ -652,7 +652,7 @@ const sendValorantTBDMatches = async (app: App) => {
       const channelBatches = new Map<string, any[]>()
 
       for (const match of guild.tbdMatches) {
-        const found = res.find(d => d.id === match.id)
+        const found = res.find((d) => d.id === match.id)
         if (!found) continue
         const data = {
           ...found,

@@ -207,7 +207,7 @@ manager.on('shardCreate', async (shard) => {
 
   shard.on('error', async (error) => {
     if (!webhook) return
-    
+
     const embed = new EmbedBuilder()
       .setTitle('Shard Error')
       .setDesc(
