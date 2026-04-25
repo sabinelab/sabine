@@ -1,4 +1,4 @@
-import { prisma } from '../packages/prisma'
+import { prisma } from '../prisma'
 
 export default async function (version, content) {
   if (!version) throw new Error('version is needed')
