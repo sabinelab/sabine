@@ -1,6 +1,15 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["dist", "generated", "postgres", ".github"],
+  "ignorePatterns": [
+    "dist",
+    "generated",
+    "postgres",
+    ".github",
+    ".next",
+    ".nuxt",
+    ".output",
+    "next-env.d.ts",
+  ],
   "singleQuote": true,
   "jsxSingleQuote": true,
   "semi": false,

@@ -1,6 +1,13 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": ["dist", "generated", "postgres"],
+  "ignorePatterns": [
+    "dist",
+    "generated",
+    "postgres",
+    ".next",
+    ".nuxt",
+    ".output"
+  ],
   "plugins": [
     "typescript",
     "unicorn",
