@@ -29,7 +29,9 @@ export default defineNuxtConfig({
         '@vueuse/core',
         'reka-ui',
         'clsx',
-        'tailwind-merge'
+        'tailwind-merge',
+        'oh-vue-icons/icons',
+        'zod'
       ]
     }
   },
