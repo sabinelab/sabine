@@ -29,5 +29,9 @@ export default defineNuxtConfig({
       path: '~/components',
       extensions: ['vue']
     }
-  ]
+  ],
+  modules: ['@nuxt/fonts', '@nuxt/image'],
+  experimental: {
+    typedPages: true
+  }
 })
