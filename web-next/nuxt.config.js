@@ -54,5 +54,23 @@ export default defineNuxtConfig({
         file: 'en-us.json'
       }
     ]
+  },
+  app: {
+    head: {
+      meta: [
+        {
+          name: 'google-adsense-account',
+          content: 'ca-pub-3346744916189692'
+        }
+      ],
+      script: [
+        {
+          key: 'adsense',
+          async: true,
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3346744916189692',
+          crossorigin: 'anonymous'
+        }
+      ]
+    }
   }
 })
