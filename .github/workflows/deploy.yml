@@ -60,6 +60,7 @@ jobs:
               - 'prisma.config.js'
               - 'prisma/**'
               - 'packages/**'
+              - '.github/workflows/deploy.yml'
 
       - name: setup ssh
         run: |
