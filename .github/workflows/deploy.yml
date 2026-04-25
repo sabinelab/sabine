@@ -1,4 +1,4 @@
-name: Deploy Apps
+name: deploy apps
 on:
   workflow_call:
     inputs:
@@ -129,7 +129,7 @@ jobs:
           echo "Deploying: $SERVICES_TO_DEPLOY"
 
           # Fetch and deploy the exact commit that passed the OXC workflow.
-          ssh prod "cd sabine/sabine && git fetch origin main && git checkout --detach \"$DEPLOY_SHA\" && SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
+          ssh prod "cd sabine/sabine && git fetch origin main && git checkout --detach \"$DEPLOY_SHA\" && DEPLOY_SHA=\"$DEPLOY_SHA\" SERVICES=\"$SERVICES_TO_DEPLOY\" DEPLOY_DELAY=\"$DEPLOY_DELAY_SECONDS\" bash -c '
             set -euo pipefail
 
             git fetch origin main
