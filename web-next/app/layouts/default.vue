@@ -108,10 +108,7 @@ const items = [
             />
           </SelectTrigger>
 
-          <SelectContent
-            align="end"
-            class="bg-[#111] text-white border-none"
-          >
+          <SelectContent align="end" class="bg-[#111] text-white border-none">
             <SelectItem
               value="en-us"
               class="cursor-pointer transition duration-300 hover:bg-white/10 focus:bg-white/10 focus:text-white"
