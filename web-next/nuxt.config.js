@@ -1,3 +1,5 @@
+import tailwind from '@tailwindcss/vite'
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
@@ -17,5 +19,15 @@ export default defineNuxtConfig({
         console.warn(message)
       }
     }
-  }
+  },
+  vite: {
+    plugins: [tailwind()]
+  },
+  css: ['~/assets/css/main.css'],
+  components: [
+    {
+      path: '~/components',
+      extensions: ['vue']
+    }
+  ]
 })
