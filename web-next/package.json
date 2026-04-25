@@ -12,6 +12,7 @@
     "lint": "oxlint"
   },
   "dependencies": {
+    "@iconify/vue": "^5.0.0",
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/image": "^2.0.0",
     "@nuxtjs/i18n": "^10.3.0",
