@@ -55,7 +55,6 @@ jobs:
               - 'turbo.json'
               - '.oxfmtrc.json'
               - '.oxlintrc.json'
-              - 'bun.lock'
               - 'docker-compose.yml'
               - 'prisma.config.js'
               - 'prisma/**'
