@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const i18nPath = path.join(__dirname, '../apps/sabine/src/i18n')
+const i18nPath = path.join(__dirname, '../sabine/src/i18n')
 
 const loadJson = (filename) => {
   try {
