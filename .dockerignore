@@ -1,5 +1,4 @@
 scripts/
-.gitignore
 *test*
 **/node_modules
 prisma/generated/

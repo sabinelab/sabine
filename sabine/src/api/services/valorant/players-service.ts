@@ -1,25 +1,25 @@
-import type { PlayerData, PlayersData } from "@types";
-import { env } from "@/env";
+import type { PlayerData, PlayersData } from '@types'
+import { env } from '@/env'
 
 export const valorantPlayers = {
   async get() {
-    const response = await fetch(env.API_URL + "/players/valorant", {
+    const response = await fetch(env.API_URL + '/players/valorant', {
       headers: {
         authorization: env.AUTH
       }
-    });
-    const data: PlayersData[] = await response.json();
+    })
+    const data: PlayersData[] = await response.json()
 
-    return data;
+    return data
   },
   async getById(id: string | number) {
-    const response = await fetch(env.API_URL + "/players/valorant?id=" + id, {
+    const response = await fetch(env.API_URL + '/players/valorant?id=' + id, {
       headers: {
         authorization: env.AUTH
       }
-    });
-    const data: PlayerData = await response.json();
+    })
+    const data: PlayerData = await response.json()
 
-    return data;
+    return data
   }
-};
+}

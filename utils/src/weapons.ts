@@ -1,6 +1,6 @@
 export const valorantWeapons = [
   {
-    name: "Classic",
+    name: 'Classic',
     price: 0,
     damage: {
       head: 78,
@@ -10,7 +10,7 @@ export const valorantWeapons = [
     rate_fire: 148.15 / 10
   },
   {
-    name: "Shorty",
+    name: 'Shorty',
     price: 200,
     damage: {
       head: 22,
@@ -20,7 +20,7 @@ export const valorantWeapons = [
     rate_fire: 303.03 / 10
   },
   {
-    name: "Frenzy",
+    name: 'Frenzy',
     price: 450,
     damage: {
       head: 78,
@@ -30,7 +30,7 @@ export const valorantWeapons = [
     rate_fire: 100 / 10
   },
   {
-    name: "Ghost",
+    name: 'Ghost',
     price: 500,
     damage: {
       head: 105,
@@ -40,7 +40,7 @@ export const valorantWeapons = [
     rate_fire: 148.15 / 10
   },
   {
-    name: "Bandit",
+    name: 'Bandit',
     price: 600,
     damage: {
       head: 152,
@@ -50,7 +50,7 @@ export const valorantWeapons = [
     rate_fire: 240 / 10
   },
   {
-    name: "Sheriff",
+    name: 'Sheriff',
     price: 800,
     damage: {
       head: 159,
@@ -60,7 +60,7 @@ export const valorantWeapons = [
     rate_fire: 250 / 10
   },
   {
-    name: "Stinger",
+    name: 'Stinger',
     price: 950,
     damage: {
       head: 67,
@@ -70,7 +70,7 @@ export const valorantWeapons = [
     rate_fire: 55.56 / 10
   },
   {
-    name: "Spectre",
+    name: 'Spectre',
     price: 1600,
     damage: {
       head: 78,
@@ -80,7 +80,7 @@ export const valorantWeapons = [
     rate_fire: 75 / 10
   },
   {
-    name: "Bucky",
+    name: 'Bucky',
     price: 850,
     damage: {
       head: 40,
@@ -90,7 +90,7 @@ export const valorantWeapons = [
     rate_fire: 909.09 / 10
   },
   {
-    name: "Judge",
+    name: 'Judge',
     price: 1850,
     damage: {
       head: 34,
@@ -100,7 +100,7 @@ export const valorantWeapons = [
     rate_fire: 285.71 / 10
   },
   {
-    name: "Bulldog",
+    name: 'Bulldog',
     price: 2050,
     damage: {
       head: 115,
@@ -110,7 +110,7 @@ export const valorantWeapons = [
     rate_fire: 109.29 / 10
   },
   {
-    name: "Guardian",
+    name: 'Guardian',
     price: 2250,
     damage: {
       head: 195,
@@ -120,7 +120,7 @@ export const valorantWeapons = [
     rate_fire: 153.85 / 10
   },
   {
-    name: "Phantom",
+    name: 'Phantom',
     price: 2900,
     damage: {
       head: 140,
@@ -130,7 +130,7 @@ export const valorantWeapons = [
     rate_fire: 90.91 / 10
   },
   {
-    name: "Vandal",
+    name: 'Vandal',
     price: 2900,
     damage: {
       head: 160,
@@ -140,7 +140,7 @@ export const valorantWeapons = [
     rate_fire: 108.11 / 10
   },
   {
-    name: "Marshal",
+    name: 'Marshal',
     price: 950,
     damage: {
       head: 202,
@@ -150,7 +150,7 @@ export const valorantWeapons = [
     rate_fire: 666.67 / 10
   },
   {
-    name: "Operator",
+    name: 'Operator',
     price: 4700,
     damage: {
       head: 255,
@@ -160,7 +160,7 @@ export const valorantWeapons = [
     rate_fire: 1333.33 / 10
   },
   {
-    name: "Outlaw",
+    name: 'Outlaw',
     price: 2400,
     damage: {
       head: 238,
@@ -170,7 +170,7 @@ export const valorantWeapons = [
     rate_fire: 666.67 / 10
   },
   {
-    name: "Ares",
+    name: 'Ares',
     price: 1600,
     damage: {
       head: 75,
@@ -180,7 +180,7 @@ export const valorantWeapons = [
     rate_fire: 100 / 10
   },
   {
-    name: "Odin",
+    name: 'Odin',
     price: 3200,
     damage: {
       head: 95,
@@ -190,7 +190,7 @@ export const valorantWeapons = [
     rate_fire: 83.33 / 10
   },
   {
-    name: "Melee",
+    name: 'Melee',
     price: 0,
     damage: {
       head: 50,
@@ -199,4 +199,4 @@ export const valorantWeapons = [
     magazine: 0,
     rate_fire: 750 / 10
   }
-] as const;
+] as const

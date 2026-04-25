@@ -1,30 +1,30 @@
-import { GuildSchema, UserSchema } from "@db";
-import type { MessageComponentInteraction } from "discord.js";
-import type App from "../app/App";
-import ComponentInteractionContext from "./ComponentInteractionContext";
+import { GuildSchema, UserSchema } from '@db'
+import type { MessageComponentInteraction } from 'discord.js'
+import type App from '../app/App'
+import ComponentInteractionContext from './ComponentInteractionContext'
 
 export default class ComponentInteractionRunner {
   public async run(
     app: App,
     interaction: MessageComponentInteraction
   ): Promise<unknown> {
-    if (!interaction.guild || !interaction.guildId) return;
+    if (!interaction.guild || !interaction.guildId) return
 
-    const args = interaction.customId.split(";");
-    const i = app.interactions.get(args[0]);
+    const args = interaction.customId.split(';')
+    const i = app.interactions.get(args[0])
 
     const guild =
       (await GuildSchema.fetch(interaction.guildId)) ??
-      new GuildSchema(interaction.guildId);
-    const user = await UserSchema.fetch(interaction.user.id);
+      new GuildSchema(interaction.guildId)
+    const user = await UserSchema.fetch(interaction.user.id)
 
-    if (!i) return;
+    if (!i) return
 
     if (!user) {
       return await interaction.reply({
-        content: "You need to register first.",
+        content: 'You need to register first.',
         flags: 64
-      });
+      })
     }
 
     const ctx = new ComponentInteractionContext({
@@ -38,16 +38,16 @@ export default class ComponentInteractionRunner {
       },
       interaction,
       author: interaction.user
-    });
+    })
 
     if (i.flags) {
-      ctx.setFlags(i.flags);
+      ctx.setFlags(i.flags)
     } else if (i.ephemeral) {
-      await interaction.deferReply({ flags: 64 });
+      await interaction.deferReply({ flags: 64 })
     } else if (i.isThinking) {
-      await interaction.deferReply();
+      await interaction.deferReply()
     }
 
-    await i.run({ ctx, app });
+    await i.run({ ctx, app })
   }
 }

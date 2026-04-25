@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const schema = z.object({
-  DATABASE_URL: z.string().startsWith("postgresql://"),
+  DATABASE_URL: z.string().startsWith('postgresql://'),
   BOT_TOKEN: z.string(),
   ERROR_LOG: z.string(),
   COMMAND_LOG: z.string(),
@@ -14,11 +14,11 @@ const schema = z.object({
   CDN_URL: z.string(),
   DEVS: z.string(),
   REDIS_URL: z.optional(z.string()),
-  NODE_ENV: z.optional(z.enum(["production", "development"])),
+  NODE_ENV: z.optional(z.enum(['production', 'development'])),
   PREFIX: z.string()
-});
+})
 
 export const env = schema.parse({
   ...Bun.env,
   INTERVAL: Number(Bun.env.INTERVAL) || undefined
-});
+})

@@ -2,16 +2,16 @@
   "name": "@sabinelab/prisma",
   "version": "0.0.0",
   "description": "your valorant simulator and esports coverage discord bot",
-  "main": "src/index.ts",
-  "type": "module",
-  "scripts": {
-    "lint": "biome ci",
-    "format": "biome check --write",
-    "start": "bunx --bun prisma generate",
-    "build": "biome ci && tsc",
-    "check": "tsc"
-  },
   "keywords": [],
+  "license": "ISC",
   "author": "levisantosp",
-  "license": "ISC"
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "start": "bunx --bun prisma generate",
+    "build": "oxfmt --check && oxlint && tsc",
+    "check": "tsc"
+  }
 }

@@ -1,6 +1,6 @@
 services:
   sabine:
-    build: 
+    build:
       context: .
       dockerfile: sabine/Dockerfile
       secrets:
@@ -19,7 +19,7 @@ services:
     network_mode: host
 
   helper:
-    build: 
+    build:
       context: .
       dockerfile: helper/Dockerfile
       secrets:
@@ -32,7 +32,7 @@ services:
     network_mode: host
 
   web:
-    build: 
+    build:
       context: .
       dockerfile: web/Dockerfile
       secrets:
@@ -45,7 +45,7 @@ services:
     network_mode: host
 
   api:
-    build: 
+    build:
       context: .
       dockerfile: api/Dockerfile
       secrets:
@@ -77,7 +77,7 @@ services:
     restart: always
     network_mode: host
     shm_size: 2gb
-    
+
     environment:
       - PGDATA=/var/lib/postgresql/18/data
     env_file:
@@ -94,7 +94,11 @@ services:
       -c random_page_cost=1.1
 
     healthcheck:
-      test: ['CMD-SHELL', 'PGPASSWORD=$${POSTGRES_PASSWORD} pg_isready -h localhost -U $${POSTGRES_USER}']
+      test:
+        [
+          'CMD-SHELL',
+          'PGPASSWORD=$${POSTGRES_PASSWORD} pg_isready -h localhost -U $${POSTGRES_USER}'
+        ]
       interval: 10s
       timeout: 5s
       retries: 5

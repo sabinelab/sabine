@@ -1,4 +1,4 @@
-FROM oven/bun:1.3.12
+FROM oven/bun:1.3.13
 
 WORKDIR /app
 
@@ -8,6 +8,7 @@ COPY helper/package.json ./helper/package.json
 COPY api/package.json ./api/package.json
 COPY sabine/package.json ./sabine/package.json
 COPY web/package.json ./web/package.json
+COPY web-next/package.json ./web-next/package.json
 COPY players/package.json ./players/package.json
 COPY prisma/package.json ./prisma/package.json
 COPY utils/package.json ./utils/package.json

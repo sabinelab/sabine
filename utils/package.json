@@ -2,16 +2,16 @@
   "name": "@sabinelab/utils",
   "version": "0.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
   "main": "src/index.ts",
   "scripts": {
     "test": "node test.ts",
-    "lint": "biome ci",
-    "format": "biome check --write",
-    "build": "biome ci && rm -rf dist && tsc",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "build": "oxfmt --check && oxlint && rm -rf dist && tsc",
     "check": "tsc"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module"
+  }
 }

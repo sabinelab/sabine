@@ -1,23 +1,23 @@
-import { Elysia } from "elysia";
-import { app } from "../../../structures/app/App";
+import { Elysia } from 'elysia'
+import { app } from '../../../structures/app/App'
 
-await app.load();
+await app.load()
 
-export const commands = new Elysia().get("/commands", async ({ set }) => {
+export const commands = new Elysia().get('/commands', async ({ set }) => {
   type Command = Pick<
     typeof app.commands extends Map<any, infer V> ? V : never,
-    | "name"
-    | "nameLocalizations"
-    | "description"
-    | "descriptionLocalizations"
-    | "syntax"
-    | "syntaxes"
-    | "examples"
-    | "permissions"
-    | "botPermissions"
-  >;
+    | 'name'
+    | 'nameLocalizations'
+    | 'description'
+    | 'descriptionLocalizations'
+    | 'syntax'
+    | 'syntaxes'
+    | 'examples'
+    | 'permissions'
+    | 'botPermissions'
+  >
 
-  const commands: Command[] = [];
+  const commands: Command[] = []
 
   app.commands.forEach((command) => {
     commands.push({
@@ -30,10 +30,10 @@ export const commands = new Elysia().get("/commands", async ({ set }) => {
       examples: command.examples,
       permissions: command.permissions,
       botPermissions: command.botPermissions
-    });
-  });
+    })
+  })
 
-  set.status = "OK";
+  set.status = 'OK'
 
-  return commands;
-});
+  return commands
+})

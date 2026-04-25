@@ -1,24 +1,24 @@
-import { env } from "@/env";
-import type { LiveFeed } from "../../../types/index.d";
+import { env } from '@/env'
+import type { LiveFeed } from '../../../types/index.d'
 
 export default {
   get: async () => {
     const res = await fetch(
-      "https://api.pandascore.co/lol/matches/running?per_page=100&sort=begin_at",
+      'https://api.pandascore.co/lol/matches/running?per_page=100&sort=begin_at',
       {
         headers: {
-          accept: "application/json",
+          accept: 'application/json',
           authorization: env.PANDA_TOKEN
         },
-        cache: "no-store"
+        cache: 'no-store'
       }
-    );
+    )
 
-    if (!res.ok) return [];
+    if (!res.ok) return []
 
-    const data = await res.json();
+    const data = await res.json()
 
-    if (!data.length) return [];
+    if (!data.length) return []
 
     const matches: LiveFeed[] = data.map((e: any) => {
       return {
@@ -40,9 +40,9 @@ export default {
         ],
         stage: e.tournament.name,
         streams: e.streams_list
-      };
-    });
+      }
+    })
 
-    return matches;
+    return matches
   }
-};
+}

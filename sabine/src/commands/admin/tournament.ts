@@ -1,75 +1,74 @@
-import { GuildSchema } from "@db";
-import { ApplicationCommandOptionType } from "discord.js";
-import { env } from "@/env";
-import Service from "../../api";
-import createCommand from "../../structures/command/createCommand";
+import { GuildSchema } from '@db'
+import { ApplicationCommandOptionType } from 'discord.js'
+import Service from '../../api'
+import createCommand from '../../structures/command/createCommand'
 
-const service = new Service();
+const service = new Service()
 
 export default createCommand({
-  name: "tournament",
-  category: "admin",
+  name: 'tournament',
+  category: 'admin',
   nameLocalizations: {
-    "pt-BR": "torneio"
+    'pt-BR': 'torneio'
   },
-  description: "Add or remove tournaments, manage it, and more",
+  description: 'Add or remove tournaments, manage it, and more',
   descriptionLocalizations: {
-    "pt-BR": "Adicione ou remova torneios, gerencie-os, e mais"
+    'pt-BR': 'Adicione ou remova torneios, gerencie-os, e mais'
   },
   args: {
     add: {
       type: ApplicationCommandOptionType.SubcommandGroup,
-      name: "add",
+      name: 'add',
       nameLocalizations: {
-        "pt-BR": "adicionar"
+        'pt-BR': 'adicionar'
       },
-      description: "Add a tournament",
+      description: 'Add a tournament',
       descriptionLocalizations: {
-        "pt-BR": "Adicione um torneio"
+        'pt-BR': 'Adicione um torneio'
       },
       args: {
         valorant: {
           type: ApplicationCommandOptionType.Subcommand,
-          name: "valorant",
-          description: "Add a VALORANT tournament",
+          name: 'valorant',
+          description: 'Add a VALORANT tournament',
           descriptionLocalizations: {
-            "pt-BR": "Adicione um torneio de VALORANT"
+            'pt-BR': 'Adicione um torneio de VALORANT'
           },
           args: {
             tournament: {
               type: ApplicationCommandOptionType.String,
-              name: "tournament",
+              name: 'tournament',
               nameLocalizations: {
-                "pt-BR": "torneio"
+                'pt-BR': 'torneio'
               },
-              description: "Enter a tournament",
+              description: 'Enter a tournament',
               descriptionLocalizations: {
-                "pt-BR": "Informe o torneio"
+                'pt-BR': 'Informe o torneio'
               },
               autocomplete: true,
               required: true
             },
             matches_channel: {
               type: ApplicationCommandOptionType.Channel,
-              name: "matches_channel",
+              name: 'matches_channel',
               nameLocalizations: {
-                "pt-BR": "canal_de_partidas"
+                'pt-BR': 'canal_de_partidas'
               },
-              description: "Enter a channel",
+              description: 'Enter a channel',
               descriptionLocalizations: {
-                "pt-BR": "Informe o canal"
+                'pt-BR': 'Informe o canal'
               },
               required: true
             },
             results_channel: {
               type: ApplicationCommandOptionType.Channel,
-              name: "results_channel",
+              name: 'results_channel',
               nameLocalizations: {
-                "pt-BR": "canal_de_resultados"
+                'pt-BR': 'canal_de_resultados'
               },
-              description: "Enter a channel",
+              description: 'Enter a channel',
               descriptionLocalizations: {
-                "pt-BR": "Informe o canal"
+                'pt-BR': 'Informe o canal'
               },
               required: true
             }
@@ -77,46 +76,46 @@ export default createCommand({
         },
         lol: {
           type: ApplicationCommandOptionType.Subcommand,
-          name: "lol",
-          description: "Add a League of Legends tournament",
+          name: 'lol',
+          description: 'Add a League of Legends tournament',
           descriptionLocalizations: {
-            "pt-BR": "Adicione um torneio de League of Legends"
+            'pt-BR': 'Adicione um torneio de League of Legends'
           },
           args: {
             tournament: {
               type: ApplicationCommandOptionType.String,
-              name: "tournament",
+              name: 'tournament',
               nameLocalizations: {
-                "pt-BR": "torneio"
+                'pt-BR': 'torneio'
               },
-              description: "Enter a tournament",
+              description: 'Enter a tournament',
               descriptionLocalizations: {
-                "pt-BR": "Informe o torneio"
+                'pt-BR': 'Informe o torneio'
               },
               autocomplete: true,
               required: true
             },
             matches_channel: {
               type: ApplicationCommandOptionType.Channel,
-              name: "matches_channel",
+              name: 'matches_channel',
               nameLocalizations: {
-                "pt-BR": "canal_de_partidas"
+                'pt-BR': 'canal_de_partidas'
               },
-              description: "Enter a channel",
+              description: 'Enter a channel',
               descriptionLocalizations: {
-                "pt-BR": "Informe o canal"
+                'pt-BR': 'Informe o canal'
               },
               required: true
             },
             results_channel: {
               type: ApplicationCommandOptionType.Channel,
-              name: "results_channel",
+              name: 'results_channel',
               nameLocalizations: {
-                "pt-BR": "canal_de_resultados"
+                'pt-BR': 'canal_de_resultados'
               },
-              description: "Enter a channel",
+              description: 'Enter a channel',
               descriptionLocalizations: {
-                "pt-BR": "Informe o canal"
+                'pt-BR': 'Informe o canal'
               },
               required: true
             }
@@ -126,32 +125,32 @@ export default createCommand({
     },
     remove: {
       type: ApplicationCommandOptionType.SubcommandGroup,
-      name: "remove",
+      name: 'remove',
       nameLocalizations: {
-        "pt-BR": "remover"
+        'pt-BR': 'remover'
       },
-      description: "Remove a tournament",
+      description: 'Remove a tournament',
       descriptionLocalizations: {
-        "pt-BR": "Remove um torneio"
+        'pt-BR': 'Remove um torneio'
       },
       args: {
         valorant: {
           type: ApplicationCommandOptionType.Subcommand,
-          name: "valorant",
-          description: "Remove a VALORANT tournament",
+          name: 'valorant',
+          description: 'Remove a VALORANT tournament',
           descriptionLocalizations: {
-            "pt-BR": "Remova um torneio de VALORANT"
+            'pt-BR': 'Remova um torneio de VALORANT'
           },
           args: {
             tournament: {
               type: ApplicationCommandOptionType.String,
-              name: "tournament",
+              name: 'tournament',
               nameLocalizations: {
-                "pt-BR": "torneio"
+                'pt-BR': 'torneio'
               },
-              description: "Enter a tournament",
+              description: 'Enter a tournament',
               descriptionLocalizations: {
-                "pt-BR": "Informe o torneio"
+                'pt-BR': 'Informe o torneio'
               },
               autocomplete: true,
               required: true
@@ -160,21 +159,21 @@ export default createCommand({
         },
         lol: {
           type: ApplicationCommandOptionType.Subcommand,
-          name: "lol",
-          description: "Remove a League of Legends tournament",
+          name: 'lol',
+          description: 'Remove a League of Legends tournament',
           descriptionLocalizations: {
-            "pt-BR": "Remova um torneio de League of Legends"
+            'pt-BR': 'Remova um torneio de League of Legends'
           },
           args: {
             tournament: {
               type: ApplicationCommandOptionType.String,
-              name: "tournament",
+              name: 'tournament',
               nameLocalizations: {
-                "pt-BR": "torneio"
+                'pt-BR': 'torneio'
               },
-              description: "Enter a tournament",
+              description: 'Enter a tournament',
               descriptionLocalizations: {
-                "pt-BR": "Informe o torneio"
+                'pt-BR': 'Informe o torneio'
               },
               autocomplete: true,
               required: true
@@ -184,27 +183,27 @@ export default createCommand({
       }
     }
   },
-  permissions: ["ManageGuild", "ManageChannels"],
-  botPermissions: ["ManageMessages", "SendMessages"],
+  permissions: ['ManageGuild', 'ManageChannels'],
+  botPermissions: ['ManageMessages', 'SendMessages'],
   syntaxes: [
-    "tournament add valorant [tournament] [matches_channel] [results_channel]",
-    "tournament add lol [tournament] [matches_channel] [results_channel]",
-    "tournament remove valorant [tournament]",
-    "tournament remove lol [tournament]"
+    'tournament add valorant [tournament] [matches_channel] [results_channel]',
+    'tournament add lol [tournament] [matches_channel] [results_channel]',
+    'tournament remove valorant [tournament]',
+    'tournament remove lol [tournament]'
   ],
   examples: [
-    "tournament add valorant VCT Americas #matches #results",
-    "tournament add lol Worlds #matches #results",
-    "tournament remove valorant VCT Americas",
-    "tournament remove lol Worlds"
+    'tournament add valorant VCT Americas #matches #results',
+    'tournament add lol Worlds #matches #results',
+    'tournament remove valorant VCT Americas',
+    'tournament remove lol Worlds'
   ],
   async run({ ctx, app, t, id }) {
     if (ctx.args.add) {
       if (ctx.args.add.valorant) {
         const { tournament, matches_channel, results_channel } =
-          ctx.args.add.valorant;
+          ctx.args.add.valorant
 
-        if (!ctx.db.guild || !ctx.guild) return;
+        if (!ctx.db.guild || !ctx.guild) return
 
         const guild =
           (await app.prisma.guild.findUnique({
@@ -214,25 +213,25 @@ export default createCommand({
             include: {
               events: true
             }
-          })) ?? new GuildSchema(ctx.db.guild.id);
+          })) ?? new GuildSchema(ctx.db.guild.id)
 
         if (
-          guild.events.filter((e) => e.type === "lol").length +
-            guild.events.filter((e) => e.type === "valorant").length >=
+          guild.events.filter((e) => e.type === 'lol').length +
+            guild.events.filter((e) => e.type === 'valorant').length >=
           ctx.db.guild.tournamentsLength
         )
-          return ctx.reply("commands.tournament.limit_reached", {
+          return ctx.reply('commands.tournament.limit_reached', {
             cmd: `</tournament remove valorant:${id}>`
-          });
+          })
 
         if (matches_channel.id === results_channel.id)
-          return ctx.reply("commands.tournament.channels_must_be_different");
+          return ctx.reply('commands.tournament.channels_must_be_different')
 
         if (
           ctx.guild.channels.cache.get(matches_channel.id)?.type !== 0 ||
           ctx.guild.channels.cache.get(results_channel.id)?.type !== 0
         ) {
-          return ctx.reply("commands.tournament.invalid_channel");
+          return ctx.reply('commands.tournament.invalid_channel')
         }
 
         await app.prisma.guild.upsert({
@@ -246,7 +245,7 @@ export default createCommand({
                   name: tournament,
                   channel1: matches_channel.id,
                   channel2: results_channel.id,
-                  type: "valorant"
+                  type: 'valorant'
                 }
               ]
             }
@@ -258,21 +257,21 @@ export default createCommand({
                   name: tournament,
                   channel1: matches_channel.id,
                   channel2: results_channel.id,
-                  type: "valorant"
+                  type: 'valorant'
                 }
               ]
             },
             id: ctx.db.guild.id
           }
-        });
-        await ctx.reply("commands.tournament.tournament_added", {
+        })
+        await ctx.reply('commands.tournament.tournament_added', {
           t: tournament
-        });
+        })
       } else if (ctx.args.add.lol) {
         const { tournament, matches_channel, results_channel } =
-          ctx.args.add.lol;
+          ctx.args.add.lol
 
-        if (!ctx.db.guild || !ctx.guild) return;
+        if (!ctx.db.guild || !ctx.guild) return
 
         const guild =
           (await app.prisma.guild.findUnique({
@@ -282,25 +281,25 @@ export default createCommand({
             include: {
               events: true
             }
-          })) ?? new GuildSchema(ctx.db.guild.id);
+          })) ?? new GuildSchema(ctx.db.guild.id)
 
         if (
-          guild.events.filter((e) => e.type === "lol").length +
-            guild.events.filter((e) => e.type === "valorant").length >=
+          guild.events.filter((e) => e.type === 'lol').length +
+            guild.events.filter((e) => e.type === 'valorant').length >=
           ctx.db.guild.tournamentsLength
         )
-          return ctx.reply("commands.tournament.limit_reached", {
+          return ctx.reply('commands.tournament.limit_reached', {
             cmd: `</tournament remove lol:${id}>`
-          });
+          })
 
         if (matches_channel.id === results_channel.id)
-          return ctx.reply("commands.tournament.channels_must_be_different");
+          return ctx.reply('commands.tournament.channels_must_be_different')
 
         if (
           ctx.guild.channels.cache.get(matches_channel.id)?.type !== 0 ||
           ctx.guild.channels.cache.get(results_channel.id)?.type !== 0
         ) {
-          return ctx.reply("commands.tournament.invalid_channel");
+          return ctx.reply('commands.tournament.invalid_channel')
         }
 
         await app.prisma.guild.upsert({
@@ -314,7 +313,7 @@ export default createCommand({
                   name: tournament,
                   channel1: matches_channel.id,
                   channel2: results_channel.id,
-                  type: "lol"
+                  type: 'lol'
                 }
               ]
             }
@@ -326,29 +325,29 @@ export default createCommand({
                   name: tournament,
                   channel1: matches_channel.id,
                   channel2: results_channel.id,
-                  type: "lol"
+                  type: 'lol'
                 }
               ]
             },
             id: ctx.db.guild.id
           }
-        });
-        await ctx.reply("commands.tournament.tournament_added", {
+        })
+        await ctx.reply('commands.tournament.tournament_added', {
           t: tournament
-        });
+        })
       }
     } else if (ctx.args.remove) {
       if (ctx.args.remove.valorant) {
-        const { tournament } = ctx.args.remove.valorant;
+        const { tournament } = ctx.args.remove.valorant
 
-        if (!ctx.db.guild) return;
+        if (!ctx.db.guild) return
 
-        if (tournament === t("commands.tournament.remove_all")) {
+        if (tournament === t('commands.tournament.remove_all')) {
           const guild = await app.prisma.guild.findUnique({
             where: {
               id: ctx.db.guild.id
             }
-          });
+          })
 
           if (guild) {
             await app.prisma.guild.update({
@@ -358,21 +357,21 @@ export default createCommand({
               data: {
                 events: {
                   deleteMany: {
-                    type: "valorant"
+                    type: 'valorant'
                   }
                 }
               }
-            });
+            })
           }
 
-          return await ctx.reply("commands.tournament.tournament_removed");
+          return await ctx.reply('commands.tournament.tournament_removed')
         }
 
         const guild = await app.prisma.guild.findUnique({
           where: {
             id: ctx.db.guild.id
           }
-        });
+        })
 
         if (guild) {
           await app.prisma.guild.update({
@@ -382,28 +381,28 @@ export default createCommand({
             data: {
               events: {
                 deleteMany: {
-                  type: "valorant",
+                  type: 'valorant',
                   name: tournament
                 }
               }
             }
-          });
+          })
         }
 
-        await ctx.reply("commands.tournament.tournament_removed", {
+        await ctx.reply('commands.tournament.tournament_removed', {
           t: tournament
-        });
+        })
       } else if (ctx.args.remove.lol) {
-        const { tournament } = ctx.args.remove.lol;
+        const { tournament } = ctx.args.remove.lol
 
-        if (!ctx.db.guild) return;
+        if (!ctx.db.guild) return
 
-        if (tournament === t("commands.tournament.remove_all")) {
+        if (tournament === t('commands.tournament.remove_all')) {
           const guild = await app.prisma.guild.findUnique({
             where: {
               id: ctx.db.guild.id
             }
-          });
+          })
 
           if (guild) {
             await app.prisma.guild.update({
@@ -413,21 +412,21 @@ export default createCommand({
               data: {
                 events: {
                   deleteMany: {
-                    type: "lol"
+                    type: 'lol'
                   }
                 }
               }
-            });
+            })
           }
 
-          return await ctx.reply("commands.tournament.tournament_removed");
+          return await ctx.reply('commands.tournament.tournament_removed')
         }
 
         const guild = await app.prisma.guild.findUnique({
           where: {
             id: ctx.db.guild.id
           }
-        });
+        })
 
         if (guild) {
           await app.prisma.guild.update({
@@ -437,57 +436,57 @@ export default createCommand({
             data: {
               events: {
                 deleteMany: {
-                  type: "lol",
+                  type: 'lol',
                   name: tournament
                 }
               }
             }
-          });
+          })
         }
 
-        await ctx.reply("commands.tournament.tournament_removed", {
+        await ctx.reply('commands.tournament.tournament_removed', {
           t: tournament
-        });
+        })
       }
     }
   },
   async createAutocompleteInteraction({ i, t, app }) {
-    const focused = i.options.getFocused(true);
-    const sub = i.options.getSubcommand(false); // 'valorant' or 'lol'
-    const group = i.options.getSubcommandGroup(false); // 'add' or 'remove'
+    const focused = i.options.getFocused(true)
+    const sub = i.options.getSubcommand(false) // 'valorant' or 'lol'
+    const group = i.options.getSubcommandGroup(false) // 'add' or 'remove'
 
-    if (!group || !sub) return [];
+    if (!group || !sub) return []
 
-    const game = sub as "valorant" | "lol";
+    const game = sub as 'valorant' | 'lol'
 
-    if (focused.name === "tournament") {
-      if (group === "add") {
-        const tournaments = await service.getEvents(game);
+    if (focused.name === 'tournament') {
+      if (group === 'add') {
+        const tournaments = await service.getEvents(game)
 
-        if (game === "valorant") {
+        if (game === 'valorant') {
           tournaments.unshift({
-            name: "Valorant Game Changers"
-          });
-
-          tournaments.unshift({
-            name: "Valorant Challengers League"
-          });
+            name: 'Valorant Game Changers'
+          })
 
           tournaments.unshift({
-            name: "Valorant Champions Tour"
-          });
+            name: 'Valorant Challengers League'
+          })
+
+          tournaments.unshift({
+            name: 'Valorant Champions Tour'
+          })
         }
 
         return await i.respond(
           tournaments
-            .filter((e) => e.status !== "completed")
+            .filter((e) => e.status !== 'completed')
             .filter((e) =>
               e.name.toLowerCase().includes(focused.value.toLowerCase())
             )
             .map((e) => ({ name: e.name, value: e.name }))
             .slice(0, 25)
-        );
-      } else if (group === "remove") {
+        )
+      } else if (group === 'remove') {
         const guild = await app.prisma.guild.findUnique({
           where: {
             id: i.guild!.id
@@ -495,21 +494,21 @@ export default createCommand({
           include: {
             events: true
           }
-        });
+        })
 
-        if (!guild) return [];
+        if (!guild) return []
 
         const events = guild.events
           .filter((e) => e.type === game)
           .map((e) => e.name)
-          .filter((e) => e.toLowerCase().includes(focused.value.toLowerCase()));
+          .filter((e) => e.toLowerCase().includes(focused.value.toLowerCase()))
 
-        events.unshift(t("commands.tournament.remove_all"));
+        events.unshift(t('commands.tournament.remove_all'))
 
         return await i.respond(
           events.map((e) => ({ name: e, value: e })).slice(0, 25)
-        );
+        )
       }
     }
   }
-});
+})

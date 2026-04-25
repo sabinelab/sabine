@@ -1,18 +1,18 @@
-import { prisma } from "@db";
-import createCommand from "../../structures/command/createCommand";
+import { prisma } from '@db'
+import createCommand from '../../structures/command/createCommand'
 
 export default createCommand({
-  name: "remind",
+  name: 'remind',
   nameLocalizations: {
-    "pt-BR": "lembrar"
+    'pt-BR': 'lembrar'
   },
-  description: "Notify you when you can run /claim again",
+  description: 'Notify you when you can run /claim again',
   descriptionLocalizations: {
-    "pt-BR": "Notifica você quando você puder usar /claim novamente"
+    'pt-BR': 'Notifica você quando você puder usar /claim novamente'
   },
-  category: "misc",
-  syntax: "remind",
-  examples: ["remind"],
+  category: 'misc',
+  syntax: 'remind',
+  examples: ['remind'],
   async run({ ctx }) {
     if (!ctx.db.profile.remind) {
       await prisma.profile.update({
@@ -25,11 +25,11 @@ export default createCommand({
         data: {
           remind: true
         }
-      });
+      })
 
-      return await ctx.reply("commands.remind.enabled", {
-        cmd: `</claim:${ctx.app.commands.get("claim")?.id}>`
-      });
+      return await ctx.reply('commands.remind.enabled', {
+        cmd: `</claim:${ctx.app.commands.get('claim')?.id}>`
+      })
     }
 
     await prisma.profile.update({
@@ -42,10 +42,10 @@ export default createCommand({
       data: {
         remind: false
       }
-    });
+    })
 
-    return await ctx.reply("commands.remind.disabled", {
-      cmd: `</claim:${ctx.app.commands.get("claim")?.id}>`
-    });
+    return await ctx.reply('commands.remind.disabled', {
+      cmd: `</claim:${ctx.app.commands.get('claim')?.id}>`
+    })
   }
-});
+})

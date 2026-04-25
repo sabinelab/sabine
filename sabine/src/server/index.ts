@@ -1,23 +1,23 @@
-import { cors } from "@elysiajs/cors";
-import { Elysia } from "elysia";
-import Logger from "../util/Logger";
-import { auth } from "./auth";
-import { lolLive } from "./routes/lol/live";
-import { lolResults } from "./routes/lol/results";
-import { commands } from "./routes/util/commands";
-import { players } from "./routes/util/players";
-import { updates } from "./routes/util/updates";
-import { vote } from "./routes/util/vote";
-import { valorantLive } from "./routes/valorant/live";
-import { news } from "./routes/valorant/news";
-import { valorantResults } from "./routes/valorant/results";
+import { cors } from '@elysia/cors'
+import { Elysia } from 'elysia'
+import Logger from '../util/Logger'
+import { auth } from './auth'
+import { lolLive } from './routes/lol/live'
+import { lolResults } from './routes/lol/results'
+import { commands } from './routes/util/commands'
+import { players } from './routes/util/players'
+import { updates } from './routes/util/updates'
+import { vote } from './routes/util/vote'
+import { valorantLive } from './routes/valorant/live'
+import { news } from './routes/valorant/news'
+import { valorantResults } from './routes/valorant/results'
 
 new Elysia()
   .use(
     cors({
       origin: true,
-      methods: ["POST", "GET", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "x-dbl-signature"]
+      methods: ['POST', 'GET', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-dbl-signature']
     })
   )
   .use(auth)
@@ -30,6 +30,6 @@ new Elysia()
   .use(players)
   .use(updates)
   .use(vote)
-  .listen(3001);
+  .listen(3001)
 
-Logger.info("HTTP server running at 3001");
+Logger.info('HTTP server running at 3001')

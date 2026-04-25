@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod'
 
 const schema = z.object({
   BOT_TOKEN: z.string(),
-  DATABASE_URL: z.string().startsWith("postgresql://"),
+  DATABASE_URL: z.string().startsWith('postgresql://'),
   PREFIX: z.string(),
   MOD_LOG: z.string(),
   SABINE_TOKEN: z.string(),
@@ -18,6 +18,6 @@ const schema = z.object({
   STRIPE_SECRET_WEBHOOK: z.string(),
   REDIS_URL: z.string(),
   STATUS_CHANNEL: z.string()
-});
+})
 
-export const env = schema.parse(Bun.env);
+export const env = schema.parse(Bun.env)

@@ -2,27 +2,27 @@
   "name": "@sabinelab/players",
   "version": "2.0.0",
   "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
-  "scripts": {
-    "test": "node test.ts",
-    "lint": "biome ci",
-    "format": "biome check --write",
-    "build": "biome ci && rm -rf dist && tsc",
-    "check": "tsc --noEmit",
-    "prepublishOnly": "bun run build"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "test": "node test.ts",
+    "lint": "oxlint",
+    "fmt": "oxfmt",
+    "build": "oxfmt --check && oxlint && rm -rf dist && tsc",
+    "check": "tsc --noEmit",
+    "prepublishOnly": "bun run build"
   }
 }

@@ -1,50 +1,50 @@
-import { Prisma } from "@generated";
-import { valorantAgents } from "@sabinelab/utils";
-import { ApplicationCommandOptionType } from "discord.js";
-import EmbedBuilder from "../../structures/builders/EmbedBuilder";
-import createCommand from "../../structures/command/createCommand";
+import { Prisma } from '@generated'
+import { valorantAgents } from '@sabinelab/utils'
+import { ApplicationCommandOptionType } from 'discord.js'
+import EmbedBuilder from '../../structures/builders/EmbedBuilder'
+import createCommand from '../../structures/command/createCommand'
 
 type Stats = {
-  id: string;
-  kills: number;
-  deaths: number;
-  agent: string;
-  ovr: number;
-  name: string;
-};
+  id: string
+  kills: number
+  deaths: number
+  agent: string
+  ovr: number
+  name: string
+}
 
 type MetadataTeam = {
-  name: string;
-  user: string;
-};
+  name: string
+  user: string
+}
 type Metadata = {
-  map: string;
-  stats: Stats[];
-  teams: MetadataTeam[];
-};
+  map: string
+  stats: Stats[]
+  teams: MetadataTeam[]
+}
 
 export default createCommand({
-  name: "summary",
+  name: 'summary',
   nameLocalizations: {
-    "pt-BR": "resumo"
+    'pt-BR': 'resumo'
   },
-  description: "View a match summary",
+  description: 'View a match summary',
   descriptionLocalizations: {
-    "pt-BR": "Veja o resumo de uma partida"
+    'pt-BR': 'Veja o resumo de uma partida'
   },
-  category: "pvp",
-  syntax: "summary [seed]",
-  examples: ["summary 123456789"],
+  category: 'pvp',
+  syntax: 'summary [seed]',
+  examples: ['summary 123456789'],
   args: {
     seed: {
       type: ApplicationCommandOptionType.Integer,
-      name: "seed",
+      name: 'seed',
       nameLocalizations: {
-        "pt-BR": "semente"
+        'pt-BR': 'semente'
       },
-      description: "Insert the seed",
+      description: 'Insert the seed',
       descriptionLocalizations: {
-        "pt-BR": "Insira a semente"
+        'pt-BR': 'Insira a semente'
       },
       required: true
     }
@@ -67,17 +67,17 @@ export default createCommand({
         points: true,
         winner: true
       }
-    });
+    })
 
     if (!match) {
-      return await ctx.reply("commands.summary.match_not_found");
+      return await ctx.reply('commands.summary.match_not_found')
     }
 
-    const summary = match.metadata as Metadata;
+    const summary = match.metadata as Metadata
 
     const embed = new EmbedBuilder()
       .setTitle(
-        ctx.t("commands.summary.embed.title", {
+        ctx.t('commands.summary.embed.title', {
           mode: ctx.t(`commands.career.mode.${match.mode}`)
         })
       )
@@ -94,9 +94,9 @@ export default createCommand({
           value: summary.stats
             .slice(0, 5)
             .map((p) => {
-              return `${valorantAgents.find((a) => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``;
+              return `${valorantAgents.find((a) => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
-            .join("\n"),
+            .join('\n'),
           inline: true
         },
         {
@@ -104,14 +104,14 @@ export default createCommand({
           value: summary.stats
             .slice(-5)
             .map((p) => {
-              return `${valorantAgents.find((a) => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``;
+              return `${valorantAgents.find((a) => a.name === p.agent)?.emoji} ${p.name} (${Math.floor(p.ovr)}) — \`${p.kills}/${p.deaths}\``
             })
-            .join("\n"),
+            .join('\n'),
           inline: true
         }
       )
-      .setImage(summary.map);
+      .setImage(summary.map)
 
-    await ctx.reply(embed.build());
+    await ctx.reply(embed.build())
   }
-});
+})

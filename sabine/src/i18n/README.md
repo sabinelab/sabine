@@ -12,8 +12,8 @@ These files are automatically generated and synchronized by Crowdin. Any manual 
 
 ## How to Contribute
 
-1. **Join the Project:** Go to our project page on Crowdin:  
-    - **[https://crowdin.com/project/sabinelab](https://crowdin.com/project/sabinelab)**
+1. **Join the Project:** Go to our project page on Crowdin:
+   - **[https://crowdin.com/project/sabinelab](https://crowdin.com/project/sabinelab)**
 
 2. **Select a Language:** Choose the language you want to translate into. If your language is not listed, feel free to request it on the Crowdin page.
 
