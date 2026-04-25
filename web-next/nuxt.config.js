@@ -74,5 +74,14 @@ export default defineNuxtConfig({
         }
       ]
     }
+  },
+  runtimeConfig: {
+    auth: '',
+    apiUrl: '',
+    public: {
+      invite: '',
+      supportServer: '',
+      cdnUrl: ''
+    }
   }
 })
