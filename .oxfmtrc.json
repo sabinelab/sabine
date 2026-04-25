@@ -8,7 +8,7 @@
     ".next",
     ".nuxt",
     ".output",
-    "next-env.d.ts",
+    "next-env.d.ts"
   ],
   "singleQuote": true,
   "jsxSingleQuote": true,
