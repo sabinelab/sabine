@@ -5,6 +5,7 @@ WORKDIR /app
 COPY package.json bun.lock ./
 COPY .npmrc ./
 COPY web/package.json ./web/package.json
+COPY web-next/package.json ./web-next/package.json
 COPY sabine/package.json ./sabine/package.json
 COPY helper/package.json ./helper/package.json
 COPY api/package.json ./api/package.json
