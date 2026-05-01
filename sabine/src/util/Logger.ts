@@ -76,7 +76,9 @@ export default class Logger {
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
-        .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack ?? error}\`\`\``)
+        .setDesc(
+          `Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack ?? error}\`\`\``
+        )
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
       const webhooks = (await rest.get(
