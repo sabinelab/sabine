@@ -25,10 +25,10 @@ export default {
         id: e.id.toString(),
         teams: [
           {
-            name: e.opponents[0]?.opponent.name
+            name: e.opponents[0]?.opponent?.name ?? 'TBD'
           },
           {
-            name: e.opponents[1]?.opponent.name
+            name: e.opponents[1]?.opponent?.name ?? 'TBD'
           }
         ],
         tournament: {

@@ -27,12 +27,12 @@ export default {
         id: e.id.toString(),
         teams: [
           {
-            name: e.opponents[0]?.opponent.name,
+            name: e.opponents[0]?.opponent?.name ?? 'TBD',
             score: e.results[0]?.score.toString(),
             winner: e.results[0]?.score === winnerScore
           },
           {
-            name: e.opponents[1]?.opponent.name,
+            name: e.opponents[1]?.opponent?.name ?? 'TBD',
             score: e.results[1]?.score.toString(),
             winner: e.results[1]?.score === winnerScore
           }
