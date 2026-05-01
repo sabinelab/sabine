@@ -46,12 +46,9 @@ export default createCommand({
         }
       })
 
-      if (!ban)
-        return await ctx.send(`\`${u.tag}\` is not banned from the bot.`)
+      if (!ban) return await ctx.send(`\`${u.tag}\` is not banned from the bot.`)
 
-      const timestamp = ban.endsAt
-        ? (ban.endsAt.getTime() / 1000).toFixed(0)
-        : undefined
+      const timestamp = ban.endsAt ? (ban.endsAt.getTime() / 1000).toFixed(0) : undefined
       const when = (ban.when.getTime() / 1000).toFixed(0)
 
       await ctx.send(
@@ -65,14 +62,9 @@ export default createCommand({
         }
       })
 
-      if (!ban)
-        return await ctx.send(
-          `\`${ctx.args.guild.id}\` is not banned from the bot.`
-        )
+      if (!ban) return await ctx.send(`\`${ctx.args.guild.id}\` is not banned from the bot.`)
 
-      const timestamp = ban.endsAt
-        ? (ban.endsAt.getTime() / 1000).toFixed(0)
-        : undefined
+      const timestamp = ban.endsAt ? (ban.endsAt.getTime() / 1000).toFixed(0) : undefined
       const when = (ban.when.getTime() / 1000).toFixed(0)
 
       await ctx.send(

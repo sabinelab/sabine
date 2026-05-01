@@ -14,24 +14,17 @@ export default createCommand({
   syntax: 'daily',
   examples: ['daily'],
   async run({ ctx, app, t }) {
-    if (
-      ctx.db.profile.dailyTime &&
-      ctx.db.profile.dailyTime.getTime() > Date.now()
-    ) {
+    if (ctx.db.profile.dailyTime && ctx.db.profile.dailyTime.getTime() > Date.now()) {
       return await ctx.reply('commands.daily.has_been_claimed', {
         t: `<t:${(ctx.db.profile.dailyTime.getTime() / 1000).toFixed(0)}:R>`
       })
     }
 
-    let poisons = BigInt(
-      Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000
-    )
+    let poisons = BigInt(Math.floor(Math.random() * (25000 - 10000 + 1)) + 10000)
 
     let fates = Math.floor(Math.random() * (210 - 140 + 1)) + 140
 
-    const member = app.guilds.cache
-      .get('1233965003850125433')
-      ?.members.cache.get(ctx.author.id)
+    const member = app.guilds.cache.get('1233965003850125433')?.members.cache.get(ctx.author.id)
 
     let content =
       t('commands.daily.res', {

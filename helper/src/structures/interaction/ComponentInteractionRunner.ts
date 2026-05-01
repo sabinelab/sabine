@@ -4,18 +4,13 @@ import type App from '../app/App'
 import ComponentInteractionContext from './ComponentInteractionContext'
 
 export default class ComponentInteractionRunner {
-  public async run(
-    app: App,
-    interaction: MessageComponentInteraction
-  ): Promise<unknown> {
+  public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
     if (!interaction.guild || !interaction.guildId) return
 
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
 
-    const guild =
-      (await GuildSchema.fetch(interaction.guildId)) ??
-      new GuildSchema(interaction.guildId)
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     const user = await UserSchema.fetch(interaction.user.id)
 
     if (!i) return

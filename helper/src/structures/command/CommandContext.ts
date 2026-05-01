@@ -42,10 +42,7 @@ export default class CommandContext<T> {
 
   public async send<T extends string>(
     content: T | Discord.InteractionReplyOptions | Discord.MessageReplyOptions,
-    files?:
-      | Discord.AttachmentPayload[]
-      | Discord.AttachmentBuilder[]
-      | Discord.Attachment[]
+    files?: Discord.AttachmentPayload[] | Discord.AttachmentBuilder[] | Discord.Attachment[]
   ): Promise<Discord.Message | null | undefined> {
     if (this.data instanceof Discord.BaseInteraction) {
       const payload =
@@ -86,14 +83,8 @@ export default class CommandContext<T> {
   }
 
   public async edit<T extends string>(
-    content:
-      | T
-      | Discord.InteractionEditReplyOptions
-      | Discord.MessageEditOptions,
-    files?:
-      | Discord.AttachmentPayload[]
-      | Discord.AttachmentBuilder[]
-      | Discord.Attachment[]
+    content: T | Discord.InteractionEditReplyOptions | Discord.MessageEditOptions,
+    files?: Discord.AttachmentPayload[] | Discord.AttachmentBuilder[] | Discord.Attachment[]
   ): Promise<Discord.Message | null | undefined> {
     if (this.data instanceof Discord.BaseInteraction) {
       const payload =

@@ -2,13 +2,7 @@ import { prisma } from '@db'
 import type { $Enums } from '@generated'
 import t from '@i18n'
 import { Queue } from 'bullmq'
-import {
-  ActionRowBuilder,
-  ButtonBuilder,
-  ButtonStyle,
-  REST,
-  Routes
-} from 'discord.js'
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, REST, Routes } from 'discord.js'
 import pLimit from 'p-limit'
 import { tournaments } from '@/config'
 import { env } from '@/env'
@@ -102,10 +96,7 @@ export const processPredictions = async (data: ResultsPayload) => {
     }
 
     const transactions = preds.flatMap((pred) => {
-      if (
-        pred.teams[0].score === data.teams[0].score &&
-        pred.teams[1].score === data.teams[1].score
-      ) {
+      if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
         let odd: number | null = null
         let bonus = 0
 
@@ -119,8 +110,7 @@ export const processPredictions = async (data: ResultsPayload) => {
           }
         }
 
-        const poisons =
-          BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
+        const poisons = BigInt(Math.floor(Number(pred.bet) * (odd ?? 1))) + BigInt(bonus)
         const fates = 35
 
         return [
@@ -167,9 +157,7 @@ export const processResult = async (app: App, data: ResultsPayload) => {
   const matchedEventNames = Object.keys(tournaments).filter(
     (key) =>
       key.toLowerCase() === data.tournament.name ||
-      tournaments[key].some((regex) =>
-        regex.test(data.tournament.name.toLowerCase())
-      )
+      tournaments[key].some((regex) => regex.test(data.tournament.name.toLowerCase()))
   )
 
   if (!matchedEventNames.includes(data.tournament.name)) {
@@ -224,15 +212,11 @@ export const processResult = async (app: App, data: ResultsPayload) => {
 
       const emoji1 =
         app.emoji.get(data.teams[0].name.toLowerCase()) ??
-        app.emoji.get(
-          app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? ''
-        ) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
         app.emoji.get('default')
       const emoji2 =
         app.emoji.get(data.teams[1].name.toLowerCase()) ??
-        app.emoji.get(
-          app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? ''
-        ) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
         app.emoji.get('default')
 
       const embed = new EmbedBuilder()

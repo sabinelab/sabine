@@ -32,9 +32,7 @@ export default async function CommandsList() {
         >
           <div>
             <h2 className='text-2xl font-extrabold'>/{cmd.name}</h2>
-            <p className='mt-2 text-lg'>
-              {t(`commands.${cmd.name}.description`)}
-            </p>
+            <p className='mt-2 text-lg'>{t(`commands.${cmd.name}.description`)}</p>
           </div>
         </div>
       ))}

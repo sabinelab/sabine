@@ -12,13 +12,11 @@ export default createModalSubmitInteraction({
       valorant: async () => {
         const value = BigInt(ctx.args[3])
 
-        if (Number.isNaN(Number(value)))
-          return await ctx.reply('helper.invalid_poisons')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.profile.poisons)
-          return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -101,8 +99,7 @@ export default createModalSubmitInteraction({
 
         const winnerIndex = pred.teams.findIndex((t) => t.winner)
 
-        if (winnerIndex === -1)
-          return await ctx.reply('helper.prediction_needed')
+        if (winnerIndex === -1) return await ctx.reply('helper.prediction_needed')
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,
@@ -113,13 +110,11 @@ export default createModalSubmitInteraction({
       lol: async () => {
         const value = BigInt(ctx.args[3])
 
-        if (Number.isNaN(Number(value)))
-          return await ctx.reply('helper.invalid_poisons')
+        if (Number.isNaN(Number(value))) return await ctx.reply('helper.invalid_poisons')
 
         if (value < 500) return await ctx.reply('helper.min_value')
 
-        if (value > ctx.db.profile.poisons)
-          return await ctx.reply('helper.too_much')
+        if (value > ctx.db.profile.poisons) return await ctx.reply('helper.too_much')
 
         const pred = await app.prisma.prediction.findFirst({
           where: {
@@ -202,8 +197,7 @@ export default createModalSubmitInteraction({
 
         const winnerIndex = pred.teams.findIndex((t) => t.winner)
 
-        if (winnerIndex === -1)
-          return await ctx.reply('helper.prediction_needed')
+        if (winnerIndex === -1) return await ctx.reply('helper.prediction_needed')
 
         await ctx.reply('helper.bet_res', {
           team: pred.teams[winnerIndex].name,

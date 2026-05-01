@@ -52,9 +52,7 @@ export default createCommand({
       reason: ctx.args.reason
     })
 
-    await ctx.send(
-      `\`${ctx.args.user.tag}\` (\`${ctx.args.user.id}\`) have been banned for \`${ctx.args.reason}\``
-    )
+    await ctx.send(`\`${ctx.args.user.tag}\` (\`${ctx.args.user.id}\`) have been banned for \`${ctx.args.reason}\``)
 
     const channel = ctx.app.channels.cache.get(env.MOD_LOG) as TextChannel
 

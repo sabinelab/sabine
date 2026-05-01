@@ -33,9 +33,7 @@ export default createListener({
             }
           })
 
-          const channel = app.channels.cache.get(
-            '1237496064580386917'
-          ) as TextChannel
+          const channel = app.channels.cache.get('1237496064580386917') as TextChannel
 
           await channel.send({
             content: `[Auto] - \`${(await app.users.fetch(user.id)).tag}\` (\`${user.id}\`) has been unbanned from the bot.`
@@ -66,9 +64,7 @@ export default createListener({
             }
           })
 
-          const channel = app.channels.cache.get(
-            '1237496064580386917'
-          ) as TextChannel
+          const channel = app.channels.cache.get('1237496064580386917') as TextChannel
 
           await channel.send({
             content: `[Auto] - \`${guild.id}\` has been unbanned from the bot.`
@@ -90,9 +86,7 @@ export default createListener({
         if (!user.premium) continue
         if (user.premium.expiresAt > new Date()) continue
 
-        const member = app.guilds.cache
-          .get('1233965003850125433')!
-          .members.cache.get(user.id)
+        const member = app.guilds.cache.get('1233965003850125433')!.members.cache.get(user.id)
 
         if (member) {
           await member.roles.remove('1314272663316856863')
@@ -134,9 +128,7 @@ export default createListener({
         if (user.warned) continue
         if (!user.premium) continue
 
-        const member = app.guilds.cache
-          .get('1233965003850125433')!
-          .members.cache.get(user.id)
+        const member = app.guilds.cache.get('1233965003850125433')!.members.cache.get(user.id)
 
         if (user.premium.expiresAt.getTime() - Date.now() <= 2.592e8) {
           if (member) {
@@ -169,8 +161,7 @@ export default createListener({
 
       for (const channel of channels.values()) {
         const threads = channel.threads.cache.filter(
-          (t) =>
-            Date.now() - new Date(t.createdAt ?? '').getTime() >= 1000 * 60 * 45
+          (t) => Date.now() - new Date(t.createdAt ?? '').getTime() >= 1000 * 60 * 45
         )
 
         for (const thread of threads.values()) await thread.delete()
@@ -222,9 +213,7 @@ export default createListener({
       const keysToDelete: string[] = []
 
       for (const key of keys) {
-        const member = app.guilds.cache
-          .get('1233965003850125433')!
-          .members.cache.get(key.user)
+        const member = app.guilds.cache.get('1233965003850125433')!.members.cache.get(key.user)
         if (!member || (member && !member.premiumSince)) {
           keysToDelete.push(key.id)
         }
@@ -250,12 +239,8 @@ export default createListener({
       ])
     }
     const verifyPartners = async () => {
-      const channel = app.channels.cache.get(
-        '1346170715165950086'
-      ) as TextChannel
-      const message = channel.messages.cache.find(
-        (m) => m.author.id === app.user?.id
-      )
+      const channel = app.channels.cache.get('1346170715165950086') as TextChannel
+      const message = channel.messages.cache.find((m) => m.author.id === app.user?.id)
 
       if (!message) {
         const guilds = await app.prisma.guild.findMany({

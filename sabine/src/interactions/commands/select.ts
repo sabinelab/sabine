@@ -15,9 +15,7 @@ export default createComponentInteraction({
     if (!player) return
 
     const controllers = new SelectMenuBuilder()
-      .setCustomId(
-        `selected;${ctx.author.id};${player.id};controller;${ctx.args[2]}`
-      )
+      .setCustomId(`selected;${ctx.author.id};${player.id};controller;${ctx.args[2]}`)
       .setPlaceholder(t('helper.controllers'))
       .setOptions(
         ...valorantAgents
@@ -32,9 +30,7 @@ export default createComponentInteraction({
       )
 
     const duelists = new SelectMenuBuilder()
-      .setCustomId(
-        `selected;${ctx.author.id};${player.id};duelist;${ctx.args[2]}`
-      )
+      .setCustomId(`selected;${ctx.author.id};${player.id};duelist;${ctx.args[2]}`)
       .setPlaceholder(t('helper.duelists'))
       .setOptions(
         ...valorantAgents
@@ -49,9 +45,7 @@ export default createComponentInteraction({
       )
 
     const initiators = new SelectMenuBuilder()
-      .setCustomId(
-        `selected;${ctx.author.id};${player.id};initiator;${ctx.args[2]}`
-      )
+      .setCustomId(`selected;${ctx.author.id};${player.id};initiator;${ctx.args[2]}`)
       .setPlaceholder(t('helper.initiators'))
       .setOptions(
         ...valorantAgents
@@ -66,9 +60,7 @@ export default createComponentInteraction({
       )
 
     const sentinels = new SelectMenuBuilder()
-      .setCustomId(
-        `selected;${ctx.author.id};${player.id};sentinel;${ctx.args[2]}`
-      )
+      .setCustomId(`selected;${ctx.author.id};${player.id};sentinel;${ctx.args[2]}`)
       .setPlaceholder(t('helper.sentinels'))
       .setOptions(
         ...valorantAgents

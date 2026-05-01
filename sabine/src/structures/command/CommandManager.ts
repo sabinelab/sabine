@@ -20,10 +20,7 @@ import { env } from '@/env'
 import type App from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import CommandContext from '@/structures/command/CommandContext'
-import type {
-  CommandArguments,
-  ResolveArguments
-} from '@/structures/command/createCommand'
+import type { CommandArguments, ResolveArguments } from '@/structures/command/createCommand'
 import Logger from '@/util/Logger'
 
 const nullCatch = () => null
@@ -67,24 +64,15 @@ export class CommandManager {
       }
       case ApplicationCommandOptionType.User: {
         const id = props.value.replace(/[<@!>]/g, '')
-        return (
-          props.app.users.cache.get(id) ??
-          (await props.app.users.fetch(id).catch(nullCatch))
-        )
+        return props.app.users.cache.get(id) ?? (await props.app.users.fetch(id).catch(nullCatch))
       }
       case ApplicationCommandOptionType.Channel: {
         const id = props.value.replace(/[<#>]/g, '')
-        return (
-          props.guild.channels.cache.get(id) ??
-          (await props.guild.channels.fetch(id).catch(nullCatch))
-        )
+        return props.guild.channels.cache.get(id) ?? (await props.guild.channels.fetch(id).catch(nullCatch))
       }
       case ApplicationCommandOptionType.Role: {
         const id = props.value.replace(/[<@&>]/g, '')
-        return (
-          props.guild.roles.cache.get(id) ??
-          (await props.guild.roles.fetch(id).catch(nullCatch))
-        )
+        return props.guild.roles.cache.get(id) ?? (await props.guild.roles.fetch(id).catch(nullCatch))
       }
       default: {
         return props.value
@@ -152,16 +140,10 @@ export class CommandManager {
 
       if (value === undefined && def.required) {
         await message.reply({
-          content: locales(
-            'en',
-            typeof def.required === 'string'
-              ? def.required
-              : 'helper.missing_argument',
-            {
-              arg: def.name,
-              cmd: `</help:${app.commands.get('help')?.id}>`
-            }
-          )
+          content: locales('en', typeof def.required === 'string' ? def.required : 'helper.missing_argument', {
+            arg: def.name,
+            cmd: `</help:${app.commands.get('help')?.id}>`
+          })
         })
         return false
       }
@@ -171,18 +153,14 @@ export class CommandManager {
     return true
   }
 
-  public async exec(
-    app: App,
-    data: ChatInputCommandInteraction | Message<true>
-  ) {
+  public async exec(app: App, data: ChatInputCommandInteraction | Message<true>) {
     if (!data.guild || !data.guildId) return
 
     let commandName = ''
     const args: string[] = []
     let user: User
 
-    const guild =
-      (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
+    const guild = (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
 
     if (data instanceof ChatInputCommandInteraction) {
       commandName = data.commandName
@@ -199,9 +177,7 @@ export class CommandManager {
       commandName = command.slice((guild.prefix ?? env.PREFIX).length)
     }
 
-    const command =
-      app.commands.get(commandName) ||
-      app.commands.get(app.aliases.get(commandName) ?? '')
+    const command = app.commands.get(commandName) || app.commands.get(app.aliases.get(commandName) ?? '')
 
     if (!command) return
 
@@ -223,9 +199,7 @@ export class CommandManager {
             components: [
               new ButtonBuilder()
                 .setStyle(ButtonStyle.Link)
-                .setLabel(
-                  locales(guild?.lang ?? 'en', 'commands.help.community')
-                )
+                .setLabel(locales(guild?.lang ?? 'en', 'commands.help.community'))
                 .setURL('https://discord.gg/g5nmc376yh')
             ]
           }
@@ -281,33 +255,23 @@ export class CommandManager {
       const perms: PermissionResolvable[] = []
 
       for (const perm of command.permissions) {
-        if (
-          data instanceof ChatInputCommandInteraction &&
-          !data.memberPermissions?.has(perm)
-        ) {
+        if (data instanceof ChatInputCommandInteraction && !data.memberPermissions?.has(perm)) {
           perms.push(perm)
-        } else if (
-          data instanceof Message &&
-          !data.member?.permissions.has(perm)
-        ) {
+        } else if (data instanceof Message && !data.member?.permissions.has(perm)) {
           perms.push(perm)
         }
       }
 
       if (perms[0])
         return await ctx.reply('helper.permissions.user', {
-          permissions: perms
-            .map((p) => `\`${permissions[p.toString()]}\``)
-            .join(', ')
+          permissions: perms.map((p) => `\`${permissions[p.toString()]}\``).join(', ')
         })
     }
 
     if (command.botPermissions) {
       const perms: PermissionResolvable[] = []
 
-      const member = app.guilds.cache
-        .get(guild.id)
-        ?.members.cache.get(app.user?.id ?? '')
+      const member = app.guilds.cache.get(guild.id)?.members.cache.get(app.user?.id ?? '')
 
       for (const perm of command.botPermissions) {
         if (!member?.permissions.has(perm)) perms.push(perm)
@@ -315,9 +279,7 @@ export class CommandManager {
 
       if (perms[0])
         return await ctx.reply('helper.permissions.bot', {
-          permissions: perms
-            .map((p) => `\`${permissions[p.toString()]}\``)
-            .join(', ')
+          permissions: perms.map((p) => `\`${permissions[p.toString()]}\``).join(', ')
         })
     }
 
@@ -330,37 +292,19 @@ export class CommandManager {
         let currentParsedArgs = parsedArgs
 
         if (group) {
-          const groupArgKey = Object.keys(currentArgs).find(
-            (k) => currentArgs[k].name === group
-          )
-          if (
-            groupArgKey &&
-            currentArgs[groupArgKey].type ===
-              ApplicationCommandOptionType.SubcommandGroup
-          ) {
+          const groupArgKey = Object.keys(currentArgs).find((k) => currentArgs[k].name === group)
+          if (groupArgKey && currentArgs[groupArgKey].type === ApplicationCommandOptionType.SubcommandGroup) {
             currentParsedArgs[groupArgKey] = {}
-            currentParsedArgs = currentParsedArgs[groupArgKey] as Record<
-              string,
-              unknown
-            >
+            currentParsedArgs = currentParsedArgs[groupArgKey] as Record<string, unknown>
             currentArgs = currentArgs[groupArgKey].args || {}
           }
         }
 
         if (sub) {
-          const subArgKey = Object.keys(currentArgs).find(
-            (k) => currentArgs[k].name === sub
-          )
-          if (
-            subArgKey &&
-            currentArgs[subArgKey].type ===
-              ApplicationCommandOptionType.Subcommand
-          ) {
+          const subArgKey = Object.keys(currentArgs).find((k) => currentArgs[k].name === sub)
+          if (subArgKey && currentArgs[subArgKey].type === ApplicationCommandOptionType.Subcommand) {
             currentParsedArgs[subArgKey] = {}
-            currentParsedArgs = currentParsedArgs[subArgKey] as Record<
-              string,
-              unknown
-            >
+            currentParsedArgs = currentParsedArgs[subArgKey] as Record<string, unknown>
             currentArgs = currentArgs[subArgKey].args || {}
           }
         }
@@ -419,9 +363,7 @@ export class CommandManager {
             return await data.reply({
               content: locales(
                 'en',
-                typeof argDef.required === 'string'
-                  ? argDef.required
-                  : 'helper.missing_argument',
+                typeof argDef.required === 'string' ? argDef.required : 'helper.missing_argument',
                 {
                   arg: argDef.name,
                   cmd: `</help:${app.commands.get('help')?.id}>`
@@ -433,23 +375,14 @@ export class CommandManager {
           currentParsedArgs[key] = value
         }
       } else {
-        const success = await this.parseMessageArguments(
-          app,
-          data.guild,
-          command.args,
-          args,
-          parsedArgs,
-          data
-        )
+        const success = await this.parseMessageArguments(app, data.guild, command.args, args, parsedArgs, data)
         if (!success) return
       }
     }
 
     if (command.ephemeral) {
       if (data instanceof ChatInputCommandInteraction) {
-        await data
-          .deferReply({ flags: 64, withResponse: true })
-          .catch(voidCatch)
+        await data.deferReply({ flags: 64, withResponse: true }).catch(voidCatch)
       }
     } else if (command.isThinking) {
       if (data instanceof ChatInputCommandInteraction) {
@@ -462,9 +395,7 @@ export class CommandManager {
     const t = ctx.t.bind(ctx)
 
     if (command.cooldown) {
-      const cooldown = await app.redis.get(
-        `cooldown:${data.guild.id}:${user.id}`
-      )
+      const cooldown = await app.redis.get(`cooldown:${data.guild.id}:${user.id}`)
 
       if (cooldown) {
         return await ctx.reply('helper.cooldown', {
@@ -472,12 +403,7 @@ export class CommandManager {
         })
       }
 
-      await app.redis.set(
-        `cooldown:${data.guild.id}:${user.id}`,
-        (Date.now() + 5000).toString(),
-        'EX',
-        5
-      )
+      await app.redis.set(`cooldown:${data.guild.id}:${user.id}`, (Date.now() + 5000).toString(), 'EX', 5)
     }
 
     command
@@ -546,12 +472,8 @@ export class CommandManager {
           )
           .setThumbnail(ctx.guild.iconURL())
 
-        const webhooks = (await rest.get(
-          Routes.channelWebhooks(env.COMMAND_LOG)
-        )) as APIWebhook[]
-        let webhook = webhooks.find(
-          (w) => w.name === `${app.user?.username} Logger`
-        )
+        const webhooks = (await rest.get(Routes.channelWebhooks(env.COMMAND_LOG))) as APIWebhook[]
+        let webhook = webhooks.find((w) => w.name === `${app.user?.username} Logger`)
 
         if (!webhook) {
           webhook = (await rest.post(Routes.channelWebhooks(env.COMMAND_LOG), {

@@ -5,9 +5,7 @@ import { NavigationMenuViewport, useForwardProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<
-  NavigationMenuViewportProps & { class?: HTMLAttributes['class'] }
->()
+const props = defineProps<NavigationMenuViewportProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = reactiveOmit(props, 'class')
 

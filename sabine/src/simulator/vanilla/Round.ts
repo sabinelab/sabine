@@ -32,19 +32,13 @@ export default class Round extends Match {
     if (this.mode === 'ranked') {
       if ((score1 === 13 || score2 === 13) && this.rounds.length <= 24) {
         return await this.finish(score1, score2)
-      } else if (
-        (score1 > 13 || score2 > 13) &&
-        Math.abs(score1 - score2) === 2
-      ) {
+      } else if ((score1 > 13 || score2 > 13) && Math.abs(score1 - score2) === 2) {
         return await this.finish(score1, score2)
       }
     } else if (this.mode === 'tournament') {
       if ((score1 === 13 || score2 === 13) && this.rounds.length <= 24) {
         return await this.finish(score1, score2)
-      } else if (
-        (score1 > 13 || score2 > 13) &&
-        Math.abs(score1 - score2) === 2
-      ) {
+      } else if ((score1 > 13 || score2 > 13) && Math.abs(score1 - score2) === 2) {
         return await this.finish(score1, score2)
       }
     } else if (!this.overtime) {
@@ -126,17 +120,13 @@ export default class Round extends Match {
         p.weapon = player.weapon
 
         if (p.weapon.primary) {
-          const weapon = valorantWeapons.find(
-            (w) => w.name === p.weapon?.primary?.name
-          )
+          const weapon = valorantWeapons.find((w) => w.name === p.weapon?.primary?.name)
 
           p.weapon.primary.magazine = weapon?.magazine
         }
 
         if (p.weapon.secondary) {
-          const weapon = valorantWeapons.find(
-            (w) => w.name === p.weapon?.secondary?.name
-          )
+          const weapon = valorantWeapons.find((w) => w.name === p.weapon?.secondary?.name)
 
           p.weapon.secondary.magazine = weapon?.magazine
         }
@@ -213,10 +203,7 @@ export default class Round extends Match {
         winKey: 'unrankedWins',
         loseKey: 'unrankedDefeats'
       })
-    } else if (
-      this.mode === 'tournament' ||
-      (this.mode === 'tournament' && !this.overtime)
-    ) {
+    } else if (this.mode === 'tournament' || (this.mode === 'tournament' && !this.overtime)) {
       await this.saveMatch({
         winnerIdx,
         score1,
@@ -373,8 +360,7 @@ export default class Round extends Match {
         [loseKey]: { increment: 1 }
       } as any
 
-      if (updateRank)
-        loseData.rankRating = p1Win ? profile2.rankRating : profile1.rankRating
+      if (updateRank) loseData.rankRating = p1Win ? profile2.rankRating : profile1.rankRating
 
       transactions.push(
         prisma.profile.update({
@@ -435,13 +421,7 @@ export default class Round extends Match {
     const kills: KillEvent[] = []
 
     for (let i = 0; i < duels; i++) {
-      const {
-        winnerIndex,
-        winnerTeamIndex,
-        loserIndex,
-        loserTeamIndex,
-        weapon
-      } = await this.startPlayerDuel()
+      const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
       if (winnerIndex === undefined) continue
 
@@ -507,10 +487,8 @@ export default class Round extends Match {
 
     await this.ctx.edit(embed.build(this.mentions) as MessageEditOptions)
 
-    const playersAlive1 =
-      this.teams[0].roster.filter((p) => p.life > 0).length > 0
-    const playersAlive2 =
-      this.teams[1].roster.filter((p) => p.life > 0).length > 0
+    const playersAlive1 = this.teams[0].roster.filter((p) => p.life > 0).length > 0
+    const playersAlive2 = this.teams[1].roster.filter((p) => p.life > 0).length > 0
 
     if (!playersAlive1 || !playersAlive2) {
       const winningTeam = playersAlive1 ? 0 : 1
@@ -536,8 +514,7 @@ export default class Round extends Match {
       const content = this.t('simulator.won_by_elimination', {
         t: this.teams[winningTeam].name
       })
-      this.content =
-        this.content.split('\n').slice(1).join('\n') + `${content}\n`
+      this.content = this.content.split('\n').slice(1).join('\n') + `${content}\n`
 
       const embed = new EmbedBuilder()
         .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -573,13 +550,10 @@ export default class Round extends Match {
 
       return await this.wait(3000)
     } else {
-      const playersAlive = this.teams
-        .find((t) => t.side === 'ATTACK')!
-        .roster.filter((p) => p.life > 0).length
+      const playersAlive = this.teams.find((t) => t.side === 'ATTACK')!.roster.filter((p) => p.life > 0).length
       const minChance = 0.2
       const maxChance = 0.8
-      const chance =
-        minChance + ((playersAlive - 1) / (5 - 1)) * (maxChance - minChance)
+      const chance = minChance + ((playersAlive - 1) / (5 - 1)) * (maxChance - minChance)
       const bombPlanted = Math.random() < chance
 
       if (bombPlanted) {
@@ -673,13 +647,7 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -718,8 +686,7 @@ export default class Round extends Match {
         this.content += `- ${content}\n`
       }
 
-      const winning_team =
-        this.teams[0].roster.filter((p) => p.life > 0).length > 0 ? 0 : 1
+      const winning_team = this.teams[0].roster.filter((p) => p.life > 0).length > 0 ? 0 : 1
 
       this.rounds.push({
         kills,
@@ -748,8 +715,7 @@ export default class Round extends Match {
         t: this.teams[winning_team].name
       })
 
-      this.content =
-        this.content.split('\n').slice(1).join('\n') + `${content}\n`
+      this.content = this.content.split('\n').slice(1).join('\n') + `${content}\n`
 
       const embed = new EmbedBuilder()
         .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -790,13 +756,7 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -863,8 +823,7 @@ export default class Round extends Match {
         t: this.teams[winning_team].name
       })
 
-      this.content =
-        this.content.split('\n').slice(1).join('\n') + `${content}\n`
+      this.content = this.content.split('\n').slice(1).join('\n') + `${content}\n`
 
       const embed = new EmbedBuilder()
         .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -905,13 +864,7 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -979,8 +932,7 @@ export default class Round extends Match {
         t: this.teams[winning_team].name
       })
 
-      this.content =
-        this.content.split('\n').slice(1).join('\n') + `${content}\n`
+      this.content = this.content.split('\n').slice(1).join('\n') + `${content}\n`
 
       const embed = new EmbedBuilder()
         .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1021,13 +973,7 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const {
-          winnerIndex,
-          winnerTeamIndex,
-          loserIndex,
-          loserTeamIndex,
-          weapon
-        } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -1096,8 +1042,7 @@ export default class Round extends Match {
         t: this.teams[winning_team].name
       })
 
-      this.content =
-        this.content.split('\n').slice(1).join('\n') + `${content}\n`
+      this.content = this.content.split('\n').slice(1).join('\n') + `${content}\n`
 
       const embed = new EmbedBuilder()
         .setTitle(this.t(`simulator.mode.${this.mode}`))
@@ -1136,9 +1081,7 @@ export default class Round extends Match {
 
   private calcTeamOvr(i: number, alivePlayers?: boolean) {
     if (alivePlayers) {
-      return this.teams[i].roster
-        .filter((p) => p.life > 0)
-        .reduce((sum, p) => sum + p.ovr, 0)
+      return this.teams[i].roster.filter((p) => p.life > 0).reduce((sum, p) => sum + p.ovr, 0)
     }
 
     return this.teams[i].roster.reduce((sum, p) => sum + p.ovr, 0)
@@ -1156,10 +1099,7 @@ export default class Round extends Match {
       (p) => p.aggression * 5
     )
 
-    const [winner1, winner2, weapon1, weapon2] = await this.chooseWinner(
-      player1,
-      player2
-    )
+    const [winner1, winner2, weapon1, weapon2] = await this.chooseWinner(player1, player2)
 
     const i1 = this.teams[0].roster.findIndex((p) => p.id === player1?.id)
     const i2 = this.teams[1].roster.findIndex((p) => p.id === player2?.id)
@@ -1201,10 +1141,7 @@ export default class Round extends Match {
     }
   }
 
-  private async chooseWinner(
-    player1: Player | undefined,
-    player2: Player | undefined
-  ) {
+  private async chooseWinner(player1: Player | undefined, player2: Player | undefined) {
     let nextShot1 = 0
     let nextShot2 = 0
 
@@ -1212,16 +1149,10 @@ export default class Round extends Match {
     let weapon2 = ''
 
     if (!player1) {
-      if (
-        player2?.weapon.primary?.magazine &&
-        player2.weapon.primary.magazine > 0
-      ) {
+      if (player2?.weapon.primary?.magazine && player2.weapon.primary.magazine > 0) {
         nextShot2 = player2!.weapon.primary.rate_fire
         weapon2 = player2!.weapon.primary.name!
-      } else if (
-        player2!.weapon.secondary?.magazine &&
-        player2!.weapon.secondary.magazine > 0
-      ) {
+      } else if (player2!.weapon.secondary?.magazine && player2!.weapon.secondary.magazine > 0) {
         nextShot2 = player2!.weapon.secondary.rate_fire
         weapon2 = player2!.weapon.secondary.name!
       } else {
@@ -1231,16 +1162,10 @@ export default class Round extends Match {
       return [false, true, weapon1, weapon2]
     }
     if (!player2) {
-      if (
-        player1?.weapon.primary?.magazine &&
-        player1.weapon.primary.magazine > 0
-      ) {
+      if (player1?.weapon.primary?.magazine && player1.weapon.primary.magazine > 0) {
         nextShot1 = player1.weapon.primary.rate_fire
         weapon1 = player1.weapon.primary.name!
-      } else if (
-        player1!.weapon.secondary?.magazine &&
-        player1.weapon.secondary.magazine > 0
-      ) {
+      } else if (player1!.weapon.secondary?.magazine && player1.weapon.secondary.magazine > 0) {
         nextShot1 = player1.weapon.secondary.rate_fire
         weapon1 = player1.weapon.secondary.name!
       } else {
@@ -1251,27 +1176,17 @@ export default class Round extends Match {
     }
 
     if (!player1.weapon.secondary) {
-      player1.weapon.secondary = valorantWeapons.find(
-        (w) => w.name === 'Classic'
-      )!
+      player1.weapon.secondary = valorantWeapons.find((w) => w.name === 'Classic')!
     }
 
     if (!player2.weapon.secondary) {
-      player2.weapon.secondary = valorantWeapons.find(
-        (w) => w.name === 'Classic'
-      )!
+      player2.weapon.secondary = valorantWeapons.find((w) => w.name === 'Classic')!
     }
 
-    if (
-      player1.weapon.primary?.magazine &&
-      player1.weapon.primary.magazine > 0
-    ) {
+    if (player1.weapon.primary?.magazine && player1.weapon.primary.magazine > 0) {
       nextShot1 = player1.weapon.primary.rate_fire
       weapon1 = player1.weapon.primary.name!
-    } else if (
-      player1.weapon.secondary.magazine &&
-      player1.weapon.secondary.magazine > 0
-    ) {
+    } else if (player1.weapon.secondary.magazine && player1.weapon.secondary.magazine > 0) {
       nextShot1 = player1.weapon.secondary.rate_fire
       weapon1 = player1.weapon.secondary.name!
     } else {
@@ -1279,16 +1194,10 @@ export default class Round extends Match {
       weapon1 = 'Melee'
     }
 
-    if (
-      player2.weapon.primary?.magazine &&
-      player2.weapon.primary.magazine > 0
-    ) {
+    if (player2.weapon.primary?.magazine && player2.weapon.primary.magazine > 0) {
       nextShot2 = player2.weapon.primary.rate_fire
       weapon2 = player2.weapon.primary.name!
-    } else if (
-      player2.weapon.secondary.magazine &&
-      player2.weapon.secondary.magazine > 0
-    ) {
+    } else if (player2.weapon.secondary.magazine && player2.weapon.secondary.magazine > 0) {
       nextShot2 = player2.weapon.secondary.rate_fire
       weapon2 = player2.weapon.secondary.name!
     } else {
@@ -1321,11 +1230,7 @@ export default class Round extends Match {
     return [player1.life > 0, player2.life > 0, weapon1, weapon2]
   }
 
-  private choosePlayer(
-    items: TeamRoster[],
-    index: number,
-    weightFun: (item: TeamRoster) => number
-  ) {
+  private choosePlayer(items: TeamRoster[], index: number, weightFun: (item: TeamRoster) => number) {
     const weight = items.reduce((sum, i) => sum + weightFun(i), 0)
     let random = Math.random() * weight
 
@@ -1338,8 +1243,7 @@ export default class Round extends Match {
           life: item.life,
           credits: item.credits,
           weapon: item.weapon!,
-          teamCredits:
-            this.teams[index].roster.reduce((sum, p) => sum + p.credits, 0) / 5,
+          teamCredits: this.teams[index].roster.reduce((sum, p) => sum + p.credits, 0) / 5,
           stats: item,
           id: item.id,
           rounds: this.rounds.length

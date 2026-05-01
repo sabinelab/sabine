@@ -14,10 +14,7 @@ export default async function Cards() {
         <div className='p-5 rounded-2xl max-w-xs md:max-w-5xl mb-6 text-3xl'>
           <ul className='flex flex-col gap-10'>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='introduction-to-simulator'
-              >
+              <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                 {t('wiki.module.cards.introduction.title')}
               </h1>
               <p className='text-lg pt-3'>
@@ -36,35 +33,25 @@ export default async function Cards() {
               </p>
             </li>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='introduction-to-simulator'
-              >
+              <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                 {t('wiki.module.cards.calc.title')}
               </h1>
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.cards.calc.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>
-                      {chunks}
-                    </span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>{chunks}</span>
                   )
                 })}
               </p>
             </li>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='introduction-to-simulator'
-              >
+              <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                 {t('wiki.module.cards.attributes.title')}
               </h1>
               <p className='text-lg pt-3 whitespace-pre-line' id='attributes'>
                 {t.rich('wiki.module.cards.attributes.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>
-                      {chunks}
-                    </span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>{chunks}</span>
                   )
                 })}
               </p>

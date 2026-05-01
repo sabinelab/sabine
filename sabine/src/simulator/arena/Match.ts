@@ -1,9 +1,5 @@
 import { calcPlayerOvr, type Player } from '@sabinelab/players'
-import {
-  type valorantAgents,
-  valorantMaps,
-  valorantWeapons
-} from '@sabinelab/utils'
+import { type valorantAgents, valorantMaps, valorantWeapons } from '@sabinelab/utils'
 import type { PlayerWeapon } from './Player'
 
 export type PlayerStats = {
@@ -199,10 +195,7 @@ export default class Match {
         if (
           !valorantMaps
             .find((m) => m.name === this.map)
-            ?.meta_agents.includes(
-              p.agent
-                .name as (typeof valorantMaps)[number]['meta_agents'][number]
-            )
+            ?.meta_agents.includes(p.agent.name as (typeof valorantMaps)[number]['meta_agents'][number])
         ) {
           p.aim *= 0.95
           p.hs *= 0.95

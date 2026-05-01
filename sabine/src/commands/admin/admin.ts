@@ -99,32 +99,22 @@ export default createCommand({
         }
       })
 
-      const embed = new EmbedBuilder()
-        .setTitle(t('commands.admin.dashboard'))
-        .setDesc(
-          t('commands.admin.desc', {
-            lang: ctx.db.guild.lang
-              .replace('en', 'English')
-              .replace('pt', 'Português'),
-            limit:
-              ctx.db.guild.tournamentsLength === Infinity
-                ? '`Infinity`'
-                : `${guild?.events.length ?? 0}/${ctx.db.guild.tournamentsLength}`,
-            id,
-            vlr_news: !ctx.db.guild.valorantNewsChannel
-              ? '`undefined`'
-              : `<#${ctx.db.guild.valorantNewsChannel}>`,
-            vlr_live: !ctx.db.guild.valorantLiveFeedChannel
-              ? '`undefined`'
-              : `<#${ctx.db.guild.valorantLiveFeedChannel}>`,
-            lol_news: !ctx.db.guild.lolNewsChannel
-              ? '`undefined`'
-              : `<#${ctx.db.guild.lolNewsChannel}>`,
-            lol_live: !ctx.db.guild.lolLiveFeedChannel
-              ? '`undefined`'
-              : `<#${ctx.db.guild.lolLiveFeedChannel}>`
-          })
-        )
+      const embed = new EmbedBuilder().setTitle(t('commands.admin.dashboard')).setDesc(
+        t('commands.admin.desc', {
+          lang: ctx.db.guild.lang.replace('en', 'English').replace('pt', 'Português'),
+          limit:
+            ctx.db.guild.tournamentsLength === Infinity
+              ? '`Infinity`'
+              : `${guild?.events.length ?? 0}/${ctx.db.guild.tournamentsLength}`,
+          id,
+          vlr_news: !ctx.db.guild.valorantNewsChannel ? '`undefined`' : `<#${ctx.db.guild.valorantNewsChannel}>`,
+          vlr_live: !ctx.db.guild.valorantLiveFeedChannel
+            ? '`undefined`'
+            : `<#${ctx.db.guild.valorantLiveFeedChannel}>`,
+          lol_news: !ctx.db.guild.lolNewsChannel ? '`undefined`' : `<#${ctx.db.guild.lolNewsChannel}>`,
+          lol_live: !ctx.db.guild.lolLiveFeedChannel ? '`undefined`' : `<#${ctx.db.guild.lolLiveFeedChannel}>`
+        })
+      )
 
       await ctx.reply(
         embed.build({
@@ -197,9 +187,7 @@ export default createCommand({
             }
           })
 
-          await ctx.reply(
-            'Agora eu irei interagir em português neste servidor!'
-          )
+          await ctx.reply('Agora eu irei interagir em português neste servidor!')
         },
         es: async () => {
           await prisma.guild.upsert({
@@ -215,9 +203,7 @@ export default createCommand({
             }
           })
 
-          await ctx.reply(
-            '¡Ahora voy a interactuar en español en este servidor!'
-          )
+          await ctx.reply('¡Ahora voy a interactuar en español en este servidor!')
         }
       }
 
@@ -268,9 +254,7 @@ export default createCommand({
 
       if (!guild) return
 
-      const embed = new EmbedBuilder().setDesc(
-        t('commands.admin.tournaments', { game: 'VALORANT' })
-      )
+      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'VALORANT' }))
 
       for (const event of guild.events) {
         embed.addField(
@@ -302,9 +286,7 @@ export default createCommand({
 
       if (!guild) return
 
-      const embed = new EmbedBuilder().setDesc(
-        t('commands.admin.tournaments', { game: 'League of Legends' })
-      )
+      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'League of Legends' }))
 
       for (const event of guild.events) {
         embed.addField(
@@ -321,10 +303,7 @@ export default createCommand({
     } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'vlr') {
       ctx.setFlags(64)
 
-      if (
-        ctx.db.guild.valorantResendTime &&
-        ctx.db.guild.valorantResendTime > new Date()
-      ) {
+      if (ctx.db.guild.valorantResendTime && ctx.db.guild.valorantResendTime > new Date()) {
         return await ctx.reply('commands.admin.resend_time', {
           t: `<t:${(ctx.db.guild.valorantResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
@@ -347,10 +326,7 @@ export default createCommand({
     } else if (ctx.args[2] === 'resend' && ctx.args[3] === 'lol') {
       ctx.setFlags(64)
 
-      if (
-        ctx.db.guild.lolResendTime &&
-        ctx.db.guild.lolResendTime > new Date()
-      ) {
+      if (ctx.db.guild.lolResendTime && ctx.db.guild.lolResendTime > new Date()) {
         return await ctx.reply('commands.admin.resend_time', {
           t: `<t:${(ctx.db.guild.lolResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
@@ -371,10 +347,7 @@ export default createCommand({
         ]
       })
     } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'vlr') {
-      if (
-        ctx.db.guild.valorantResendTime &&
-        ctx.db.guild.valorantResendTime > new Date()
-      ) {
+      if (ctx.db.guild.valorantResendTime && ctx.db.guild.valorantResendTime > new Date()) {
         return await ctx.edit('commands.admin.resend_time', {
           t: `<t:${(ctx.db.guild.valorantResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
@@ -413,10 +386,7 @@ export default createCommand({
       const res2 = await service.getResults('valorant')
       if (
         guild.valorantMatches.length &&
-        !res2.some(
-          (d) =>
-            d.id === guild.valorantMatches[guild.valorantMatches.length - 1]
-        )
+        !res2.some((d) => d.id === guild.valorantMatches[guild.valorantMatches.length - 1])
       )
         return
 
@@ -453,11 +423,7 @@ export default createCommand({
               .some((e) => {
                 const tour = tournaments[e.name]
                 if (!tour) return false
-                return tour.some((regex) =>
-                  regex.test(
-                    d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
-                  )
-                )
+                return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
               })
 
             if (events2) return true
@@ -480,30 +446,21 @@ export default createCommand({
             .some((e) => Object.keys(tournaments).includes(e.name))
         ) {
           data = res.filter((d) => {
-            const events1 = guild.events.some(
-              (e) => e.name === d.tournament.name
-            )
+            const events1 = guild.events.some((e) => e.name === d.tournament.name)
 
             if (events1) return true
 
             const events2 = guild.events.some((e) => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some((regex) =>
-                regex.test(
-                  d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
-                )
-              )
+              return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
             })
 
             if (events2) return true
 
             return false
           })
-        } else
-          data = res.filter((d) =>
-            guild.events.some((e) => e.name === d.tournament.name)
-          )
+        } else data = res.filter((d) => guild.events.some((e) => e.name === d.tournament.name))
       }
 
       for (const e of guild.events.filter((e) => e.type === 'valorant')) {
@@ -514,9 +471,7 @@ export default createCommand({
           const messages = await channel.messages.fetch({
             limit: 100
           })
-          const messagesIds = messages
-            .filter((m) => m.author.id === app.user?.id)
-            .map((m) => m.id)
+          const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
 
           if (messagesIds.length === 1) {
             await channel.messages.delete(messagesIds[0])
@@ -535,32 +490,25 @@ export default createCommand({
           ...body,
           when: new Date(body.when)
         }))) {
-          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
           for (const e of guild.events) {
             if (
               d.id &&
               (e.name === d.tournament.name ||
                 tournaments[e.name]?.some((regex) =>
-                  regex.test(
-                    d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase()
-                  )
+                  regex.test(d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase())
                 ))
             ) {
               if (d.stage.toLowerCase().includes('showmatch')) continue
 
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
               const index = guild.valorantMatches.indexOf(d.id)
@@ -678,10 +626,7 @@ export default createCommand({
 
       await ctx.edit('commands.admin.resent')
     } else if (ctx.args[2] === 'continue' && ctx.args[3] === 'lol') {
-      if (
-        ctx.db.guild.lolResendTime &&
-        ctx.db.guild.lolResendTime > new Date()
-      ) {
+      if (ctx.db.guild.lolResendTime && ctx.db.guild.lolResendTime > new Date()) {
         return await ctx.edit('commands.admin.resend_time', {
           t: `<t:${(ctx.db.guild.lolResendTime.getTime() / 1000).toFixed(0)}:R>`
         })
@@ -720,13 +665,7 @@ export default createCommand({
 
       const res2 = await service.getResults('lol')
 
-      if (
-        guild.lolMatches.length &&
-        !res2.some(
-          (d) => d.id === guild.lolMatches[guild.lolMatches.length - 1]
-        )
-      )
-        return
+      if (guild.lolMatches.length && !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])) return
 
       const matches: {
         matchId: string
@@ -744,10 +683,7 @@ export default createCommand({
             .slice(0, 5)
             .some((e) => e.name === d.tournament.name)
         )
-      } else
-        data = res.filter((d) =>
-          guild.events.some((e) => e.name === d.tournament.name)
-        )
+      } else data = res.filter((d) => guild.events.some((e) => e.name === d.tournament.name))
 
       for (const e of guild.events.filter((e) => e.type === 'lol')) {
         const channel = await app.channels.fetch(e.channel1)
@@ -757,9 +693,7 @@ export default createCommand({
           const messages = await channel.messages.fetch({
             limit: 100
           })
-          const messagesIds = messages
-            .filter((m) => m.author.id === app.user?.id)
-            .map((m) => m.id)
+          const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
 
           if (messagesIds.length === 1) {
             await channel.messages.delete(messagesIds[0])
@@ -778,8 +712,7 @@ export default createCommand({
           ...body,
           when: new Date(body.when)
         }))) {
-          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
           for (const e of guild.events) {
             if (e.name === d.tournament.name && d.id) {
@@ -787,15 +720,11 @@ export default createCommand({
 
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
               const index = guild.lolMatches.indexOf(d.id)

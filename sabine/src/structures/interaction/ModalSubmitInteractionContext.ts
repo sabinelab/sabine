@@ -56,10 +56,7 @@ export default class ModalSubmitInteractionContext {
     if (options?.files) {
       content = {
         ...content,
-        files: options.files as (
-          | Discord.AttachmentBuilder
-          | Discord.AttachmentPayload
-        )[]
+        files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
       }
     }
 
@@ -72,9 +69,7 @@ export default class ModalSubmitInteractionContext {
 
     if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.followUp(content)
-    } else
-      return (await this.interaction.reply({ ...content, withResponse: true }))
-        .resource?.message
+    } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
   public async edit<T extends Content>(
@@ -90,10 +85,7 @@ export default class ModalSubmitInteractionContext {
     if (options?.files) {
       content = {
         ...content,
-        files: options.files as (
-          | Discord.AttachmentBuilder
-          | Discord.AttachmentPayload
-        )[]
+        files: options.files as (Discord.AttachmentBuilder | Discord.AttachmentPayload)[]
       }
     }
 

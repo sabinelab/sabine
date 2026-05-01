@@ -15,10 +15,7 @@ export default async function MetaAgents() {
         <div className='bg-[#2A2A2A]/30 p-5 rounded-2xl max-w-xs md:max-w-5xl mb-6 text-3xl'>
           <ul className='flex flex-col gap-10'>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='introduction-to-simulator'
-              >
+              <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                 {t('wiki.module.meta.introduction.title')}
               </h1>
               <p className='text-lg pt-3'>
@@ -40,10 +37,7 @@ export default async function MetaAgents() {
               .sort((a, b) => a.name.localeCompare(b.name))
               .map((map) => (
                 <li key={map.name}>
-                  <h1
-                    className='text-2xl font-bold text-center'
-                    id='introduction-to-simulator'
-                  >
+                  <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                     {map.name}
                   </h1>
                   {map.meta_agents.map((agent) => (

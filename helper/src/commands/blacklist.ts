@@ -111,9 +111,7 @@ export default createCommand({
 
         if (blacklist) return await ctx.send('This user is already banned.')
 
-        await app.prisma.user
-          .delete({ where: { id: ctx.args.add.user.id } })
-          .catch(() => null)
+        await app.prisma.user.delete({ where: { id: ctx.args.add.user.id } }).catch(() => null)
         const u = await app.users.fetch(ctx.args.add.user.id).catch(() => null)
 
         await app.prisma.blacklist.create({
@@ -129,9 +127,7 @@ export default createCommand({
           `\`${u?.tag ?? 'Unknown'}\` (\`${ctx.args.add.user.id}\`) has been banned from the bot ${time ? 'for ' + ms(time) : 'forever'} for \`${ctx.args.add.user.reason}\``
         )
       } else if (ctx.args.add.guild) {
-        const time = ctx.args.add.guild.time
-          ? ms(ctx.args.add.guild.time)
-          : null
+        const time = ctx.args.add.guild.time ? ms(ctx.args.add.guild.time) : null
 
         const blacklist = await app.prisma.blacklist.findUnique({
           where: {
@@ -142,9 +138,7 @@ export default createCommand({
 
         if (blacklist) return await ctx.send('This guild is already banned.')
 
-        await app.prisma.guild
-          .delete({ where: { id: ctx.args.add.guild.id } })
-          .catch(() => null)
+        await app.prisma.guild.delete({ where: { id: ctx.args.add.guild.id } }).catch(() => null)
         const g = app.guilds.cache.get(ctx.args.add.guild.id)
 
         await app.prisma.blacklist.create({
@@ -172,9 +166,7 @@ export default createCommand({
 
         if (!blacklist) return await ctx.send('This user is not banned.')
 
-        const u = await app.users
-          .fetch(ctx.args.remove.user.id)
-          .catch(() => null)
+        const u = await app.users.fetch(ctx.args.remove.user.id).catch(() => null)
         await app.prisma.blacklist.delete({
           where: {
             id: ctx.args.remove.user.id,
@@ -182,9 +174,7 @@ export default createCommand({
           }
         })
 
-        await ctx.send(
-          `\`${u?.tag ?? 'Unknown'}\` (\`${ctx.args.remove.user.id}\`) has been unbanned from the bot.`
-        )
+        await ctx.send(`\`${u?.tag ?? 'Unknown'}\` (\`${ctx.args.remove.user.id}\`) has been unbanned from the bot.`)
       } else if (ctx.args.remove.guild) {
         const blacklist = await app.prisma.blacklist.findUnique({
           where: {
@@ -201,9 +191,7 @@ export default createCommand({
             type: 'GUILD'
           }
         })
-        await ctx.send(
-          `\`${ctx.args.remove.guild.id}\` has been unbanned from the bot.`
-        )
+        await ctx.send(`\`${ctx.args.remove.guild.id}\` has been unbanned from the bot.`)
       }
     }
   }

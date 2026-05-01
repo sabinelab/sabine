@@ -23,10 +23,7 @@ export default class App extends Discord.Client {
   public aliases = new Map<string, string>()
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
-  public interactions = new Map<
-    string,
-    CreateInteractionOptions & CreateModalSubmitInteractionOptions
-  >()
+  public interactions = new Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions>()
   public players = new Map<string, Player>()
   public playerNameIndex = new Map<string, Set<string>>()
   public emoji = new Map<string, string>()
@@ -40,34 +37,19 @@ export default class App extends Discord.Client {
   }
 
   public async load() {
-    for (const file of readdirSync(
-      path.resolve(__dirname, '../../listeners')
-    )) {
-      const listener: Listener = (await import(`../../listeners/${file}`))
-        .default
+    for (const file of readdirSync(path.resolve(__dirname, '../../listeners'))) {
+      const listener: Listener = (await import(`../../listeners/${file}`)).default
 
       if (listener.name === 'clientReady') {
-        this.once('clientReady', () =>
-          listener.run(this).catch((e: Error) => new Logger(this).error(e))
-        )
+        this.once('clientReady', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
       } else {
-        this.on(listener.name, (...args) =>
-          listener
-            .run(this, ...args)
-            .catch((e: Error) => new Logger(this).error(e))
-        )
+        this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
       }
     }
 
-    for (const folder of readdirSync(
-      path.resolve(__dirname, '../../commands')
-    )) {
-      for (const file of readdirSync(
-        path.resolve(__dirname, `../../commands/${folder}`)
-      )) {
-        const command: Command = (
-          await import(`../../commands/${folder}/${file}`)
-        ).default
+    for (const folder of readdirSync(path.resolve(__dirname, '../../commands'))) {
+      for (const file of readdirSync(path.resolve(__dirname, `../../commands/${folder}`))) {
+        const command: Command = (await import(`../../commands/${folder}/${file}`)).default
 
         if (this.commands.get(command.name)) {
           Logger.warn(`There is already a command named '${command.name}'`)
@@ -86,20 +68,12 @@ export default class App extends Discord.Client {
       }
     }
 
-    for (const folder of readdirSync(
-      path.resolve(__dirname, '../../interactions')
-    )) {
-      for (const file of readdirSync(
-        path.resolve(__dirname, `../../interactions/${folder}`)
-      )) {
-        const interaction = (
-          await import(`../../interactions/${folder}/${file}`)
-        ).default
+    for (const folder of readdirSync(path.resolve(__dirname, '../../interactions'))) {
+      for (const file of readdirSync(path.resolve(__dirname, `../../interactions/${folder}`))) {
+        const interaction = (await import(`../../interactions/${folder}/${file}`)).default
 
         if (this.interactions.get(interaction.name)) {
-          Logger.warn(
-            `There is already an interaction named '${interaction.name}'`
-          )
+          Logger.warn(`There is already an interaction named '${interaction.name}'`)
         }
 
         this.interactions.set(interaction.name, interaction)
@@ -123,10 +97,7 @@ export default class App extends Discord.Client {
 
       for (const otherPlayer of allPlayers) {
         const otherPlayerName = otherPlayer.name.toLowerCase()
-        if (
-          playerName.includes(otherPlayerName) ||
-          otherPlayerName.includes(playerName)
-        ) {
+        if (playerName.includes(otherPlayerName) || otherPlayerName.includes(playerName)) {
           similarIds.add(otherPlayer.id.toString())
         }
       }
@@ -152,10 +123,7 @@ export default class App extends Discord.Client {
   }
 
   public async syncCache() {
-    const [blacklist, keys] = await Promise.all([
-      prisma.blacklist.findMany(),
-      Bun.redis.keys('status:*')
-    ])
+    const [blacklist, keys] = await Promise.all([prisma.blacklist.findMany(), Bun.redis.keys('status:*')])
 
     for (const ban of blacklist) {
       this.blacklist.set(ban.id, ban)
@@ -166,11 +134,7 @@ export default class App extends Discord.Client {
       this.status.add(key)
     }
 
-    setTimeout(
-      async () =>
-        await this.syncCache().catch((e) => new Logger(this).error(e)),
-      300_000
-    )
+    setTimeout(async () => await this.syncCache().catch((e) => new Logger(this).error(e)), 300_000)
   }
 
   public async connect() {
@@ -212,12 +176,9 @@ export default class App extends Discord.Client {
       return transformed
     }
 
-    const res = (await rest.put(
-      Discord.Routes.applicationCommands(this.user!.id),
-      {
-        body: transformKeys(commands)
-      }
-    )) as {
+    const res = (await rest.put(Discord.Routes.applicationCommands(this.user!.id), {
+      body: transformKeys(commands)
+    })) as {
       name: string
       id: string
     }[]

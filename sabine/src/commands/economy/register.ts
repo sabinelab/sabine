@@ -15,10 +15,7 @@ export default createCommand({
   examples: ['register'],
   cooldown: true,
   async run({ ctx }) {
-    const profile = await ProfileSchema.fetch(
-      ctx.db.profile.userId,
-      ctx.db.guild.id
-    )
+    const profile = await ProfileSchema.fetch(ctx.db.profile.userId, ctx.db.guild.id)
 
     if (profile) {
       return await ctx.reply('commands.register.already_registered')

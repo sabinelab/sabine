@@ -237,16 +237,12 @@ export default createCommand({
 
     const previous = new ButtonBuilder()
       .setEmoji('1404176223621611572')
-      .setCustomId(
-        `predictions;${ctx.author.id};${page - 1};previous;${ctx.args[4]}`
-      )
+      .setCustomId(`predictions;${ctx.author.id};${page - 1};previous;${ctx.args[4]}`)
       .defineStyle('blue')
 
     const next = new ButtonBuilder()
       .setEmoji('1404176291829121028')
-      .setCustomId(
-        `predictions;${ctx.author.id};${page + 1};next;${ctx.args[4]}`
-      )
+      .setCustomId(`predictions;${ctx.author.id};${page + 1};next;${ctx.args[4]}`)
       .defineStyle('blue')
 
     if (page <= 1) {

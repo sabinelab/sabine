@@ -14,19 +14,9 @@ export default async function Home() {
   return (
     <>
       <div className='h-screen flex flex-col justify-center items-center gap-8 md:gap-0'>
-        <Image
-          src='/sabine.png'
-          width={180}
-          height={180}
-          alt='sabine'
-          className='rounded-full'
-        />
-        <h1 className='md:pt-6 text-6xl font-bold md:text-8xl max-w-full md:max-w-md'>
-          Sabine
-        </h1>
-        <h2 className='text-center md:pt-6 text-2xl md:text-4xl max-w-full'>
-          {t('home.title')}
-        </h2>
+        <Image src='/sabine.png' width={180} height={180} alt='sabine' className='rounded-full' />
+        <h1 className='md:pt-6 text-6xl font-bold md:text-8xl max-w-full md:max-w-md'>Sabine</h1>
+        <h2 className='text-center md:pt-6 text-2xl md:text-4xl max-w-full'>{t('home.title')}</h2>
         <Link
           href='/invite'
           target='_blank'
@@ -43,14 +33,10 @@ export default async function Home() {
         <div className='flex flex-col gap-25 justify-between'>
           <div className='flex flex-col md:flex-row items-center gap-10'>
             <div className='text-center md:text-left md:flex-1'>
-              <h2 className='text-[30px] font-bold pt-10'>
-                {t('home.build.title')}
-              </h2>
+              <h2 className='text-[30px] font-bold pt-10'>{t('home.build.title')}</h2>
               <p className='text-lg pt-4 text-[#9CA3AF] whitespace-pre-line'>
                 {t.rich('home.build.desc', {
-                  strong: (chunks) => (
-                    <span className='font-extrabold'>{chunks}</span>
-                  ),
+                  strong: (chunks) => <span className='font-extrabold'>{chunks}</span>,
                   a: (chunks) => (
                     <a
                       className='font-bold text-blue-400 underline'
@@ -99,14 +85,10 @@ export default async function Home() {
               />
             </div>
             <div className='text-center md:text-left md:flex-1'>
-              <h2 className='text-[30px] font-bold pt-10'>
-                {t('home.realtime.title')}
-              </h2>
+              <h2 className='text-[30px] font-bold pt-10'>{t('home.realtime.title')}</h2>
               <p className='text-lg pt-4 text-[#9CA3AF] whitespace-pre-line'>
                 {t.rich('home.realtime.desc', {
-                  strong: (chunks) => (
-                    <span className='font-extrabold'>{chunks}</span>
-                  ),
+                  strong: (chunks) => <span className='font-extrabold'>{chunks}</span>,
                   a: (chunks) => (
                     <a
                       className='font-bold text-blue-400 underline'
@@ -123,14 +105,10 @@ export default async function Home() {
           </div>
           <div className='flex flex-col md:flex-row items-center gap-10'>
             <div className='text-center md:text-left md:flex-1'>
-              <h2 className='text-[30px] font-bold pt-10'>
-                {t('home.cards.title')}
-              </h2>
+              <h2 className='text-[30px] font-bold pt-10'>{t('home.cards.title')}</h2>
               <p className='text-lg pt-4 text-[#9CA3AF] whitespace-pre-line'>
                 {t.rich('home.cards.desc', {
-                  strong: (chunks) => (
-                    <span className='font-extrabold'>{chunks}</span>
-                  ),
+                  strong: (chunks) => <span className='font-extrabold'>{chunks}</span>,
                   a: (chunks) => (
                     <a
                       className='font-bold text-blue-400 underline'

@@ -24,18 +24,9 @@ export default createCommand({
     const swiftplay_defeats = ctx.db.profile.swiftplayDefeats
     const arena_wins = ctx.db.profile.arenaWins
     const arena_defeats = ctx.db.profile.arenaDefeats
-    const total_wins =
-      ranked_wins +
-      unranked_wins +
-      swiftplay_wins +
-      ranked_swiftplay_wins +
-      arena_wins
+    const total_wins = ranked_wins + unranked_wins + swiftplay_wins + ranked_swiftplay_wins + arena_wins
     const total_defeats =
-      ranked_defeats +
-      unranked_defeats +
-      swiftplay_defeats +
-      ranked_swiftplay_defeats +
-      arena_defeats
+      ranked_defeats + unranked_defeats + swiftplay_defeats + ranked_swiftplay_defeats + arena_defeats
     const lastMatch = await prisma.match.findFirst({
       where: {
         profileId: ctx.db.profile.id

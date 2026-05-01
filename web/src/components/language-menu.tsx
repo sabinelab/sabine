@@ -33,11 +33,7 @@ export default function LanguageMenu() {
 
   return (
     <>
-      <div
-        onMouseEnter={openMenu}
-        onMouseLeave={closeMenu}
-        className='relative inline-block'
-      >
+      <div onMouseEnter={openMenu} onMouseLeave={closeMenu} className='relative inline-block'>
         <button
           type='button'
           onClick={openMenu}

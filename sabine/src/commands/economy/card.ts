@@ -1,21 +1,12 @@
 import { calcPlayerPrice } from '@sabinelab/players'
-import {
-  ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ButtonBuilder,
-  ButtonStyle
-} from 'discord.js'
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
 import { env } from '@/env'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
 const date = Date.now()
 
-export const getNextPlayer = (
-  collection: Set<string>,
-  currentPlayer: string,
-  type: 'next' | 'previous'
-) => {
+export const getNextPlayer = (collection: Set<string>, currentPlayer: string, type: 'next' | 'previous') => {
   const players = [...collection]
   const currentIndex = players.indexOf(currentPlayer)
 
@@ -91,8 +82,7 @@ export default createCommand({
           },
           {
             name: t('commands.card.devalued_price'),
-            value:
-              calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
+            value: calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
             inline: true
           }
         )
@@ -100,23 +90,16 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `card;${ctx.author.id};previous;${ctx.args.card};${firstPlayer}`
-        )
+        .setCustomId(`card;${ctx.author.id};previous;${ctx.args.card};${firstPlayer}`)
         .setStyle(ButtonStyle.Primary)
         .setDisabled()
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(
-          `card;${ctx.author.id};next;${ctx.args.card};${firstPlayer}`
-        )
+        .setCustomId(`card;${ctx.author.id};next;${ctx.args.card};${firstPlayer}`)
         .setStyle(ButtonStyle.Primary)
 
-      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
       await ctx.reply({
         embeds: [embed],
@@ -147,8 +130,7 @@ export default createCommand({
           },
           {
             name: t('commands.card.devalued_price'),
-            value:
-              calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
+            value: calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
             inline: true
           }
         )
@@ -187,11 +169,7 @@ export default createCommand({
       return await ctx.reply('commands.card.player_not_found')
     }
 
-    const nextPlayer = getNextPlayer(
-      players,
-      ctx.args[4],
-      ctx.args[2] as 'next' | 'previous'
-    )
+    const nextPlayer = getNextPlayer(players, ctx.args[4], ctx.args[2] as 'next' | 'previous')
     const player = app.players.get(nextPlayer ?? '')
 
     if (!player) {
@@ -217,8 +195,7 @@ export default createCommand({
         },
         {
           name: t('commands.card.devalued_price'),
-          value:
-            calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
+          value: calcPlayerPrice(player, true).toLocaleString('en') + ' poisons',
           inline: true
         }
       )
@@ -226,9 +203,7 @@ export default createCommand({
 
     const previous = new ButtonBuilder()
       .setEmoji('1404176223621611572')
-      .setCustomId(
-        `card;${ctx.author.id};previous;${ctx.args[3]};${nextPlayer}`
-      )
+      .setCustomId(`card;${ctx.author.id};previous;${ctx.args[3]};${nextPlayer}`)
       .setStyle(ButtonStyle.Primary)
       .setDisabled(!getNextPlayer(players, nextPlayer!, 'previous'))
 
@@ -238,10 +213,7 @@ export default createCommand({
       .setStyle(ButtonStyle.Primary)
       .setDisabled(!getNextPlayer(players, nextPlayer!, 'next'))
 
-    const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-      previous,
-      next
-    )
+    const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
     await ctx.edit({
       embeds: [embed],

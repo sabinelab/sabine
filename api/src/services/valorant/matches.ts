@@ -16,24 +16,12 @@ export default {
     $('.wf-module-item.match-item').each((_, element) => {
       const id = $(element).attr('href')!.split('/')[1]
 
-      const teams = $(element)
-        .find('.match-item-vs-team-name')
-        .text()
-        .replace(/\t/g, '')
-        .trim()
+      const teams = $(element).find('.match-item-vs-team-name').text().replace(/\t/g, '').trim()
       const [team1, team2] = teams.split('\n').filter((i) => i !== '')
 
       const countryElements = $(element).find('.match-item-vs-team .flag')
-      const country1 = countryElements
-        .eq(0)
-        .attr('class')
-        ?.split(' ')[1]
-        .replace('mod-', '')
-      const country2 = countryElements
-        .eq(1)
-        .attr('class')
-        ?.split(' ')[1]
-        .replace('mod-', '')
+      const country1 = countryElements.eq(0).attr('class')?.split(' ')[1].replace('mod-', '')
+      const country2 = countryElements.eq(1).attr('class')?.split(' ')[1].replace('mod-', '')
 
       const status = $(element).find('.ml-status').text()
 
@@ -56,12 +44,7 @@ export default {
         ],
         status,
         tournament: {
-          name: $(element)
-            .find('.match-item-event')
-            .text()
-            .replace(/\t/g, '')
-            .replace(stage, '')
-            .trim(),
+          name: $(element).find('.match-item-event').text().replace(/\t/g, '').replace(stage, '').trim(),
           image: `https:${$(element).find('.match-item-icon img').attr('src')}`
         },
         stage,

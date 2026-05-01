@@ -48,13 +48,11 @@ export default createCommand({
       return await ctx.reply('commands.transactions.none_yet')
     }
 
-    const embed = new EmbedBuilder()
-      .setTitle(t('commands.transactions.embed.title'))
-      .setFooter({
-        text: t('commands.transactions.embed.footer', {
-          page
-        })
+    const embed = new EmbedBuilder().setTitle(t('commands.transactions.embed.title')).setFooter({
+      text: t('commands.transactions.embed.footer', {
+        page
       })
+    })
 
     let description = ''
 
@@ -135,13 +133,11 @@ export default createCommand({
       return await ctx.reply('commands.transactions.none_yet')
     }
 
-    const embed = new EmbedBuilder()
-      .setTitle(t('commands.transactions.embed.title'))
-      .setFooter({
-        text: t('commands.transactions.embed.footer', {
-          page
-        })
+    const embed = new EmbedBuilder().setTitle(t('commands.transactions.embed.title')).setFooter({
+      text: t('commands.transactions.embed.footer', {
+        page
       })
+    })
 
     let description = ''
 

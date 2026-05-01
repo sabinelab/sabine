@@ -1,10 +1,5 @@
 import { prisma } from '@db'
-import {
-  ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ButtonBuilder,
-  ButtonStyle
-} from 'discord.js'
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
 import { env } from '@/env'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
@@ -95,24 +90,17 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`
-        )
+        .setCustomId(`show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`)
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(
-          `show;${ctx.author.id};next;${ctx.args.player};${card.playerId};${card.id}`
-        )
+        .setCustomId(`show;${ctx.author.id};next;${ctx.args.player};${card.playerId};${card.id}`)
         .setStyle(ButtonStyle.Primary)
         .setDisabled(cards.length === 1)
 
-      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
       await ctx.reply(embed.build({ components: [row] }))
     }
@@ -182,24 +170,17 @@ export default createCommand({
 
     const previous = new ButtonBuilder()
       .setEmoji('1404176223621611572')
-      .setCustomId(
-        `show;${ctx.author.id};previous;${ctx.args[3]};${card.playerId};${card.id}`
-      )
+      .setCustomId(`show;${ctx.author.id};previous;${ctx.args[3]};${card.playerId};${card.id}`)
       .setStyle(ButtonStyle.Primary)
       .setDisabled(!hasPrevious)
 
     const next = new ButtonBuilder()
       .setEmoji('1404176291829121028')
-      .setCustomId(
-        `show;${ctx.author.id};next;${ctx.args[3]};${card.playerId};${card.id}`
-      )
+      .setCustomId(`show;${ctx.author.id};next;${ctx.args[3]};${card.playerId};${card.id}`)
       .setStyle(ButtonStyle.Primary)
       .setDisabled(!hasNext)
 
-    const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-      previous,
-      next
-    )
+    const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
     await ctx.edit({
       embeds: [embed],

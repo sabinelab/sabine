@@ -49,12 +49,8 @@ export const processMatch = async () => {
       const parsedData1 = JSON.parse(payload1)
       const parsedData2 = JSON.parse(payload2)
 
-      const p1InQueue = await Bun.redis.get(
-        `arena:in_queue:${parsedData1.userId}`
-      )
-      const p2InQueue = await Bun.redis.get(
-        `arena:in_queue:${parsedData2.userId}`
-      )
+      const p1InQueue = await Bun.redis.get(`arena:in_queue:${parsedData1.userId}`)
+      const p2InQueue = await Bun.redis.get(`arena:in_queue:${parsedData2.userId}`)
 
       if (!p1InQueue) {
         if (p2InQueue) {
@@ -74,10 +70,7 @@ export const processMatch = async () => {
         break
       }
 
-      await Bun.redis.unlink(
-        `arena:in_queue:${parsedData1.userId}`,
-        `arena:in_queue:${parsedData2.userId}`
-      )
+      await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`, `arena:in_queue:${parsedData2.userId}`)
 
       await arenaQueue.add(
         'arena',
@@ -149,8 +142,7 @@ export const processArenaQueue = async (app: App, data: ArenaQueuePayload) => {
     })
   ])
 
-  if (!player1 || !player2 || !player1.cards.length || !player2.cards.length)
-    return
+  if (!player1 || !player2 || !player1.cards.length || !player2.cards.length) return
 
   if (player1.cards.length < 5 && player2.cards.length === 5) {
     player1.rankRating -= 15

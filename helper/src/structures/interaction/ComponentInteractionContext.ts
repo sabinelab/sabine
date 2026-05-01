@@ -42,9 +42,7 @@ export default class ComponentInteractionContext {
     return this
   }
 
-  public async reply(
-    content: string | Discord.InteractionReplyOptions
-  ): Promise<Discord.Message | null | undefined> {
+  public async reply(content: string | Discord.InteractionReplyOptions): Promise<Discord.Message | null | undefined> {
     if (typeof content === 'string') {
       content = {
         content
@@ -60,9 +58,7 @@ export default class ComponentInteractionContext {
 
     if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.followUp(content)
-    } else
-      return (await this.interaction.reply({ ...content, withResponse: true }))
-        .resource?.message
+    } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
   public async edit(
@@ -83,7 +79,6 @@ export default class ComponentInteractionContext {
 
     if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.editReply(content)
-    } else
-      return await this.interaction.update({ ...content, withResponse: true })
+    } else return await this.interaction.update({ ...content, withResponse: true })
   }
 }

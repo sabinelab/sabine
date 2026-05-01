@@ -3,16 +3,13 @@ import type { EventsData } from '../../../types/index.d'
 
 export default {
   get: async () => {
-    const res = await fetch(
-      'https://api.pandascore.co/lol/leagues?per_page=100',
-      {
-        headers: {
-          accept: 'application/json',
-          authorization: env.PANDA_TOKEN
-        },
-        cache: 'no-store'
-      }
-    )
+    const res = await fetch('https://api.pandascore.co/lol/leagues?per_page=100', {
+      headers: {
+        accept: 'application/json',
+        authorization: env.PANDA_TOKEN
+      },
+      cache: 'no-store'
+    })
 
     if (!res.ok) return []
 

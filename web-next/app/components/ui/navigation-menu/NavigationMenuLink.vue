@@ -5,9 +5,7 @@ import { NavigationMenuLink, useForwardPropsEmits } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 
-const props = defineProps<
-  NavigationMenuLinkProps & { class?: HTMLAttributes['class'] }
->()
+const props = defineProps<NavigationMenuLinkProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<NavigationMenuLinkEmits>()
 
 const delegatedProps = reactiveOmit(props, 'class')

@@ -35,11 +35,7 @@ export default class Logger {
   }
 
   public async error(error: Error | string, shardId?: number) {
-    const ignoredErrors = [
-      'Missing Permissions',
-      'AbortError: This operation was aborted',
-      'Missing Access'
-    ]
+    const ignoredErrors = ['Missing Permissions', 'AbortError: This operation was aborted', 'Missing Access']
 
     if (ignoredErrors.some((e) => error.toString().includes(e))) return
 
@@ -51,9 +47,7 @@ export default class Logger {
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``)
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
-      const webhooks = (await rest.get(
-        Routes.channelWebhooks(env.ERROR_LOG)
-      )) as APIWebhook[]
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find((w) => w.name === `${client.username} Logger`)
 
       if (!webhook) {
@@ -78,9 +72,7 @@ export default class Logger {
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack}\`\`\``)
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
-      const webhooks = (await rest.get(
-        Routes.channelWebhooks(env.ERROR_LOG)
-      )) as APIWebhook[]
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find((w) => w.name === `${client.username} Logger`)
 
       if (!webhook) {

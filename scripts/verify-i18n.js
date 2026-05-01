@@ -21,11 +21,7 @@ const loadJson = (filename) => {
 const flattenKeys = (obj, prefix = '') => {
   return Object.keys(obj).reduce((acc, k) => {
     const pre = prefix.length ? prefix + '.' : ''
-    if (
-      typeof obj[k] === 'object' &&
-      obj[k] !== null &&
-      !Array.isArray(obj[k])
-    ) {
+    if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k])) {
       Object.assign(acc, flattenKeys(obj[k], pre + k))
     } else {
       acc[pre + k] = true
@@ -71,9 +67,7 @@ if (missingPt.length > 0) {
 }
 
 if (hasError) {
-  console.error(
-    '\nVerification failed. Please add missing keys to translation files.'
-  )
+  console.error('\nVerification failed. Please add missing keys to translation files.')
   process.exit(1)
 }
 

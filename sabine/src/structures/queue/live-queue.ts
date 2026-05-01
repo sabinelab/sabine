@@ -28,9 +28,7 @@ export const processLive = async (app: App, data: LivePayload) => {
   const matchedEventNames = Object.keys(tournaments).filter(
     (key) =>
       key.toLowerCase() === data.tournament.name ||
-      tournaments[key].some((regex) =>
-        regex.test(data.tournament.name.toLowerCase())
-      )
+      tournaments[key].some((regex) => regex.test(data.tournament.name.toLowerCase()))
   )
 
   if (!matchedEventNames.includes(data.tournament.name)) {
@@ -46,9 +44,7 @@ export const processLive = async (app: App, data: LivePayload) => {
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { id: 'asc' },
       where: {
-        [data.game === 'valorant'
-          ? 'valorantLiveFeedChannel'
-          : 'lolLiveFeedChannel']: {
+        [data.game === 'valorant' ? 'valorantLiveFeedChannel' : 'lolLiveFeedChannel']: {
           not: null
         },
         events: {
@@ -77,10 +73,7 @@ export const processLive = async (app: App, data: LivePayload) => {
     const messages: Promise<unknown>[] = []
 
     for (const guild of guilds) {
-      const channelId =
-        data.game === 'valorant'
-          ? guild.valorantLiveFeedChannel
-          : guild.lolLiveFeedChannel
+      const channelId = data.game === 'valorant' ? guild.valorantLiveFeedChannel : guild.lolLiveFeedChannel
       if (!channelId) continue
 
       if (!guild.events.length) continue
@@ -89,15 +82,11 @@ export const processLive = async (app: App, data: LivePayload) => {
 
       const emoji1 =
         app.emoji.get(data.teams[0].name.toLowerCase()) ??
-        app.emoji.get(
-          app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? ''
-        ) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
         app.emoji.get('default')
       const emoji2 =
         app.emoji.get(data.teams[1].name.toLowerCase()) ??
-        app.emoji.get(
-          app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? ''
-        ) ??
+        app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
         app.emoji.get('default')
 
       const embed = new EmbedBuilder()
@@ -123,10 +112,7 @@ export const processLive = async (app: App, data: LivePayload) => {
 
       const button = new ButtonBuilder()
       if (data.game === 'valorant') {
-        button
-          .setStyle(ButtonStyle.Link)
-          .setLabel(t(guild.lang, 'helper.stats'))
-          .setURL(data.url!)
+        button.setStyle(ButtonStyle.Link).setLabel(t(guild.lang, 'helper.stats')).setURL(data.url!)
       } else {
         button
           .setStyle(ButtonStyle.Primary)

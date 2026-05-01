@@ -127,11 +127,7 @@ export const emojis: Emoji[] = [
   },
   {
     name: 'corinthians esports',
-    aliases: [
-      'corinthians esports inclusivo',
-      'corinthians e-sports',
-      'corinthians esports'
-    ],
+    aliases: ['corinthians esports inclusivo', 'corinthians e-sports', 'corinthians esports'],
     emoji: '<:corinthians:1439977471859494912>'
   },
   {

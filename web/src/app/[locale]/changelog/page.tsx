@@ -18,9 +18,7 @@ export default async function ChangelogPage(props: Props) {
   return (
     <>
       <div>
-        <h1 className='font-bold text-4xl md:text-5xl text-center pt-15'>
-          {t('changelog.title')}
-        </h1>
+        <h1 className='font-bold text-4xl md:text-5xl text-center pt-15'>{t('changelog.title')}</h1>
       </div>
 
       <Suspense fallback={skeleton}>

@@ -74,9 +74,7 @@ export class UserSchema implements User {
           userId: this.id
         },
         update: {
-          expiresAt: !premium?.expiresAt
-            ? expiresAt
-            : new Date(premium.expiresAt.getTime() + 2592000000)
+          expiresAt: !premium?.expiresAt ? expiresAt : new Date(premium.expiresAt.getTime() + 2592000000)
         },
         where: {
           userId: this.id
@@ -105,9 +103,7 @@ export class UserSchema implements User {
       })
 
     const webhooks = await channel.fetchWebhooks()
-    let webhook = webhooks.find(
-      (w) => w.name === app.user?.username + ' Logger'
-    )
+    let webhook = webhooks.find((w) => w.name === app.user?.username + ' Logger')
 
     if (!webhook)
       webhook = await channel.createWebhook({

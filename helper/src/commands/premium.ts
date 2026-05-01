@@ -31,9 +31,7 @@ export default createCommand({
 
     const embed = new EmbedBuilder()
       .setTitle('PREMIUM')
-      .setDesc(
-        'Use this panel to purchase one of our plans and gain exclusive advantages for your server!'
-      )
+      .setDesc('Use this panel to purchase one of our plans and gain exclusive advantages for your server!')
       .setFields(
         {
           name: 'Premium Booster',

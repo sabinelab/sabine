@@ -11,13 +11,7 @@ const deleteProfileCache = async (pattern: string | undefined) => {
   let cursor = '0'
 
   do {
-    const [next, keys] = await Bun.redis.scan(
-      cursor,
-      'MATCH',
-      pattern,
-      'COUNT',
-      100
-    )
+    const [next, keys] = await Bun.redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100)
 
     if (keys.length) {
       await Bun.redis.unlink(...keys)
@@ -87,33 +81,25 @@ export const prisma = new PrismaClient({ adapter }).$extends({
     profile: {
       async update({ args, query }) {
         const profile = await query(args)
-        Bun.redis
-          .unlink(`profile:${profile.guildId}:${profile.userId}`)
-          .catch(voidCatch)
+        Bun.redis.unlink(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
 
         return profile
       },
       async upsert({ args, query }) {
         const profile = await query(args)
-        Bun.redis
-          .unlink(`profile:${profile.guildId}:${profile.userId}`)
-          .catch(voidCatch)
+        Bun.redis.unlink(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
 
         return profile
       },
       async create({ args, query }) {
         const profile = await query(args)
-        Bun.redis
-          .unlink(`profile:${profile.guildId}:${profile.userId}`)
-          .catch(voidCatch)
+        Bun.redis.unlink(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
 
         return profile
       },
       async delete({ args, query }) {
         const profile = await query(args)
-        Bun.redis
-          .unlink(`profile:${profile.guildId}:${profile.userId}`)
-          .catch(voidCatch)
+        Bun.redis.unlink(`profile:${profile.guildId}:${profile.userId}`).catch(voidCatch)
 
         return profile
       }

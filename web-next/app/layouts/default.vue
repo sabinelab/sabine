@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  BookCheck,
-  IdCardLanyard,
-  Menu,
-  NotepadText,
-  SlashSquare
-} from 'lucide-vue-next'
+import { BookCheck, IdCardLanyard, Menu, NotepadText, SlashSquare } from 'lucide-vue-next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,12 +15,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle
 } from '~/components/ui/navigation-menu'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger
-} from '~/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '~/components/ui/select'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -58,9 +47,7 @@ const items = [
 
 <template>
   <main>
-    <header
-      class="hidden md:flex justify-between items-center py-5 md:px-15 px-5"
-    >
+    <header class="hidden md:flex justify-between items-center py-5 md:px-15 px-5">
       <div class="flex gap-5 items-center">
         <nuxt-img
           src="/favicon.ico"
@@ -202,10 +189,7 @@ const items = [
             <Menu />
           </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            align="end"
-            class="bg-[#111] text-white border-none"
-          >
+          <DropdownMenuContent align="end" class="bg-[#111] text-white border-none">
             <DropdownMenuGroup class="">
               <DropdownMenuItem
                 v-for="item in items"

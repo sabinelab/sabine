@@ -15,9 +15,7 @@ export default createCommand({
   },
   onlyDev: true,
   async run({ ctx }) {
-    const user =
-      (await UserSchema.fetch(ctx.args.user.id)) ??
-      new UserSchema(ctx.args.user.id)
+    const user = (await UserSchema.fetch(ctx.args.user.id)) ?? new UserSchema(ctx.args.user.id)
 
     await user.addPremium('ADD_PREMIUM_BY_COMMAND')
     await ctx.send(`Premium activated for ${ctx.args.user.toString()}`)

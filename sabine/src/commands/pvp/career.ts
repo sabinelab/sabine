@@ -65,10 +65,7 @@ export default createCommand({
       })
 
     for (const match of matches) {
-      if (
-        match.mode.toLowerCase().includes('ranked') &&
-        match.mode.toLowerCase() !== 'unranked'
-      ) {
+      if (match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'
@@ -175,10 +172,7 @@ export default createCommand({
       })
 
     for (const match of matches) {
-      if (
-        match.mode.toLowerCase().includes('ranked') &&
-        match.mode.toLowerCase() !== 'unranked'
-      ) {
+      if (match.mode.toLowerCase().includes('ranked') && match.mode.toLowerCase() !== 'unranked') {
         const timestamp = (match.when.getTime() / 1000).toFixed(0)
 
         const type = match.winner ? 'win' : 'defeat'

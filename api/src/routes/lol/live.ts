@@ -10,19 +10,13 @@ export default function (fastify: FastifyInstance) {
       }
     })
 
-    return matches.map(
-      ({
-        tournamentFullName: _tournamentFullName,
-        tournamentImage,
-        tournamentName,
-        ...m
-      }) =>
-        Object.assign(m, {
-          tournament: {
-            name: tournamentName,
-            image: tournamentImage
-          }
-        })
+    return matches.map(({ tournamentFullName: _tournamentFullName, tournamentImage, tournamentName, ...m }) =>
+      Object.assign(m, {
+        tournament: {
+          name: tournamentName,
+          image: tournamentImage
+        }
+      })
     )
   })
 }

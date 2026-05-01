@@ -52,9 +52,7 @@ export default class Logger {
         .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error}\`\`\``)
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
-      const webhooks = (await rest.get(
-        Routes.channelWebhooks(env.ERROR_LOG)
-      )) as APIWebhook[]
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find((w) => w.name === `${client.username} Logger`)
 
       if (!webhook) {
@@ -76,14 +74,10 @@ export default class Logger {
 
       const embed = new EmbedBuilder()
         .setTitle('An error has occurred')
-        .setDesc(
-          `Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack ?? error}\`\`\``
-        )
+        .setDesc(`Shard ID: \`${shardId}\`\n\`\`\`js\n${error.stack ?? error}\`\`\``)
 
       const client = (await rest.get(Routes.user('@me'))) as APIUser
-      const webhooks = (await rest.get(
-        Routes.channelWebhooks(env.ERROR_LOG)
-      )) as APIWebhook[]
+      const webhooks = (await rest.get(Routes.channelWebhooks(env.ERROR_LOG))) as APIWebhook[]
       let webhook = webhooks.find((w) => w.name === `${client.username} Logger`)
 
       if (!webhook) {

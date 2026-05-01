@@ -12,12 +12,8 @@ export default createModalSubmitInteraction({
   async run({ ctx }) {
     if (ctx.author.id !== '441932495693414410') return
 
-    const title = ctx.interaction.fields.getTextInputValue(
-      'create-status-modal-response-1'
-    )
-    const description = ctx.interaction.fields.getTextInputValue(
-      'create-status-modal-response-2'
-    )
+    const title = ctx.interaction.fields.getTextInputValue('create-status-modal-response-1')
+    const description = ctx.interaction.fields.getTextInputValue('create-status-modal-response-2')
     const type = ctx.interaction.fields
       .getTextInputValue('create-status-modal-response-3')
       .toUpperCase() as keyof typeof emoji
@@ -26,10 +22,7 @@ export default createModalSubmitInteraction({
 
     if (channel?.type !== ChannelType.GuildAnnouncement) return
 
-    const embed = new EmbedBuilder()
-      .setTitle(`${emoji[type]} ${title}`)
-      .setDesc(description)
-      .setColor(colors[type])
+    const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(description).setColor(colors[type])
 
     const button = new ButtonBuilder()
       .setCustomId('join-thread')

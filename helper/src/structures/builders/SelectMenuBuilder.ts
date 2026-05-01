@@ -1,8 +1,4 @@
-import {
-  type ComponentEmojiResolvable,
-  type InteractionReplyOptions,
-  StringSelectMenuBuilder
-} from 'discord.js'
+import { type ComponentEmojiResolvable, type InteractionReplyOptions, StringSelectMenuBuilder } from 'discord.js'
 
 export default class SelectMenuBuilder extends StringSelectMenuBuilder {
   public setCustomId(id: string) {

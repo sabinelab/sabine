@@ -14,20 +14,8 @@ export default {
     const team0 = $('.wf-title-med').eq(0).text().replace(/\t/g, '').trim()
     const team1 = $('.wf-title-med').eq(1).text().replace(/\t/g, '').trim()
 
-    const score0 = $('.js-spoiler')
-      .find('span')
-      .text()
-      .replace(':', '')
-      .replace(/\s+/g, '')
-      .trim()
-      .split('')[0]
-    const score1 = $('.js-spoiler')
-      .find('span')
-      .text()
-      .replace(':', '')
-      .replace(/\s+/g, '')
-      .trim()
-      .split('')[1]
+    const score0 = $('.js-spoiler').find('span').text().replace(':', '').replace(/\s+/g, '').trim().split('')[0]
+    const score1 = $('.js-spoiler').find('span').text().replace(':', '').replace(/\s+/g, '').trim().split('')[1]
 
     const maps = $("div[style*='text-align: center']")
       .contents()
@@ -37,32 +25,12 @@ export default {
       .replace(/\s+/g, ' ')
       .split(' ')
     const currentMap =
-      maps[
-        Number(
-          $('.vm-stats-gamesnav-item.js-map-switch.mod-active.mod-live')
-            .find('span')
-            .text()
-            .trim()
-        ) - 1
-      ]
+      maps[Number($('.vm-stats-gamesnav-item.js-map-switch.mod-active.mod-live').find('span').text().trim()) - 1]
 
-    const mapScore0 = $('.vm-stats-game.mod-active')
-      .find('div')
-      .find('.score')
-      .eq(0)
-      .text()
-      .trim()
-    const mapScore1 = $('.vm-stats-game.mod-active')
-      .find('div')
-      .find('.score')
-      .eq(1)
-      .text()
-      .trim()
+    const mapScore0 = $('.vm-stats-game.mod-active').find('div').find('.score').eq(0).text().trim()
+    const mapScore1 = $('.vm-stats-game.mod-active').find('div').find('.score').eq(1).text().trim()
 
-    const stage = $('.match-header-event-series')
-      .text()
-      .replace(/\t/g, '')
-      .replace(/\n/g, '')
+    const stage = $('.match-header-event-series').text().replace(/\t/g, '').replace(/\n/g, '')
 
     return {
       teams: [

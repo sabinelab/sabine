@@ -14,9 +14,7 @@ type CommandArgumentType = {
   [Discord.ApplicationCommandOptionType.User]: Discord.User
   [Discord.ApplicationCommandOptionType.Channel]: Discord.Channel
   [Discord.ApplicationCommandOptionType.Role]: Discord.Role
-  [Discord.ApplicationCommandOptionType.Mentionable]:
-    | Discord.User
-    | Discord.Role
+  [Discord.ApplicationCommandOptionType.Mentionable]: Discord.User | Discord.Role
   [Discord.ApplicationCommandOptionType.Attachment]: Discord.Attachment
 }
 
@@ -42,17 +40,9 @@ export type CommandArguments = {
 
 export type ResolveArguments<T extends CommandArguments> = {
   [K in keyof T]: T[K]['type'] extends Discord.ApplicationCommandOptionType.Subcommand
-    ?
-        | (T[K]['args'] extends CommandArguments
-            ? ResolveArguments<T[K]['args']>
-            : Record<string, never>)
-        | undefined
+    ? (T[K]['args'] extends CommandArguments ? ResolveArguments<T[K]['args']> : Record<string, never>) | undefined
     : T[K]['type'] extends Discord.ApplicationCommandOptionType.SubcommandGroup
-      ?
-          | (T[K]['args'] extends CommandArguments
-              ? ResolveArguments<T[K]['args']>
-              : Record<string, never>)
-          | undefined
+      ? (T[K]['args'] extends CommandArguments ? ResolveArguments<T[K]['args']> : Record<string, never>) | undefined
       : T[K]['required'] extends string | boolean
         ? CommandArgumentType[T[K]['type']]
         : CommandArgumentType[T[K]['type']] | undefined
@@ -99,20 +89,12 @@ export type Command<T extends CommandArguments = CommandArguments> = {
   modalSubmitInteractionTime?: number
   cooldown?: boolean
   run: (props: CommandOptions<T>) => Promise<unknown>
-  createAutocompleteInteraction?: (
-    options: CreateAutocompleteInteractionOptions
-  ) => Promise<unknown>
-  createMessageComponentInteraction?: (
-    options: CreateComponentInteractionOptions
-  ) => Promise<unknown>
-  createModalSubmitInteraction?: (
-    options: CreateModalSubmitInteractionOptions
-  ) => Promise<unknown>
+  createAutocompleteInteraction?: (options: CreateAutocompleteInteractionOptions) => Promise<unknown>
+  createMessageComponentInteraction?: (options: CreateComponentInteractionOptions) => Promise<unknown>
+  createModalSubmitInteraction?: (options: CreateModalSubmitInteractionOptions) => Promise<unknown>
 }
 
-export const parseArguments = (
-  args?: CommandArguments
-): Discord.ApplicationCommandOptionData[] | undefined => {
+export const parseArguments = (args?: CommandArguments): Discord.ApplicationCommandOptionData[] | undefined => {
   if (!args) return undefined
 
   return Object.values(args).map((arg) => {
@@ -121,8 +103,7 @@ export const parseArguments = (
       nameLocalizations: arg.nameLocalizations,
       description: arg.description,
       descriptionLocalizations: arg.descriptionLocalizations,
-      required:
-        typeof arg.required === 'boolean' ? arg.required : !!arg.required
+      required: typeof arg.required === 'boolean' ? arg.required : !!arg.required
     }
 
     if (
@@ -138,9 +119,7 @@ export const parseArguments = (
     if (arg.type === Discord.ApplicationCommandOptionType.String) {
       return Object.assign(base, {
         type: arg.type,
-        choices: arg.choices as
-          | Discord.ApplicationCommandOptionChoiceData<string>[]
-          | undefined,
+        choices: arg.choices as Discord.ApplicationCommandOptionChoiceData<string>[] | undefined,
         minLength: arg.min_length,
         maxLength: arg.max_length,
         autocomplete: arg.autocomplete
@@ -153,9 +132,7 @@ export const parseArguments = (
     ) {
       return Object.assign(base, {
         type: arg.type,
-        choices: arg.choices as
-          | Discord.ApplicationCommandOptionChoiceData<number>[]
-          | undefined,
+        choices: arg.choices as Discord.ApplicationCommandOptionChoiceData<number>[] | undefined,
         minValue: arg.min_value,
         maxValue: arg.max_value,
         autocomplete: arg.autocomplete

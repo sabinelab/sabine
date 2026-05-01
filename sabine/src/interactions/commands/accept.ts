@@ -207,10 +207,7 @@ export default createComponentInteraction({
         channelId: interaction.resource?.message?.channelId,
         map: map.name,
         image: map.image,
-        mode:
-          ctx.args[3] === 'tournament'
-            ? 'tournament'
-            : ctx.args.slice(3).join(':')
+        mode: ctx.args[3] === 'tournament' ? 'tournament' : ctx.args.slice(3).join(':')
       }),
       'EX',
       300

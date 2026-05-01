@@ -11,9 +11,7 @@ export default async function Commands() {
   return (
     <>
       <div>
-        <h1 className='flex flex-col font-bold text-4xl md:text-5xl items-center pt-15'>
-          {t('commands.title')}
-        </h1>
+        <h1 className='flex flex-col font-bold text-4xl md:text-5xl items-center pt-15'>{t('commands.title')}</h1>
       </div>
 
       <Suspense fallback={skeleton}>

@@ -36,11 +36,7 @@ const locale: Record<string, unknown> = {
   es
 }
 
-export default function t<T extends Content>(
-  lang: string,
-  content: T,
-  args?: Args
-): string {
+export default function t<T extends Content>(lang: string, content: T, args?: Args): string {
   let json = locale[lang]
 
   for (const param of content.split('.')) {

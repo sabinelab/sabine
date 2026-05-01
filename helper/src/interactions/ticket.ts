@@ -10,14 +10,11 @@ export default createComponentInteraction({
       flags: 64
     })
 
-    const channels = ctx.guild.channels.cache.filter(
-      (c) => c.parentId === '1277285123070361673'
-    )
+    const channels = ctx.guild.channels.cache.filter((c) => c.parentId === '1277285123070361673')
 
     if (channels.some((ch) => ch.name.includes(ctx.interaction.user.id))) {
       return await ctx.interaction.editReply({
-        content:
-          'You already have an open ticket. Please wait until a moderator deletes it.'
+        content: 'You already have an open ticket. Please wait until a moderator deletes it.'
       })
     }
 

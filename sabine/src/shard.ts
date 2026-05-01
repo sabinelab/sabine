@@ -2,10 +2,7 @@ import { valorantMaps } from '@sabinelab/utils'
 import { Worker } from 'bullmq'
 import { REST, Routes, ShardingManager, type APIWebhook } from 'discord.js'
 import { env } from '@/env'
-import {
-  arenaMapQueue,
-  processArenaMap
-} from '@/structures/queue/arena-map-queue'
+import { arenaMapQueue, processArenaMap } from '@/structures/queue/arena-map-queue'
 import './server'
 import { processMatch } from '@/structures/queue/arena-queue'
 import EmbedBuilder from './structures/builders/EmbedBuilder'
@@ -27,15 +24,11 @@ const mapInit = mapsInit[Math.floor(Math.random() * mapsInit.length)]
 
 if (!currentMapInit && mapInit) await Bun.redis.set('arena:map', mapInit)
 
-new Worker(
-  'change-arena-map',
-  async () => await processArenaMap().catch(Logger.error),
-  {
-    connection: {
-      url: env.REDIS_URL
-    }
+new Worker('change-arena-map', async () => await processArenaMap().catch(Logger.error), {
+  connection: {
+    url: env.REDIS_URL
   }
-)
+})
 
 const patterns = ['*leaderboard:*', '*agent_selection:*', '*match:*']
 
@@ -43,13 +36,7 @@ for (const pattern of patterns) {
   let cursor = '0'
 
   do {
-    const [next, keys] = await Bun.redis.scan(
-      cursor,
-      'MATCH',
-      pattern,
-      'COUNT',
-      100
-    )
+    const [next, keys] = await Bun.redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100)
 
     if (keys.length) {
       await Bun.redis.unlink(...keys)
@@ -67,9 +54,7 @@ const manager = new ShardingManager('src/index.ts', {
 
 const rest = new REST().setToken(env.BOT_TOKEN)
 
-const res = (await rest.get(
-  Routes.channelWebhooks(env.SHARD_LOG)
-)) as APIWebhook[]
+const res = (await rest.get(Routes.channelWebhooks(env.SHARD_LOG))) as APIWebhook[]
 const webhook = res.find((w) => w.token)
 
 if (!webhook) {
@@ -210,9 +195,7 @@ manager.on('shardCreate', async (shard) => {
 
     const embed = new EmbedBuilder()
       .setTitle('Shard Error')
-      .setDesc(
-        `Shard ID: \`${shard.id}\` => \`Error\`\n\`\`\`fix\n${error.stack}\`\`\``
-      )
+      .setDesc(`Shard ID: \`${shard.id}\` => \`Error\`\n\`\`\`fix\n${error.stack}\`\`\``)
       .setTimestamp()
 
     const route = Routes.webhook(webhook.id, webhook.token)

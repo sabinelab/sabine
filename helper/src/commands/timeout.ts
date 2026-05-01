@@ -70,9 +70,7 @@ export default createCommand({
       .catch(() => {})
 
     await member.edit({
-      communicationDisabledUntil: new Date(
-        Date.now() + ms(ctx.args.time)
-      ).toISOString()
+      communicationDisabledUntil: new Date(Date.now() + ms(ctx.args.time)).toISOString()
     })
 
     const translatedTime = (

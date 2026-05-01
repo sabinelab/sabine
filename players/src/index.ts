@@ -23,10 +23,7 @@ export type Player = {
 }
 
 export const getPlayers = () => {
-  const lines = fs
-    .readFileSync(path.join(__dirname, '../assets/players.csv'))
-    .toString()
-    .split('\n')
+  const lines = fs.readFileSync(path.join(__dirname, '../assets/players.csv')).toString().split('\n')
   const headers = lines
     .shift()
     ?.split(',')

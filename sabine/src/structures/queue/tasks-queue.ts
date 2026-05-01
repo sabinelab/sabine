@@ -33,10 +33,7 @@ const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service()
 
 const sendValorantMatches = async (app: App) => {
-  const [res, res2] = await Promise.all([
-    service.getMatches('valorant'),
-    service.getResults('valorant')
-  ])
+  const [res, res2] = await Promise.all([service.getMatches('valorant'), service.getResults('valorant')])
 
   if (!res?.length) return
 
@@ -79,10 +76,7 @@ const sendValorantMatches = async (app: App) => {
 
       if (
         guild.valorantMatches.length &&
-        !res2.some(
-          (d) =>
-            d.id === guild.valorantMatches[guild.valorantMatches.length - 1]
-        )
+        !res2.some((d) => d.id === guild.valorantMatches[guild.valorantMatches.length - 1])
       )
         continue
 
@@ -122,11 +116,7 @@ const sendValorantMatches = async (app: App) => {
               .some((e) => {
                 const tour = tournaments[e.name]
                 if (!tour) return false
-                return tour.some((regex) =>
-                  regex.test(
-                    d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
-                  )
-                )
+                return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
               })
 
             if (events2) return true
@@ -135,28 +125,18 @@ const sendValorantMatches = async (app: App) => {
           })
         }
       } else {
-        if (
-          !guild.events.some((e) => Object.keys(tournaments).includes(e.name))
-        ) {
-          data = res.filter((d) =>
-            guild.events.some((e) => e.name === d.tournament.name)
-          )
+        if (!guild.events.some((e) => Object.keys(tournaments).includes(e.name))) {
+          data = res.filter((d) => guild.events.some((e) => e.name === d.tournament.name))
         } else {
           data = res.filter((d) => {
-            const events1 = guild.events.some(
-              (e) => e.name === d.tournament.name
-            )
+            const events1 = guild.events.some((e) => e.name === d.tournament.name)
 
             if (events1) return true
 
             const events2 = guild.events.some((e) => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some((regex) =>
-                regex.test(
-                  d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()
-                )
-              )
+              return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
             })
 
             if (events2) return true
@@ -171,23 +151,16 @@ const sendValorantMatches = async (app: App) => {
       for (const e of guild.events.filter((e) => e.type === 'valorant')) {
         const thunk = async () => {
           try {
-            const messages = (await rest.get(
-              Routes.channelMessages(e.channel1),
-              {
-                query: new URLSearchParams({
-                  limit: '100'
-                })
-              }
-            )) as Collection<string, Message>
+            const messages = (await rest.get(Routes.channelMessages(e.channel1), {
+              query: new URLSearchParams({
+                limit: '100'
+              })
+            })) as Collection<string, Message>
 
-            const messagesIds = messages
-              .filter((m) => m.author.id === app.user?.id)
-              .map((m) => m.id)
+            const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
 
             if (messagesIds.length === 1) {
-              await rest.delete(
-                Routes.channelMessage(e.channel1, messagesIds[0])
-              )
+              await rest.delete(Routes.channelMessage(e.channel1, messagesIds[0]))
             } else if (messagesIds.length) {
               await rest.post(Routes.channelBulkDelete(e.channel1), {
                 body: {
@@ -210,32 +183,25 @@ const sendValorantMatches = async (app: App) => {
           ...body,
           when: new Date(body.when)
         }))) {
-          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
           for (const e of guild.events) {
             if (
               d.id &&
               (e.name === d.tournament.name ||
                 tournaments[e.name]?.some((regex) =>
-                  regex.test(
-                    d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase()
-                  )
+                  regex.test(d.tournament.name.trim().replace(/\s+/g, ' ').toLowerCase())
                 ))
             ) {
               if (d.stage.toLowerCase().includes('showmatch')) continue
 
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
               const index = guild.valorantMatches.indexOf(d.id)
@@ -411,13 +377,7 @@ const sendLolMatches = async (app: App) => {
         type: $Enums.EventType
       }[] = []
 
-      if (
-        guild.lolMatches.length &&
-        !res2.some(
-          (d) => d.id === guild.lolMatches[guild.lolMatches.length - 1]
-        )
-      )
-        continue
+      if (guild.lolMatches.length && !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])) continue
 
       guild.lolMatches = []
 
@@ -430,31 +390,21 @@ const sendLolMatches = async (app: App) => {
             .slice(0, 5)
             .some((e) => e.name === d.tournament.name)
         )
-      } else
-        data = res.filter((d) =>
-          guild.events.some((e) => e.name === d.tournament.name)
-        )
+      } else data = res.filter((d) => guild.events.some((e) => e.name === d.tournament.name))
 
       for (const e of guild.events.filter((e) => e.type === 'lol')) {
         const thunk = async () => {
           try {
-            const messages = (await rest.get(
-              Routes.channelMessages(e.channel1),
-              {
-                query: new URLSearchParams({
-                  limit: '100'
-                })
-              }
-            )) as Collection<string, Message>
+            const messages = (await rest.get(Routes.channelMessages(e.channel1), {
+              query: new URLSearchParams({
+                limit: '100'
+              })
+            })) as Collection<string, Message>
 
-            const messagesIds = messages
-              .filter((m) => m.author.id === app.user?.id)
-              .map((m) => m.id)
+            const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
 
             if (messagesIds.length === 1) {
-              await rest.delete(
-                Routes.channelMessage(e.channel1, messagesIds[0])
-              )
+              await rest.delete(Routes.channelMessage(e.channel1, messagesIds[0]))
             } else if (messagesIds.length) {
               await rest.post(Routes.channelBulkDelete(e.channel1), {
                 body: {
@@ -477,30 +427,24 @@ const sendLolMatches = async (app: App) => {
           ...body,
           when: new Date(body.when)
         }))) {
-          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate())
-            continue
+          if (new Date(d.when).getDate() !== new Date(data[0].when).getDate()) continue
 
           for (const e of guild.events) {
             if (e.name === d.tournament.name && d.id) {
               const emoji1 =
                 app.emoji.get(d.teams[0].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[0].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
               const emoji2 =
                 app.emoji.get(d.teams[1].name.toLowerCase()) ??
-                app.emoji.get(
-                  app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? ''
-                ) ??
+                app.emoji.get(app.emojiAliases.get(d.teams[1].name.toLowerCase()) ?? '') ??
                 app.emoji.get('default')
 
               const index = guild.lolMatches.indexOf(d.id)
 
               if (index > -1) guild.lolMatches.splice(index, 1)
 
-              if (!d.stage.toLowerCase().includes('showmatch'))
-                guild.lolMatches.push(d.id!)
+              if (!d.stage.toLowerCase().includes('showmatch')) guild.lolMatches.push(d.id!)
 
               if (d.stage.toLowerCase().includes('showmatch')) continue
 
@@ -664,24 +608,18 @@ const sendValorantTBDMatches = async (app: App) => {
         if (data.teams[0].name !== 'TBD' && data.teams[1].name !== 'TBD') {
           const emoji1 =
             app.emoji.get(data.teams[0].name.toLowerCase()) ??
-            app.emoji.get(
-              app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? ''
-            ) ??
+            app.emoji.get(app.emojiAliases.get(data.teams[0].name.toLowerCase()) ?? '') ??
             app.emoji.get('default')
           const emoji2 =
             app.emoji.get(data.teams[1].name.toLowerCase()) ??
-            app.emoji.get(
-              app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? ''
-            ) ??
+            app.emoji.get(app.emojiAliases.get(data.teams[1].name.toLowerCase()) ?? '') ??
             app.emoji.get('default')
 
           if (!channelBatches.has(match.channel)) {
             channelBatches.set(match.channel, [])
           }
 
-          channelBatches
-            .get(match.channel)
-            ?.push({ data, emoji1, emoji2, match })
+          channelBatches.get(match.channel)?.push({ data, emoji1, emoji2, match })
 
           const m = guild.tbdMatches.find((m) => m.id === match.id)
 

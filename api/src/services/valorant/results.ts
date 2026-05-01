@@ -16,34 +16,18 @@ export default {
     $('.wf-module-item.match-item').each((_, element) => {
       const id = $(element).attr('href')?.split('/')[1] as string
 
-      const teams = $(element)
-        .find('.match-item-vs-team-name')
-        .text()
-        .replace(/\t/g, '')
-        .trim()
+      const teams = $(element).find('.match-item-vs-team-name').text().replace(/\t/g, '').trim()
       const [team1, team2] = teams
         .split('\n')
         .map((item) => item)
         .filter((item) => item !== '')
 
-      const scores = $(element)
-        .find('.match-item-vs-team-score')
-        .text()
-        .replace(/\t/g, '')
-        .trim()
+      const scores = $(element).find('.match-item-vs-team-score').text().replace(/\t/g, '').trim()
       const [score1, score2] = scores.split('\n')
 
       const countryElements = $(element).find('.match-item-vs-team .flag')
-      const country1 = countryElements
-        .eq(0)
-        .attr('class')
-        ?.split(' ')[1]
-        .replace('mod-', '')
-      const country2 = countryElements
-        .eq(1)
-        .attr('class')
-        ?.split(' ')[1]
-        .replace('mod-', '')
+      const country1 = countryElements.eq(0).attr('class')?.split(' ')[1].replace('mod-', '')
+      const country2 = countryElements.eq(1).attr('class')?.split(' ')[1].replace('mod-', '')
 
       const winnerScore = Math.max(Number(score1), Number(score2))
 
@@ -72,12 +56,7 @@ export default {
         ],
         status,
         tournament: {
-          name: $(element)
-            .find('.match-item-event')
-            .text()
-            .replace(/\t/g, '')
-            .replace(stage, '')
-            .trim(),
+          name: $(element).find('.match-item-event').text().replace(/\t/g, '').replace(stage, '').trim(),
           image: `https:${$(element).find('.match-item-icon img').attr('src')}`
         },
         stage,

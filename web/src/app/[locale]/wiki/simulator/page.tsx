@@ -14,15 +14,10 @@ export default async function Wiki() {
         <div className='p-5 rounded-2xl max-w-xs md:max-w-5xl text-3xl'>
           <ul className='flex flex-col gap-10'>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='introduction-to-simulator'
-              >
+              <h1 className='text-2xl font-bold text-center' id='introduction-to-simulator'>
                 {t('wiki.module.simulator.introduction.title')}
               </h1>
-              <p className='text-lg pt-3'>
-                {t('wiki.module.simulator.introduction.description')}
-              </p>
+              <p className='text-lg pt-3'>{t('wiki.module.simulator.introduction.description')}</p>
             </li>
             <li>
               <h1 className='text-2xl font-bold text-center' id='how-it-works'>
@@ -31,9 +26,7 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.how_it_works.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
-                      {chunks}
-                    </span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
                   )
                 })}
               </p>
@@ -45,9 +38,7 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.players.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
-                      {chunks}
-                    </span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
                   ),
                   a: (chunks) => (
                     <a
@@ -69,23 +60,16 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.matches.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
-                      {chunks}
-                    </span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
                   )
                 })}
               </p>
             </li>
             <li>
-              <h1
-                className='text-2xl font-bold text-center'
-                id='progression-and-ranking'
-              >
+              <h1 className='text-2xl font-bold text-center' id='progression-and-ranking'>
                 {t('wiki.module.simulator.progress.title')}
               </h1>
-              <p className='text-lg pt-3 whitespace-pre-line'>
-                {t('wiki.module.simulator.progress.description')}
-              </p>
+              <p className='text-lg pt-3 whitespace-pre-line'>{t('wiki.module.simulator.progress.description')}</p>
             </li>
           </ul>
         </div>

@@ -62,24 +62,16 @@ export default class Player {
 
   public buy() {
     if (this.teamCredits >= 2500 && !this.weapon.primary) {
-      let primary = valorantWeapons.filter(
-        (w) => w.price > 800 && w.price + 1000 <= this.credits
-      )
+      let primary = valorantWeapons.filter((w) => w.price > 800 && w.price + 1000 <= this.credits)
 
-      let secondary = valorantWeapons.filter(
-        (w) => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits
-      )
+      let secondary = valorantWeapons.filter((w) => w.price > 0 && w.price <= 800 && w.price + 1000 <= this.credits)
 
       if (!primary.length) {
-        primary = valorantWeapons.filter(
-          (w) => w.price > 800 && w.price + 400 <= this.credits
-        )
+        primary = valorantWeapons.filter((w) => w.price > 800 && w.price + 400 <= this.credits)
       }
 
       if (!secondary.length) {
-        secondary = valorantWeapons.filter(
-          (w) => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits
-        )
+        secondary = valorantWeapons.filter((w) => w.price > 0 && w.price <= 800 && w.price + 400 <= this.credits)
       }
 
       let weapon: (typeof valorantWeapons)[number]
@@ -117,9 +109,7 @@ export default class Player {
         this.life = 125
       }
     } else if (this.teamCredits === 800) {
-      const secondary = valorantWeapons.filter(
-        (w) => w.price <= 800 && w.name !== 'Melee'
-      )
+      const secondary = valorantWeapons.filter((w) => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, (w) => w.price * 5)
 
@@ -134,9 +124,7 @@ export default class Player {
         this.credits -= 400
       }
     } else {
-      const secondary = valorantWeapons.filter(
-        (w) => w.price <= 800 && w.name !== 'Melee'
-      )
+      const secondary = valorantWeapons.filter((w) => w.price <= 800 && w.name !== 'Melee')
 
       const weapon = this.chooseWeapon(secondary, (w) => w.price * 5)
 
@@ -176,9 +164,7 @@ export default class Player {
   private chooseShoot(mov: number) {
     let steepness = 0.12
     let midpoint = 70
-    let prob =
-      (1 / (1 + Math.exp(-steepness * (this.stats.aim - midpoint)))) *
-      (1 - (mov / 100) * 0.2)
+    let prob = (1 / (1 + Math.exp(-steepness * (this.stats.aim - midpoint)))) * (1 - (mov / 100) * 0.2)
     let random = Math.random()
 
     if (random <= prob) {
@@ -207,24 +193,15 @@ export default class Player {
       } else {
         return [0, this.weapon.primary.rate_fire]
       }
-    } else if (
-      this.weapon.secondary!.magazine &&
-      this.weapon.secondary!.magazine > 0
-    ) {
+    } else if (this.weapon.secondary!.magazine && this.weapon.secondary!.magazine > 0) {
       this.weapon.secondary!.magazine -= 1
 
       const choice = this.chooseShoot(mov)
 
       if (choice === 'head') {
-        return [
-          this.weapon.secondary!.damage.head,
-          this.weapon.secondary!.rate_fire
-        ]
+        return [this.weapon.secondary!.damage.head, this.weapon.secondary!.rate_fire]
       } else if (choice === 'chest') {
-        return [
-          this.weapon.secondary!.damage.chest,
-          this.weapon.secondary!.rate_fire
-        ]
+        return [this.weapon.secondary!.damage.chest, this.weapon.secondary!.rate_fire]
       } else {
         return [0, this.weapon.secondary!.rate_fire]
       }

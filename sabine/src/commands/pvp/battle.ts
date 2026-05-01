@@ -238,9 +238,7 @@ export default createCommand({
       authorCounts[c.playerId] = (authorCounts[c.playerId] || 0) + 1
     }
 
-    const authorDuplicates = Object.values(authorCounts).filter(
-      (count) => count > 1
-    ).length
+    const authorDuplicates = Object.values(authorCounts).filter((count) => count > 1).length
 
     if (!ctx.db.profile.teamName || !ctx.db.profile.teamTag) {
       return await ctx.reply('commands.battle.needed_team_name')
@@ -284,9 +282,7 @@ export default createCommand({
       userCounts[c.playerId] = (userCounts[c.playerId] || 0) + 1
     }
 
-    const userDuplicates = Object.values(userCounts).filter(
-      (count) => count > 1
-    ).length
+    const userDuplicates = Object.values(userCounts).filter((count) => count > 1).length
 
     if (userDuplicates) {
       return await ctx.reply('commands.battle.duplicated_cards2')

@@ -30,25 +30,18 @@ const route: FastifyPluginAsyncZod = async (fastify) => {
     },
     async (req) => {
       if (req.body.type === 'payment') {
-        const details = await fetch(
-          `https://api.mercadopago.com/v1/payments/${req.body.data.id}`,
-          {
-            headers: {
-              Authorization: 'Bearer ' + process.env.MP_TOKEN
-            }
+        const details = await fetch(`https://api.mercadopago.com/v1/payments/${req.body.data.id}`, {
+          headers: {
+            Authorization: 'Bearer ' + process.env.MP_TOKEN
           }
-        ).then((res) => res.json())
+        }).then((res) => res.json())
 
         const args = details.external_reference.split(';')
 
-        if (
-          details.status === 'approved' &&
-          !cache.has(details.external_reference)
-        ) {
+        if (details.status === 'approved' && !cache.has(details.external_reference)) {
           cache.add(details.external_reference)
 
-          const user =
-            (await UserSchema.fetch(args[1])) || new UserSchema(args[1])
+          const user = (await UserSchema.fetch(args[1])) || new UserSchema(args[1])
 
           const keyId = await user.addPremium('BUY_PREMIUM')
 
@@ -102,9 +95,7 @@ const route: FastifyPluginAsyncZod = async (fastify) => {
       if (req.body.type === 'checkout.session.completed') {
         const session = req.body.data.object
 
-        const user =
-          (await UserSchema.fetch(session.metadata.user)) ||
-          new UserSchema(session.metadata.user)
+        const user = (await UserSchema.fetch(session.metadata.user)) || new UserSchema(session.metadata.user)
 
         const keyId = await user.addPremium('BUY_PREMIUM')
 
@@ -117,9 +108,7 @@ const route: FastifyPluginAsyncZod = async (fastify) => {
             text: 'The thread will be deleted automatically after 45 minutes of inactivity'
           })
 
-        const channel = app.channels.cache.get(
-          session.metadata!.thread
-        ) as TextChannel
+        const channel = app.channels.cache.get(session.metadata!.thread) as TextChannel
 
         await channel.send({ embeds: [embed] })
 
@@ -133,9 +122,7 @@ const route: FastifyPluginAsyncZod = async (fastify) => {
             `Your purchase of **${session.amount_total?.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}** has been rejected and it was not possible to proceed with the payment!`
           )
 
-        const channel = app.channels.cache.get(
-          session.metadata!.thread
-        ) as TextChannel
+        const channel = app.channels.cache.get(session.metadata!.thread) as TextChannel
 
         await channel.send({ embeds: [embed] })
 

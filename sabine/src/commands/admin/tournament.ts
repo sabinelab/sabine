@@ -200,8 +200,7 @@ export default createCommand({
   async run({ ctx, app, t, id }) {
     if (ctx.args.add) {
       if (ctx.args.add.valorant) {
-        const { tournament, matches_channel, results_channel } =
-          ctx.args.add.valorant
+        const { tournament, matches_channel, results_channel } = ctx.args.add.valorant
 
         if (!ctx.db.guild || !ctx.guild) return
 
@@ -268,8 +267,7 @@ export default createCommand({
           t: tournament
         })
       } else if (ctx.args.add.lol) {
-        const { tournament, matches_channel, results_channel } =
-          ctx.args.add.lol
+        const { tournament, matches_channel, results_channel } = ctx.args.add.lol
 
         if (!ctx.db.guild || !ctx.guild) return
 
@@ -480,9 +478,7 @@ export default createCommand({
         return await i.respond(
           tournaments
             .filter((e) => e.status !== 'completed')
-            .filter((e) =>
-              e.name.toLowerCase().includes(focused.value.toLowerCase())
-            )
+            .filter((e) => e.name.toLowerCase().includes(focused.value.toLowerCase()))
             .map((e) => ({ name: e.name, value: e.name }))
             .slice(0, 25)
         )
@@ -505,9 +501,7 @@ export default createCommand({
 
         events.unshift(t('commands.tournament.remove_all'))
 
-        return await i.respond(
-          events.map((e) => ({ name: e, value: e })).slice(0, 25)
-        )
+        return await i.respond(events.map((e) => ({ name: e, value: e })).slice(0, 25))
       }
     }
   }

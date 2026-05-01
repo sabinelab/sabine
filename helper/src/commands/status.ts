@@ -1,9 +1,5 @@
 import { prisma } from '@db'
-import {
-  ApplicationCommandOptionType,
-  ButtonStyle,
-  ChannelType
-} from 'discord.js'
+import { ApplicationCommandOptionType, ButtonStyle, ChannelType } from 'discord.js'
 import { env } from '@/env'
 import ButtonBuilder from '@/structures/builders/ButtonBuilder'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
@@ -81,10 +77,7 @@ export default createCommand({
       const embed = new EmbedBuilder().setTitle('Active Status')
 
       for (const status of list) {
-        embed.addField(
-          `${emoji[status.type]} ${status.title}`,
-          `ID: \`${status.id}\``
-        )
+        embed.addField(`${emoji[status.type]} ${status.title}`, `ID: \`${status.id}\``)
       }
 
       await ctx.send(embed.build())
@@ -148,9 +141,7 @@ export default createCommand({
         promises.push(
           thread.send(
             embed
-              .setDesc(
-                `This issue has been resolved.\nCheck the original message for final updates: ${message.url}`
-              )
+              .setDesc(`This issue has been resolved.\nCheck the original message for final updates: ${message.url}`)
               .build({
                 content: '@everyone',
                 allowedMentions: {

@@ -38,12 +38,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                 bg-linear-to-tr from-neutral-800/40 to-neutral-700/40 animate-pulse rounded-xl
               '
             >
-              <svg
-                className='w-12 h-12 text-neutral-600'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-              >
+              <svg className='w-12 h-12 text-neutral-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
@@ -72,9 +67,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
           '
           onClick={handleOpen}
         >
-          <span className='flex p-1 justify-center'>
-            {t('cards.more_information')}
-          </span>
+          <span className='flex p-1 justify-center'>{t('cards.more_information')}</span>
         </button>
       </div>
 
@@ -89,9 +82,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
           >
             <div className='flex flex-col md:flex-row gap-10 md:gap-40 py-10 px-10 md:px-20'>
               <div className='flex flex-col justify-center items-center'>
-                {!loaded && (
-                  <div className='absolute inset-0 bg-gray-700 animate-pulse rounded-3xl' />
-                )}
+                {!loaded && <div className='absolute inset-0 bg-gray-700 animate-pulse rounded-3xl' />}
 
                 <Image
                   src={src}
@@ -103,30 +94,20 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                 />
 
                 <div className='flex flex-col gap-2 pl-5 md:pl-0'>
-                  <p className='font-bold text-center text-2xl'>
-                    {player.name}
-                  </p>
+                  <p className='font-bold text-center text-2xl'>{player.name}</p>
 
                   <span className='flex items-center gap-2'>
                     <span className='w-1.5 h-1.5 rounded-full bg-current' />
                     {t.rich('cards.collection', {
                       collection: player.collection,
-                      strong: (chunks) => (
-                        <span className='font-bold text-gray-400'>
-                          {chunks}
-                        </span>
-                      )
+                      strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                     })}
                   </span>
 
                   <span className='flex items-center gap-2'>
                     <span className='w-1.5 h-1.5 rounded-full bg-current' />
                     {t.rich(`cards.role.${player.role}`, {
-                      strong: (chunks) => (
-                        <span className='font-bold text-gray-400'>
-                          {chunks}
-                        </span>
-                      )
+                      strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                     })}
                   </span>
 
@@ -134,31 +115,21 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                     <span className='w-1.5 h-1.5 rounded-full bg-current' />
                     {t.rich('cards.price', {
                       price: player.price.toLocaleString(),
-                      strong: (chunks) => (
-                        <span className='font-bold text-gray-400'>
-                          {chunks}
-                        </span>
-                      )
+                      strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                     })}
                   </span>
                 </div>
               </div>
 
               <div className='flex flex-col gap-5 justify-center'>
-                <h3 className='font-bold text-2xl text-center'>
-                  {t('cards.stats.title')}
-                </h3>
+                <h3 className='font-bold text-2xl text-center'>{t('cards.stats.title')}</h3>
                 <div className='flex gap-5'>
                   <div className='flex flex-col gap-2 pl-5 md:pl-0'>
                     <span className='flex items-center gap-2'>
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.aim', {
                         stats: player.aim,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
 
@@ -166,11 +137,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.hs', {
                         stats: player.hs,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
 
@@ -178,11 +145,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.movement', {
                         stats: player.movement,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
                   </div>
@@ -192,11 +155,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.aggression', {
                         stats: player.aggression,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
 
@@ -204,11 +163,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.acs', {
                         stats: player.acs,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
 
@@ -216,11 +171,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
                       <span className='w-1.5 h-1.5 rounded-full bg-current' />
                       {t.rich('cards.stats.gamesense', {
                         stats: player.gamesense,
-                        strong: (chunks) => (
-                          <span className='font-bold text-gray-400'>
-                            {chunks}
-                          </span>
-                        )
+                        strong: (chunks) => <span className='font-bold text-gray-400'>{chunks}</span>
                       })}
                     </span>
                   </div>
@@ -229,10 +180,7 @@ export default function CardLoading({ src, collection, alt, player }: Props) {
             </div>
 
             <div className='p-5'>
-              <button
-                className='bg-red-500 rounded-md px-10 py-1 cursor-pointer'
-                onClick={handleClose}
-              >
+              <button className='bg-red-500 rounded-md px-10 py-1 cursor-pointer' onClick={handleClose}>
                 <span>{t('close')}</span>
               </button>
             </div>

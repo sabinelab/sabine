@@ -59,9 +59,7 @@ export default function ChangelogSkeleton() {
         {sectionGroups.map((group) => (
           <div key={group.id}>
             {/* Section Header (H2) */}
-            <div
-              className={`h-7 bg-[#2A2A2A]/40 rounded-lg ${group.titleWidth} mb-6 mt-10 animate-pulse`}
-            />
+            <div className={`h-7 bg-[#2A2A2A]/40 rounded-lg ${group.titleWidth} mb-6 mt-10 animate-pulse`} />
 
             {/* List Items */}
             <ul className='space-y-4 pl-2'>

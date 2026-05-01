@@ -86,12 +86,7 @@ type MatchOptions = {
   teams: Team[]
   ctx: Message
   t: (content: string, args?: Args) => string
-  mode:
-    | 'unranked'
-    | 'ranked'
-    | 'swiftplay:unranked'
-    | 'swiftplay:ranked'
-    | 'tournament'
+  mode: 'unranked' | 'ranked' | 'swiftplay:unranked' | 'swiftplay:ranked' | 'tournament'
   map: string
   content: string
   overtime?: boolean
@@ -105,12 +100,7 @@ export default class Match {
   public readonly ctx: Message
   public content: string = ''
   public t: (content: string, args?: Args) => string
-  public readonly mode:
-    | 'unranked'
-    | 'ranked'
-    | 'swiftplay:unranked'
-    | 'swiftplay:ranked'
-    | 'tournament'
+  public readonly mode: 'unranked' | 'ranked' | 'swiftplay:unranked' | 'swiftplay:ranked' | 'tournament'
   public maxScore: number = 0
   public switchSidesAt: number = 12
   public map: string
@@ -234,10 +224,7 @@ export default class Match {
         if (
           !valorantMaps
             .find((m) => m.name === this.map)
-            ?.meta_agents.includes(
-              p.agent
-                .name as (typeof valorantMaps)[number]['meta_agents'][number]
-            )
+            ?.meta_agents.includes(p.agent.name as (typeof valorantMaps)[number]['meta_agents'][number])
         ) {
           p.aim *= 0.95
           p.hs *= 0.95

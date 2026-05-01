@@ -75,15 +75,11 @@ export default createCommand({
         await ctx.send('The bot is now temporarily unavailable for updates.')
       } else {
         await Bun.redis.set('status:bot:maintenance', '1')
-        await ctx.send(
-          'The bot is now temporarily unavailable for a maintenance.'
-        )
+        await ctx.send('The bot is now temporarily unavailable for a maintenance.')
       }
     } else if (ctx.args.cmd) {
       await Bun.redis.set(`status:cmd:${ctx.args.cmd.cmd}`, '1')
-      await ctx.send(
-        `The command \`${ctx.args.cmd.cmd}\` is now unavailable for a maintenance.`
-      )
+      await ctx.send(`The command \`${ctx.args.cmd.cmd}\` is now unavailable for a maintenance.`)
     } else if (ctx.args.rm) {
       if (ctx.args.rm.bot) {
         const keys = await Bun.redis.keys('status:bot:*')
@@ -95,18 +91,14 @@ export default createCommand({
         await Bun.redis.unlink(...keys)
         await ctx.send('The bot is available again.')
       } else if (ctx.args.rm.cmd) {
-        const exists = await Bun.redis.exists(
-          `status:cmd:${ctx.args.rm.cmd.cmd}`
-        )
+        const exists = await Bun.redis.exists(`status:cmd:${ctx.args.rm.cmd.cmd}`)
 
         if (!exists) {
           return await ctx.send('This command is already available.')
         }
 
         await Bun.redis.unlink(`status:cmd:${ctx.args.rm.cmd.cmd}`)
-        await ctx.send(
-          `The command \`${ctx.args.rm.cmd.cmd}\` is available again.`
-        )
+        await ctx.send(`The command \`${ctx.args.rm.cmd.cmd}\` is available again.`)
       }
     }
   }

@@ -51,8 +51,7 @@ export default createCommand({
           name: 'lol',
           description: 'Enable League of Legends news feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Habilita a funcionalidade de notícias de League of Legends'
+            'pt-BR': 'Habilita a funcionalidade de notícias de League of Legends'
           },
           args: {
             channel: {
@@ -95,8 +94,7 @@ export default createCommand({
           name: 'lol',
           description: 'Disable League of Legends news feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Desabilita a funcionalidade de notícias de League of Legends'
+            'pt-BR': 'Desabilita a funcionalidade de notícias de League of Legends'
           }
         }
       }
@@ -109,22 +107,14 @@ export default createCommand({
     'news disable valorant',
     'news disable lol'
   ],
-  examples: [
-    'news enable valorant #news',
-    'news enable lol #lol-news',
-    'news disable valorant',
-    'news disable lol'
-  ],
+  examples: ['news enable valorant #news', 'news enable lol #lol-news', 'news disable valorant', 'news disable lol'],
   async run({ ctx }) {
     if (ctx.args.enable) {
       const games = {
         valorant: async () => {
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.valorant?.channel.id ?? ''
-          )!
+          const channel = ctx.guild.channels.cache.get(ctx.args.enable?.valorant?.channel.id ?? '')!
 
-          if (![0, 5].some((t) => t === channel.type))
-            return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some((t) => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.upsert({
             where: {
@@ -143,12 +133,9 @@ export default createCommand({
           })
         },
         lol: async () => {
-          const channel = ctx.guild.channels.cache.get(
-            ctx.args.enable?.lol?.channel.id ?? ''
-          )!
+          const channel = ctx.guild.channels.cache.get(ctx.args.enable?.lol?.channel.id ?? '')!
 
-          if (![0, 5].some((t) => t === channel.type))
-            return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some((t) => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.upsert({
             where: {

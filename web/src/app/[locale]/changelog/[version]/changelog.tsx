@@ -15,9 +15,7 @@ const getContent = async (props: Props) => {
     }
   })
   const changelogs: Changelog[] = await res.json()
-  const changelog = changelogs.find(
-    (c) => c.id === props.version.replace('v', '')
-  )
+  const changelog = changelogs.find((c) => c.id === props.version.replace('v', ''))
 
   const content = changelog?.content.find((c) => c.lang === props.locale)
 

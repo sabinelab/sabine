@@ -7,9 +7,7 @@ import type { HTMLAttributes } from 'vue'
 import { cn } from '@/lib/utils'
 import { navigationMenuTriggerStyle } from '.'
 
-const props = defineProps<
-  NavigationMenuTriggerProps & { class?: HTMLAttributes['class'] }
->()
+const props = defineProps<NavigationMenuTriggerProps & { class?: HTMLAttributes['class'] }>()
 
 const delegatedProps = reactiveOmit(props, 'class')
 

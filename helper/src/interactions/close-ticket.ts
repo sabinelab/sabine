@@ -7,14 +7,8 @@ export default createComponentInteraction({
   async run({ ctx, app }) {
     if (!ctx.guild || !ctx.interaction.member) return
 
-    const roles = new Set([
-      '1237458600046104617',
-      '1237458505196114052',
-      '1237457762502574130'
-    ])
-    const hasRole = (
-      ctx.interaction.member.roles as GuildMemberRoleManager
-    ).cache.some((r: any) => roles.has(r.id))
+    const roles = new Set(['1237458600046104617', '1237458505196114052', '1237457762502574130'])
+    const hasRole = (ctx.interaction.member.roles as GuildMemberRoleManager).cache.some((r: any) => roles.has(r.id))
 
     if (!hasRole) return
 
@@ -38,9 +32,7 @@ export default createComponentInteraction({
       const ownerId = channel.name.replace('ticket_', '')
       await channel.delete()
 
-      const logChannel = app.channels.cache.get(
-        '1313845851998781562'
-      ) as TextChannel
+      const logChannel = app.channels.cache.get('1313845851998781562') as TextChannel
       if (logChannel) {
         await logChannel.send({
           content: `Ticket requested by: <@${ownerId}>`,

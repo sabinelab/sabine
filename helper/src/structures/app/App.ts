@@ -1,18 +1,9 @@
 import { existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 import { prisma } from '@db'
-import {
-  type ApplicationCommandData,
-  Client,
-  type ClientOptions,
-  REST,
-  Routes
-} from 'discord.js'
+import { type ApplicationCommandData, Client, type ClientOptions, REST, Routes } from 'discord.js'
 import { env } from '@/env'
-import {
-  type Command,
-  parseArguments
-} from '@/structures/command/createCommand'
+import { type Command, parseArguments } from '@/structures/command/createCommand'
 import type { CreateInteractionOptions } from '@/structures/interaction/createComponentInteraction'
 import type { CreateModalSubmitInteractionOptions } from '@/structures/interaction/createModalSubmitInteraction'
 import Logger from '@/util/Logger'
@@ -22,10 +13,7 @@ const rest = new REST().setToken(env.BOT_TOKEN)
 export default class App extends Client {
   public commands: Map<string, Command> = new Map()
   public aliases: Map<string, string> = new Map()
-  public interactions: Map<
-    string,
-    CreateInteractionOptions & CreateModalSubmitInteractionOptions
-  > = new Map()
+  public interactions: Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions> = new Map()
   public prisma: typeof prisma
 
   public constructor(options: ClientOptions) {
@@ -37,25 +25,17 @@ export default class App extends Client {
   public async connect() {
     for (const file of readdirSync(path.join(__dirname, '../../listeners'))) {
       const listener =
-        (await import(`../../listeners/${file}`)).default.default ??
-        (await import(`../../listeners/${file}`)).default
+        (await import(`../../listeners/${file}`)).default.default ?? (await import(`../../listeners/${file}`)).default
 
       if (listener.name === 'ready')
-        this.once('ready', () =>
-          listener.run(this).catch((e: Error) => new Logger(this).error(e))
-        )
+        this.once('ready', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
       else
-        this.on(listener.name, (...args) =>
-          listener
-            .run(this, ...args)
-            .catch((e: Error) => new Logger(this).error(e))
-        )
+        this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
     }
 
     for (const file of readdirSync(path.join(__dirname, '../../commands'))) {
       const command =
-        (await import(`../../commands/${file}`)).default.default ??
-        (await import(`../../commands/${file}`)).default
+        (await import(`../../commands/${file}`)).default.default ?? (await import(`../../commands/${file}`)).default
 
       this.commands.set(command.name, command)
 
@@ -121,11 +101,5 @@ export const app = new App({
     parse: ['users', 'roles'],
     repliedUser: true
   },
-  intents: [
-    'GuildMessages',
-    'GuildMembers',
-    'GuildBans',
-    'Guilds',
-    'MessageContent'
-  ]
+  intents: ['GuildMessages', 'GuildMembers', 'GuildBans', 'Guilds', 'MessageContent']
 })

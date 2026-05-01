@@ -16,8 +16,7 @@ export default createListener({
       if (!interaction.isAutocomplete()) return
 
       const command = app.commands.get(interaction.commandName)
-      if (!command?.createAutocompleteInteraction || !interaction.guildId)
-        return
+      if (!command?.createAutocompleteInteraction || !interaction.guildId) return
 
       const args: string[] = []
       const sub = interaction.options.getSubcommand(false)

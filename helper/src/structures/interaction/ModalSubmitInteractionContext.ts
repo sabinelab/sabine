@@ -42,9 +42,7 @@ export default class ModalSubmitInteractionContext {
     return this
   }
 
-  public async reply(
-    content: string | Discord.InteractionReplyOptions
-  ): Promise<Discord.Message | null | undefined> {
+  public async reply(content: string | Discord.InteractionReplyOptions): Promise<Discord.Message | null | undefined> {
     if (typeof content === 'string') {
       content = {
         content
@@ -60,14 +58,10 @@ export default class ModalSubmitInteractionContext {
 
     if (this.interaction.replied || this.interaction.deferred) {
       return await this.interaction.followUp(content)
-    } else
-      return (await this.interaction.reply({ ...content, withResponse: true }))
-        .resource?.message
+    } else return (await this.interaction.reply({ ...content, withResponse: true })).resource?.message
   }
 
-  public async edit(
-    content: string | Discord.InteractionEditReplyOptions
-  ): Promise<Discord.Message> {
+  public async edit(content: string | Discord.InteractionEditReplyOptions): Promise<Discord.Message> {
     if (typeof content === 'string') {
       content = {
         content

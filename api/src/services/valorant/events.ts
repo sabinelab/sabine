@@ -17,8 +17,7 @@ export default {
       const id = $(element).attr('href')?.split('/')[2]
       const name = $(element).find('.event-item-title').text().trim()
       const status = $(element).find('.event-item-desc-item-status').text()
-      const image =
-        'https:' + $(element).find('.event-item-thumb img').attr('src')
+      const image = 'https:' + $(element).find('.event-item-thumb img').attr('src')
       const url = 'https://vlr.gg' + $(element).attr('href')
 
       events.push({ id, name, status, image, url })

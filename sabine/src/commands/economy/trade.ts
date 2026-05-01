@@ -62,10 +62,7 @@ export default createCommand({
       return await ctx.reply('commands.sell.player_not_found')
     }
 
-    const profile = await ProfileSchema.fetch(
-      ctx.args.user.toString(),
-      ctx.db.guild.id
-    )
+    const profile = await ProfileSchema.fetch(ctx.args.user.toString(), ctx.db.guild.id)
     const card = await prisma.card.findFirst({
       where: {
         id: BigInt(ctx.args.player),
@@ -92,9 +89,7 @@ export default createCommand({
 
     if (!profile || profile.poisons < BigInt(ctx.args.price)) {
       return await ctx.reply('commands.trade.missing_poisons', {
-        poisons: (
-          BigInt(ctx.args.price) - (!profile ? 0n : profile.poisons)
-        ).toLocaleString(),
+        poisons: (BigInt(ctx.args.price) - (!profile ? 0n : profile.poisons)).toLocaleString(),
         user: `<@${ctx.args.user}>`
       })
     }
@@ -114,9 +109,7 @@ export default createCommand({
             new ButtonBuilder()
               .defineStyle('green')
               .setLabel(ctx.t('commands.trade.make_purchase'))
-              .setCustomId(
-                `trade;${ctx.args.user};buy;${ctx.author.id};${card.id};${ctx.args.price}`
-              ),
+              .setCustomId(`trade;${ctx.args.user};buy;${ctx.author.id};${card.id};${ctx.args.price}`),
             new ButtonBuilder()
               .defineStyle('red')
               .setLabel(ctx.t('commands.trade.cancel'))
@@ -180,9 +173,7 @@ export default createCommand({
 
       if (ctx.db.profile.poisons < BigInt(ctx.args[5])) {
         return await ctx.edit('commands.trade.missing_poisons', {
-          poisons: (
-            BigInt(ctx.args[5]) - ctx.db.profile.poisons
-          ).toLocaleString(),
+          poisons: (BigInt(ctx.args[5]) - ctx.db.profile.poisons).toLocaleString(),
           user: `<@${ctx.interaction.user}>`
         })
       }

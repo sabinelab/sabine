@@ -112,9 +112,7 @@ export default createCommand({
               ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
                 ovr: Math.floor(ovr / cards.length),
-                name: ctx.db.profile.teamName
-                  ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
-                  : '`undefined`'
+                name: ctx.db.profile.teamName ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})` : '`undefined`'
               })
           )
         )
@@ -162,13 +160,9 @@ export default createCommand({
               new ButtonBuilder()
                 .setStyle(ButtonStyle.Danger)
                 .setLabel(ctx.t('commands.roster.container.button.remove'))
-                .setCustomId(
-                  `roster;${ctx.db.profile.userId};remove;${card.id}`
-                ),
+                .setCustomId(`roster;${ctx.db.profile.userId};remove;${card.id}`),
               new ButtonBuilder()
-                .setLabel(
-                  ctx.t('commands.roster.container.button.promote_arena')
-                )
+                .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
                 .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                 .setStyle(ButtonStyle.Primary)
                 .setDisabled(card.arenaRoster),
@@ -251,16 +245,10 @@ export default createCommand({
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
-                  .setCustomId(
-                    `roster;${ctx.db.profile.userId};promote;${card.id}`
-                  ),
+                  .setCustomId(`roster;${ctx.db.profile.userId};promote;${card.id}`),
                 new ButtonBuilder()
-                  .setLabel(
-                    ctx.t('commands.roster.container.button.promote_arena')
-                  )
-                  .setCustomId(
-                    `roster;${ctx.author.id};promote-arena;${card.id}`
-                  )
+                  .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                  .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
@@ -285,9 +273,7 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`
-        )
+        .setCustomId(`roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
@@ -301,10 +287,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
       await ctx.reply({
         flags: 'IsComponentsV2',
@@ -544,9 +527,7 @@ export default createCommand({
       }
 
       const menu = new SelectMenuBuilder()
-        .setCustomId(
-          `roster;${ctx.db.profile.userId};promote-arena2;${card.id}`
-        )
+        .setCustomId(`roster;${ctx.db.profile.userId};promote-arena2;${card.id}`)
         .setOptions(options)
 
       await ctx.reply(menu.build(t('commands.promote.select_player')))
@@ -715,16 +696,10 @@ export default createCommand({
                 new ButtonBuilder()
                   .setStyle(ButtonStyle.Success)
                   .setLabel(ctx.t('commands.roster.container.button.promote'))
-                  .setCustomId(
-                    `roster;${ctx.db.profile.userId};promote;${card.id}`
-                  ),
+                  .setCustomId(`roster;${ctx.db.profile.userId};promote;${card.id}`),
                 new ButtonBuilder()
-                  .setLabel(
-                    ctx.t('commands.roster.container.button.promote_arena')
-                  )
-                  .setCustomId(
-                    `roster;${ctx.author.id};promote-arena;${card.id}`
-                  )
+                  .setLabel(ctx.t('commands.roster.container.button.promote_arena'))
+                  .setCustomId(`roster;${ctx.author.id};promote-arena;${card.id}`)
                   .setStyle(ButtonStyle.Primary)
                   .setDisabled(card.arenaRoster),
                 new ButtonBuilder()
@@ -749,9 +724,7 @@ export default createCommand({
       const previous = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`
-        )
+        .setCustomId(`roster;${ctx.db.profile.userId};reserve;previous;${page - 1}`)
 
       const next = new ButtonBuilder()
         .setStyle(ButtonStyle.Primary)
@@ -765,10 +738,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().setComponents(previous, next)
 
       await ctx.edit({
         flags: 'IsComponentsV2',
@@ -780,12 +750,8 @@ export default createCommand({
     ctx.setFlags(64)
 
     if (ctx.args[2] === 'team') {
-      const name = i.fields.getTextInputValue(
-        `roster;${i.user.id};team;response-1`
-      )
-      const tag = i.fields.getTextInputValue(
-        `roster;${i.user.id};team;response-2`
-      )
+      const name = i.fields.getTextInputValue(`roster;${i.user.id};team;response-1`)
+      const tag = i.fields.getTextInputValue(`roster;${i.user.id};team;response-2`)
 
       await prisma.profile.update({
         where: {
@@ -816,20 +782,12 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      const value = Number(
-        i.fields.getTextInputValue(
-          `roster;${i.user.id};practice;${card.id};response`
-        )
-      )
+      const value = Number(i.fields.getTextInputValue(`roster;${i.user.id};practice;${card.id};response`))
 
       if (card.xp >= card.requiredXp) {
         return await ctx.reply('commands.roster.max_xp_reached')
       }
-      if (
-        Number.isNaN(value) ||
-        value > card.requiredXp - card.xp ||
-        value <= 0
-      ) {
+      if (Number.isNaN(value) || value > card.requiredXp - card.xp || value <= 0) {
         return await ctx.reply('commands.roster.invalid_value', {
           value: card.requiredXp - card.xp
         })

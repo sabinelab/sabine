@@ -1,9 +1,4 @@
-import {
-  ActionRowBuilder,
-  ApplicationCommandOptionType,
-  ButtonBuilder,
-  ButtonStyle
-} from 'discord.js'
+import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -14,11 +9,9 @@ export default createCommand({
     'pt-BR': 'tabela'
   },
   category: 'esports',
-  description:
-    'Leaderboard of users with most correct predictions, rating and poisons',
+  description: 'Leaderboard of users with most correct predictions, rating and poisons',
   descriptionLocalizations: {
-    'pt-BR':
-      'Tabela de usuários com mais palpites corretos, classificação e toxinas'
+    'pt-BR': 'Tabela de usuários com mais palpites corretos, classificação e toxinas'
   },
   args: {
     predictions: {
@@ -95,11 +88,7 @@ export default createCommand({
     }
   },
   syntax: 'leaderboard predictions/poisons/rating <page>',
-  examples: [
-    'leaderboard predictions 1',
-    'leaderboard poisons 2',
-    'leaderboard rating 3'
-  ],
+  examples: ['leaderboard predictions 1', 'leaderboard poisons 2', 'leaderboard rating 3'],
   isThinking: true,
   messageComponentInteractionTime: 10 * 60 * 1000,
   async run({ ctx, app }) {
@@ -144,14 +133,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.poisons.description1', {
@@ -202,9 +184,7 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};poisons;previous;${page - 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
@@ -219,10 +199,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.reply({
         embeds: [embed],
@@ -269,14 +246,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.rating.description1', {
@@ -342,10 +312,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.reply({
         embeds: [embed],
@@ -392,14 +359,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.predictions.description1', {
@@ -450,16 +410,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};predictions;previous;${page - 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};predictions;next;${page + 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -469,10 +425,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.reply({
         embeds: [embed],
@@ -522,14 +475,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.poisons.description1', {
@@ -580,9 +526,7 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};poisons;previous;${page - 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};poisons;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
@@ -597,10 +541,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.edit({
         embeds: [embed],
@@ -647,14 +588,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.rating.description1', {
@@ -720,10 +654,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.edit({
         embeds: [embed],
@@ -770,14 +701,7 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos =
-                position === 1
-                  ? '🥇'
-                  : position === 2
-                    ? '🥈'
-                    : position === 3
-                      ? '🥉'
-                      : `#${position}`
+              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.predictions.description1', {
@@ -828,16 +752,12 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};predictions;previous;${page - 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;previous;${page - 1}`)
         .setStyle(ButtonStyle.Primary)
 
       const next = new ButtonBuilder()
         .setEmoji('1404176291829121028')
-        .setCustomId(
-          `leaderboard;${ctx.author.id};predictions;next;${page + 1}`
-        )
+        .setCustomId(`leaderboard;${ctx.author.id};predictions;next;${page + 1}`)
         .setStyle(ButtonStyle.Primary)
 
       if (page <= 1) {
@@ -847,10 +767,7 @@ export default createCommand({
         next.setDisabled()
       }
 
-      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        previous,
-        next
-      )
+      const row = new ActionRowBuilder<ButtonBuilder>().addComponents(previous, next)
 
       await ctx.edit({
         embeds: [embed],

@@ -1,23 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "ignorePatterns": [
-    "dist",
-    "generated",
-    "postgres",
-    ".next",
-    ".nuxt",
-    ".output"
-  ],
-  "plugins": [
-    "typescript",
-    "unicorn",
-    "oxc",
-    "react",
-    "nextjs",
-    "vue",
-    "react-perf",
-    "jsx-a11y"
-  ],
+  "ignorePatterns": ["dist", "generated", "postgres", ".next", ".nuxt", ".output"],
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "vue", "react-perf", "jsx-a11y"],
   "categories": {
     "correctness": "error",
     "perf": "warn"

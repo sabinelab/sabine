@@ -17,9 +17,7 @@ const players = getPlayers()
   }))
 
 export default function Cards(props: Props) {
-  const filtered = players.filter((p) =>
-    p.name.toLowerCase().includes(props.query.toLowerCase())
-  )
+  const filtered = players.filter((p) => p.name.toLowerCase().includes(props.query.toLowerCase()))
 
   return (
     <div className='grid justify-items-center gap-7 mt-10 md:px-30 mb-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>

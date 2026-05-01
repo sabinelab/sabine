@@ -14,21 +14,9 @@ export default {
     const news: NewsData[] = []
 
     $('.wf-module-item').each((_, el) => {
-      const title = $(el)
-        .find('div')
-        .find('div')
-        .first()
-        .text()
-        .replace(/\t/g, '')
-        .trim()
+      const title = $(el).find('div').find('div').first().text().replace(/\t/g, '').trim()
 
-      let desc: string | undefined = $(el)
-        .find('div')
-        .find('div')
-        .eq(1)
-        .text()
-        .replace(/\t/g, '')
-        .trim()
+      let desc: string | undefined = $(el).find('div').find('div').eq(1).text().replace(/\t/g, '').trim()
 
       if (desc === '') desc = undefined
 

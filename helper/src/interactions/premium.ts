@@ -33,14 +33,11 @@ export default createComponentInteraction({
       }
       case 'premium_br': {
         await ctx.interaction.reply({
-          content:
-            '<a:carregando:809221866434199634> Preparando o ambiente para a sua compra...',
+          content: '<a:carregando:809221866434199634> Preparando o ambiente para a sua compra...',
           flags: 64
         })
 
-        const thread = await (
-          ctx.interaction.channel as TextChannel
-        ).threads.create({
+        const thread = await (ctx.interaction.channel as TextChannel).threads.create({
           name: `BRL Premium (${ctx.interaction.user.id})`,
           type: 12, // Private Thread
           invitable: false
@@ -79,10 +76,7 @@ export default createComponentInteraction({
             `Clique no botão abaixo para ser redirecionado para a página de pagamento do Mercado Pago <:mercadopago:1313901326744293427>\nRealize o pagamento <t:${((Date.now() + 600000) / 1000).toFixed(0)}:R>, caso contrário, o link expirará.`
           )
 
-        const button = new ButtonBuilder()
-          .defineStyle('link')
-          .setLabel('Link de pagamento')
-          .setURL(res.init_point)
+        const button = new ButtonBuilder().defineStyle('link').setLabel('Link de pagamento').setURL(res.init_point)
 
         await thread.send({
           components: [
@@ -101,14 +95,11 @@ export default createComponentInteraction({
       }
       case 'premium_usd': {
         await ctx.interaction.reply({
-          content:
-            '<a:carregando:809221866434199634> Getting everything ready for your purchase...',
+          content: '<a:carregando:809221866434199634> Getting everything ready for your purchase...',
           flags: 64
         })
 
-        const thread = await (
-          ctx.interaction.channel as TextChannel
-        ).threads.create({
+        const thread = await (ctx.interaction.channel as TextChannel).threads.create({
           name: `USD Premium (${ctx.interaction.user.id})`,
           type: 12, // Private Thread
           invitable: false
@@ -141,8 +132,7 @@ export default createComponentInteraction({
 
         if (!payment.url) {
           return await thread.send({
-            content:
-              'The payment link could not be generated and your purchase could not be completed.'
+            content: 'The payment link could not be generated and your purchase could not be completed.'
           })
         }
 
@@ -152,10 +142,7 @@ export default createComponentInteraction({
             `Click on the button below to be redirected to the <:stripe:1409597720313987204> Stripe payment page.\nYou must complete the payment <t:${((Date.now() + 30 * 60 * 1000) / 1000).toFixed(0)}:R>, or the link will expire.`
           )
 
-        const button = new ButtonBuilder()
-          .defineStyle('link')
-          .setLabel('Payment link')
-          .setURL(payment.url)
+        const button = new ButtonBuilder().defineStyle('link').setLabel('Payment link').setURL(payment.url)
 
         await thread.send({
           components: [

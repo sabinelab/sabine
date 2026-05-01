@@ -24,8 +24,7 @@ const limit = pLimit(25)
 
 export const processNews = async (data: NewsPayload) => {
   let cursor: string | undefined
-  const key =
-    data.game === 'valorant' ? 'valorantNewsChannel' : 'lolNewsChannel'
+  const key = data.game === 'valorant' ? 'valorantNewsChannel' : 'lolNewsChannel'
 
   while (true) {
     const guilds = await prisma.guild.findMany({
@@ -51,10 +50,7 @@ export const processNews = async (data: NewsPayload) => {
     const messages: Promise<unknown>[] = []
 
     for (const guild of guilds) {
-      const channelId =
-        data.game === 'valorant'
-          ? guild.valorantNewsChannel
-          : guild.lolNewsChannel
+      const channelId = data.game === 'valorant' ? guild.valorantNewsChannel : guild.lolNewsChannel
       if (!channelId) continue
 
       const embed = new EmbedBuilder().setTitle(data.title)

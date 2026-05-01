@@ -87,10 +87,7 @@ export default class CommandContext<T> {
   }
 
   public async edit<T extends Content>(
-    content:
-      | T
-      | Discord.InteractionEditReplyOptions
-      | Discord.MessageEditOptions,
+    content: T | Discord.InteractionEditReplyOptions | Discord.MessageEditOptions,
     options?: Args
   ): Promise<Discord.Message | null | undefined> {
     if (this.data instanceof Discord.BaseInteraction) {

@@ -45,9 +45,7 @@ export default createCommand({
   examples: ['help', 'help ping', 'help team', 'help player'],
   async run({ ctx, app, t }) {
     if (ctx.args.command) {
-      const cmd =
-        app.commands.get(ctx.args.command) ||
-        app.commands.get(app.aliases.get(ctx.args.command) ?? '')
+      const cmd = app.commands.get(ctx.args.command) || app.commands.get(app.aliases.get(ctx.args.command) ?? '')
 
       if (!cmd || cmd.onlyDev) {
         return await ctx.reply('commands.help.command_not_found')
@@ -69,41 +67,28 @@ export default createCommand({
         .setThumb(app.user!.displayAvatarURL({ size: 2048 }))
 
       if (cmd.aliases) {
-        embed.addField(
-          t('commands.help.aliases'),
-          cmd.aliases.map((alias) => `\`${alias}\``).join(',')
-        )
+        embed.addField(t('commands.help.aliases'), cmd.aliases.map((alias) => `\`${alias}\``).join(','))
       }
       if (cmd.syntax) {
         embed.addField(t('commands.help.syntax'), `- \`/${cmd.syntax}\``)
       }
       if (cmd.syntaxes) {
-        embed.addField(
-          t('commands.help.syntax'),
-          cmd.syntaxes.map((syntax) => `- \`/${syntax}\``).join('\n')
-        )
+        embed.addField(t('commands.help.syntax'), cmd.syntaxes.map((syntax) => `- \`/${syntax}\``).join('\n'))
       }
       if (cmd.examples) {
-        embed.addField(
-          t('commands.help.examples'),
-          cmd.examples.map((ex) => `- \`/${ex}\``).join('\n')
-        )
+        embed.addField(t('commands.help.examples'), cmd.examples.map((ex) => `- \`/${ex}\``).join('\n'))
       }
       if (cmd.permissions) {
         embed.addField(
           t('commands.help.permissions'),
-          cmd.permissions
-            .map((perm) => `\`${permissions[perm.toString()]}\``)
-            .join(', '),
+          cmd.permissions.map((perm) => `\`${permissions[perm.toString()]}\``).join(', '),
           true
         )
       }
       if (cmd.botPermissions) {
         embed.addField(
           t('commands.help.bot_permissions'),
-          cmd.botPermissions
-            .map((perm) => `\`${permissions[perm.toString()]}\``)
-            .join(', '),
+          cmd.botPermissions.map((perm) => `\`${permissions[perm.toString()]}\``).join(', '),
           true
         )
       }
@@ -111,18 +96,16 @@ export default createCommand({
       return await ctx.reply(embed.build())
     }
 
-    const embed = new EmbedBuilder()
-      .setThumb(app.user!.displayAvatarURL({ size: 2048 }))
-      .setFields(
-        {
-          name: t('commands.help.support.title'),
-          value: t('commands.help.support.desc')
-        },
-        {
-          name: t('commands.help.get.title'),
-          value: t('commands.help.get.desc')
-        }
-      )
+    const embed = new EmbedBuilder().setThumb(app.user!.displayAvatarURL({ size: 2048 })).setFields(
+      {
+        name: t('commands.help.support.title'),
+        value: t('commands.help.support.desc')
+      },
+      {
+        name: t('commands.help.get.title'),
+        value: t('commands.help.get.desc')
+      }
+    )
 
     const button = new ButtonBuilder()
       .setLabel(t('commands.help.community'))

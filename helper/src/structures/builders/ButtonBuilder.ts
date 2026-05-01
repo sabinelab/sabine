@@ -1,8 +1,4 @@
-import {
-  ButtonStyle,
-  ButtonBuilder as DJSButtonBuilder,
-  type InteractionReplyOptions
-} from 'discord.js'
+import { ButtonStyle, ButtonBuilder as DJSButtonBuilder, type InteractionReplyOptions } from 'discord.js'
 
 export default class ButtonBuilder extends DJSButtonBuilder {
   public defineStyle(style: 'blue' | 'gray' | 'green' | 'red' | 'link') {
@@ -23,9 +19,7 @@ export default class ButtonBuilder extends DJSButtonBuilder {
         super.setStyle(ButtonStyle.Link)
         break
       default:
-        throw new Error(
-          'Invalid style! Please, choose: "BLUE", "GRAY", "GREEN", "RED", "LINK"'
-        )
+        throw new Error('Invalid style! Please, choose: "BLUE", "GRAY", "GREEN", "RED", "LINK"')
     }
 
     return this

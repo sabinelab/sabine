@@ -7,27 +7,18 @@ import ComponentInteractionContext from './ComponentInteractionContext'
 import type ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 export default class ComponentInteractionRunner {
-  public async run(
-    app: App,
-    interaction: MessageComponentInteraction
-  ): Promise<unknown> {
+  public async run(app: App, interaction: MessageComponentInteraction): Promise<unknown> {
     if (!interaction.guild || !interaction.guildId) return
 
     if (app.blacklist.get(interaction.user.id)) return
-    if (app.blacklist.get(interaction.guildId))
-      return await interaction.guild.leave()
+    if (app.blacklist.get(interaction.guildId)) return await interaction.guild.leave()
 
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
 
-    const guild =
-      (await GuildSchema.fetch(interaction.guildId)) ??
-      new GuildSchema(interaction.guildId)
-    let profile = await ProfileSchema.fetch(
-      interaction.user.id,
-      interaction.guildId
-    )
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
     if (i?.global && !command) {
       if (!interaction.guild || !interaction.guildId) return
@@ -70,8 +61,7 @@ export default class ComponentInteractionRunner {
 
       return i
         .run({
-          ctx: ctx as ComponentInteractionContext &
-            ModalSubmitInteractionContext,
+          ctx: ctx as ComponentInteractionContext & ModalSubmitInteractionContext,
           t,
           app
         })
@@ -115,9 +105,7 @@ export default class ComponentInteractionRunner {
 
       if (
         command.messageComponentInteractionTime &&
-        interaction.message.createdAt.getTime() +
-          command.messageComponentInteractionTime <
-          Date.now()
+        interaction.message.createdAt.getTime() + command.messageComponentInteractionTime < Date.now()
       ) {
         ctx.setFlags(64)
 
@@ -177,10 +165,7 @@ export default class ComponentInteractionRunner {
       return await ctx.reply('helper.maintenance_status')
     }
 
-    if (
-      i.time &&
-      interaction.message.createdAt.getTime() + i.time < Date.now()
-    ) {
+    if (i.time && interaction.message.createdAt.getTime() + i.time < Date.now()) {
       ctx.setFlags(64)
 
       return await ctx.reply('helper.unknown_interaction')

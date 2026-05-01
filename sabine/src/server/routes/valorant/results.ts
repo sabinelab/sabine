@@ -1,10 +1,7 @@
 import type { Job } from 'bullmq'
 import { Elysia } from 'elysia'
 import { z } from 'zod'
-import {
-  type ResultsPayload,
-  resultsQueue
-} from '@/structures/queue/results-queue'
+import { type ResultsPayload, resultsQueue } from '@/structures/queue/results-queue'
 
 export const valorantResults = new Elysia().post(
   '/webhooks/results/valorant',

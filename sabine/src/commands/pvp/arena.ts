@@ -79,9 +79,7 @@ export default createCommand({
 
         if (
           !ctx.db.profile.teamName ||
-          cards.filter(
-            (c) => c.arenaAgentName && c.arenaRoster && c.arenaAgentRole
-          ).length < 5
+          cards.filter((c) => c.arenaAgentName && c.arenaRoster && c.arenaAgentRole).length < 5
         ) {
           return await ctx.reply('commands.arena.invalid_lineup', {
             map,
@@ -95,17 +93,13 @@ export default createCommand({
           counts[c.playerId] = (counts[c.playerId] || 0) + 1
         }
 
-        const duplicates = Object.values(counts).filter(
-          (count) => count > 1
-        ).length
+        const duplicates = Object.values(counts).filter((count) => count > 1).length
 
         if (duplicates) {
           return await ctx.reply('commands.battle.duplicated_cards')
         }
 
-        const isAlreadyInQueue = await ctx.app.redis.exists(
-          `arena:in_queue:${ctx.db.profile.userId}`
-        )
+        const isAlreadyInQueue = await ctx.app.redis.exists(`arena:in_queue:${ctx.db.profile.userId}`)
 
         if (isAlreadyInQueue) {
           return await ctx.reply('commands.arena.is_already_in_queue')
@@ -118,19 +112,14 @@ export default createCommand({
         }
 
         await Promise.all([
-          ctx.app.redis.set(
-            `arena:in_queue:${ctx.db.profile.userId}`,
-            JSON.stringify(payload)
-          ),
+          ctx.app.redis.set(`arena:in_queue:${ctx.db.profile.userId}`, JSON.stringify(payload)),
           ctx.app.redis.lpush('arena:queue', JSON.stringify(payload))
         ])
 
         await ctx.reply('commands.arena.joined')
       },
       leave: async () => {
-        const payload = await ctx.app.redis.get(
-          `arena:in_queue:${ctx.db.profile.userId}`
-        )
+        const payload = await ctx.app.redis.get(`arena:in_queue:${ctx.db.profile.userId}`)
 
         if (!payload) {
           return await ctx.reply('commands.arena.is_not_in_queue')
@@ -158,9 +147,7 @@ export default createCommand({
         const container = new ContainerBuilder()
           .setAccentColor(6719296)
           .addTextDisplayComponents((text) => text.setContent(map))
-          .addTextDisplayComponents((text) =>
-            text.setContent(ctx.t('commands.arena.your_players'))
-          )
+          .addTextDisplayComponents((text) => text.setContent(ctx.t('commands.arena.your_players')))
 
         for (const c of cards) {
           container
@@ -172,9 +159,7 @@ export default createCommand({
               let content: string
 
               if (c.arenaAgentName && c.arenaAgentRole) {
-                const emoji = valorantAgents.find(
-                  (a) => a.name === c.arenaAgentName
-                )?.emoji
+                const emoji = valorantAgents.find((a) => a.name === c.arenaAgentName)?.emoji
 
                 content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
               } else {
@@ -210,15 +195,13 @@ export default createCommand({
         when.setDate(now.getDate() + (7 - today))
         when.setHours(0, 0, 0, 0)
 
-        const embed = new EmbedBuilder()
-          .setTitle(ctx.t('commands.arena.embed.title'))
-          .setDesc(
-            ctx.t('commands.arena.embed.desc', {
-              when: `<t:${Math.floor(when.getTime() / 1000)}:R>`,
-              map: await ctx.app.redis.get('arena:map'),
-              queueLength: await Bun.redis.llen('arena:queue')
-            })
-          )
+        const embed = new EmbedBuilder().setTitle(ctx.t('commands.arena.embed.title')).setDesc(
+          ctx.t('commands.arena.embed.desc', {
+            when: `<t:${Math.floor(when.getTime() / 1000)}:R>`,
+            map: await ctx.app.redis.get('arena:map'),
+            queueLength: await Bun.redis.llen('arena:queue')
+          })
+        )
 
         await ctx.reply(embed.build())
       }
@@ -305,21 +288,13 @@ export default createCommand({
             })
         )
 
-      const row1 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-        controllers
-      )
+      const row1 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(controllers)
 
-      const row2 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-        duelists
-      )
+      const row2 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(duelists)
 
-      const row3 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-        initiators
-      )
+      const row3 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(initiators)
 
-      const row4 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(
-        sentinels
-      )
+      const row4 = new ActionRowBuilder<SelectMenuBuilder>().setComponents(sentinels)
 
       await Promise.all([
         ctx.reply({
@@ -375,9 +350,7 @@ export default createCommand({
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
         .addTextDisplayComponents((text) => text.setContent(map))
-        .addTextDisplayComponents((text) =>
-          text.setContent(ctx.t('commands.arena.your_players'))
-        )
+        .addTextDisplayComponents((text) => text.setContent(ctx.t('commands.arena.your_players')))
 
       for (const c of cards) {
         container
@@ -389,9 +362,7 @@ export default createCommand({
             let content: string
 
             if (c.arenaAgentName && c.arenaAgentRole) {
-              const emoji = valorantAgents.find(
-                (a) => a.name === c.arenaAgentName
-              )?.emoji
+              const emoji = valorantAgents.find((a) => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {
@@ -476,9 +447,7 @@ export default createCommand({
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
         .addTextDisplayComponents((text) => text.setContent(map))
-        .addTextDisplayComponents((text) =>
-          text.setContent(ctx.t('commands.arena.your_players'))
-        )
+        .addTextDisplayComponents((text) => text.setContent(ctx.t('commands.arena.your_players')))
 
       for (const c of cards) {
         container
@@ -490,9 +459,7 @@ export default createCommand({
             let content: string
 
             if (c.arenaAgentName && c.arenaAgentRole) {
-              const emoji = valorantAgents.find(
-                (a) => a.name === c.arenaAgentName
-              )?.emoji
+              const emoji = valorantAgents.find((a) => a.name === c.arenaAgentName)?.emoji
 
               content = `- ${emoji} ${player.name} (${Math.floor(c.overall)}) — ${player.collection}`
             } else {
@@ -515,9 +482,7 @@ export default createCommand({
           )
       }
 
-      const messageId = await ctx.app.redis.get(
-        `lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`
-      )
+      const messageId = await ctx.app.redis.get(`lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
       if (!messageId) return
 
       const message = ctx.interaction.channel?.messages.cache.get(messageId)
@@ -532,9 +497,7 @@ export default createCommand({
           p: player.name,
           agent: agent.name
         }),
-        ctx.app.redis.unlink(
-          `lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`
-        )
+        ctx.app.redis.unlink(`lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
       ])
     }
   }

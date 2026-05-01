@@ -9,9 +9,7 @@ import Footer from '@/components/footer'
 import Header from '@/components/header'
 import Motion from '@/components/motion'
 
-export const generateMetadata = async ({
-  params
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { locale } = await params
   const t = await getTranslations({ locale })
 
@@ -46,9 +44,7 @@ export default async function RootLayout({ children, params }: Props) {
 
   return (
     <html lang={locale}>
-      <body
-        className={`${geist.className} min-h-screen flex flex-col background`}
-      >
+      <body className={`${geist.className} min-h-screen flex flex-col background`}>
         <Header />
         <NextIntlClientProvider messages={messages} locale={locale}>
           <main className='grow'>

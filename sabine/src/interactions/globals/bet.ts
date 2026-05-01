@@ -8,8 +8,7 @@ export default createComponentInteraction({
   flags: 64,
   global: true,
   async run({ ctx, t, app }) {
-    if (ctx.db.profile.poisons < 500)
-      return await ctx.reply('helper.poisons_needed')
+    if (ctx.db.profile.poisons < 500) return await ctx.reply('helper.poisons_needed')
 
     const options = {
       valorant: async () => {
@@ -58,11 +57,7 @@ export default createComponentInteraction({
                   style: 1,
                   minLength: 3,
                   required: true,
-                  placeholder:
-                    'Ex.: ' +
-                    (
-                      Math.floor(Math.random() * (1000 - 500 + 1)) + 500
-                    ).toString()
+                  placeholder: 'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
                 }
               ]
             }
@@ -109,11 +104,7 @@ export default createComponentInteraction({
                   style: 1,
                   minLength: 3,
                   required: true,
-                  placeholder:
-                    'Ex.: ' +
-                    (
-                      Math.floor(Math.random() * (1000 - 500 + 1)) + 500
-                    ).toString()
+                  placeholder: 'Ex.: ' + (Math.floor(Math.random() * (1000 - 500 + 1)) + 500).toString()
                 }
               ]
             }

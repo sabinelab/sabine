@@ -393,10 +393,7 @@
           "- Pity"
         ],
         "balance": ["- Toxinas e destinos"],
-        "predictions": [
-          "- Palpites corretos/incorretos",
-          "- Palpites enviados"
-        ],
+        "predictions": ["- Palpites corretos/incorretos", "- Palpites enviados"],
         "simulator": [
           "- Partidas",
           "- Carreira",
@@ -436,24 +433,15 @@
       },
       "ranked_swiftplay": {
         "title": "Ranked Swiftplay",
-        "description": [
-          "Wins: `{ranked_swiftplay_wins}`",
-          "Defeats: `{ranked_swiftplay_defeats}`"
-        ]
+        "description": ["Wins: `{ranked_swiftplay_wins}`", "Defeats: `{ranked_swiftplay_defeats}`"]
       },
       "unranked": {
         "title": "Unranked",
-        "description": [
-          "Wins: `{unranked_wins}`",
-          "Defeats: `{unranked_defeats}`"
-        ]
+        "description": ["Wins: `{unranked_wins}`", "Defeats: `{unranked_defeats}`"]
       },
       "swiftplay": {
         "title": "Swiftplay",
-        "description": [
-          "Wins: `{swiftplay_wins}`",
-          "Defeats: `{swiftplay_defeats}`"
-        ]
+        "description": ["Wins: `{swiftplay_wins}`", "Defeats: `{swiftplay_defeats}`"]
       },
       "last_battle": "Last Battle"
     }

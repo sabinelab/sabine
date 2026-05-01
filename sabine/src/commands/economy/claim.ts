@@ -6,16 +6,7 @@ import ButtonBuilder from '../../structures/builders/ButtonBuilder'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
-type Tier =
-  | 'iron'
-  | 'bronze'
-  | 'silver'
-  | 'gold'
-  | 'platinum'
-  | 'diamond'
-  | 'ascendant'
-  | 'immortal'
-  | 'radiant'
+type Tier = 'iron' | 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond' | 'ascendant' | 'immortal' | 'radiant'
 
 const tier = (() => {
   const tier: Record<Tier, Player[]> = {
@@ -104,11 +95,7 @@ export default createCommand({
       channel = ctx.data.channel.id
     }
 
-    await ctx.db.profile.addPlayerToRoster(
-      player.id.toString(),
-      'CLAIM_PLAYER_BY_CLAIM_COMMAND',
-      channel
-    )
+    await ctx.db.profile.addPlayerToRoster(player.id.toString(), 'CLAIM_PLAYER_BY_CLAIM_COMMAND', channel)
 
     const embed = new EmbedBuilder()
       .setTitle(player.name)

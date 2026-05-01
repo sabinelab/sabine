@@ -3,10 +3,7 @@ import { GuildSchema, UserSchema } from '@/database'
 import { env } from '@/env'
 import type App from '@/structures/app/App'
 import CommandContext from '@/structures/command/CommandContext'
-import type {
-  CommandArguments,
-  ResolveArguments
-} from '@/structures/command/createCommand'
+import type { CommandArguments, ResolveArguments } from '@/structures/command/createCommand'
 import Logger from '@/util/Logger'
 
 type Props = {
@@ -35,24 +32,15 @@ export class CommandManager {
       }
       case Discord.ApplicationCommandOptionType.User: {
         const id = props.val.replace(/[<@!>]/g, '')
-        return (
-          props.app.users.cache.get(id) ??
-          (await props.app.users.fetch(id).catch(() => null))
-        )
+        return props.app.users.cache.get(id) ?? (await props.app.users.fetch(id).catch(() => null))
       }
       case Discord.ApplicationCommandOptionType.Channel: {
         const id = props.val.replace(/[<#>]/g, '')
-        return (
-          props.guild.channels.cache.get(id) ??
-          (await props.guild.channels.fetch(id).catch(() => null))
-        )
+        return props.guild.channels.cache.get(id) ?? (await props.guild.channels.fetch(id).catch(() => null))
       }
       case Discord.ApplicationCommandOptionType.Role: {
         const id = props.val.replace(/[<@&>]/g, '')
-        return (
-          props.guild.roles.cache.get(id) ??
-          (await props.guild.roles.fetch(id).catch(() => null))
-        )
+        return props.guild.roles.cache.get(id) ?? (await props.guild.roles.fetch(id).catch(() => null))
       }
       default: {
         return props.val
@@ -127,10 +115,7 @@ export class CommandManager {
     return true
   }
 
-  public async exec(
-    app: App,
-    data: Discord.ChatInputCommandInteraction | Discord.Message<true>
-  ) {
+  public async exec(app: App, data: Discord.ChatInputCommandInteraction | Discord.Message<true>) {
     if (!data.guild || !data.guildId) return
 
     let commandName = ''
@@ -153,9 +138,7 @@ export class CommandManager {
       commandName = commandLabel.slice(env.PREFIX.length)
     }
 
-    const cmd =
-      app.commands.get(commandName) ||
-      app.commands.get(app.aliases.get(commandName) ?? '')
+    const cmd = app.commands.get(commandName) || app.commands.get(app.aliases.get(commandName) ?? '')
 
     if (!cmd) return
 
@@ -163,16 +146,10 @@ export class CommandManager {
 
     if (cmd.onlyMod) {
       const member =
-        data instanceof Discord.Message
-          ? data.member
-          : await data.guild.members.fetch(user.id).catch(() => null)
+        data instanceof Discord.Message ? data.member : await data.guild.members.fetch(user.id).catch(() => null)
       if (
         !member ||
-        ![
-          '1237458600046104617',
-          '1237458505196114052',
-          '1237457762502574130'
-        ].some((r) => member.roles.cache.has(r))
+        !['1237458600046104617', '1237458505196114052', '1237457762502574130'].some((r) => member.roles.cache.has(r))
       ) {
         return
       }
@@ -180,33 +157,25 @@ export class CommandManager {
 
     if (cmd.onlyBooster) {
       const member =
-        data instanceof Discord.Message
-          ? data.member
-          : await data.guild.members.fetch(user.id).catch(() => null)
+        data instanceof Discord.Message ? data.member : await data.guild.members.fetch(user.id).catch(() => null)
       if (!member?.premiumSince) return
     }
 
     if (cmd.onlyBoosterAndPremium) {
       const member =
-        data instanceof Discord.Message
-          ? data.member
-          : await data.guild.members.fetch(user.id).catch(() => null)
+        data instanceof Discord.Message ? data.member : await data.guild.members.fetch(user.id).catch(() => null)
       if (
         !member ||
-        ![
-          '1265770785893515285',
-          '1314272663316856863',
-          '1314272739917303888',
-          '1314272766891003945'
-        ].some((r) => member.roles.cache.has(r))
+        !['1265770785893515285', '1314272663316856863', '1314272739917303888', '1314272766891003945'].some((r) =>
+          member.roles.cache.has(r)
+        )
       ) {
         return
       }
     }
 
     const dbUser = (await UserSchema.fetch(user.id)) ?? new UserSchema(user.id)
-    const dbGuild =
-      (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
+    const dbGuild = (await GuildSchema.fetch(data.guildId)) ?? new GuildSchema(data.guildId)
 
     const parsedArgs: Record<string, unknown> = {}
 
@@ -219,37 +188,19 @@ export class CommandManager {
         let currentParsedArgs = parsedArgs
 
         if (group) {
-          const groupKey = Object.keys(currentArgsDef).find(
-            (k) => currentArgsDef[k].name === group
-          )
-          if (
-            groupKey &&
-            currentArgsDef[groupKey].type ===
-              Discord.ApplicationCommandOptionType.SubcommandGroup
-          ) {
+          const groupKey = Object.keys(currentArgsDef).find((k) => currentArgsDef[k].name === group)
+          if (groupKey && currentArgsDef[groupKey].type === Discord.ApplicationCommandOptionType.SubcommandGroup) {
             currentParsedArgs[groupKey] = {}
-            currentParsedArgs = currentParsedArgs[groupKey] as Record<
-              string,
-              unknown
-            >
+            currentParsedArgs = currentParsedArgs[groupKey] as Record<string, unknown>
             currentArgsDef = currentArgsDef[groupKey].args || {}
           }
         }
 
         if (sub) {
-          const subKey = Object.keys(currentArgsDef).find(
-            (k) => currentArgsDef[k].name === sub
-          )
-          if (
-            subKey &&
-            currentArgsDef[subKey].type ===
-              Discord.ApplicationCommandOptionType.Subcommand
-          ) {
+          const subKey = Object.keys(currentArgsDef).find((k) => currentArgsDef[k].name === sub)
+          if (subKey && currentArgsDef[subKey].type === Discord.ApplicationCommandOptionType.Subcommand) {
             currentParsedArgs[subKey] = {}
-            currentParsedArgs = currentParsedArgs[subKey] as Record<
-              string,
-              unknown
-            >
+            currentParsedArgs = currentParsedArgs[subKey] as Record<string, unknown>
             currentArgsDef = currentArgsDef[subKey].args || {}
           }
         }
@@ -294,14 +245,7 @@ export class CommandManager {
           currentParsedArgs[key] = val
         }
       } else {
-        const success = await this.parseMessageArguments(
-          app,
-          data.guild,
-          cmd.args,
-          args,
-          parsedArgs,
-          data
-        )
+        const success = await this.parseMessageArguments(app, data.guild, cmd.args, args, parsedArgs, data)
         if (!success) return
       }
     }

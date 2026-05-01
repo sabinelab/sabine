@@ -6,23 +6,17 @@ import type App from '../app/App'
 import ModalSubmitInteractionContext from './ModalSubmitInteractionContext'
 
 export default class ModalSubmitInteractionRunner {
-  public async run(
-    app: App,
-    interaction: ModalSubmitInteraction
-  ): Promise<unknown> {
+  public async run(app: App, interaction: ModalSubmitInteraction): Promise<unknown> {
     if (!interaction.guild || !interaction.guildId) return
 
     if (app.blacklist.get(interaction.user.id)) return
-    if (app.blacklist.get(interaction.guildId))
-      return await interaction.guild.leave()
+    if (app.blacklist.get(interaction.guildId)) return await interaction.guild.leave()
 
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
 
-    const guild =
-      (await GuildSchema.fetch(interaction.guildId)) ??
-      new GuildSchema(interaction.guildId)
+    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     const profile =
       (await ProfileSchema.fetch(interaction.user.id, interaction.guildId)) ??
       new ProfileSchema(interaction.user.id, interaction.guildId)
@@ -104,12 +98,10 @@ export default class ModalSubmitInteractionRunner {
       return locales(ctx.locale, content, args)
     }
 
-    command
-      .createModalSubmitInteraction({ ctx, t, app, i: interaction })
-      .catch(async (e) => {
-        ctx.setFlags(64)
-        await ctx.reply('helper.error', { e })
-        await new Logger(app).error(e)
-      })
+    command.createModalSubmitInteraction({ ctx, t, app, i: interaction }).catch(async (e) => {
+      ctx.setFlags(64)
+      await ctx.reply('helper.error', { e })
+      await new Logger(app).error(e)
+    })
   }
 }

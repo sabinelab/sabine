@@ -14,18 +14,12 @@ export default createModalSubmitInteraction({
 
     ctx.setFlags(64)
 
-    const title = ctx.interaction.fields.getTextInputValue(
-      'edit-status-modal-response-1'
-    )
-    const description = ctx.interaction.fields.getTextInputValue(
-      'edit-status-modal-response-2'
-    )
+    const title = ctx.interaction.fields.getTextInputValue('edit-status-modal-response-1')
+    const description = ctx.interaction.fields.getTextInputValue('edit-status-modal-response-2')
     const type = ctx.interaction.fields
       .getTextInputValue('edit-status-modal-response-3')
       .toUpperCase() as keyof typeof emoji
-    const msg = ctx.interaction.fields.getTextInputValue(
-      'edit-status-modal-response-4'
-    )
+    const msg = ctx.interaction.fields.getTextInputValue('edit-status-modal-response-4')
 
     const status = await prisma.status.findUnique({
       where: {
@@ -42,10 +36,7 @@ export default createModalSubmitInteraction({
 
     if (channel?.type !== ChannelType.GuildAnnouncement) return
 
-    const embed = new EmbedBuilder()
-      .setTitle(`${emoji[type]} ${title}`)
-      .setDesc(description)
-      .setColor(colors[type])
+    const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(description).setColor(colors[type])
 
     const button = new ButtonBuilder()
       .setCustomId('join-thread')
@@ -82,10 +73,7 @@ export default createModalSubmitInteraction({
     ]
 
     if (msg.length) {
-      const embed = new EmbedBuilder()
-        .setTitle(`${emoji[type]} ${title}`)
-        .setDesc(msg)
-        .setColor(colors[type])
+      const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(msg).setColor(colors[type])
 
       const thread = await message.thread?.fetch()
       if (thread) {

@@ -25,9 +25,7 @@ export default createCommand({
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)
-      .addTextDisplayComponents((text) =>
-        text.setContent(ctx.t('commands.shop.container.title'))
-      )
+      .addTextDisplayComponents((text) => text.setContent(ctx.t('commands.shop.container.title')))
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>

@@ -27,9 +27,7 @@ export default async function CardsPage({ searchParams }: Props) {
   return (
     <>
       <div className='flex flex-col items-center gap-5'>
-        <h1 className='font-bold text-4xl md:text-5xl pt-15'>
-          {t('cards.title')}
-        </h1>
+        <h1 className='font-bold text-4xl md:text-5xl pt-15'>{t('cards.title')}</h1>
         <form action={searchAction} className='relative md:w-full max-w-md'>
           <input
             type='text'

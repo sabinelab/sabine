@@ -53,10 +53,7 @@ const getRandomPlayers = (key: Tier) => {
     i = Math.floor(Math.random() * currentLength)
     currentLength--
 
-    ;[shuffled[currentLength], shuffled[i]] = [
-      shuffled[i],
-      shuffled[currentLength]
-    ]
+    ;[shuffled[currentLength], shuffled[i]] = [shuffled[i], shuffled[currentLength]]
   }
 
   return shuffled.slice(0, count)
@@ -77,9 +74,7 @@ export default createCommand({
   async run({ ctx }) {
     const container = new ContainerBuilder()
       .setAccentColor(6719296)
-      .addTextDisplayComponents((text) =>
-        text.setContent(ctx.t('commands.packs.container.title'))
-      )
+      .addTextDisplayComponents((text) => text.setContent(ctx.t('commands.packs.container.title')))
       .addSectionComponents((section) =>
         section
           .addTextDisplayComponents((text) =>
@@ -243,9 +238,7 @@ export default createCommand({
     if (ctx.args[2] === 'back') {
       const container = new ContainerBuilder()
         .setAccentColor(6719296)
-        .addTextDisplayComponents((text) =>
-          text.setContent(t('commands.packs.container.title'))
-        )
+        .addTextDisplayComponents((text) => text.setContent(t('commands.packs.container.title')))
         .addSectionComponents((section) =>
           section
             .addTextDisplayComponents((text) =>
@@ -407,8 +400,7 @@ export default createCommand({
     } else {
       const packs: { [key: string]: () => Promise<unknown> } = {
         iron: async () => {
-          if (ctx.db.profile.ironPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.ironPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('iron')
 
@@ -425,9 +417,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -437,9 +427,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -454,8 +442,7 @@ export default createCommand({
           })
         },
         bronze: async () => {
-          if (ctx.db.profile.bronzePacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.bronzePacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('bronze')
 
@@ -472,9 +459,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -484,9 +469,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -501,8 +484,7 @@ export default createCommand({
           })
         },
         silver: async () => {
-          if (ctx.db.profile.silverPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.silverPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('silver')
 
@@ -519,9 +501,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -531,9 +511,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -548,8 +526,7 @@ export default createCommand({
           })
         },
         gold: async () => {
-          if (ctx.db.profile.goldPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.goldPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('gold')
 
@@ -566,9 +543,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -578,9 +553,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -595,8 +568,7 @@ export default createCommand({
           })
         },
         platinum: async () => {
-          if (ctx.db.profile.platinumPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.platinumPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('platinum')
 
@@ -613,9 +585,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -625,9 +595,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -642,8 +610,7 @@ export default createCommand({
           })
         },
         diamond: async () => {
-          if (ctx.db.profile.diamondPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.diamondPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('diamond')
 
@@ -660,9 +627,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -672,9 +637,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -689,8 +652,7 @@ export default createCommand({
           })
         },
         ascendant: async () => {
-          if (ctx.db.profile.ascendantPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.ascendantPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('ascendant')
 
@@ -707,9 +669,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -719,9 +679,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -736,8 +694,7 @@ export default createCommand({
           })
         },
         immortal: async () => {
-          if (ctx.db.profile.immortalPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.immortalPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('immortal')
 
@@ -754,9 +711,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -766,9 +721,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 
@@ -783,8 +736,7 @@ export default createCommand({
           })
         },
         radiant: async () => {
-          if (ctx.db.profile.radiantPacks <= 0)
-            return await ctx.reply('commands.packs.you_dont_have_this_pack')
+          if (ctx.db.profile.radiantPacks <= 0) return await ctx.reply('commands.packs.you_dont_have_this_pack')
 
           const players = getRandomPlayers('radiant')
 
@@ -801,9 +753,7 @@ export default createCommand({
               }
             }
           })
-          await ctx.db.profile.addPlayersToRoster(
-            players.map((p) => p.id.toString())
-          )
+          await ctx.db.profile.addPlayersToRoster(players.map((p) => p.id.toString()))
 
           const button = new ButtonBuilder()
             .defineStyle('blue')
@@ -813,9 +763,7 @@ export default createCommand({
           const textDisplay = new TextDisplayBuilder().setContent(
             t('commands.packs.pack_opened', {
               pack: ctx.args[2].toUpperCase(),
-              players: players
-                .map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``)
-                .join(', ')
+              players: players.map((p) => `\`${p.name} (${Math.floor(p.ovr)})\``).join(', ')
             })
           )
 

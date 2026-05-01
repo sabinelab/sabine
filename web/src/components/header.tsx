@@ -14,21 +14,12 @@ export default async function Header() {
     <header className='flex justify-between p-4'>
       <div className='flex items-center md:px-10 gap-10'>
         <Link href='/' className='transition duration-300 hover:scale-125'>
-          <Image
-            src='/header/sabine.png'
-            width={80}
-            height={80}
-            alt='sabine'
-            className='rounded-full'
-          />
+          <Image src='/header/sabine.png' width={80} height={80} alt='sabine' className='rounded-full' />
         </Link>
 
         <ul className='hidden text-lg md:flex'>
           <li className='transition duration-300 hover:scale-105 hover:bg-[#333333]/30 rounded-lg'>
-            <Link
-              href='/commands'
-              className='flex items-center gap-2 px-4 py-2'
-            >
+            <Link href='/commands' className='flex items-center gap-2 px-4 py-2'>
               <CopySlash size={20} />
               {t('header.commands')}
             </Link>
@@ -42,10 +33,7 @@ export default async function Header() {
           </li>
 
           <li className='transition duration-300 hover:scale-105 hover:bg-[#333333]/30 rounded-lg'>
-            <Link
-              href='/changelog'
-              className='flex items-center gap-2 px-4 py-2'
-            >
+            <Link href='/changelog' className='flex items-center gap-2 px-4 py-2'>
               <NotebookText size={20} />
               {t('header.changelog')}
             </Link>

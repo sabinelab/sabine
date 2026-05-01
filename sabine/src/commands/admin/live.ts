@@ -26,8 +26,7 @@ export default createCommand({
           name: 'valorant',
           description: 'Enable VALORANT live feed feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Habilita a funcionalidade de transmissão ao vivo de VALORANT'
+            'pt-BR': 'Habilita a funcionalidade de transmissão ao vivo de VALORANT'
           },
           args: {
             channel: {
@@ -49,8 +48,7 @@ export default createCommand({
           name: 'lol',
           description: 'Enable League of Legends live feed feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Habilita a funcionalidade de transmissão ao vivo de League of Legends'
+            'pt-BR': 'Habilita a funcionalidade de transmissão ao vivo de League of Legends'
           },
           args: {
             channel: {
@@ -85,8 +83,7 @@ export default createCommand({
           name: 'valorant',
           description: 'Disable VALORANT live feed feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Desabilita a funcionalidade de transmissão ao vivo de VALORANT'
+            'pt-BR': 'Desabilita a funcionalidade de transmissão ao vivo de VALORANT'
           }
         },
         lol: {
@@ -94,8 +91,7 @@ export default createCommand({
           name: 'lol',
           description: 'Disable League of Legends live feed feature',
           descriptionLocalizations: {
-            'pt-BR':
-              'Desabilita a funcionalidade de transmissão ao vivo de League of Legends'
+            'pt-BR': 'Desabilita a funcionalidade de transmissão ao vivo de League of Legends'
           }
         }
       }
