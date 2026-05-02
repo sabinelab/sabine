@@ -253,9 +253,7 @@ const items = [
 
           <div class="flex flex-col md:items-center">
             <h3 class="font-extrabold text-xl">{{ t('footer.contact') }}</h3>
-            <NuxtLink href="/wiki" target="_blank" class="text-[#9CA3AF] underline">
-              Wiki
-            </NuxtLink>
+            <NuxtLink href="/wiki" target="_blank" class="text-[#9CA3AF] underline"> Wiki </NuxtLink>
 
             <NuxtLink href="/commands" target="_blank" class="text-[#9CA3AF] underline">
               {{ t('header.commands') }}
