@@ -3,5 +3,23 @@
     "commands": "Commands",
     "changelog": "Changelog",
     "cards": "Cards"
+  },
+  "footer": {
+    "contact": "Contact",
+    "learn": "Learn",
+    "guidelines": "Guidelines",
+    "legal": "Legal",
+    "terms": "Terms",
+    "privacy": "Privacy"
+  },
+  "pages": {
+    "home": {
+      "title": "Bringing the VALORANT to your Discord server!",
+      "add_to_discord": "Add to Discord",
+      "build": {
+        "title": "Build your Dream Team and Compete in Ranked Matches",
+        "desc": "Build your Dream Team is too easy. Just run the command {claim} to claim a random player, {promote} to promote him to active roster and {roster} to see your roster."
+      }
+    }
   }
 }
