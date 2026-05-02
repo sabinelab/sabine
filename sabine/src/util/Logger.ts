@@ -39,7 +39,8 @@ export default class Logger {
       'Missing Permissions',
       'AbortError: This operation was aborted',
       'Missing Access',
-      'Unknown Message'
+      'Unknown Message',
+      'Unknown Channel'
     ]
 
     if (ignoredErrors.some((e) => error.toString().includes(e))) return
