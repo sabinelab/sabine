@@ -107,12 +107,7 @@ export default createCommand({
               ? '`Infinity`'
               : `${guild?.events.length ?? 0}/${ctx.db.guild.tournamentsLength}`,
           id,
-          vlr_news: !ctx.db.guild.valorantNewsChannel ? '`undefined`' : `<#${ctx.db.guild.valorantNewsChannel}>`,
-          vlr_live: !ctx.db.guild.valorantLiveFeedChannel
-            ? '`undefined`'
-            : `<#${ctx.db.guild.valorantLiveFeedChannel}>`,
-          lol_news: !ctx.db.guild.lolNewsChannel ? '`undefined`' : `<#${ctx.db.guild.lolNewsChannel}>`,
-          lol_live: !ctx.db.guild.lolLiveFeedChannel ? '`undefined`' : `<#${ctx.db.guild.lolLiveFeedChannel}>`
+          vlr_news: !ctx.db.guild.valorantNewsChannel ? '`undefined`' : `<#${ctx.db.guild.valorantNewsChannel}>`
         })
       )
 
