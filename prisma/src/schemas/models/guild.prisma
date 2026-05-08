@@ -4,15 +4,12 @@ model Guild {
   prefix String?
   events Event[]
 
-  valorantResendTime      DateTime? @map("valorant_resend_time")
-  valorantMatches         String[]  @default([]) @map("valorant_matches")
-  valorantNewsChannel     String?   @map("valorant_news_channel")
-  valorantLiveFeedChannel String?   @map("valorant_live_feed_channel")
+  valorantResendTime  DateTime? @map("valorant_resend_time")
+  valorantMatches     String[]  @default([]) @map("valorant_matches")
+  valorantNewsChannel String?   @map("valorant_news_channel")
 
-  lolResendTime      DateTime? @map("lol_resend_time")
-  lolMatches         String[]  @default([]) @map("lol_matches")
-  lolNewsChannel     String?   @map("lol_news_channel")
-  lolLiveFeedChannel String?   @map("lol_live_feed_channel")
+  lolResendTime DateTime? @map("lol_resend_time")
+  lolMatches    String[]  @default([]) @map("lol_matches")
 
   tbdMatches        TBDMatch[]
   tournamentsLength Int           @default(5) @map("tournaments_length") @db.SmallInt
@@ -24,23 +21,24 @@ model Guild {
 
   users Profile[]
 
-  @@index([valorantLiveFeedChannel])
-  @@index([lolLiveFeedChannel])
   @@index([valorantNewsChannel])
 }
 
 model LiveMessage {
-  id      String @id @default(uuid())
-  guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
-  guildId String @map("guild_id")
-  message String
-  event   String
+  id        String @id @default(uuid())
+  guild     Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
+  guildId   String @map("guild_id")
+  messageId String @map("message_id")
+  channelId String @map("channel_id")
+  index     Int    @default(0) @db.SmallInt
+  game      Game
 
-  @@index([guildId])
+  @@unique([guildId, game, channelId, index])
+  @@index([guildId, game])
 }
 
 model GuildKey {
-  id      String @id @default(uuid())
+  id      String @id @default(uuid(7))
   guild   Guild  @relation(fields: [guildId], references: [id], onDelete: Cascade)
   guildId String @unique @map("guild_id")
 
@@ -49,7 +47,7 @@ model GuildKey {
 }
 
 model Key {
-  id   String  @id @default(uuid())
+  id   String  @id @default(cuid(2))
   type KeyType
 
   expiresAt DateTime? @map("expires_at")
