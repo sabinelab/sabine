@@ -62,7 +62,7 @@
       "tournament_removed": "The tournament **{t}** has been removed successfully!",
       "dashboard": "Dashboard",
       "event_channels": "Matches will be announced in {ch1}\nResults will be announced in {ch2}",
-      "desc": "- Language: `{lang}` (change by using: </admin language:{id}>)\n- Limit of tournaments: `{limit}`\n- VALORANT news channel: {vlr_news}\n- VALORANT live feed channel: {vlr_live}\n- League of Legends news channel: {lol_news}\n- League of legends live feed channel: {lol_live}",
+      "desc": "- Language: `{lang}` (change by using: </admin language:{id}>)\n- Limit of tournaments: `{limit}`\n- VALORANT news channel: {vlr_news}",
       "invalid_channel": "Invalid channel type. Consider select a TEXT channel.",
       "limit_reached": "This server has reached the maximum limit of tournaments that can be added. If you want to add this tournaments, consider removing one using {cmd}",
       "channel_being_used": "The channel {ch} is already being used to send the results of a tournament. Consider using another channel for this.\nCheck the channels that are already in use by using {cmd}",

@@ -62,7 +62,7 @@
       "tournament_removed": "¡El torneo **{t}** ha sido eliminado con éxito!",
       "dashboard": "Panel de control",
       "event_channels": "Los partidos se anunciarán en {ch1}\nLos resultados se anunciarán en {ch2}",
-      "desc": "- Idioma: `{lang}` (cambiar usando: </admin language:{id}>)\n- Límite de torneos: `{limit}`\n- Canal de noticias de VALORANT: {vlr_news}\n- Canal de transmisión en vivo de VALORANT: {vlr_live}\n- Canal de noticias de League of Legends: {lol_news}\n- Canal de transmisión en vivo de League of Legends: {lol_live}",
+      "desc": "- Idioma: `{lang}` (cambiar usando: </admin language:{id}>)\n- Límite de torneos: `{limit}`\n- Canal de noticias de VALORANT: {vlr_news}",
       "invalid_channel": "Tipo de canal inválido. Considera seleccionar un canal de TEXTO.",
       "limit_reached": "Este servidor ha alcanzado el límite máximo de torneos que se pueden añadir. Si quieres añadir estos torneos, considera eliminar uno usando {cmd}",
       "channel_being_used": "El canal {ch} ya se está utilizando para enviar los resultados de un torneo. Considera usar otro canal para esto.\nVerifica los canales que ya están en uso usando {cmd}",
