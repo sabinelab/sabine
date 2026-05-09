@@ -1,5 +1,5 @@
 import { prisma } from '@db'
-import type { $Enums } from '@generated'
+import type { $Enums, Prisma } from '@generated'
 import t from '@i18n'
 import { Queue } from 'bullmq'
 import {
@@ -55,6 +55,33 @@ export const processLive = async (app: App, data: LivePayload) => {
     }
   }
 
+  const matchedEventNamesArray = [...matchedEventNames]
+  const where: Prisma.GuildWhereInput = {
+    OR: [
+      ...(matchedEventNamesArray.length
+        ? [
+            {
+              events: {
+                some: {
+                  type: data.game,
+                  name: {
+                    in: matchedEventNamesArray
+                  }
+                }
+              }
+            }
+          ]
+        : []),
+      {
+        liveMessages: {
+          some: {
+            game: data.game
+          }
+        }
+      }
+    ]
+  }
+
   let cursor: string | undefined
 
   while (true) {
@@ -63,23 +90,19 @@ export const processLive = async (app: App, data: LivePayload) => {
       skip: cursor ? 1 : 0,
       cursor: cursor ? { id: cursor } : undefined,
       orderBy: { id: 'asc' },
-      where: {
-        events: {
-          some: {
-            type: data.game,
-            name: {
-              in: [...matchedEventNames]
-            }
-          }
-        }
-      },
+      where,
       include: {
         events: {
           where: {
             type: data.game,
             name: {
-              in: [...matchedEventNames]
+              in: matchedEventNamesArray
             }
+          }
+        },
+        liveMessages: {
+          where: {
+            game: data.game
           }
         }
       }
@@ -87,7 +110,7 @@ export const processLive = async (app: App, data: LivePayload) => {
 
     if (!guilds.length) break
 
-    const messages: Promise<unknown>[] = []
+    const promises: Promise<unknown>[] = []
 
     for (const guild of guilds) {
       const channelBatches = new Map<string, LiveMatchData[]>()
@@ -136,7 +159,10 @@ export const processLive = async (app: App, data: LivePayload) => {
           const index = i / chunkSize
           const chunk = matches.slice(i, i + chunkSize)
 
-          const container = new ContainerBuilder().setAccentColor(6719296)
+          const container = new ContainerBuilder()
+            .setAccentColor(6719296)
+            .addTextDisplayComponents((text) => text.setContent(`## ${t(guild.lang, 'helper.live_now')}`))
+            .addSeparatorComponents((separator) => separator)
 
           for (const match of chunk) {
             const team1 = match.data.teams[0]
@@ -149,9 +175,12 @@ export const processLive = async (app: App, data: LivePayload) => {
                 content += `**${match.emoji1} ${team1.name} \`${team1.score ?? '0'}\` <:versus:1349105624180330516> \`${team2.score ?? '0'}\` ${team2.name} ${match.emoji2}**\n`
 
                 if (data.game === 'valorant' && match.data.currentMap) {
-                  content += `-# ${match.data.currentMap} | ${match.data.score1 ?? '0'}-${match.data.score2 ?? '0'}`
+                  content += t(guild.lang, 'helper.live_feed_value', {
+                    map: match.data.currentMap,
+                    score: `${match.data.score1 ?? '0'}-${match.data.score2 ?? '0'}`
+                  })
                 } else if (match.data.stage) {
-                  content += `-# ${match.data.stage}`
+                  content += `${match.data.stage}`
                 }
 
                 return text.setContent(content)
@@ -173,7 +202,7 @@ export const processLive = async (app: App, data: LivePayload) => {
               .addSeparatorComponents((separator) => separator)
           }
 
-          messages.push(
+          promises.push(
             limit(async () => {
               const liveMessage = await prisma.liveMessage.findUnique({
                 where: {
@@ -249,7 +278,7 @@ export const processLive = async (app: App, data: LivePayload) => {
         })
 
         for (const stale of staleMessages) {
-          messages.push(
+          promises.push(
             limit(async () => {
               await rest.delete(Routes.channelMessage(stale.channelId, stale.messageId)).catch(() => null)
               await prisma.liveMessage.delete({
@@ -261,9 +290,24 @@ export const processLive = async (app: App, data: LivePayload) => {
           )
         }
       }
+
+      const activeChannelIds = new Set(channelBatches.keys())
+
+      for (const stale of guild.liveMessages.filter((liveMessage) => !activeChannelIds.has(liveMessage.channelId))) {
+        promises.push(
+          limit(async () => {
+            await rest.delete(Routes.channelMessage(stale.channelId, stale.messageId)).catch(() => null)
+            await prisma.liveMessage.delete({
+              where: {
+                id: stale.id
+              }
+            })
+          })
+        )
+      }
     }
 
-    await Promise.allSettled(messages)
+    await Promise.allSettled(promises)
     cursor = guilds[guilds.length - 1].id
   }
 }
