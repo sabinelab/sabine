@@ -45,7 +45,7 @@
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 1rem;
   --background: #1a1a1a;
   --foreground: #e0e0e0;
   --card: oklch(1 0 0);
@@ -116,6 +116,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: gray transparent;
   }
   body {
     @apply text-foreground;

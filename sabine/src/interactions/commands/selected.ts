@@ -168,10 +168,12 @@ export default createComponentInteraction({
       )
       .setFooter({ text: t('commands.battle.time') })
 
-    const channel = app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
+    const channel =
+      app.channels.cache.get(data.channelId) ?? (await app.channels.fetch(data.channelId))
     if (!channel || channel.type !== ChannelType.GuildText) return
 
-    const message = channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
+    const message =
+      channel.messages.cache.get(data.messageId) ?? (await channel.messages.fetch(data.messageId))
     if (!message) return
 
     await ctx.edit('commands.battle.agent_selected', {

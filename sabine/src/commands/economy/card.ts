@@ -1,12 +1,21 @@
 import { calcPlayerPrice } from '@sabinelab/players'
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonBuilder,
+  ButtonStyle
+} from 'discord.js'
 import { env } from '@/env'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
 const date = Date.now()
 
-export const getNextPlayer = (collection: Set<string>, currentPlayer: string, type: 'next' | 'previous') => {
+export const getNextPlayer = (
+  collection: Set<string>,
+  currentPlayer: string,
+  type: 'next' | 'previous'
+) => {
   const players = [...collection]
   const currentIndex = players.indexOf(currentPlayer)
 

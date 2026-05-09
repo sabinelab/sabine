@@ -96,7 +96,10 @@ export const processPredictions = async (data: ResultsPayload) => {
     }
 
     const transactions = preds.flatMap((pred) => {
-      if (pred.teams[0].score === data.teams[0].score && pred.teams[1].score === data.teams[1].score) {
+      if (
+        pred.teams[0].score === data.teams[0].score &&
+        pred.teams[1].score === data.teams[1].score
+      ) {
         let odd: number | null = null
         let bonus = 0
 

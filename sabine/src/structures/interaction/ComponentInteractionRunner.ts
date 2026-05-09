@@ -17,7 +17,8 @@ export default class ComponentInteractionRunner {
     const i = app.interactions.get(args[0])
     const command = app.commands.get(args[0])
 
-    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     let profile = await ProfileSchema.fetch(interaction.user.id, interaction.guildId)
 
     if (i?.global && !command) {
@@ -105,7 +106,8 @@ export default class ComponentInteractionRunner {
 
       if (
         command.messageComponentInteractionTime &&
-        interaction.message.createdAt.getTime() + command.messageComponentInteractionTime < Date.now()
+        interaction.message.createdAt.getTime() + command.messageComponentInteractionTime <
+          Date.now()
       ) {
         ctx.setFlags(64)
 

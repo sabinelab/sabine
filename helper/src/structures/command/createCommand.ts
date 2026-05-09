@@ -40,9 +40,17 @@ export type CommandArguments = {
 
 export type ResolveArguments<T extends CommandArguments> = {
   [K in keyof T]: T[K]['type'] extends Discord.ApplicationCommandOptionType.Subcommand
-    ? (T[K]['args'] extends CommandArguments ? ResolveArguments<T[K]['args']> : Record<string, never>) | undefined
+    ?
+        | (T[K]['args'] extends CommandArguments
+            ? ResolveArguments<T[K]['args']>
+            : Record<string, never>)
+        | undefined
     : T[K]['type'] extends Discord.ApplicationCommandOptionType.SubcommandGroup
-      ? (T[K]['args'] extends CommandArguments ? ResolveArguments<T[K]['args']> : Record<string, never>) | undefined
+      ?
+          | (T[K]['args'] extends CommandArguments
+              ? ResolveArguments<T[K]['args']>
+              : Record<string, never>)
+          | undefined
       : T[K]['required'] extends string | boolean
         ? CommandArgumentType[T[K]['type']]
         : CommandArgumentType[T[K]['type']] | undefined
@@ -89,12 +97,18 @@ export type Command<T extends CommandArguments = CommandArguments> = {
   modalSubmitInteractionTime?: number
   cooldown?: boolean
   run: (props: CommandOptions<T>) => Promise<unknown>
-  createAutocompleteInteraction?: (options: CreateAutocompleteInteractionOptions) => Promise<unknown>
-  createMessageComponentInteraction?: (options: CreateComponentInteractionOptions) => Promise<unknown>
+  createAutocompleteInteraction?: (
+    options: CreateAutocompleteInteractionOptions
+  ) => Promise<unknown>
+  createMessageComponentInteraction?: (
+    options: CreateComponentInteractionOptions
+  ) => Promise<unknown>
   createModalSubmitInteraction?: (options: CreateModalSubmitInteractionOptions) => Promise<unknown>
 }
 
-export const parseArguments = (args?: CommandArguments): Discord.ApplicationCommandOptionData[] | undefined => {
+export const parseArguments = (
+  args?: CommandArguments
+): Discord.ApplicationCommandOptionData[] | undefined => {
   if (!args) return undefined
 
   return Object.values(args).map((arg) => {

@@ -11,7 +11,9 @@ export default createCommand({
   examples: ['ping'],
   async run({ ctx, app }) {
     if (ctx.guild) {
-      return await ctx.reply(`🏓 Pong! \`${ctx.guild.shard.ping}ms\` (Shard \`${ctx.guild.shard.id}\`)`)
+      return await ctx.reply(
+        `🏓 Pong! \`${ctx.guild.shard.ping}ms\` (Shard \`${ctx.guild.shard.id}\`)`
+      )
     }
 
     await ctx.reply(`🏓 Pong! \`${app.ws.ping}ms\``)

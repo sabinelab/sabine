@@ -12,11 +12,8 @@ export class GuildSchema implements Guild {
   public valorantResendTime: Date | null = null
   public valorantMatches: string[] = []
   public valorantNewsChannel: string | null = null
-  public valorantLiveFeedChannel: string | null = null
   public lolResendTime: Date | null = null
   public lolMatches: string[] = []
-  public lolNewsChannel: string | null = null
-  public lolLiveFeedChannel: string | null = null
   public tournamentsLength: number = 5
   public partner: boolean | null = null
   public invite: string | null = null

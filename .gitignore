@@ -10,3 +10,4 @@ tsconfig.tsbuildinfo
 .turbo/
 next-env.d.ts
 postgres/
+updates.md

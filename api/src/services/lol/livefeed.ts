@@ -3,13 +3,16 @@ import type { LiveFeed } from '../../../types/index.d'
 
 export default {
   get: async () => {
-    const res = await fetch('https://api.pandascore.co/lol/matches/running?per_page=100&sort=begin_at', {
-      headers: {
-        accept: 'application/json',
-        authorization: env.PANDA_TOKEN
-      },
-      cache: 'no-store'
-    })
+    const res = await fetch(
+      'https://api.pandascore.co/lol/matches/running?per_page=100&sort=begin_at',
+      {
+        headers: {
+          accept: 'application/json',
+          authorization: env.PANDA_TOKEN
+        },
+        cache: 'no-store'
+      }
+    )
 
     if (!res.ok) return []
 

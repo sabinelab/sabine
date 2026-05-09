@@ -421,7 +421,8 @@ export default class Round extends Match {
     const kills: KillEvent[] = []
 
     for (let i = 0; i < duels; i++) {
-      const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
+      const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } =
+        await this.startPlayerDuel()
 
       if (winnerIndex === undefined) continue
 
@@ -550,7 +551,9 @@ export default class Round extends Match {
 
       return await this.wait(3000)
     } else {
-      const playersAlive = this.teams.find((t) => t.side === 'ATTACK')!.roster.filter((p) => p.life > 0).length
+      const playersAlive = this.teams
+        .find((t) => t.side === 'ATTACK')!
+        .roster.filter((p) => p.life > 0).length
       const minChance = 0.2
       const maxChance = 0.8
       const chance = minChance + ((playersAlive - 1) / (5 - 1)) * (maxChance - minChance)
@@ -647,7 +650,8 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } =
+          await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -756,7 +760,8 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } =
+          await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -864,7 +869,8 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } =
+          await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -973,7 +979,8 @@ export default class Round extends Match {
       ].length
 
       while (alivePlayers > 0) {
-        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } = await this.startPlayerDuel()
+        const { winnerIndex, winnerTeamIndex, loserIndex, loserTeamIndex, weapon } =
+          await this.startPlayerDuel()
 
         if (winnerIndex === undefined) {
           alivePlayers--
@@ -1230,7 +1237,11 @@ export default class Round extends Match {
     return [player1.life > 0, player2.life > 0, weapon1, weapon2]
   }
 
-  private choosePlayer(items: TeamRoster[], index: number, weightFun: (item: TeamRoster) => number) {
+  private choosePlayer(
+    items: TeamRoster[],
+    index: number,
+    weightFun: (item: TeamRoster) => number
+  ) {
     const weight = items.reduce((sum, i) => sum + weightFun(i), 0)
     let random = Math.random() * weight
 

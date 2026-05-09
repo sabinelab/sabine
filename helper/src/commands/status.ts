@@ -141,7 +141,9 @@ export default createCommand({
         promises.push(
           thread.send(
             embed
-              .setDesc(`This issue has been resolved.\nCheck the original message for final updates: ${message.url}`)
+              .setDesc(
+                `This issue has been resolved.\nCheck the original message for final updates: ${message.url}`
+              )
               .build({
                 content: '@everyone',
                 allowedMentions: {

@@ -174,7 +174,9 @@ export default createCommand({
           }
         })
 
-        await ctx.send(`\`${u?.tag ?? 'Unknown'}\` (\`${ctx.args.remove.user.id}\`) has been unbanned from the bot.`)
+        await ctx.send(
+          `\`${u?.tag ?? 'Unknown'}\` (\`${ctx.args.remove.user.id}\`) has been unbanned from the bot.`
+        )
       } else if (ctx.args.remove.guild) {
         const blacklist = await app.prisma.blacklist.findUnique({
           where: {

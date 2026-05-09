@@ -95,7 +95,8 @@ const route: FastifyPluginAsyncZod = async (fastify) => {
       if (req.body.type === 'checkout.session.completed') {
         const session = req.body.data.object
 
-        const user = (await UserSchema.fetch(session.metadata.user)) || new UserSchema(session.metadata.user)
+        const user =
+          (await UserSchema.fetch(session.metadata.user)) || new UserSchema(session.metadata.user)
 
         const keyId = await user.addPremium('BUY_PREMIUM')
 

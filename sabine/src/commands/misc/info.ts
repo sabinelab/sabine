@@ -18,7 +18,9 @@ export default createCommand({
     const [creator, guildsCount, usersCount] = await Promise.all([
       app.getUser('441932495693414410'),
       app.shard?.fetchClientValues('guilds.cache.size') as Promise<number[] | undefined>,
-      app.shard?.broadcastEval((a) => a.users.cache.filter((u) => !u.bot).size) as Promise<number[] | undefined>
+      app.shard?.broadcastEval((a) => a.users.cache.filter((u) => !u.bot).size) as Promise<
+        number[] | undefined
+      >
     ])
 
     const totalUsers = usersCount?.reduce((sum, count) => sum + count, 0) ?? 0
@@ -83,7 +85,9 @@ export default createCommand({
               new ButtonBuilder()
                 .setLabel(t('commands.info.invite'))
                 .defineStyle('link')
-                .setURL('https://discord.com/oauth2/authorize?app_id=1235576817683922954&scope=bot&permissions=388096')
+                .setURL(
+                  'https://discord.com/oauth2/authorize?app_id=1235576817683922954&scope=bot&permissions=388096'
+                )
             ]
           }
         ]

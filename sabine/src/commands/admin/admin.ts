@@ -107,12 +107,9 @@ export default createCommand({
               ? '`Infinity`'
               : `${guild?.events.length ?? 0}/${ctx.db.guild.tournamentsLength}`,
           id,
-          vlr_news: !ctx.db.guild.valorantNewsChannel ? '`undefined`' : `<#${ctx.db.guild.valorantNewsChannel}>`,
-          vlr_live: !ctx.db.guild.valorantLiveFeedChannel
+          vlr_news: !ctx.db.guild.valorantNewsChannel
             ? '`undefined`'
-            : `<#${ctx.db.guild.valorantLiveFeedChannel}>`,
-          lol_news: !ctx.db.guild.lolNewsChannel ? '`undefined`' : `<#${ctx.db.guild.lolNewsChannel}>`,
-          lol_live: !ctx.db.guild.lolLiveFeedChannel ? '`undefined`' : `<#${ctx.db.guild.lolLiveFeedChannel}>`
+            : `<#${ctx.db.guild.valorantNewsChannel}>`
         })
       )
 
@@ -254,7 +251,9 @@ export default createCommand({
 
       if (!guild) return
 
-      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'VALORANT' }))
+      const embed = new EmbedBuilder().setDesc(
+        t('commands.admin.tournaments', { game: 'VALORANT' })
+      )
 
       for (const event of guild.events) {
         embed.addField(
@@ -286,7 +285,9 @@ export default createCommand({
 
       if (!guild) return
 
-      const embed = new EmbedBuilder().setDesc(t('commands.admin.tournaments', { game: 'League of Legends' }))
+      const embed = new EmbedBuilder().setDesc(
+        t('commands.admin.tournaments', { game: 'League of Legends' })
+      )
 
       for (const event of guild.events) {
         embed.addField(
@@ -423,7 +424,9 @@ export default createCommand({
               .some((e) => {
                 const tour = tournaments[e.name]
                 if (!tour) return false
-                return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+                return tour.some((regex) =>
+                  regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+                )
               })
 
             if (events2) return true
@@ -453,7 +456,9 @@ export default createCommand({
             const events2 = guild.events.some((e) => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+              return tour.some((regex) =>
+                regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+              )
             })
 
             if (events2) return true
@@ -665,7 +670,11 @@ export default createCommand({
 
       const res2 = await service.getResults('lol')
 
-      if (guild.lolMatches.length && !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])) return
+      if (
+        guild.lolMatches.length &&
+        !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])
+      )
+        return
 
       const matches: {
         matchId: string

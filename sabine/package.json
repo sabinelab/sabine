@@ -1,6 +1,6 @@
 {
   "name": "@sabinelab/sabine",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "your valorant simulator and esports coverage discord bot",
   "keywords": [],
   "license": "ISC",
@@ -24,7 +24,7 @@
     "@sabinelab/players": "workspace:*",
     "@sabinelab/prisma": "workspace:*",
     "@sabinelab/utils": "workspace:*",
-    "bullmq": "^5.76.4",
+    "bullmq": "^5.76.6",
     "discord.js": "^14.26.4",
     "elysia": "^1.4.28",
     "humanize-duration": "^3.33.2",

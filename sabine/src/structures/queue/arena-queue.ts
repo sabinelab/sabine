@@ -70,7 +70,10 @@ export const processMatch = async () => {
         break
       }
 
-      await Bun.redis.unlink(`arena:in_queue:${parsedData1.userId}`, `arena:in_queue:${parsedData2.userId}`)
+      await Bun.redis.unlink(
+        `arena:in_queue:${parsedData1.userId}`,
+        `arena:in_queue:${parsedData2.userId}`
+      )
 
       await arenaQueue.add(
         'arena',

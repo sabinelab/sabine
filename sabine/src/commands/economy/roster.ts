@@ -112,7 +112,9 @@ export default createCommand({
               ctx.t('commands.roster.container.desc', {
                 value: Math.floor(value).toLocaleString(),
                 ovr: Math.floor(ovr / cards.length),
-                name: ctx.db.profile.teamName ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})` : '`undefined`'
+                name: ctx.db.profile.teamName
+                  ? `${ctx.db.profile.teamName} (${ctx.db.profile.teamTag})`
+                  : '`undefined`'
               })
           )
         )
@@ -782,7 +784,9 @@ export default createCommand({
         return await ctx.reply('commands.promote.player_not_found')
       }
 
-      const value = Number(i.fields.getTextInputValue(`roster;${i.user.id};practice;${card.id};response`))
+      const value = Number(
+        i.fields.getTextInputValue(`roster;${i.user.id};practice;${card.id};response`)
+      )
 
       if (card.xp >= card.requiredXp) {
         return await ctx.reply('commands.roster.max_xp_reached')

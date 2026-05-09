@@ -39,7 +39,9 @@ export default async function Cards() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.cards.calc.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>{chunks}</span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>
+                      {chunks}
+                    </span>
                   )
                 })}
               </p>
@@ -51,7 +53,9 @@ export default async function Cards() {
               <p className='text-lg pt-3 whitespace-pre-line' id='attributes'>
                 {t.rich('wiki.module.cards.attributes.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>{chunks}</span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-2xl md:max-w-30'>
+                      {chunks}
+                    </span>
                   )
                 })}
               </p>

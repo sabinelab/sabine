@@ -56,7 +56,12 @@ export default {
         ],
         status,
         tournament: {
-          name: $(element).find('.match-item-event').text().replace(/\t/g, '').replace(stage, '').trim(),
+          name: $(element)
+            .find('.match-item-event')
+            .text()
+            .replace(/\t/g, '')
+            .replace(stage, '')
+            .trim(),
           image: `https:${$(element).find('.match-item-icon img').attr('src')}`
         },
         stage,

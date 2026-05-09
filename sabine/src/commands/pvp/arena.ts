@@ -99,7 +99,9 @@ export default createCommand({
           return await ctx.reply('commands.battle.duplicated_cards')
         }
 
-        const isAlreadyInQueue = await ctx.app.redis.exists(`arena:in_queue:${ctx.db.profile.userId}`)
+        const isAlreadyInQueue = await ctx.app.redis.exists(
+          `arena:in_queue:${ctx.db.profile.userId}`
+        )
 
         if (isAlreadyInQueue) {
           return await ctx.reply('commands.arena.is_already_in_queue')
@@ -482,7 +484,9 @@ export default createCommand({
           )
       }
 
-      const messageId = await ctx.app.redis.get(`lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`)
+      const messageId = await ctx.app.redis.get(
+        `lineup:select:${ctx.db.guild.id}:${ctx.db.profile.userId}`
+      )
       if (!messageId) return
 
       const message = ctx.interaction.channel?.messages.cache.get(messageId)

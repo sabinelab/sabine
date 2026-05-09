@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { BookCheck, IdCardLanyard, Menu, NotepadText, SlashSquare } from 'lucide-vue-next'
+import {
+  BookCheck,
+  Copyright,
+  IdCardLanyard,
+  Menu,
+  NotepadText,
+  SlashSquare
+} from 'lucide-vue-next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,7 +72,7 @@ const items = [
                 as-child
                 :class="[
                   navigationMenuTriggerStyle(),
-                  'bg-transparent hover:bg-primary hover:text-white text-white transition duration-300'
+                  'bg-transparent hover:bg-primary hover:text-white text-white transition duration-300 rounded-full'
                 ]"
               >
                 <nuxt-link :href="item.href">
@@ -122,13 +129,13 @@ const items = [
           <SelectContent align="end" class="bg-[#111] text-white border-none">
             <SelectItem
               value="en-us"
-              class="cursor-pointer transition duration-300 hover:bg-white/10 focus:bg-white/10 focus:text-white"
+              class="cursor-pointer rounded-full transition duration-300 hover:bg-white/10 focus:bg-white/10 focus:text-white"
             >
               English
             </SelectItem>
             <SelectItem
               value="pt-br"
-              class="cursor-pointer transition duration-300 hover:bg-white/10 focus:bg-white/10 focus:text-white"
+              class="cursor-pointer rounded-full transition duration-300 hover:bg-white/10 focus:bg-white/10 focus:text-white"
             >
               Português
             </SelectItem>
@@ -228,6 +235,58 @@ const items = [
         </DropdownMenu>
       </div>
     </header>
+
     <slot />
+
+    <footer class="bg-primary/50 mt-30">
+      <div
+        class="mx-auto flex max-w-full flex-col gap-8 px-5 py-8 md:flex-row md:items-center md:justify-between md:px-15 md:py-10 xl:px-30"
+      >
+        <div class="flex gap-5 items-center">
+          <NuxtImg src="/favicon.ico" :width="50" :height="50" class="rounded-2xl" />
+          <span class="text-3xl font-extrabold">Sabine</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <Copyright :size="20" />
+          <span>Sabine {{ `2025-${new Date().getFullYear()}` }} - All rights reserved.</span>
+        </div>
+
+        <div class="flex flex-row justify-between md:flex-row md:gap-10">
+          <div class="flex flex-col md:items-center">
+            <h3 class="font-extrabold text-xl">{{ t('footer.contact') }}</h3>
+            <a :href="env.public.supportServer" target="_blank" class="text-[#9CA3AF] underline"
+              >Discord</a
+            >
+          </div>
+
+          <div class="flex flex-col md:items-center">
+            <h3 class="font-extrabold text-xl">{{ t('footer.contact') }}</h3>
+            <NuxtLink href="/wiki" target="_blank" class="text-[#9CA3AF] underline">
+              Wiki
+            </NuxtLink>
+
+            <NuxtLink href="/commands" target="_blank" class="text-[#9CA3AF] underline">
+              {{ t('header.commands') }}
+            </NuxtLink>
+
+            <NuxtLink href="/guidelines" target="_blank" class="text-[#9CA3AF] underline">
+              {{ t('footer.guidelines') }}
+            </NuxtLink>
+          </div>
+
+          <div class="flex flex-col md:items-center">
+            <h3 class="font-extrabold text-xl">{{ t('footer.legal') }}</h3>
+            <NuxtLink href="/terms" target="_blank" class="text-[#9CA3AF] underline">
+              {{ t('footer.terms') }}
+            </NuxtLink>
+
+            <NuxtLink href="/privacy" target="_blank" class="text-[#9CA3AF] underline">
+              {{ t('footer.privacy') }}
+            </NuxtLink>
+          </div>
+        </div>
+      </div>
+    </footer>
   </main>
 </template>
