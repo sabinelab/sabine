@@ -34,7 +34,7 @@ export default createCommand({
       .setFields(
         {
           name: 'Patch',
-          value: `[${pkg.version}](https://sabinebot.xyz/changelog/v${pkg.version})`,
+          value: `[${pkg.version}](https://sabinelab.com/changelog/v${pkg.version})`,
           inline: true
         },
         {

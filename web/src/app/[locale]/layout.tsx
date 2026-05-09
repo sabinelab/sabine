@@ -20,7 +20,7 @@ export const generateMetadata = async ({ params }: Props): Promise<Metadata> => 
       card: 'summary',
       images: ['/sabine.png']
     },
-    metadataBase: new URL('https://sabinebot.xyz/'),
+    metadataBase: new URL('https://sabinelab.com/'),
     other: {
       'google-adsense-account': 'ca-pub-3346744916189692'
     }

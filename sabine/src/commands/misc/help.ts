@@ -115,7 +115,7 @@ export default createCommand({
     const terms = new ButtonBuilder()
       .setLabel(t('commands.help.privacy'))
       .defineStyle('link')
-      .setURL('https://sabinebot.xyz/terms')
+      .setURL('https://sabinelab.com/terms')
 
     await ctx.reply(
       embed.build({

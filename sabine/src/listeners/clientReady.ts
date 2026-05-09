@@ -10,12 +10,12 @@ const setPresence = (app: App) => {
   if (app.user?.id !== '1235576817683922954') {
     app.user?.setStatus('dnd')
     app.user?.setActivity({
-      name: `sabinebot.xyz | ${env.PREFIX}claim`,
+      name: `sabinelab.com | ${env.PREFIX}claim`,
       type: ActivityType.Playing
     })
   } else {
     app.user.setActivity({
-      name: `sabinebot.xyz | ${env.PREFIX}claim`,
+      name: `sabinelab.com | ${env.PREFIX}claim`,
       type: ActivityType.Playing
     })
   }

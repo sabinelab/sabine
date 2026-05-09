@@ -24,11 +24,11 @@
       "privacy": "Términos de Servicio y Privacidad",
       "support": {
         "title": "Ayuda y Soporte",
-        "desc": "[Wiki](https://sabinebot.xyz/wiki)\n[Lista de Comandos](https://sabinebot.xyz/commands)"
+        "desc": "[Wiki](https://sabinelab.com/wiki)\n[Lista de Comandos](https://sabinelab.com/commands)"
       },
       "get": {
         "title": "Obtén a Sabine",
-        "desc": "[Añade a Sabine a tu servidor](https://api.sabinebot.xyz/invite)\n[Obtén premium](https://discord.com/invite/FaqYcpA84r)"
+        "desc": "[Añade a Sabine a tu servidor](https://api.sabinelab.com/invite)\n[Obtén premium](https://discord.com/invite/FaqYcpA84r)"
       }
     },
     "leaderboard": {
@@ -486,7 +486,7 @@
       "bot": "Me faltan los siguientes permisos para que este comando funcione correctamente: {permissions}"
     },
     "error": "Ha ocurrido un error inesperado...\n```fix\n{e}```",
-    "privacy": "Antes de comenzar a usar el bot, debes aceptar los [Términos de Servicio y Privacidad](https://sabinebot.xyz/terms)",
+    "privacy": "Antes de comenzar a usar el bot, debes aceptar los [Términos de Servicio y Privacidad](https://sabinelab.com/terms)",
     "verified": "Haz tu predicción haciendo clic en el botón de abajo.",
     "pickem": {
       "label": "Pick'em",

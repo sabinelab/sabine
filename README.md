@@ -1,6 +1,6 @@
 # Sabine
 
-[![](https://img.shields.io/badge/Invite-Sabine-5865F2?style=flat&logo=discord&logoColor=white)](https://sabinebot.xyz/invite)
+[![](https://img.shields.io/badge/Invite-Sabine-5865F2?style=flat&logo=discord&logoColor=white)](https://sabinelab.com/invite)
 [![](https://img.shields.io/badge/Discord-Community-7289DA?style=flat&logo=discord&logoColor=white)](https://discord.com/invite/FaqYcpA84r)
 [![](https://img.shields.io/badge/license-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 

@@ -424,7 +424,7 @@ export class CommandManager {
 
             await ctx.reply({
               content: t('helper.warn', {
-                link: `https://sabinebot.xyz/changelog/v${update.id}`
+                link: `https://sabinelab.com/changelog/v${update.id}`
               }),
               flags: 'Ephemeral',
               components: [

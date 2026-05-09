@@ -10,15 +10,15 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'cdn.sabinebot.xyz'
+        hostname: 'cdn.sabinelab.com'
       },
       {
         protocol: 'https',
-        hostname: 'cdn2.sabinebot.xyz'
+        hostname: 'cdn2.sabinelab.com'
       }
     ]
   },
-  allowedDevOrigins: ['test.sabinebot.xyz']
+  allowedDevOrigins: ['test.sabinelab.com']
 }
 
 const withNextIntl = createNextIntlPlugin()
