@@ -1,4 +1,9 @@
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonBuilder,
+  ButtonStyle
+} from 'discord.js'
 import EmbedBuilder from '../../structures/builders/EmbedBuilder'
 import createCommand from '../../structures/command/createCommand'
 
@@ -133,7 +138,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.poisons.description1', {
@@ -246,7 +258,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.rating.description1', {
@@ -359,7 +378,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.predictions.description1', {
@@ -475,7 +501,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.poisons.description1', {
@@ -588,7 +621,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.rating.description1', {
@@ -701,7 +741,14 @@ export default createCommand({
             .slice(0, 10)
             .map((profile, i) => {
               const position = (page - 1) * 10 + i + 1
-              const pos = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `#${position}`
+              const pos =
+                position === 1
+                  ? '🥇'
+                  : position === 2
+                    ? '🥈'
+                    : position === 3
+                      ? '🥉'
+                      : `#${position}`
 
               return profile.userId === ctx.db.profile.userId
                 ? ctx.t('commands.leaderboard.predictions.description1', {

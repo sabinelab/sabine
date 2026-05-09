@@ -19,7 +19,9 @@ export default createCommand({
   async run({ ctx, app }) {
     await ctx.guild.bans.remove(ctx.args.user.id)
 
-    await ctx.send(`\`${ctx.args.user.tag}\` (\`${ctx.args.user.id}\`) has been unbanned for ${ctx.author.toString()}`)
+    await ctx.send(
+      `\`${ctx.args.user.tag}\` (\`${ctx.args.user.id}\`) has been unbanned for ${ctx.author.toString()}`
+    )
 
     const channel = app.channels.cache.get(env.MOD_LOG) as TextChannel
 

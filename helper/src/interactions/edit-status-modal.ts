@@ -36,7 +36,10 @@ export default createModalSubmitInteraction({
 
     if (channel?.type !== ChannelType.GuildAnnouncement) return
 
-    const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(description).setColor(colors[type])
+    const embed = new EmbedBuilder()
+      .setTitle(`${emoji[type]} ${title}`)
+      .setDesc(description)
+      .setColor(colors[type])
 
     const button = new ButtonBuilder()
       .setCustomId('join-thread')
@@ -73,7 +76,10 @@ export default createModalSubmitInteraction({
     ]
 
     if (msg.length) {
-      const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(msg).setColor(colors[type])
+      const embed = new EmbedBuilder()
+        .setTitle(`${emoji[type]} ${title}`)
+        .setDesc(msg)
+        .setColor(colors[type])
 
       const thread = await message.thread?.fetch()
       if (thread) {

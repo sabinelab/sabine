@@ -79,7 +79,8 @@ export default createCommand({
         valorant: async () => {
           const channel = ctx.guild.channels.cache.get(ctx.args.enable?.valorant?.channel.id ?? '')!
 
-          if (![0, 5].some((t) => t === channel.type)) return await ctx.reply('commands.news.invalid_channel')
+          if (![0, 5].some((t) => t === channel.type))
+            return await ctx.reply('commands.news.invalid_channel')
 
           await prisma.guild.upsert({
             where: {

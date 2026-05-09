@@ -1,5 +1,10 @@
 import { prisma } from '@db'
-import { ActionRowBuilder, ApplicationCommandOptionType, ButtonBuilder, ButtonStyle } from 'discord.js'
+import {
+  ActionRowBuilder,
+  ApplicationCommandOptionType,
+  ButtonBuilder,
+  ButtonStyle
+} from 'discord.js'
 import { env } from '@/env'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import createCommand from '@/structures/command/createCommand'
@@ -90,7 +95,9 @@ export default createCommand({
 
       const previous = new ButtonBuilder()
         .setEmoji('1404176223621611572')
-        .setCustomId(`show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`)
+        .setCustomId(
+          `show;${ctx.author.id};previous;${ctx.args.player};${card.playerId};${card.id}`
+        )
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true)
 

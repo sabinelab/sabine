@@ -23,7 +23,10 @@ export default class App extends Discord.Client {
   public aliases = new Map<string, string>()
   public prisma!: typeof prisma
   public redis: typeof Bun.redis
-  public interactions = new Map<string, CreateInteractionOptions & CreateModalSubmitInteractionOptions>()
+  public interactions = new Map<
+    string,
+    CreateInteractionOptions & CreateModalSubmitInteractionOptions
+  >()
   public players = new Map<string, Player>()
   public playerNameIndex = new Map<string, Set<string>>()
   public emoji = new Map<string, string>()
@@ -41,9 +44,13 @@ export default class App extends Discord.Client {
       const listener: Listener = (await import(`../../listeners/${file}`)).default
 
       if (listener.name === 'clientReady') {
-        this.once('clientReady', () => listener.run(this).catch((e: Error) => new Logger(this).error(e)))
+        this.once('clientReady', () =>
+          listener.run(this).catch((e: Error) => new Logger(this).error(e))
+        )
       } else {
-        this.on(listener.name, (...args) => listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e)))
+        this.on(listener.name, (...args) =>
+          listener.run(this, ...args).catch((e: Error) => new Logger(this).error(e))
+        )
       }
     }
 
@@ -123,7 +130,10 @@ export default class App extends Discord.Client {
   }
 
   public async syncCache() {
-    const [blacklist, keys] = await Promise.all([prisma.blacklist.findMany(), Bun.redis.keys('status:*')])
+    const [blacklist, keys] = await Promise.all([
+      prisma.blacklist.findMany(),
+      Bun.redis.keys('status:*')
+    ])
 
     for (const ban of blacklist) {
       this.blacklist.set(ban.id, ban)

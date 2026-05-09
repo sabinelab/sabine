@@ -20,7 +20,9 @@ const getChangelogs = async () => {
   })
   const changelogs: Changelog[] = await res.json()
 
-  return changelogs.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  return changelogs.sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  )
 }
 
 type Props = {
@@ -46,7 +48,9 @@ export default async function ChangelogsList(props: Props) {
           >
             <h2 className='text-2xl font-bold'>v{update.id}</h2>
 
-            <span className='text-gray-400 text-sm md:text-base'>{moment(update.publishedAt).format('LLL')}</span>
+            <span className='text-gray-400 text-sm md:text-base'>
+              {moment(update.publishedAt).format('LLL')}
+            </span>
           </Link>
         ))}
       </div>

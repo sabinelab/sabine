@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { BookCheck, Copyright, IdCardLanyard, Menu, NotepadText, SlashSquare } from 'lucide-vue-next'
+import {
+  BookCheck,
+  Copyright,
+  IdCardLanyard,
+  Menu,
+  NotepadText,
+  SlashSquare
+} from 'lucide-vue-next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -248,12 +255,16 @@ const items = [
         <div class="flex flex-row justify-between md:flex-row md:gap-10">
           <div class="flex flex-col md:items-center">
             <h3 class="font-extrabold text-xl">{{ t('footer.contact') }}</h3>
-            <a :href="env.public.supportServer" target="_blank" class="text-[#9CA3AF] underline">Discord</a>
+            <a :href="env.public.supportServer" target="_blank" class="text-[#9CA3AF] underline"
+              >Discord</a
+            >
           </div>
 
           <div class="flex flex-col md:items-center">
             <h3 class="font-extrabold text-xl">{{ t('footer.contact') }}</h3>
-            <NuxtLink href="/wiki" target="_blank" class="text-[#9CA3AF] underline"> Wiki </NuxtLink>
+            <NuxtLink href="/wiki" target="_blank" class="text-[#9CA3AF] underline">
+              Wiki
+            </NuxtLink>
 
             <NuxtLink href="/commands" target="_blank" class="text-[#9CA3AF] underline">
               {{ t('header.commands') }}

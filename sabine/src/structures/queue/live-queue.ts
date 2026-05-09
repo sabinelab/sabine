@@ -161,7 +161,9 @@ export const processLive = async (app: App, data: LivePayload) => {
 
           const container = new ContainerBuilder()
             .setAccentColor(6719296)
-            .addTextDisplayComponents((text) => text.setContent(`## ${t(guild.lang, 'helper.live_now')}`))
+            .addTextDisplayComponents((text) =>
+              text.setContent(`## ${t(guild.lang, 'helper.live_now')}`)
+            )
             .addSeparatorComponents((separator) => separator)
 
           for (const match of chunk) {
@@ -189,7 +191,10 @@ export const processLive = async (app: App, data: LivePayload) => {
                 const button = new ButtonBuilder()
 
                 if (data.game === 'valorant') {
-                  button.setStyle(ButtonStyle.Link).setLabel(t(guild.lang, 'helper.stats')).setURL(match.data.url!)
+                  button
+                    .setStyle(ButtonStyle.Link)
+                    .setLabel(t(guild.lang, 'helper.stats'))
+                    .setURL(match.data.url!)
                 } else {
                   button
                     .setStyle(ButtonStyle.Primary)
@@ -280,7 +285,9 @@ export const processLive = async (app: App, data: LivePayload) => {
         for (const stale of staleMessages) {
           promises.push(
             limit(async () => {
-              await rest.delete(Routes.channelMessage(stale.channelId, stale.messageId)).catch(() => null)
+              await rest
+                .delete(Routes.channelMessage(stale.channelId, stale.messageId))
+                .catch(() => null)
               await prisma.liveMessage.delete({
                 where: {
                   id: stale.id
@@ -293,10 +300,14 @@ export const processLive = async (app: App, data: LivePayload) => {
 
       const activeChannelIds = new Set(channelBatches.keys())
 
-      for (const stale of guild.liveMessages.filter((liveMessage) => !activeChannelIds.has(liveMessage.channelId))) {
+      for (const stale of guild.liveMessages.filter(
+        (liveMessage) => !activeChannelIds.has(liveMessage.channelId)
+      )) {
         promises.push(
           limit(async () => {
-            await rest.delete(Routes.channelMessage(stale.channelId, stale.messageId)).catch(() => null)
+            await rest
+              .delete(Routes.channelMessage(stale.channelId, stale.messageId))
+              .catch(() => null)
             await prisma.liveMessage.delete({
               where: {
                 id: stale.id

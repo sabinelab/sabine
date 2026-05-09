@@ -11,8 +11,10 @@ export default class ModalSubmitInteractionRunner {
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
 
-    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
-    const user = (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const user =
+      (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
 
     if (!i) return
 

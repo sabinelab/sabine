@@ -7,7 +7,9 @@ export default async function Wiki() {
   return (
     <>
       <div>
-        <h1 className='flex flex-col font-bold text-3xl md:text-5xl items-center pt-15'>{t('wiki.title')}</h1>
+        <h1 className='flex flex-col font-bold text-3xl md:text-5xl items-center pt-15'>
+          {t('wiki.title')}
+        </h1>
       </div>
       <div>
         <ul className='flex flex-col items-center justify-center pt-10'>

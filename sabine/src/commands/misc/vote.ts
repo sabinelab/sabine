@@ -28,13 +28,16 @@ export default createCommand({
   examples: ['vote'],
   messageComponentInteractionTime: 60_000,
   async run({ ctx }) {
-    const user = (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
+    const user =
+      (await UserSchema.fetch(ctx.db.profile.userId)) ?? new UserSchema(ctx.db.profile.userId)
 
     const embed = new EmbedBuilder()
       .setTitle(ctx.t('commands.vote.title'))
       .setDesc(
         ctx.t('commands.vote.description', {
-          last_vote: user.lastVote ? `<t:${(user.lastVote?.getTime() / 1000).toFixed(0)}:R>` : '`null`',
+          last_vote: user.lastVote
+            ? `<t:${(user.lastVote?.getTime() / 1000).toFixed(0)}:R>`
+            : '`null`',
           current_streak: user.voteStreak,
           total: user.votes
         })

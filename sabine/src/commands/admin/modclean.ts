@@ -10,7 +10,13 @@ export default createCommand({
     'pt-BR': 'Resete palpites, partidas, carreira, toxinas e mais'
   },
   category: 'admin',
-  syntaxes: ['modclean all', 'modclean balance', 'modclean simulator', 'modclean predictions', 'modclean stats'],
+  syntaxes: [
+    'modclean all',
+    'modclean balance',
+    'modclean simulator',
+    'modclean predictions',
+    'modclean stats'
+  ],
   examples: ['modclean all', 'modclean balance', 'modclean predictions', 'modclean stats'],
   args: {
     all: {
@@ -19,7 +25,8 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'tudo'
       },
-      description: "Reset users' predictions, matches, career, poisons, cards, packs, claims, and more",
+      description:
+        "Reset users' predictions, matches, career, poisons, cards, packs, claims, and more",
       descriptionLocalizations: {
         'pt-BR': 'Redefine palpites, partidas, carreira, toxinas, cartas, pacotes, claims e mais'
       }
@@ -41,7 +48,8 @@ export default createCommand({
       nameLocalizations: {
         'pt-BR': 'simulador'
       },
-      description: "Reset server users' roster, career, claims, wins/defeats, poisons, fates and more",
+      description:
+        "Reset server users' roster, career, claims, wins/defeats, poisons, fates and more",
       descriptionLocalizations: {
         'pt-BR': 'Redefine o elenco, carreira, claims, vitórias/derrotas, toxinas, destinos e mais'
       }
@@ -65,7 +73,8 @@ export default createCommand({
       },
       description: "Reset server users' wins/defeats and correct/incorrect predictions",
       descriptionLocalizations: {
-        'pt-BR': 'Redefine as vitórias/derrotas e palpites corretos/incorretos dos usuários do servidor'
+        'pt-BR':
+          'Redefine as vitórias/derrotas e palpites corretos/incorretos dos usuários do servidor'
       }
     }
   },

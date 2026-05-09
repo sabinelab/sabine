@@ -68,11 +68,16 @@ export class CommandManager {
       }
       case ApplicationCommandOptionType.Channel: {
         const id = props.value.replace(/[<#>]/g, '')
-        return props.guild.channels.cache.get(id) ?? (await props.guild.channels.fetch(id).catch(nullCatch))
+        return (
+          props.guild.channels.cache.get(id) ??
+          (await props.guild.channels.fetch(id).catch(nullCatch))
+        )
       }
       case ApplicationCommandOptionType.Role: {
         const id = props.value.replace(/[<@&>]/g, '')
-        return props.guild.roles.cache.get(id) ?? (await props.guild.roles.fetch(id).catch(nullCatch))
+        return (
+          props.guild.roles.cache.get(id) ?? (await props.guild.roles.fetch(id).catch(nullCatch))
+        )
       }
       default: {
         return props.value
@@ -140,10 +145,14 @@ export class CommandManager {
 
       if (value === undefined && def.required) {
         await message.reply({
-          content: locales('en', typeof def.required === 'string' ? def.required : 'helper.missing_argument', {
-            arg: def.name,
-            cmd: `</help:${app.commands.get('help')?.id}>`
-          })
+          content: locales(
+            'en',
+            typeof def.required === 'string' ? def.required : 'helper.missing_argument',
+            {
+              arg: def.name,
+              cmd: `</help:${app.commands.get('help')?.id}>`
+            }
+          )
         })
         return false
       }
@@ -177,7 +186,8 @@ export class CommandManager {
       commandName = command.slice((guild.prefix ?? env.PREFIX).length)
     }
 
-    const command = app.commands.get(commandName) || app.commands.get(app.aliases.get(commandName) ?? '')
+    const command =
+      app.commands.get(commandName) || app.commands.get(app.aliases.get(commandName) ?? '')
 
     if (!command) return
 
@@ -293,7 +303,10 @@ export class CommandManager {
 
         if (group) {
           const groupArgKey = Object.keys(currentArgs).find((k) => currentArgs[k].name === group)
-          if (groupArgKey && currentArgs[groupArgKey].type === ApplicationCommandOptionType.SubcommandGroup) {
+          if (
+            groupArgKey &&
+            currentArgs[groupArgKey].type === ApplicationCommandOptionType.SubcommandGroup
+          ) {
             currentParsedArgs[groupArgKey] = {}
             currentParsedArgs = currentParsedArgs[groupArgKey] as Record<string, unknown>
             currentArgs = currentArgs[groupArgKey].args || {}
@@ -302,7 +315,10 @@ export class CommandManager {
 
         if (sub) {
           const subArgKey = Object.keys(currentArgs).find((k) => currentArgs[k].name === sub)
-          if (subArgKey && currentArgs[subArgKey].type === ApplicationCommandOptionType.Subcommand) {
+          if (
+            subArgKey &&
+            currentArgs[subArgKey].type === ApplicationCommandOptionType.Subcommand
+          ) {
             currentParsedArgs[subArgKey] = {}
             currentParsedArgs = currentParsedArgs[subArgKey] as Record<string, unknown>
             currentArgs = currentArgs[subArgKey].args || {}
@@ -375,7 +391,14 @@ export class CommandManager {
           currentParsedArgs[key] = value
         }
       } else {
-        const success = await this.parseMessageArguments(app, data.guild, command.args, args, parsedArgs, data)
+        const success = await this.parseMessageArguments(
+          app,
+          data.guild,
+          command.args,
+          args,
+          parsedArgs,
+          data
+        )
         if (!success) return
       }
     }
@@ -403,7 +426,12 @@ export class CommandManager {
         })
       }
 
-      await app.redis.set(`cooldown:${data.guild.id}:${user.id}`, (Date.now() + 5000).toString(), 'EX', 5)
+      await app.redis.set(
+        `cooldown:${data.guild.id}:${user.id}`,
+        (Date.now() + 5000).toString(),
+        'EX',
+        5
+      )
     }
 
     command

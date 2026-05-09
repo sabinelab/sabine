@@ -33,7 +33,10 @@ const rest = new REST().setToken(env.BOT_TOKEN)
 const service = new Service()
 
 const sendValorantMatches = async (app: App) => {
-  const [res, res2] = await Promise.all([service.getMatches('valorant'), service.getResults('valorant')])
+  const [res, res2] = await Promise.all([
+    service.getMatches('valorant'),
+    service.getResults('valorant')
+  ])
 
   if (!res?.length) return
 
@@ -116,7 +119,9 @@ const sendValorantMatches = async (app: App) => {
               .some((e) => {
                 const tour = tournaments[e.name]
                 if (!tour) return false
-                return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+                return tour.some((regex) =>
+                  regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+                )
               })
 
             if (events2) return true
@@ -136,7 +141,9 @@ const sendValorantMatches = async (app: App) => {
             const events2 = guild.events.some((e) => {
               const tour = tournaments[e.name]
               if (!tour) return false
-              return tour.some((regex) => regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase()))
+              return tour.some((regex) =>
+                regex.test(d.tournament.name.replace(/\s+/g, ' ').trim().toLowerCase())
+              )
             })
 
             if (events2) return true
@@ -157,7 +164,9 @@ const sendValorantMatches = async (app: App) => {
               })
             })) as Collection<string, Message>
 
-            const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
+            const messagesIds = messages
+              .filter((m) => m.author.id === app.user?.id)
+              .map((m) => m.id)
 
             if (messagesIds.length === 1) {
               await rest.delete(Routes.channelMessage(e.channel1, messagesIds[0]))
@@ -379,7 +388,11 @@ const sendLolMatches = async (app: App) => {
         type: $Enums.EventType
       }[] = []
 
-      if (guild.lolMatches.length && !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])) continue
+      if (
+        guild.lolMatches.length &&
+        !res2.some((d) => d.id === guild.lolMatches[guild.lolMatches.length - 1])
+      )
+        continue
 
       guild.lolMatches = []
 
@@ -403,7 +416,9 @@ const sendLolMatches = async (app: App) => {
               })
             })) as Collection<string, Message>
 
-            const messagesIds = messages.filter((m) => m.author.id === app.user?.id).map((m) => m.id)
+            const messagesIds = messages
+              .filter((m) => m.author.id === app.user?.id)
+              .map((m) => m.id)
 
             if (messagesIds.length === 1) {
               await rest.delete(Routes.channelMessage(e.channel1, messagesIds[0]))

@@ -3,13 +3,16 @@ import type { MatchesData } from '../../../types/index'
 
 export default {
   get: async () => {
-    const res = await fetch('https://api.pandascore.co/lol/matches/upcoming?per_page=100&sort=begin_at', {
-      headers: {
-        accept: 'application/json',
-        authorization: env.PANDA_TOKEN
-      },
-      cache: 'no-store'
-    })
+    const res = await fetch(
+      'https://api.pandascore.co/lol/matches/upcoming?per_page=100&sort=begin_at',
+      {
+        headers: {
+          accept: 'application/json',
+          authorization: env.PANDA_TOKEN
+        },
+        cache: 'no-store'
+      }
+    )
 
     if (!res.ok) return []
 

@@ -235,7 +235,10 @@ const sendNews = async () => {
     if (arrayNews.length) {
       await sendWebhook(arrayNews, '/webhooks/news/valorant')
 
-      await prisma.$transaction([prisma.news.deleteMany(), prisma.news.createMany({ data: val.news })])
+      await prisma.$transaction([
+        prisma.news.deleteMany(),
+        prisma.news.createMany({ data: val.news })
+      ])
     }
   } catch (e) {
     error(e as Error)
@@ -361,7 +364,10 @@ const sendLiveAndResults = async () => {
       .filter(
         (r) =>
           !vlrOldResults.some(
-            (or) => or.id === r.id && or.teams[0].score === r.teams[0].score && or.teams[1].score === r.teams[1].score
+            (or) =>
+              or.id === r.id &&
+              or.teams[0].score === r.teams[0].score &&
+              or.teams[1].score === r.teams[1].score
           )
       )
       .map(({ tournamentFullName: _tournamentFullName, tournamentImage, tournamentName, ...m }) =>
@@ -382,7 +388,10 @@ const sendLiveAndResults = async () => {
       .filter(
         (r) =>
           !lolOldResults.some(
-            (or) => or.id === r.id && or.teams[0].score === r.teams[0].score && or.teams[1].score === r.teams[1].score
+            (or) =>
+              or.id === r.id &&
+              or.teams[0].score === r.teams[0].score &&
+              or.teams[1].score === r.teams[1].score
           )
       )
       .map((result) => ({
@@ -400,7 +409,9 @@ const sendLiveAndResults = async () => {
 
     const liveVlrArray = vlrLiveMatches.filter(
       (m) =>
-        !vlrOldLiveMatches.some((om) => om.id === m.id.toString() && om.score1 === m.score1 && om.score2 === m.score2)
+        !vlrOldLiveMatches.some(
+          (om) => om.id === m.id.toString() && om.score1 === m.score1 && om.score2 === m.score2
+        )
     )
     const liveLolArray = lolLiveMatches.filter(
       (m) =>

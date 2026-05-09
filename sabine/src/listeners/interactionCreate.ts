@@ -20,8 +20,10 @@ const interactionType: Record<number, (app: App, i: Interaction) => Promise<unkn
 
     if (!command?.createAutocompleteInteraction || !interaction.guildId) return
 
-    const user = (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
-    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const user =
+      (await UserSchema.fetch(interaction.user.id)) ?? new UserSchema(interaction.user.id)
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
 
     const t = <T extends Content>(content: T, args?: Args) => {
       return locales(user.lang ?? guild?.lang, content, args)

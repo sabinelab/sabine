@@ -26,7 +26,9 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.how_it_works.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
+                      {chunks}
+                    </span>
                   )
                 })}
               </p>
@@ -38,7 +40,9 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.players.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
+                      {chunks}
+                    </span>
                   ),
                   a: (chunks) => (
                     <a
@@ -60,7 +64,9 @@ export default async function Wiki() {
               <p className='text-lg pt-3 whitespace-pre-line'>
                 {t.rich('wiki.module.simulator.matches.description', {
                   strong: (chunks) => (
-                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>{chunks}</span>
+                    <span className='font-bold bg-[#2A2A2A] text-[#9CA3AF] rounded-md md:max-w-30'>
+                      {chunks}
+                    </span>
                   )
                 })}
               </p>
@@ -69,7 +75,9 @@ export default async function Wiki() {
               <h1 className='text-2xl font-bold text-center' id='progression-and-ranking'>
                 {t('wiki.module.simulator.progress.title')}
               </h1>
-              <p className='text-lg pt-3 whitespace-pre-line'>{t('wiki.module.simulator.progress.description')}</p>
+              <p className='text-lg pt-3 whitespace-pre-line'>
+                {t('wiki.module.simulator.progress.description')}
+              </p>
             </li>
           </ul>
         </div>

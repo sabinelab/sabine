@@ -5,7 +5,11 @@ import { type ArenaQueuePayload, processArenaQueue } from '@/structures/queue/ar
 import { type LivePayload, processLive } from '@/structures/queue/live-queue'
 import { type NewsPayload, processNews } from '@/structures/queue/news-queue'
 import { processReminderQueue, type ReminderPayload } from '@/structures/queue/reminder-queue'
-import { processPredictions, processResult, type ResultsPayload } from '@/structures/queue/results-queue'
+import {
+  processPredictions,
+  processResult,
+  type ResultsPayload
+} from '@/structures/queue/results-queue'
 import { processTasks } from '@/structures/queue/tasks-queue'
 import Logger from '@/util/Logger'
 
@@ -20,11 +24,15 @@ export const startWorkers = (app: App) => {
     }
   )
 
-  new Worker<NewsPayload>('news', async (job) => await processNews(job.data).catch((e) => new Logger(app).error(e)), {
-    connection: {
-      url: env.REDIS_URL
+  new Worker<NewsPayload>(
+    'news',
+    async (job) => await processNews(job.data).catch((e) => new Logger(app).error(e)),
+    {
+      connection: {
+        url: env.REDIS_URL
+      }
     }
-  })
+  )
 
   new Worker<ResultsPayload>(
     'results',

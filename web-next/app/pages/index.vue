@@ -27,7 +27,10 @@ const router = useRouter()
       <span class="text-3xl">{{ t('pages.home.add_to_discord') }}</span>
     </Button>
 
-    <ArrowDown :size="50" class="animate-bounce absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2" />
+    <ArrowDown
+      :size="50"
+      class="animate-bounce absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2"
+    />
   </div>
 
   <div class="flex flex-col justify-center items-center px-6 md:px-20 pt-8 md:pt-15">

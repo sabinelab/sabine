@@ -14,7 +14,13 @@ export default async function Header() {
     <header className='flex justify-between p-4'>
       <div className='flex items-center md:px-10 gap-10'>
         <Link href='/' className='transition duration-300 hover:scale-125'>
-          <Image src='/header/sabine.png' width={80} height={80} alt='sabine' className='rounded-full' />
+          <Image
+            src='/header/sabine.png'
+            width={80}
+            height={80}
+            alt='sabine'
+            className='rounded-full'
+          />
         </Link>
 
         <ul className='hidden text-lg md:flex'>

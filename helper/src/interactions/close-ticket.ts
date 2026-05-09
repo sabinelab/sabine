@@ -8,7 +8,9 @@ export default createComponentInteraction({
     if (!ctx.guild || !ctx.interaction.member) return
 
     const roles = new Set(['1237458600046104617', '1237458505196114052', '1237457762502574130'])
-    const hasRole = (ctx.interaction.member.roles as GuildMemberRoleManager).cache.some((r: any) => roles.has(r.id))
+    const hasRole = (ctx.interaction.member.roles as GuildMemberRoleManager).cache.some((r: any) =>
+      roles.has(r.id)
+    )
 
     if (!hasRole) return
 

@@ -74,7 +74,9 @@ export class UserSchema implements User {
           userId: this.id
         },
         update: {
-          expiresAt: !premium?.expiresAt ? expiresAt : new Date(premium.expiresAt.getTime() + 2592000000)
+          expiresAt: !premium?.expiresAt
+            ? expiresAt
+            : new Date(premium.expiresAt.getTime() + 2592000000)
         },
         where: {
           userId: this.id

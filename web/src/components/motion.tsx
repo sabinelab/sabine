@@ -16,7 +16,13 @@ export default function Motion(props: Props) {
   const pathname = usePathname()
 
   return (
-    <motion.div key={pathname} initial={initial} animate={animate} exit={exit} transition={transition}>
+    <motion.div
+      key={pathname}
+      initial={initial}
+      animate={animate}
+      exit={exit}
+      transition={transition}
+    >
       {props.children}
     </motion.div>
   )

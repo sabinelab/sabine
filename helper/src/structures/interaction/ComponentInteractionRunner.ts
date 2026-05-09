@@ -10,7 +10,8 @@ export default class ComponentInteractionRunner {
     const args = interaction.customId.split(';')
     const i = app.interactions.get(args[0])
 
-    const guild = (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
+    const guild =
+      (await GuildSchema.fetch(interaction.guildId)) ?? new GuildSchema(interaction.guildId)
     const user = await UserSchema.fetch(interaction.user.id)
 
     if (!i) return

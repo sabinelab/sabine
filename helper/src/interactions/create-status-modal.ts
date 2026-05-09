@@ -22,7 +22,10 @@ export default createModalSubmitInteraction({
 
     if (channel?.type !== ChannelType.GuildAnnouncement) return
 
-    const embed = new EmbedBuilder().setTitle(`${emoji[type]} ${title}`).setDesc(description).setColor(colors[type])
+    const embed = new EmbedBuilder()
+      .setTitle(`${emoji[type]} ${title}`)
+      .setDesc(description)
+      .setColor(colors[type])
 
     const button = new ButtonBuilder()
       .setCustomId('join-thread')
