@@ -21,7 +21,7 @@ model Guild {
 
   users Profile[]
 
-  @@index([valorantNewsChannel])
+  @@index([id(sort: Asc), valorantNewsChannel])
 }
 
 model LiveMessage {
@@ -34,7 +34,7 @@ model LiveMessage {
   game      Game
 
   @@unique([guildId, game, channelId, index])
-  @@index([guildId, game])
+  @@index([game, guildId])
 }
 
 model GuildKey {
@@ -44,6 +44,8 @@ model GuildKey {
 
   key   Key    @relation(fields: [keyId], references: [id], onDelete: Cascade)
   keyId String @map("key_id")
+
+  @@index([keyId])
 }
 
 model Key {
@@ -58,6 +60,7 @@ model Key {
   guildKeys GuildKey[]
 
   @@index([user, type])
+  @@index([type, expiresAt])
 }
 
 model TBDMatch {
@@ -69,7 +72,7 @@ model TBDMatch {
   type    EventType
   channel String
 
-  @@index([guildId])
+  @@index([guildId, type])
 }
 
 model Event {
@@ -82,7 +85,8 @@ model Event {
   channel1 String
   channel2 String
 
-  @@index([guildId, type])
+  @@index([guildId, type, name])
+  @@index([type, name, guildId])
 }
 
 enum KeyType {

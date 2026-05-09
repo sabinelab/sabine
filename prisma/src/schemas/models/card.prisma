@@ -21,8 +21,10 @@ model Card {
   xp         Int @default(0) @db.SmallInt
   requiredXp Int @default(100) @map("required_xp")
 
-  @@index([profileId, playerId])
+  @@index([playerId])
+  @@index([profileId, playerId, id(sort: Asc)])
   @@index([profileId, playerId, level])
-  @@index([profileId, activeRoster, id(sort: Desc)])
-  @@index([profileId, arenaRoster, id])
+  @@index([profileId, activeRoster, id(sort: Asc)], map: "Card_profile_active_roster_id_asc_idx")
+  @@index([profileId, activeRoster, id(sort: Desc)], map: "Card_profile_active_roster_id_desc_idx")
+  @@index([profileId, arenaRoster])
 }

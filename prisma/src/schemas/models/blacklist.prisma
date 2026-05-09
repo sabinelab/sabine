@@ -6,7 +6,7 @@ model Blacklist {
   reason String
   endsAt DateTime?     @map("ends_at")
 
-  @@index([type])
+  @@index([type, endsAt])
 }
 
 enum BlacklistType {

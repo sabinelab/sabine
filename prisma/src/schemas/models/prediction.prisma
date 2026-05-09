@@ -15,7 +15,6 @@ model Prediction {
 
   @@unique([profileId, game, match])
   @@index([profileId, game, createdAt(sort: Desc)])
-  @@index([profileId, match, game])
   @@index([game, match, status])
 }
 
