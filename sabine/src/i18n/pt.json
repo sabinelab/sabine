@@ -24,11 +24,11 @@
       "privacy": "Termos de Serviço e Privacidade",
       "support": {
         "title": "Ajuda & Suporte",
-        "desc": "[Wiki](https://sabinebot.xyz/wiki)\n[Lista de Comandos](https://sabinebot.xyz/commands)"
+        "desc": "[Wiki](https://sabinelab.com/wiki)\n[Lista de Comandos](https://sabinelab.com/commands)"
       },
       "get": {
         "title": "Obter a Sabine",
-        "desc": "[Me adicione em seu servidor](https://api.sabinebot.xyz/invite)\n[Obter o premium](https://discord.com/invite/FaqYcpA84r)"
+        "desc": "[Me adicione em seu servidor](https://api.sabinelab.com/invite)\n[Obter o premium](https://discord.com/invite/FaqYcpA84r)"
       }
     },
     "leaderboard": {
@@ -486,7 +486,7 @@
       "bot": "Me faltam as seguintes permissões para esse comando funcionar adequadamente: {permissions}"
     },
     "error": "Ocorreu um erro inesperado...\n```fix\n{e}```",
-    "privacy": "Antes de começar a usar o bot, você deve aceitar os [Termos de Serviço e Privacidade](https://sabinebot.xyz/terms)",
+    "privacy": "Antes de começar a usar o bot, você deve aceitar os [Termos de Serviço e Privacidade](https://sabinelab.com/terms)",
     "verified": "Faça seu palpite clicando no botão abaixo.",
     "pickem": {
       "label": "Bolão",
