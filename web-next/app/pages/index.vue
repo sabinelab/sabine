@@ -21,7 +21,7 @@ const router = useRouter()
 
     <Button
       variant="outline"
-      class="h-11 px-5 md:h-13 md:px-7 md:text-lg bg-transparent cursor-pointer"
+      class="h-11 px-5 md:h-13 md:px-7 md:text-lg bg-transparent cursor-pointer rounded-full"
       @click="router.push('/invite')"
     >
       <span class="text-3xl">{{ t('pages.home.add_to_discord') }}</span>
