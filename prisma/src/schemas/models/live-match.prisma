@@ -25,6 +25,7 @@ model LiveMatchTeam {
   liveMatchId String   @map("live_match_id")
   name        String
   score       String
+  mapScore    String?   @map("map_score")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
