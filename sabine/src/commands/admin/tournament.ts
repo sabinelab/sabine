@@ -473,6 +473,10 @@ export default createCommand({
           tournaments.unshift({
             name: 'Valorant Champions Tour'
           })
+
+          tournaments.unshift({
+            name: 'Esports World Cup'
+          })
         }
 
         return await i.respond(
