@@ -14,10 +14,129 @@ on:
       source_ref:
         required: true
         type: string
+  workflow_run:
+    workflows: ["oxc format and check"]
+    types: [completed]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - '**.md'
+      - '.gitignore'
+      - 'README*'
+      - 'LICENSE'
+      - 'crowdin.yml'
+
 jobs:
+  prepare-deploy:
+    name: 'prepare deploy'
+    if: |
+      github.event_name == 'workflow_call' ||
+      github.event_name == 'push' ||
+      (
+        github.event_name == 'workflow_run' &&
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.head_branch == 'main' &&
+        github.event.workflow_run.actor.login != 'github-actions[bot]' &&
+        github.event.workflow_run.conclusion == 'success'
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      should_deploy: ${{ steps.resolve.outputs.should_deploy }}
+      base_sha: ${{ steps.resolve.outputs.base_sha }}
+      deploy_sha: ${{ steps.resolve.outputs.deploy_sha }}
+    steps:
+      - name: checkout code
+        if: github.event_name == 'push'
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+
+      - name: download deploy metadata
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@main
+        with:
+          name: deploy-metadata
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: .deploy
+
+      - name: resolve deploy inputs
+        id: resolve
+        run: |
+          SHOULD_DEPLOY="false"
+          BASE_SHA=""
+          DEPLOY_SHA=""
+
+          if [ "${{ github.event_name }}" = "workflow_call" ]; then
+            if [ "${{ inputs.source_event_name }}" = "push" ] && [ "${{ inputs.source_ref }}" = "refs/heads/main" ]; then
+              SHOULD_DEPLOY="true"
+              BASE_SHA="${{ inputs.base_sha }}"
+              DEPLOY_SHA="${{ inputs.deploy_sha }}"
+            fi
+          elif [ "${{ github.event_name }}" = "workflow_run" ]; then
+            . .deploy/deploy.env
+            SHOULD_DEPLOY="true"
+            BASE_SHA="$base_sha"
+            DEPLOY_SHA="$deploy_sha"
+          elif [ "${{ github.event_name }}" = "push" ]; then
+            BASE_SHA="${{ github.event.before }}"
+            DEPLOY_SHA="${{ github.sha }}"
+
+            if [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ]; then
+              BASE_SHA="$(git rev-list --max-parents=0 "$DEPLOY_SHA")"
+            fi
+
+            NON_IGNORED_FILES=""
+
+            while IFS= read -r file; do
+              case "$file" in
+                *.md|.gitignore|README*|LICENSE|crowdin.yml) ;;
+                *) NON_IGNORED_FILES="$NON_IGNORED_FILES $file" ;;
+              esac
+            done < <(git diff --name-only "$BASE_SHA" "$DEPLOY_SHA")
+
+            if [ -z "$NON_IGNORED_FILES" ]; then
+              SHOULD_DEPLOY="true"
+            else
+              echo "Skipping direct deploy because this push includes files handled by the OXC workflow:"
+              echo "$NON_IGNORED_FILES" | xargs -n1 echo
+            fi
+          fi
+
+          {
+            echo "should_deploy=$SHOULD_DEPLOY"
+            echo "base_sha=$BASE_SHA"
+            echo "deploy_sha=$DEPLOY_SHA"
+          } >> "$GITHUB_OUTPUT"
+
+  deploy-blocked:
+    name: 'deploy blocked'
+    if: |
+      github.event_name == 'workflow_run' &&
+      (
+        github.event.workflow_run.event != 'push' ||
+        github.event.workflow_run.head_branch != 'main' ||
+        github.event.workflow_run.actor.login == 'github-actions[bot]' ||
+        github.event.workflow_run.conclusion != 'success'
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - name: explain skipped deploy
+        run: |
+          echo "Deploy skipped."
+          echo "workflow_run event: ${{ github.event.workflow_run.event }}"
+          echo "workflow_run branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "workflow_run actor: ${{ github.event.workflow_run.actor.login }}"
+          echo "workflow_run conclusion: ${{ github.event.workflow_run.conclusion }}"
+
   deploy:
     name: 'deploy to production'
-    if: ${{ inputs.source_event_name == 'push' && inputs.source_ref == 'refs/heads/main' }}
+    needs: prepare-deploy
+    if: needs.prepare-deploy.outputs.should_deploy == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -25,22 +144,22 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 0
-          ref: ${{ inputs.deploy_sha }}
+          ref: ${{ needs.prepare-deploy.outputs.deploy_sha }}
 
       - name: verify deploy sha belongs to main
         run: |
           git fetch origin refs/heads/main:refs/remotes/origin/main --force
 
-          if ! git merge-base --is-ancestor "${{ inputs.deploy_sha }}" origin/main; then
-            echo "Refusing deploy: ${{ inputs.deploy_sha }} is not contained in origin/main."
+          if ! git merge-base --is-ancestor "${{ needs.prepare-deploy.outputs.deploy_sha }}" origin/main; then
+            echo "Refusing deploy: ${{ needs.prepare-deploy.outputs.deploy_sha }} is not contained in origin/main."
             exit 1
           fi
       
       - uses: dorny/paths-filter@master
         id: changes
         with:
-          base: ${{ inputs.base_sha }}
-          ref: ${{ inputs.deploy_sha }}
+          base: ${{ needs.prepare-deploy.outputs.base_sha }}
+          ref: ${{ needs.prepare-deploy.outputs.deploy_sha }}
           filters: |
             sabine:
               - 'sabine/**'
@@ -87,7 +206,7 @@ jobs:
           CHANGED_WEB: ${{ steps.changes.outputs.web }}
           CHANGED_API: ${{ steps.changes.outputs.api }}
           CHANGED_GLOBAL: ${{ steps.changes.outputs.global }}
-          DEPLOY_SHA: ${{ inputs.deploy_sha }}
+          DEPLOY_SHA: ${{ needs.prepare-deploy.outputs.deploy_sha }}
           DEPLOY_DELAY_SECONDS: 5
         run: |
           # Construct list of services to deploy

@@ -1,7 +1,7 @@
 name: oxc format and check
 on:
   push:
-    branches: ["**"]
+    branches: ['**']
     paths-ignore:
       - '**.md'
       - '.gitignore'
@@ -9,7 +9,7 @@ on:
       - 'LICENSE'
       - 'crowdin.yml'
   pull_request:
-    branches: ["**"]
+    branches: ['**']
     paths-ignore:
       - '**.md'
       - '.gitignore'
@@ -22,8 +22,6 @@ jobs:
   format-and-lint:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    outputs:
-      final_sha: ${{ steps.capture-final-sha.outputs.sha }}
 
     permissions:
       contents: write
@@ -37,7 +35,7 @@ jobs:
           ref: ${{ github.head_ref || github.ref }}
           persist-credentials: true
 
-      - name: setup Bun
+      - name: setup bun
         uses: oven-sh/setup-bun@main
         with:
           bun-version-file: package.json
@@ -60,11 +58,21 @@ jobs:
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
 
-      - name: capture final commit sha
-        id: capture-final-sha
-        if: github.event_name == 'push'
+      - name: write deploy metadata
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          {
+            echo "base_sha=${{ github.event.before }}"
+            echo "deploy_sha=$(git rev-parse HEAD)"
+          } > deploy.env
+
+      - name: upload deploy metadata
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@main
+        with:
+          name: deploy-metadata
+          path: deploy.env
+          retention-days: 1
 
       - name: check formatting
         if: github.event_name == 'pull_request'
@@ -73,14 +81,3 @@ jobs:
       - name: run oxlint with github annotations
         if: github.event_name == 'pull_request'
         run: bun lint --format=github
-
-  deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: format-and-lint
-    uses: ./.github/workflows/deploy.yml
-    with:
-      base_sha: ${{ github.event.before }}
-      deploy_sha: ${{ needs.format-and-lint.outputs.final_sha }}
-      source_event_name: ${{ github.event_name }}
-      source_ref: ${{ github.ref }}
-    secrets: inherit
