@@ -1,4 +1,4 @@
-import type { $Enums, Guild, LiveMessage, TBDMatch } from '@generated'
+import type { $Enums, Event, Guild, LiveMatch, LiveMessage, TBDMatch } from '@generated'
 import { hydrateData, prisma, updateCache, voidCatch } from '@sabinelab/prisma'
 
 export class GuildSchema implements Guild {
@@ -17,6 +17,7 @@ export class GuildSchema implements Guild {
   public partner: boolean | null = null
   public invite: string | null = null
   public prefix: string | null = null
+  public liveMatches: LiveMatch[] = []
 
   public constructor(id: string) {
     this.id = id

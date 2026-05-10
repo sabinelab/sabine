@@ -10,6 +10,7 @@ import type App from '@/structures/app/App'
 import EmbedBuilder from '@/structures/builders/EmbedBuilder'
 import type { ResultsData } from '@/types'
 import calcOdd from '@/util/calcOdd'
+import { renderLiveChannel } from './live-queue'
 
 export type ResultsPayload = ResultsData & {
   game: $Enums.Game
@@ -154,8 +155,57 @@ export const processPredictions = async (data: ResultsPayload) => {
   }
 }
 
-export const processResult = async (app: App, data: ResultsPayload) => {
+export async function processResult(app: App, data: ResultsPayload) {
   data.when = new Date(data.when)
+
+  const liveMatches = await prisma.liveMatch.findMany({
+    where: {
+      game: data.game,
+      matchId: data.id
+    },
+    select: {
+      guildId: true,
+      channelId: true,
+      guild: {
+        select: {
+          lang: true
+        }
+      }
+    }
+  })
+
+  await prisma.liveMatch.deleteMany({
+    where: {
+      game: data.game,
+      matchId: data.id
+    }
+  })
+
+  const affectedChannels = new Map<
+    string,
+    {
+      guildId: string
+      lang: $Enums.Language
+      channelId: string
+    }
+  >()
+
+  for (const liveMatch of liveMatches) {
+    affectedChannels.set(`${liveMatch.guildId}:${liveMatch.channelId}`, {
+      guildId: liveMatch.guildId,
+      lang: liveMatch.guild.lang,
+      channelId: liveMatch.channelId
+    })
+  }
+
+  await Promise.allSettled(
+    [...affectedChannels.values()].map((channel) =>
+      renderLiveChannel(app, {
+        ...channel,
+        game: data.game
+      })
+    )
+  )
 
   const matchedEventNames = Object.keys(tournaments).filter(
     (key) =>

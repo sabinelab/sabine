@@ -19,7 +19,8 @@ model Guild {
   key               GuildKey?
   guildKeyId        String?       @map("guild_key_id")
 
-  users Profile[]
+  users       Profile[]
+  liveMatches LiveMatch[]
 
   @@index([id(sort: Asc), valorantNewsChannel])
 }

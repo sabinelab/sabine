@@ -1,0 +1,35 @@
+model LiveMatch {
+  id             String   @id @default(uuid(7))
+  guildId        String   @map("guild_id")
+  game           Game
+  channelId      String   @map("channel_id")
+  matchId        String   @map("match_id")
+  index          Int      @db.SmallInt
+  tournamentName String   @map("tournament_name")
+  currentMap     String?  @map("current_map")
+  url            String?
+  stage          String?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  teams LiveMatchTeam[]
+  guild Guild           @relation(fields: [guildId], references: [id], onDelete: Cascade)
+
+  @@unique([guildId, game, channelId, matchId])
+  @@index([guildId, game, channelId, index(sort: Asc)])
+  @@index([game, matchId])
+}
+
+model LiveMatchTeam {
+  id          String   @id @default(uuid(7))
+  liveMatchId String   @map("live_match_id")
+  name        String
+  score       String
+  mapScore    String?   @map("map_score")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  liveMatch LiveMatch @relation(fields: [liveMatchId], references: [id], onDelete: Cascade)
+
+  @@index([liveMatchId])
+}

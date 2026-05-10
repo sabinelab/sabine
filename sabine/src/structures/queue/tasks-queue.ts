@@ -327,6 +327,11 @@ const sendValorantMatches = async (app: App) => {
               deleteMany: {
                 game: 'valorant'
               }
+            },
+            liveMatches: {
+              deleteMany: {
+                game: 'valorant'
+              }
             }
           }
         })
@@ -561,6 +566,11 @@ const sendLolMatches = async (app: App) => {
               }))
             },
             liveMessages: {
+              deleteMany: {
+                game: 'lol'
+              }
+            },
+            liveMatches: {
               deleteMany: {
                 game: 'lol'
               }
