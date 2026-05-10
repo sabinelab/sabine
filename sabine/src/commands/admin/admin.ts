@@ -625,6 +625,16 @@ export default createCommand({
                 }))
               : undefined
           },
+          liveMessages: {
+            deleteMany: {
+              game: 'valorant'
+            }
+          },
+          liveMatches: {
+            deleteMany: {
+              game: 'valorant'
+            }
+          },
           valorantResendTime: guild.valorantResendTime
         }
       })
@@ -827,6 +837,16 @@ export default createCommand({
           lolMatches: guild.lolMatches,
           tbdMatches: {
             create: guild.tbdMatches
+          },
+          liveMessages: {
+            deleteMany: {
+              game: 'lol'
+            }
+          },
+          liveMatches: {
+            deleteMany: {
+              game: 'lol'
+            }
           },
           lolResendTime: guild.lolResendTime
         }
