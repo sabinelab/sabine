@@ -36,7 +36,7 @@ jobs:
             exit 1
           fi
       
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@master
         id: changes
         with:
           base: ${{ inputs.base_sha }}
