@@ -2,7 +2,7 @@ services:
   sabine:
     build:
       context: .
-      dockerfile: sabine/Dockerfile
+      dockerfile: apps/sabine/Dockerfile
       secrets:
         - env
     image: sabine
@@ -12,7 +12,7 @@ services:
       redis:
         condition: service_healthy
     env_file:
-      - sabine/.env
+      - apps/sabine/.env
     environment:
       - REDIS_URL=redis://localhost:6379
       - NODE_ENV=production
@@ -21,40 +21,40 @@ services:
   helper:
     build:
       context: .
-      dockerfile: helper/Dockerfile
+      dockerfile: apps/helper/Dockerfile
       secrets:
         - env
     image: sabine-helper
     container_name: sabine-helper
     restart: unless-stopped
     env_file:
-      - helper/.env
+      - apps/helper/.env
     network_mode: host
 
   web:
     build:
       context: .
-      dockerfile: web/Dockerfile
+      dockerfile: apps/web/Dockerfile
       secrets:
         - env
     image: sabine-website
     container_name: sabine-website
     restart: always
     env_file:
-      - web/.env
+      - apps/web/.env
     network_mode: host
 
   api:
     build:
       context: .
-      dockerfile: api/Dockerfile
+      dockerfile: apps/api/Dockerfile
       secrets:
         - env
     image: sabine-api
     container_name: sabine-api
     restart: always
     env_file:
-      - api/.env
+      - apps/api/.env
     network_mode: host
 
   redis:
