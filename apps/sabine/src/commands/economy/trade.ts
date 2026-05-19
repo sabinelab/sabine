@@ -110,7 +110,7 @@ export default createCommand({
               .defineStyle('green')
               .setLabel(ctx.t('commands.trade.make_purchase'))
               .setCustomId(
-                `trade;${ctx.args.user};buy;${ctx.author.id};${card.id};${ctx.args.price}`
+                `trade;${ctx.args.user.id};buy;${ctx.author.id};${card.id};${ctx.args.price}`
               ),
             new ButtonBuilder()
               .defineStyle('red')
