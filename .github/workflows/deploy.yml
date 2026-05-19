@@ -162,13 +162,13 @@ jobs:
           ref: ${{ needs.prepare-deploy.outputs.deploy_sha }}
           filters: |
             sabine:
-              - 'sabine/**'
+              - 'apps/sabine/**'
             helper:
-              - 'helper/**'
+              - 'apps/helper/**'
             web:
-              - 'web/**'
+              - 'apps/web/**'
             api:
-              - 'api/**'
+              - 'apps/api/**'
             global:
               - 'package.json'
               - 'turbo.json'
@@ -176,7 +176,6 @@ jobs:
               - '.oxlintrc.json'
               - 'docker-compose.yml'
               - 'prisma.config.js'
-              - 'prisma/**'
               - 'packages/**'
               - '.github/workflows/deploy.yml'
 
