@@ -2,7 +2,7 @@
 node_modules/
 *test*
 dist/
-prisma/src/schemas/generated
+packages/prisma/src/schemas/generated
 api/prisma/generated
 api/prisma/database.db
 .next/

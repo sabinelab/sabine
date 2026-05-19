@@ -4,14 +4,14 @@ WORKDIR /app
 
 COPY package.json bun.lock ./
 COPY .npmrc ./
-COPY web/package.json ./web/package.json
-COPY web-next/package.json ./web-next/package.json
-COPY sabine/package.json ./sabine/package.json
-COPY helper/package.json ./helper/package.json
-COPY api/package.json ./api/package.json
-COPY prisma/package.json ./prisma/package.json
-COPY utils/package.json ./utils/package.json
-COPY players/package.json ./players/package.json
+COPY apps/web/package.json ./apps/web/package.json
+COPY apps/web-next/package.json ./apps/web-next/package.json
+COPY apps/sabine/package.json ./apps/sabine/package.json
+COPY apps/helper/package.json ./apps/helper/package.json
+COPY apps/api/package.json ./apps/api/package.json
+COPY packages/prisma/package.json ./packages/prisma/package.json
+COPY packages/utils/package.json ./packages/utils/package.json
+COPY apps/players/package.json ./apps/players/package.json
 
 RUN --mount=type=secret,id=env,target=/app/.env \
     export GITHUB_AUTH_TOKEN=$(grep GITHUB_AUTH_TOKEN /app/.env | cut -d '=' -f2) && \
